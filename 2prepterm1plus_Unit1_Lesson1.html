@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثاني اعدادي - مستوى رفيع الوحدة الاولى الدرس الاول والثاني (7127)</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    --primary: #6366f1; --purple-glow: #8b5cf6; --success: #10b981;
+    --danger: #ef4444; --bg-dark: #020617; 
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+body { background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; color: white; position: relative; overflow-x: hidden; }
+
+#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+.main-card { 
+    background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); 
+    width: 100%; max-width: 850px; border-radius: 40px; 
+    border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 0 50px rgba(99, 102, 241, 0.2); 
+    overflow: hidden; position: relative; z-index: 2; margin: 20px 0;
+}
+
+.quiz-header { padding: 20px 40px; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+.logo-container { 
+    width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--danger); 
+    overflow: hidden; background: #000; box-shadow: 0 0 15px var(--danger);
+    animation: glow-pulse 2s infinite ease-in-out;
+}
+@keyframes glow-pulse {
+    0% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
+    50% { box-shadow: 0 0 25px var(--danger), 0 0 40px rgba(239, 68, 68, 0.4); transform: scale(1.05); }
+    100% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
+}
+.logo-img { width: 100%; height: 100%; object-fit: cover; }
+
+.header-text { text-align: left; }
+.header-text h1 { font-size: 1.4rem; font-weight: 900; color: white; }
+.animated-name {
+    background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1.1rem;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+.progress-section { padding: 15px 40px; background: rgba(0,0,0,0.3); display: none; }
+.progress-info { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; color: #94a3b8; }
+.progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #d946ef); transition: width 0.5s ease; }
+
+.question-row { 
+    background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; 
+    margin-bottom: 30px; border: 1px solid var(--danger); 
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+    display: flex; align-items: center; gap: 20px; direction: ltr;
+}
+.question-text { font-size: 1.4rem; font-weight: 800; text-align: left; flex: 1; color: #f8fafc; line-height: 1.6; }
+
+.timer-wrapper { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+.timer-svg { transform: rotate(-90deg); width: 80px; height: 80px; }
+.timer-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 6; }
+.timer-progress { 
+    fill: none; stroke: var(--success); stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 226; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+#timer-text { position: absolute; font-size: 1.6rem; font-weight: 900; }
+
+.option-box { 
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); 
+    padding: 18px 25px; border-radius: 18px; cursor: pointer; font-weight: 700; font-size: 1.2rem; 
+    margin-bottom: 12px; color: white; width: 100%; direction: ltr; transition: 0.3s all;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.option-box:hover { background: rgba(99, 102, 241, 0.15); transform: translateX(10px); }
+
+.correct { background: var(--success) !important; border-color: #fff !important; }
+.wrong { background: var(--danger) !important; border-color: #fff !important; }
+.disabled { pointer-events: none; }
+
+.btn { 
+    background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 16px 35px; 
+    border: none; border-radius: 18px; font-size: 1.2rem; font-weight: 800; cursor: pointer; 
+    margin: 10px; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
+}
+.scene { display: none; padding: 40px; text-align: center; }
+.active { display: block; animation: zoomIn 0.5s ease; }
+@keyframes zoomIn { from { opacity:0; transform: scale(0.9); } to { opacity:1; transform: scale(1); } }
+
+input[type="text"] { width: 85%; padding: 20px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; text-align: center; font-size: 1.3rem; outline: none; margin-bottom: 30px; }
+.review-area { background: rgba(0,0,0,0.4); border-radius: 20px; padding: 25px; margin-top: 25px; text-align: center; display: none; border: 1px solid rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+
+<canvas id="particles-js"></canvas>
+
+<div class="main-card" id="card">
+    <div class="quiz-header">
+        <div class="logo-container">
+            <img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img">
+        </div>
+        <div class="header-text">
+            <h1>ثاني اعدادي - مستوى رفيع الوحدة الاولى الدرس الاول والثاني</h1>
+            <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
+        </div>
+    </div>
+
+    <div class="progress-section" id="progressArea">
+        <div class="progress-info">
+            <span id="progStep">السؤال 1</span>
+            <span id="progPercent">0%</span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="pBar"></div>
+        </div>
+    </div>
+
+    <div id="welcome-scene" class="scene active">
+        <img src="https://drive.google.com/thumbnail?id=1cF-j-60otMztzK5ruWOGf02aem5WUG7R&sz=w600" style="width: 250px; margin-bottom: 20px;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 20px;">اختبار اللغة الإنجليزية - المستوى الرفيع</h2>
+        <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي يا بطل">
+        <br>
+        <button class="btn" onclick="startTest()">بدء الاختبار <i class="fa-solid fa-bolt"></i></button>
+    </div>
+
+    <div id="quiz-scene" class="scene">
+        <div id="quiz-content"></div>
+    </div>
+
+    <div id="result-scene" class="scene">
+        <h2 id="result-title" style="font-size: 2.2rem; margin-bottom: 25px;">النتيجة النهائية</h2>
+        <div id="result-container" style="position:relative; width:100%; max-width:600px; margin: 0 auto 30px;"></div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <button class="btn" onclick="toggleReview()" style="background:rgba(255,255,255,0.1)"><i class="fa-solid fa-eye"></i> مراجعة الأخطاء</button>
+            <button class="btn" onclick="location.reload()" style="background:rgba(255,255,255,0.05)"><i class="fa-solid fa-rotate"></i> جرب مرة تانية</button>
+        </div>
+        <div id="reviewArea" class="review-area"></div>
+    </div>
+</div>
+
+<audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+
+<script>
+// 7127 - English Quiz Data
+const quizData = [
+    { q: "Science teachers take the students to the ........... to do experiments.", options: ["cafeterias", "laboratories", "gardens", "offices"], correct: "laboratories" },
+    { q: "Traveling to another country gives people important ........... .", options: ["project", "semester", "experience", "activity"], correct: "experience" },
+    { q: "The new car runs on clean energy from ........... power.", options: ["coal", "oil", "solar", "gas"], correct: "solar" },
+    { q: "Each school year has two parts, and each part is called a ........... .", options: ["project", "laboratory", "survey", "semester"], correct: "semester" },
+    { q: "The first school ........... in Egypt begins in September and ends in January.", options: ["material", "planner", "semester", "leaflet"], correct: "semester" },
+    { q: "Learning new skills gives young people the ........... to build a better future.", options: ["problem", "failure", "empowerment", "weakness"], correct: "empowerment" },
+    { q: "Last semester, we performed a ........... in the drama studio.", options: ["speech", "project", "play", "climate"], correct: "play" },
+    { q: "I enjoy coming to school because all our teachers are ........... and friendly.", options: ["lazy", "angry", "enthusiastic", "nervous"], correct: "enthusiastic" },
+    { q: "A ........... is a place where students can buy food and drinks at school.", options: ["laboratory", "library", "cafeteria", "classroom"], correct: "cafeteria" },
+    { q: "Our last class was computer studies in the ........... .", options: ["sports field", "technology room", "cafeteria", "art studio"], correct: "technology room" }
+];
+
+let shuffled = [], currentIdx = 0, score = 0, name = "", timer, timeLeft = 60, wrongs = [];
+
+function startTest() {
+    name = document.getElementById('studentName').value.trim();
+    if(name.length < 3) return alert("الاسم الثلاثي يا بطل!");
+    shuffled = quizData.sort(() => Math.random() - 0.5).slice(0, 10);
+    document.getElementById('progressArea').style.display = "block";
+    showScene('quiz-scene');
+    loadQuestion();
+}
+
+function loadQuestion() {
+    clearInterval(timer);
+    timeLeft = 60;
+    const q = shuffled[currentIdx];
+    const p = (currentIdx / shuffled.length) * 100;
+    document.getElementById('pBar').style.width = p + "%";
+    document.getElementById('progStep').innerText = `سؤال ${currentIdx + 1} من ${shuffled.length}`;
+    document.getElementById('progPercent').innerText = Math.round(p) + "%";
+
+    document.getElementById('quiz-scene').innerHTML = `
+        <div class="question-row">
+            <div class="question-text">${q.q}</div>
+            <div class="timer-wrapper">
+                <svg class="timer-svg" viewBox="0 0 80 80">
+                    <circle class="timer-bg" cx="40" cy="40" r="36"></circle>
+                    <circle id="timerRing" class="timer-progress" cx="40" cy="40" r="36"></circle>
+                </svg>
+                <div id="timer-text">60</div>
+            </div>
+        </div>
+        <div id="optionsGrid"></div>
+    `;
+
+    let currentOptions = [...q.options].sort(() => Math.random() - 0.5);
+    currentOptions.forEach((optText) => {
+        const div = document.createElement('div');
+        div.className = "option-box";
+        div.innerHTML = `<span>${optText}</span>`;
+        div.onclick = () => check(div, optText === q.correct);
+        document.getElementById('optionsGrid').appendChild(div);
+    });
+    startTimer();
+}
+
+function startTimer() {
+    const tText = document.getElementById('timer-text');
+    const ring = document.getElementById('timerRing');
+    timer = setInterval(() => {
+        timeLeft--;
+        tText.innerText = timeLeft;
+        let offset = 226 - (timeLeft * (226 / 60));
+        ring.style.strokeDashoffset = offset;
+        if(timeLeft <= 0) { clearInterval(timer); check(null, false); }
+    }, 1000);
+}
+
+function check(el, isCorrect) {
+    clearInterval(timer);
+    document.querySelectorAll('.option-box').forEach(b => b.classList.add('disabled'));
+    const q = shuffled[currentIdx];
+
+    if(el) {
+        if(isCorrect) {
+            el.classList.add('correct');
+            document.getElementById('sound-correct').play();
+            score++;
+        } else {
+            el.classList.add('wrong');
+            document.getElementById('sound-wrong').play();
+            wrongs.push({q: q.q, a: q.correct});
+            highlightCorrect(q.correct);
+        }
+    } else {
+        wrongs.push({q: q.q, a: q.correct});
+        highlightCorrect(q.correct);
+    }
+
+    setTimeout(() => {
+        currentIdx++;
+        if(currentIdx < shuffled.length) loadQuestion(); else finish();
+    }, 1500); 
+}
+
+function highlightCorrect(correctText) {
+    document.querySelectorAll('.option-box').forEach(b => {
+        if(b.innerText.trim() === correctText) {
+            b.style.borderColor = "var(--success)";
+            b.style.borderWidth = "3px";
+            b.style.boxShadow = "0 0 20px var(--success)";
+            b.querySelector('span').style.color = "var(--success)";
+            b.querySelector('span').innerHTML += " <i class='fa-solid fa-check-circle'></i>";
+        }
+    });
+}
+
+function finish() {
+    document.getElementById('progressArea').style.display = "none";
+    showScene('result-scene');
+    const percentage = (score / shuffled.length) * 100;
+    const resContainer = document.getElementById('result-container');
+    const rev = document.getElementById('reviewArea');
+
+    if (percentage >= 50) {
+        confetti({ particleCount: 150, spread: 60 });
+        resContainer.innerHTML = `
+            <img src="https://drive.google.com/thumbnail?id=1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM&sz=w800" style="width:100%; border-radius:30px;">
+            <div style="position:absolute; top:45%; left:50%; transform:translateX(-50%); color:#1e3a8a; font-size:1.8rem; font-weight:900; width:80%;">${name}</div>
+            <div style="position:absolute; top:60%; left:50%; transform:translateX(-50%); color:#dc2626; font-size:1.4rem; font-weight:900;">الدرجة: ${score} من ${shuffled.length}</div>
+        `;
+    } else {
+        resContainer.innerHTML = `
+            <div style="padding:60px; background: rgba(239, 68, 68, 0.1); border:2px solid var(--danger); border-radius:30px; margin-bottom: 20px;">
+                <h3 style="font-size: 2rem; color: var(--danger);">حاول مرة أخرى</h3>
+                <p style="font-size: 1.3rem; margin-top: 10px;">يا بطل ${name}، درجتك ${score} من ${shuffled.length}.</p>
+            </div>
+        `;
+    }
+
+    if (wrongs.length === 0) {
+        rev.innerHTML = `<h3 style="color:var(--success); font-size: 1.8rem;">ممتاز يا بطل! مفيش أخطاء 🌟</h3>`;
+    } else {
+        rev.innerHTML = "<h3 style='margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;'>الأخطاء:</h3>";
+        wrongs.forEach(w => rev.innerHTML += `<div style="margin:10px 0; padding:15px; background:rgba(255,255,255,0.05); border-radius:15px; text-align:right;">السؤال: ${w.q}<br><span style="color:var(--success)">الإجابة الصح: ${w.a}</span></div>`);
+    }
+}
+
+function toggleReview() {
+    const r = document.getElementById('reviewArea');
+    r.style.display = (r.style.display === "none" || r.style.display === "") ? "block" : "none";
+}
+
+function showScene(id) {
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+const canvas = document.getElementById('particles-js');
+const ctx = canvas.getContext('2d');
+let pts = [];
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+class P {
+    constructor() { this.reset(); }
+    reset() { this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.s=Math.random()*2+1; this.vx=(Math.random()-0.5)*0.5; this.vy=(Math.random()-0.5)*0.5; }
+    update() { this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height) this.reset(); }
+    draw() { ctx.fillStyle="rgba(139,92,246,0.3)"; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); }
+}
+for(let i=0;i<50;i++) pts.push(new P());
+function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.update(); p.draw();}); requestAnimationFrame(animate); }
+animate();
+</script>
+</body>
+</html>
