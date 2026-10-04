@@ -1,0 +1,330 @@
+const quizData = {
+  title: "Obligation and necessity - Advice 62QS",
+  questions: [
+    {
+      question: "1. We ......... eat so much fat as that's unhealthy.",
+      options: ["have to", "must", "should", "shouldn't"],
+      correct: 3
+    },
+    {
+      question: "2. You ......... stay up too late at night.",
+      options: ["shouldn't", "should", "have", "must"],
+      correct: 0
+    },
+    {
+      question: "3. You ......... take photographs here. It's against the law.",
+      options: ["mustn't", "can", "have to", "might not"],
+      correct: 0
+    },
+    {
+      question: "4. You ......... do your homework regularly.",
+      options: ["can't", "should", "mustn't", "need"],
+      correct: 1
+    },
+    {
+      question: "5. Mariam ......... get up early to catch the train.",
+      options: ["have to", "must", "need", "shouldn't"],
+      correct: 1
+    },
+    {
+      question: "6. You ......... drink the water from the pond. It's polluted.",
+      options: ["mustn't", "can", "need to", "haven't"],
+      correct: 0
+    },
+    {
+      question: "7. Asmaa ......... go to bed early to get up early.",
+      options: ["have to", "should", "can't", "need"],
+      correct: 1
+    },
+    {
+      question: "8. I ......... tidy my room or my mother will be angry.",
+      options: ["has to", "must", "can't", "shouldn't"],
+      correct: 1
+    },
+    {
+      question: "9. I can give you a lift to the airport. You ......... to take a taxi.",
+      options: ["needn't", "don't need", "must", "have"],
+      correct: 1
+    },
+    {
+      question: "10. You ......... turn this music down before your dad gets angry.",
+      options: ["need", "ought", "had better", "must to"],
+      correct: 2
+    },
+    {
+      question: "11. You ......... allowed to drive at more than 110 kph on the motorway.",
+      options: ["aren't", "don't", "haven't", "hadn't"],
+      correct: 0
+    },
+    {
+      question: "12. Emad cut his leg and ......... go to hospital for treatment.",
+      options: ["should", "needs to", "had to", "has to"],
+      correct: 2
+    },
+    {
+      question: "13. Students ......... follow the rules of the school.",
+      options: ["can", "must", "may", "might"],
+      correct: 1
+    },
+    {
+      question: "14. There is a \"No Smoking\" sign. We ......... smoke here.",
+      options: ["shouldn't", "should", "mustn't", "must"],
+      correct: 2
+    },
+    {
+      question: "15. You ......... come and try mom's food. I'm sure you will like it.",
+      options: ["shouldn't", "must", "have to", "ought to"],
+      correct: 1
+    },
+    {
+      question: "16. We ......... learn computer skills at school because they are very useful.",
+      options: ["mustn't", "should", "can't", "don't"],
+      correct: 1
+    },
+    {
+      question: "17. You ......... do the shopping now. I'll do it later.",
+      options: ["mustn't", "needn't", "must", "have to"],
+      correct: 1
+    },
+    {
+      question: "18. You ......... make noise in the library. It isn't allowed.",
+      options: ["needn't", "mustn't", "had better", "ought to"],
+      correct: 1
+    },
+    {
+      question: "19. Vegetables should ......... before you cook them.",
+      options: ["wash", "be washed", "to wash", "washing"],
+      correct: 1
+    },
+    {
+      question: "20. You must ......... your mother with the housework. She looks tired.",
+      options: ["help", "be helped", "to help", "helping"],
+      correct: 0
+    },
+    {
+      question: "21. Your mother must ......... with the housework. She looks tired.",
+      options: ["help", "be helped", "to help", "helping"],
+      correct: 1
+    },
+    {
+      question: "22. You ......... go to the Pyramids when you are in Giza. They're great.",
+      options: ["mustn't", "need", "should", "shouldn't"],
+      correct: 2
+    },
+    {
+      question: "23. A: You ......... drink any coffee. It's not good for your weak heart. B: OK, doctor.",
+      options: ["mustn't", "shouldn't", "must", "should"],
+      correct: 1
+    },
+    {
+      question: "24. You ......... lies, son!",
+      options: ["shouldn't telling", "mustn't tell", "should tell", "must tell"],
+      correct: 1
+    },
+    {
+      question: "25. I ......... obey my parents all the time.",
+      options: ["mustn't", "don't have to", "must", "'ll have to be"],
+      correct: 2
+    },
+    {
+      question: "26. To drive a car, one ......... get a licence first.",
+      options: ["mustn't", "must", "shouldn't", "should"],
+      correct: 1
+    },
+    {
+      question: "27. If you are still in Egypt, you ......... attend my wedding. You are my closest friend.",
+      options: ["ought", "must", "shouldn't", "mustn't"],
+      correct: 1
+    },
+    {
+      question: "28. I'm taking an early train tomorrow. I ......... drink too much coffee or I won't sleep easily.",
+      options: ["should", "must", "mustn't", "need to"],
+      correct: 2
+    },
+    {
+      question: "29. You should ......... vegetables before you cook them.",
+      options: ["wash", "be washed", "to wash", "washing"],
+      correct: 0
+    },
+    {
+      question: "30. I've already watered the plants; you ......... to do it again.",
+      options: ["needn't", "shouldn't", "don't need", "mustn't"],
+      correct: 2
+    },
+    {
+      question: "31. I ......... wear a suit to work. It's the dress code in my company.",
+      options: ["shouldn't", "should", "have to", "mustn't"],
+      correct: 2
+    },
+    {
+      question: "32. Nada has got a message from her family. She ......... reply soon or they'll start to worry.",
+      options: ["mustn't", "doesn't have to", "needs to", "had to"],
+      correct: 2
+    },
+    {
+      question: "33. You ......... use your phone while you're driving. It's dangerous.",
+      options: ["must", "can", "mustn't", "should"],
+      correct: 2
+    },
+    {
+      question: "34. You ......... to smoke while you are using any kind of public transport.",
+      options: ["allowed", "didn't allow", "aren't allowed", "hadn't allowed"],
+      correct: 2
+    },
+    {
+      question: "35. You ......... buy a pen. I'll lend you one.",
+      options: ["have to", "needn't", "don't have to", "b & c"],
+      correct: 3
+    },
+    {
+      question: "36. They ......... eat that bread. It's green and has a bad smell.",
+      options: ["should", "aren't", "must", "mustn't"],
+      correct: 3
+    },
+    {
+      question: "37. It is illegal to break the law; we all ......... obey it.",
+      options: ["mustn't", "oughtn't", "must", "ought"],
+      correct: 2
+    },
+    {
+      question: "38. Sayed ......... his friend yesterday. Now, it is too late.",
+      options: ["should call", "shouldn't have called", "should have called", "shouldn't call"],
+      correct: 2
+    },
+    {
+      question: "39. He ......... at the little girl. She was so scared.",
+      options: ["should shout", "should have shouted", "shouldn't have shouted", "ought to have shouted"],
+      correct: 2
+    },
+    {
+      question: "40. You ......... park your car here. It's forbidden.",
+      options: ["mustn't", "must", "might", "should"],
+      correct: 0
+    },
+    {
+      question: "41. At my sports club, everyone ......... wear flat shoes. It is an important rule.",
+      options: ["have to", "must to", "has to", "need to"],
+      correct: 2
+    },
+    {
+      question: "42. It's a/an ......... to study hard to get high marks.",
+      options: ["advice", "necessary", "must", "should"],
+      correct: 2
+    },
+    {
+      question: "43. Adel cut his leg and ......... go to hospital for treatment.",
+      options: ["should", "needs to", "had to", "has to"],
+      correct: 2
+    },
+    {
+      question: "44. Your essay has some mistakes. It ......... again.",
+      options: ["should revise", "should have revised", "shouldn't be revised", "should be revised"],
+      correct: 3
+    },
+    {
+      question: "45. The car ......... . You are starting to lose control.",
+      options: ["must be stopped", "should not stop", "must to stop", "should have stopped"],
+      correct: 0
+    },
+    {
+      question: "46. We ......... run to the museum because it was already closed when we got there.",
+      options: ["needn't have", "didn't have to", "don't have to", "don't need to"],
+      correct: 0
+    },
+    {
+      question: "47. It is advisable to do exercise. You ......... follow a diet.",
+      options: ["shouldn't", "should", "mustn't", "don't have"],
+      correct: 1
+    },
+    {
+      question: "48. A: Do you think I can cycle on the pavement? B: No, you ......... .",
+      options: ["must", "mustn't", "should", "aren't"],
+      correct: 1
+    },
+    {
+      question: "49. Haven't they given you the money back yet? They ......... that last week.",
+      options: ["should have done", "shouldn't have done", "should do", "shouldn't do"],
+      correct: 0
+    },
+    {
+      question: "50. You ......... the second project before you finished the first one completely.",
+      options: ["shouldn't start", "should start", "should have started", "shouldn't have started"],
+      correct: 3
+    },
+    {
+      question: "51. A: I'm really tired. B: You ......... to bed earlier last night.",
+      options: ["should go", "shouldn't go", "should have gone", "shouldn't have gone"],
+      correct: 2
+    },
+    {
+      question: "52. A: I'm often tired during the day. B: You ......... to bed earlier.",
+      options: ["should go", "shouldn't go", "should have gone", "shouldn't have gone"],
+      correct: 0
+    },
+    {
+      question: "53. It would be ......... to go on smoking.",
+      options: ["advisable", "better", "sensible", "insensible"],
+      correct: 3
+    },
+    {
+      question: "54. My advice to you ......... friends with those bad people.",
+      options: ["is to make", "is not to make", "is to be made", "is not to be made"],
+      correct: 1
+    },
+    {
+      question: "55. I'm your boss. You ......... leave without my permission.",
+      options: ["have to", "mustn't", "shouldn't", "must"],
+      correct: 1
+    },
+    {
+      question: "56. I really must buy my friend a mat and a rosary from Mecca. This shows ......... .",
+      options: ["inner feeling", "external obligation", "strong advice", "regret"],
+      correct: 0
+    },
+    {
+      question: "57. Which of the following sentences is structurally correct?",
+      options: [
+        "You must to study if you want to succeed.",
+        "You must study if you want to succeed.",
+        "You must be study if you want to succeed.",
+        "You must studying if you want to succeed."
+      ],
+      correct: 1
+    },
+    {
+      question: "58. When driving, you must always stop at the red light. It is a/an ......... .",
+      options: ["law", "invitation", "advice", "suggestion"],
+      correct: 0
+    },
+    {
+      question: "59. Which of the following structures is correct and logical?",
+      options: [
+        "You mustn't get up late on holidays.",
+        "You mustn't get up early on holidays.",
+        "You haven't to get up late on holidays.",
+        "You don't have to get up early on holidays."
+      ],
+      correct: 3
+    },
+    {
+      question: "60. \"I have to wear my uniform to work.\" What does this sentence refer to?",
+      options: [
+        "This is a personal obligation",
+        "This is a personal necessity",
+        "I have no choice",
+        "It is up to me"
+      ],
+      correct: 2
+    },
+    {
+      question: "61. I advise my brother not to eat a lot of carbohydrates. This means he ......... eat a lot of carbohydrates.",
+      options: ["would rather", "should", "ought not", "had better not"],
+      correct: 3
+    },
+    {
+      question: "62. Cheating in exams is strictly forbidden. This means you ......... cheat in exams.",
+      options: ["shouldn't", "mustn't", "must", "should"],
+      correct: 1
+    }
+  ]
+};
