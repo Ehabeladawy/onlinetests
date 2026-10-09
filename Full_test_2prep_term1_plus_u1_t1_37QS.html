@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الاختبار الالكتروني المانع للغش - مستر إيهاب</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root { --p: #6366f1; --s: #10b981; --d: #ef4444; --bg: #020617; --g: #ffb142; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+body { background: var(--bg); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 20px 10px; color: white; overflow-x: hidden; transition: background 0.5s ease; }
+
+body.result-mode { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://drive.google.com/thumbnail?id=1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM&sz=w1500') center/cover fixed !important; }
+
+#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+
+.container { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; padding: 30px; width: 100%; max-width: 900px; z-index: 10; box-shadow: 0 25px 60px rgba(0,0,0,0.8); position: relative; margin-top: 40px; transition: 0.3s; }
+.container.result-container { background: transparent; backdrop-filter: none; border: none; box-shadow: none; padding: 10px; }
+
+.main-logo { width: 150px; height: auto; filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2)); margin-bottom: 10px; transition: 0.5s; border-radius: 15px; }
+.main-logo:hover { transform: scale(1.05); filter: drop-shadow(0 0 25px var(--p)); }
+.header-logo { width: 65px; height: 65px; object-fit: cover; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3)); vertical-align: middle; border-radius: 50%; border: 2px solid var(--p); }
+
+.scene { display: none; animation: slideIn 0.5s ease-out; }
+.scene.active { display: block; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+
+#result-scene { display: none; flex-direction: column; justify-content: center; align-items: center; min-height: 70vh; }
+#result-scene.active { display: flex; }
+
+.q-card { position: relative; background: rgba(0,0,0,0.4); border-radius: 20px; padding: 25px; margin-bottom: 25px; border: 2px solid rgba(255, 255, 255, 0.1); transition: 0.3s; }
+.q-card:hover { border-color: var(--p); box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
+
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.total-timer { font-size: 1.5rem; font-weight: 900; color: var(--g); background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 12px; border: 1px solid var(--g); }
+
+.instructions-list { text-align: right; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin: 20px 0; border-right: 4px solid var(--g); }
+.instructions-list li { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.6; list-style: none; }
+.instructions-list i { color: var(--g); margin-left: 10px; }
+
+.passage-box { background: rgba(99, 102, 241, 0.1); padding: 25px; border-radius: 15px; border: 1px solid var(--p); line-height: 2; font-size: 1.2rem; direction: ltr; text-align: left; margin-bottom: 30px; color: #fff; }
+.target-word { color: #ff4757; text-decoration: underline; font-weight: 900; background: rgba(255, 71, 87, 0.1); padding: 0 5px; border-radius: 4px; }
+
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; direction: ltr; margin-top: 15px; }
+.opt { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; text-align: left; font-weight: bold; }
+.opt:hover { background: rgba(255,255,255,0.1); }
+.opt.selected { border-color: var(--s); background: rgba(16, 185, 129, 0.2); color: var(--s); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+
+.nav-controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 25px; }
+.nav-btn { padding: 18px; border-radius: 15px; border: none; cursor: pointer; font-weight: bold; color: white; transition: 0.3s; font-size: 1.1rem; }
+.btn-prev { background: #334155; }
+.btn-prev:hover { background: #475569; }
+.btn-next { background: var(--p); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+.btn-next:hover { background: #4f46e5; }
+.btn-extra { background: rgba(255, 177, 66, 0.1); border: 1.5px solid var(--g); color: var(--g); }
+.btn-extra:hover { background: var(--g); color: #000; }
+.submit-btn { width: 100%; margin-top: 25px; padding: 20px; border-radius: 20px; border: none; background: linear-gradient(90deg, #10b981, #059669); color: white; font-weight: 900; font-size: 1.4rem; cursor: pointer; display: none; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); }
+
+input[type="text"].name-input { width: 100%; padding: 20px; border-radius: 15px; border: 2px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; margin-bottom: 20px; text-align: center; font-size: 1.2rem; outline: none; transition: 0.3s; }
+input[type="text"].name-input:focus { border-color: var(--p); }
+
+.audio-controls { display: flex; gap: 10px; margin-bottom: 15px; justify-content: center; }
+.btn-audio { padding: 10px 20px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.2s; }
+.btn-play { background: var(--s); }
+.btn-pause { background: var(--g); color:#000; }
+.btn-stop { background: var(--d); }
+.btn-audio:hover { transform: scale(1.05); }
+
+.word-bank { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; justify-content: center; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; border: 1px dashed rgba(255,255,255,0.2); }
+.drag-word { background: var(--p); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; user-select: none; transition: 0.3s; border: 2px solid transparent; }
+.drag-word:hover { background: #4f46e5; }
+.drag-word.active-word { border-color: var(--g); transform: scale(1.1) translateY(-5px); box-shadow: 0 10px 15px rgba(255, 177, 66, 0.4); background: var(--g); color: #000; }
+
+.blank-input { width: 120px; padding: 5px 10px; margin: 0 5px; border: 2px dashed var(--p); background: rgba(0,0,0,0.5); color: var(--s); font-weight: bold; text-align: center; border-radius: 8px; outline: none; font-size: 1.1rem; transition: 0.3s; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.blank-input:focus { border-style: solid; border-color: var(--s); background: rgba(16, 185, 129, 0.1); }
+
+.progress-container { width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 5px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+.progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--g), var(--s)); transition: width 0.1s linear; }
+
+</style>
+</head>
+<body oncontextmenu="return false;">
+<canvas id="particles-js"></canvas>
+
+<div class="container" id="main-container">
+    <div id="login-scene" class="scene active" style="text-align:center;">
+        <img src="https://drive.google.com/thumbnail?id=100z54KgQrHdfkxVCzKiBhXc7RDLh-dnS&sz=w500" class="main-logo" alt="Logo">
+        <h2 style="color:var(--p); margin-bottom:10px;" id="disp-exam-name">اسم الاختبار</h2>
+        <h4 style="color:var(--g); margin-bottom:25px;" id="disp-grade">الصف</h4>
+        
+        <input type="text" id="studentName" class="name-input" placeholder="اكتب اسمك الرباعي هنا..." autocomplete="off">
+
+        <div class="instructions-list">
+            <h3 style="margin-bottom:15px; color:var(--p);"><i class="fas fa-shield-alt"></i> تعليمات الاختبار:</h3>
+            <ul>
+                <li><i class="fas fa-clock"></i> زمن الاختبار: <b>30 دقيقة</b>.</li>
+                <li><i class="fas fa-random"></i> <b>تنبيه:</b> الاختيارات تظهر بشكل عشوائي مختلف لكل طالب.</li>
+                <li><i class="fas fa-keyboard"></i> <b>سؤال الإكمال:</b> يمكنك السحب، أو الضغط، أو حتى كتابة الكلمة بالكيبورد.</li>
+                <li><i class="fas fa-lock"></i> <b>لن يتم قبول الإرسال</b> إذا تركت أي سؤال بدون إجابة.</li>
+            </ul>
+        </div>
+
+        <button class="nav-btn btn-next" style="width:100%; font-size:1.3rem;" onclick="startExam()">ابدأ الاختبار <i class="fas fa-play"></i></button>
+    </div>
+
+    <div id="exam-scene" class="scene">
+        <div class="header">
+            <div>
+                <img src="https://drive.google.com/thumbnail?id=1SnBbVz8-ylmzSDJ5cSDTxVyA0degZUnE&sz=w500" class="header-logo" alt="Logo">
+                <span id="info-display" style="margin-right:10px; font-weight:bold; font-size:1.2rem;"></span>
+            </div>
+            <div id="totalTimer" class="total-timer">30:00</div>
+        </div>
+        <div id="exam-content"></div>
+        <div class="nav-controls">
+            <button id="btn-prev" class="nav-btn btn-prev" onclick="changeQ(-1)">السابق</button>
+            <button class="nav-btn btn-extra" onclick="deferQuestion()">تأجيل السؤال</button>
+            <button id="btn-next" class="nav-btn btn-next" onclick="changeQ(1)">التالي</button>
+        </div>
+        <button id="finalSubmit" class="submit-btn" onclick="confirmFinish()">تسليم الاختبار وإرسال النتيجة <i class="fas fa-paper-plane"></i></button>
+    </div>
+
+    <div id="result-scene" class="scene" style="text-align:center;">
+        <div id="result-summary" style="width: 100%;"></div>
+        <div id="review-area" style="margin-top:20px; display:none; background:rgba(0,0,0,0.7); padding:20px; border-radius:20px; border:1px solid var(--p); width:100%; backdrop-filter: blur(5px);"></div>
+        <p style="margin-top:20px; color:#ddd; font-weight:bold; background:rgba(0,0,0,0.6); padding:5px 15px; border-radius:10px; display:inline-block;">تم إرسال نتيجتك التلقائية إلى مستر إيهاب.</p>
+    </div>
+</div>
+
+<script>
+const EXAM_NAME = "Sample Test (1) on Unit 1";
+const GRADE_LEVEL = "الصف الثاني الإعدادي";
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwyI_20IR90uo8GbkEHjFLfeQYPxxierHZeIJBmGERZNJw6wzRd_-pXHL8N1MOhDfc/exec';
+
+document.getElementById("disp-exam-name").innerText = EXAM_NAME;
+document.getElementById("disp-grade").innerText = GRADE_LEVEL;
+
+const listeningTextStr = "My name is Salma and I am in grade 8. I have been a student at this school for a year. I enjoy coming to school because all our teachers are enthusiastic and friendly. Our classes are always interesting. The school building is very big and our classrooms are bright and modern. We have an art studio, a drama studio, and a fantastic science laboratory. We also have a lot of technology to help us. We sometimes use tablets or laptops in our classes. I have gotten a lot better at using technology since I started at this school!";
+
+let cheatCount = 0;
+document.addEventListener('visibilitychange', () => { if(document.hidden && isExamStarted && !isExamFinished) cheatCount++; });
+window.addEventListener('blur', () => { if(isExamStarted && !isExamFinished) cheatCount++; });
+window.addEventListener('keyup', (e) => { if ((e.key === 'PrintScreen' || e.keyCode === 44) && isExamStarted && !isExamFinished) cheatCount++; });
+
+let synth = window.speechSynthesis;
+let utterance = new SpeechSynthesisUtterance(listeningTextStr);
+utterance.lang = 'en-US';
+utterance.rate = 0.9;
+
+function setNaturalVoice() {
+    let voices = synth.getVoices();
+    let naturalVoice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Microsoft Zira") || v.name.includes("Natural"));
+    if(naturalVoice) utterance.voice = naturalVoice;
+}
+if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = setNaturalVoice;
+setNaturalVoice();
+
+utterance.onboundary = function(event) {
+    let progress = document.getElementById('audio-progress');
+    if(progress) progress.style.width = ((event.charIndex / listeningTextStr.length) * 100) + '%';
+};
+utterance.onend = function() {
+    let progress = document.getElementById('audio-progress');
+    if(progress) { progress.style.width = '100%'; setTimeout(() => progress.style.width = '0%', 1000); }
+};
+
+function playAudio() { if (synth.paused) { synth.resume(); } else { synth.cancel(); synth.speak(utterance); } }
+function pauseAudio() { synth.pause(); }
+function stopAudio() { synth.cancel(); }
+
+let student = { name: '' };
+let cur = 0; let totalSeconds = 1800;
+let examPages = []; let userAnswers = {};
+let isExamFinished = false; let isExamStarted = false; 
+let totalQuestionsCount = 37;
+
+let activeWordToDrop = null;
+let shuffledWords = [];
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+const listeningSlide = {
+    type: 'listening', text: listeningTextStr,
+    questions: [
+        { id: 1, q: "1. What grade is Salma in?", o: ["7", "8", "9", "10"], a: "8" },
+        { id: 2, q: "2. How long has Salma been a student at this school?", o: ["a month", "a year", "two years", "a week"], a: "a year" },
+        { id: 3, q: "3. What devices do Salma and her friends use in their classes?", o: ["mobile phones", "tablets or laptops", "radios", "televisions"], a: "tablets or laptops" },
+        { id: 4, q: "4. What has Salma got better at since she started at this school?", o: ["playing sports", "drawing", "using technology", "singing"], a: "using technology" }
+    ]
+};
+
+const choicesSlide = {
+    type: 'normal',
+    questions: [
+        { id: 5, q: "1. We play soccer on the ........", o: ["studio", "pitch", "cafeteria", "hill"], a: "pitch" },
+        { id: 6, q: "2. Students can eat their lunch in the school ........", o: ["gym", "cafeteria", "library", "laboratory"], a: "cafeteria" },
+        { id: 7, q: "3. The place where students practice songs and play different instruments is the ........ studio.", o: ["art", "music", "science", "technology"], a: "music" },
+        { id: 8, q: "4. We play basketball on the basketball ........", o: ["court", "field", "room", "gym"], a: "court" },
+        { id: 9, q: "5. A large, open area with grass where students can play sports like football is a ........", o: ["sports field", "common area", "gym", "cafeteria"], a: "sports field" },
+        { id: 10, q: "6. Students can use computers and tablets in the ........ room.", o: ["art", "science", "common", "technology"], a: "technology" }
+    ]
+};
+
+const completeSlide = {
+    type: 'fill-blank',
+    words: ["library", "laboratory", "studio", "break", "cafeteria", "way"],
+    a: { 11: "library", 12: "laboratory", 13: "studio", 14: "break", 15: "cafeteria" },
+    text: "At our school, there are many places to learn and have fun. We can read books in the (1) <input type='text' id='11' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> or do experiments in the science (2) <input type='text' id='12' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> . For students who love painting and drawing, there is a wonderful art (3) <input type='text' id='13' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> . During the (4) <input type='text' id='14' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> , we usually eat healthy meals in the (5) <input type='text' id='15' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> ."
+};
+
+const passageSlide = {
+    type: 'passage',
+    text: "Education has always been important all over the world, even thousands of years ago. Ancient people invented letters so <span class='target-word'>they</span> could write down important information. Then they transferred the information to other people, so they could learn it, too. Education has changed a lot, especially in the last 20 years. When our grandparents went to school, students didn't use computers, laptops, or tablets. Today, we use technology to decide what questions to ask and to find the answers. Digital tools have changed the way we study and communicate. And children have to understand how and where to find <span class='target-word'>reliable</span> information.",
+    questions: [
+        { id: 16, q: "1. The main idea of the text is about ........", o: ["How old devices help", "How education changed with technology", "Transferring information between children", "The dangers of technology"], a: "How education changed with technology" },
+        { id: 17, q: "2. The synonym of the underlined word reliable is ........", o: ["trusted", "weak", "untrusted", "dependent"], a: "trusted" },
+        { id: 18, q: "3. What does the underlined pronoun 'they' refer to?", o: ["Ancient people", "letters", "students", "grandparents"], a: "Ancient people" },
+        { id: 19, q: "4. How did our grandparents learn in the past?", o: ["From the internet", "From tablets", "From teachers and books", "From digital tools"], a: "From teachers and books" },
+        { id: 20, q: "5. Why did Ancient people invent letters?", o: ["to play games", "to write down important information", "to build schools", "to use technology"], a: "to write down important information" },
+        { id: 21, q: "6. How do digital tools help students?", o: ["They make them play more", "They change the way we study and communicate", "They stop them from learning", "They make communication harder"], a: "They change the way we study and communicate" }
+    ]
+};
+
+const grammarSlide1 = {
+    type: 'normal',
+    title: "Choose the correct answer:",
+    questions: [
+        { id: 22, q: "1. My sister ........ from school three years ago.", o: ["has graduated", "graduated", "graduates", "is graduating"], a: "graduated" },
+        { id: 23, q: "2. Have you ever ........ to another country?", o: ["be", "been", "was", "were"], a: "been" },
+        { id: 24, q: "3. She ........ in this city since she was a child.", o: ["lived", "has lived", "lives", "was living"], a: "has lived" },
+        { id: 25, q: "4. I ........ my homework yesterday evening.", o: ["have finished", "finish", "am finishing", "finished"], a: "finished" },
+        { id: 26, q: "5. They haven't seen that film ........", o: ["yet", "ago", "since", "last"], a: "yet" },
+        { id: 27, q: "6. He ........ his friend last week.", o: ["has visited", "visited", "visits", "is visiting"], a: "visited" }
+    ]
+};
+
+const grammarSlide2 = {
+    type: 'normal',
+    title: "Complete the sentences with the correct form:",
+    questions: [
+        { id: 28, q: "1. Last year, we ........ (learn) about renewable energy.", o: ["learned", "have learned", "learn", "learns"], a: "learned" },
+        { id: 29, q: "2. I ........ (never/see) such a beautiful building before.", o: ["have never seen", "never saw", "never see", "am never seeing"], a: "have never seen" },
+        { id: 30, q: "3. They ........ (not/go) to school yesterday because it was a holiday.", o: ["didn't go", "haven't gone", "don't go", "aren't going"], a: "didn't go" },
+        { id: 31, q: "4. She ........ (live) in Aswan since 2010.", o: ["has lived", "lived", "is living", "lives"], a: "has lived" },
+        { id: 32, q: "5. My father ........ (buy) a new car last month.", o: ["bought", "has bought", "buys", "buy"], a: "bought" }
+    ]
+};
+
+const dialogueSlide = {
+    type: 'dialogue',
+    context: "Nada is telling her friend Huda about her new school.",
+    questions: [
+        { id: 33, q: "Huda: Hi Nada, do you like your new school?<br>Nada: (1) ........ The building is very big and modern.", o: ["Yes, I do.", "No, I don't.", "I hate it.", "I don't know."], a: "Yes, I do." },
+        { id: 34, q: "Huda: What places do you like most?<br>Nada: (2) ........ We do many experiments there.", o: ["The science laboratory.", "The library.", "The playground.", "The cafeteria."], a: "The science laboratory." },
+        { id: 35, q: "Huda: (3) ........ ?<br>Nada: Yes, there is a fantastic drama studio.", o: ["Is there a drama studio?", "Where is the drama studio?", "Do you like drama?", "Is there a library?"], a: "Is there a drama studio?" },
+        { id: 36, q: "Huda: (4) ........ ?<br>Nada: We perform songs and plays there.", o: ["What do you do there?", "Where is it?", "Who do you perform with?", "When do you go there?"], a: "What do you do there?" },
+        { id: 37, q: "Huda: Have you made any new friends?<br>Nada: (5) ........", o: ["Yes, I have.", "No, I didn't.", "I will.", "Yes, I do."], a: "Yes, I have." }
+    ]
+};
+
+function startExam() { 
+    student.name = document.getElementById('studentName').value.trim(); 
+    if(student.name.split(' ').length < 2) { alert("أدخل اسمك بالكامل للبدء."); return; } 
+    
+    shuffledWords = shuffleArray([...completeSlide.words]);
+    examPages = [listeningSlide, choicesSlide, completeSlide, passageSlide, grammarSlide1, grammarSlide2, dialogueSlide]; 
+    
+    examPages.forEach(slide => {
+        if(slide.questions) {
+            slide.questions.forEach(q => { if(q.o) q.o = shuffleArray([...q.o]); });
+        }
+    });
+    
+    isExamStarted = true; 
+    showScene('exam-scene'); 
+    document.getElementById('info-display').innerText = student.name; 
+    render(); 
+    startTimer(); 
+}
+
+function showScene(id) { document.querySelectorAll('.scene').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+
+function render() {
+    const p = examPages[cur]; const box = document.getElementById('exam-content');
+    let solved = countSolved();
+    let h = `<p id="progress-text" style="color:var(--g); margin-bottom:15px; font-weight:bold; text-align:center;">صفحة ${cur+1} من ${examPages.length} (تم حل: ${solved}/${totalQuestionsCount})</p>`;
+    
+    if(p.title) h += `<h3 style="color:var(--p); margin-bottom:15px; direction:ltr; text-align:left;"><i class="fas fa-list-ol"></i> ${p.title}</h3>`;
+    
+    if(p.type === 'listening') {
+        h += `<div class="passage-box" style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://drive.google.com/thumbnail?id=1t9l72xdCNTNpOfhdqiTHcWUgHZE-JIMD&sz=w1000') center/cover; border-color:var(--g); text-align:center;">
+                <h3 style="color:var(--g); margin-bottom:15px; direction:ltr;"><i class="fas fa-headphones"></i> Listen carefully:</h3>
+                <div class="progress-container"><div id="audio-progress" class="progress-bar"></div></div>
+                <div class="audio-controls">
+                    <button type="button" class="btn-audio btn-play" onclick="playAudio()"><i class="fas fa-play"></i> Play</button>
+                    <button type="button" class="btn-audio btn-pause" onclick="pauseAudio()"><i class="fas fa-pause"></i> Pause</button>
+                    <button type="button" class="btn-audio btn-stop" onclick="stopAudio()"><i class="fas fa-stop"></i> Stop</button>
+                </div>
+                <div style="color:#fff; font-size:1.3rem; line-height: 1.8; text-shadow: 1px 1px 5px #000; direction:ltr;">${p.text}</div>
+              </div>`;
+    } else if (p.type === 'passage') {
+        h += `<div class="passage-box">
+                <h3 style="color:var(--p); margin-bottom:15px; direction:ltr;"><i class="fas fa-book-reader"></i> Read the text:</h3>
+                ${p.text}
+              </div>`;
+    } else if (p.type === 'dialogue') {
+        h += `<div class="passage-box">
+                <h3 style="color:var(--p); margin-bottom:15px; direction:ltr;"><i class="fas fa-comments"></i> Complete the dialogue:</h3>
+                <p style="direction:ltr; text-align:left; font-size:1.2rem; font-weight:bold;">${p.context}</p>
+              </div>`;
+    } else if (p.type === 'fill-blank') {
+        h += `<div class="passage-box">
+                <h3 style="color:var(--g); margin-bottom:10px; text-align:center; font-size:1.1rem;">اسحب الكلمة، أو اضغط عليها ثم اضغط على الفراغ، أو اكتبها بنفسك بالكيبورد</h3>
+                <div class="word-bank">`;
+        shuffledWords.forEach(w => {
+            let activeClass = (activeWordToDrop === w) ? 'active-word' : '';
+            h += `<div class="drag-word ${activeClass}" draggable="true" ondragstart="dragWord(event, '${w}')" onclick="selectWord(this, '${w}')">${w}</div>`;
+        });
+        h += `</div><div style="font-size:1.3rem; line-height:2.8; direction:ltr; text-align:left;">${p.text}</div></div>`;
+             
+        setTimeout(() => {
+            Object.keys(p.a).forEach(id => {
+                let input = document.getElementById(id);
+                if(input && userAnswers[id]) input.value = userAnswers[id];
+            });
+        }, 50);
+    }
+
+    if(p.questions) {
+        p.questions.forEach(q => {
+            h += `<div class="q-card">
+                    <div style="direction:ltr; text-align:left; font-size:1.2rem; font-weight:bold; margin-bottom:15px;">${q.q}</div>
+                    <div class="options-grid">` + q.o.map(o => `<div class="opt ${userAnswers[q.id] === o ? 'selected' : ''}" onclick="saveChoice(${q.id}, \`${o}\`)">${o}</div>`).join('') + `</div>
+                  </div>`;
+        });
+    }
+    
+    box.innerHTML = h;
+    
+    let btnPrev = document.getElementById('btn-prev');
+    let btnNext = document.getElementById('btn-next');
+    
+    btnPrev.style.opacity = (cur === 0) ? '0.3' : '1';
+    btnPrev.style.cursor = (cur === 0) ? 'not-allowed' : 'pointer';
+    btnNext.style.opacity = (cur === examPages.length - 1) ? '0.3' : '1';
+    btnNext.style.cursor = (cur === examPages.length - 1) ? 'not-allowed' : 'pointer';
+    
+    document.getElementById('finalSubmit').style.display = (cur === examPages.length - 1) ? 'block' : 'none';
+}
+
+function countSolved() {
+    let solved = 0;
+    let allQs = [];
+    examPages.forEach(p => {
+        if(p.questions) p.questions.forEach(q => allQs.push(q.id));
+        else if (p.type === 'fill-blank') Object.keys(p.a).forEach(k => allQs.push(k));
+    });
+    allQs.forEach(id => { if(userAnswers[id] && userAnswers[id].toString().trim() !== "") solved++; });
+    return solved;
+}
+
+function updateProgressText() {
+    let pTxt = document.getElementById('progress-text');
+    if(pTxt) pTxt.innerText = `صفحة ${cur+1} من ${examPages.length} (تم حل: ${countSolved()}/${totalQuestionsCount})`;
+}
+
+function allowDrop(ev) { ev.preventDefault(); }
+function dragWord(ev, word) { ev.dataTransfer.setData("text", word); }
+function drop(ev) { ev.preventDefault(); let data = ev.dataTransfer.getData("text"); ev.target.value = data; saveInput(ev.target.id, data); }
+function selectWord(el, word) { activeWordToDrop = word; document.querySelectorAll('.drag-word').forEach(e => e.classList.remove('active-word')); el.classList.add('active-word'); }
+function placeWord(inputEl) { if (activeWordToDrop) { inputEl.value = activeWordToDrop; saveInput(inputEl.id, activeWordToDrop); activeWordToDrop = null; document.querySelectorAll('.drag-word').forEach(e => e.classList.remove('active-word')); } }
+function saveInput(id, val) { userAnswers[id] = val; updateProgressText(); }
+function saveChoice(id, val) { userAnswers[id] = val; render(); }
+
+function changeQ(d) { 
+    if (d === -1 && cur === 0) return;
+    if (d === 1 && cur === examPages.length - 1) {
+        alert("أنت الآن في الصفحة الأخيرة من الاختبار!\nيرجى التأكد من إجابة جميع الأسئلة ثم الضغط على زر (تسليم الاختبار) بالأسفل.");
+        return;
+    }
+    cur += d; stopAudio(); activeWordToDrop=null; render(); window.scrollTo(0,0); 
+}
+
+function deferQuestion() { let p = examPages.splice(cur, 1)[0]; examPages.push(p); stopAudio(); activeWordToDrop=null; render(); window.scrollTo(0,0); }
+
+function confirmFinish() { 
+    let solved = countSolved();
+    if (solved < totalQuestionsCount) {
+        let missing = totalQuestionsCount - solved;
+        alert(`عفواً يا بطل!\nلقد نسيت إجابة ${missing} أسئلة.\nيجب عليك حل جميع الأسئلة الـ ${totalQuestionsCount} قبل التسليم.\n\nاستخدم أزرار (السابق والتالي) للبحث عن الأسئلة المتروكة.`);
+        return;
+    }
+    if(confirm("ممتاز! لقد أجبت على جميع الأسئلة.\nهل أنت متأكد من تسليم الاختبار؟")) finish(); 
+}
+
+function finish() {
+    isExamFinished = true; stopAudio();
+    
+    document.body.classList.add('result-mode');
+    document.getElementById('particles-js').style.display = 'none';
+    document.getElementById('main-container').classList.add('result-container');
+    
+    let score = 0;
+    let payload = { 
+        name: student.name, 
+        className: GRADE_LEVEL, 
+        examName: EXAM_NAME,
+        cheat: cheatCount 
+    };
+    
+    let allQs = [];
+    examPages.forEach(p => {
+        if(p.questions) p.questions.forEach(q => allQs.push(q));
+        else if (p.type === 'fill-blank') Object.keys(p.a).forEach(k => allQs.push({ id: k, q: "Fill-in Blank (" + (k-10) + ")", a: p.a[k] }));
+    });
+
+    allQs.forEach(q => {
+        let ans = (userAnswers[q.id] || "").toString().trim();
+        let correct = q.a.toString().trim();
+        
+        let isCorrect = (ans.toLowerCase() === correct.toLowerCase());
+        if(isCorrect) score += 1;
+
+        payload["Q" + q.id] = { val: ans || "لم يُجب", isCorrect: isCorrect };
+    });
+    
+    payload.totalScore = score + " / " + totalQuestionsCount;
+    
+    if(SCRIPT_URL !== 'YOUR_GOOGLE_SHEET_URL_HERE') {
+        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).catch(e => console.log(e));
+    }
+    
+    showResultScreen(score, allQs);
+}
+
+function showResultScreen(score, allQs) {
+    showScene('result-scene');
+    document.getElementById('result-summary').innerHTML = `
+        <img src="https://drive.google.com/thumbnail?id=100z54KgQrHdfkxVCzKiBhXc7RDLh-dnS&sz=w500" class="main-logo" style="width:130px; margin-bottom:20px;" alt="Logo">
+        <h1 style="color:var(--s); margin-bottom:10px; font-size:2.5rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);">تم الإرسال بنجاح</h1>
+        <p style="font-size:6rem; font-weight:900; color:var(--g); margin: 0; text-shadow: 0 0 20px rgba(255, 177, 66, 0.6);">${score} / ${totalQuestionsCount}</p>
+        <br><button class="nav-btn btn-next" style="width:80%; max-width:400px; margin-top:25px; font-size:1.3rem;" onclick="toggleReview()">مراجعة الإجابات الخاطئة</button>`;
+    
+    let rh = "";
+    allQs.forEach(q => {
+        let ans = (userAnswers[q.id] || "").toString().trim();
+        let correct = q.a.toString().trim();
+        if(ans.toLowerCase() !== correct.toLowerCase()) {
+            rh += `<div class="q-card" style="text-align:left; direction:ltr; background:rgba(0,0,0,0.9); border-color:var(--d);">
+                    <b style="color:#fff;">Q:</b> <span style="color:#ddd;">${q.q}</span><br>
+                    <span style="color:var(--d)">Your Answer: ${ans||'No Answer'}</span> | <span style="color:var(--s)">Correct Answer: ${q.a}</span>
+                   </div>`;
+        }
+    });
+    document.getElementById('review-area').innerHTML = rh || "<h3 style='color:var(--s); background:rgba(0,0,0,0.8); padding:15px; border-radius:15px;'>درجة كاملة! أحسنت يا بطل ولم تخطئ في أي سؤال.</h3>";
+}
+
+function toggleReview() { let a = document.getElementById('review-area'); a.style.display = (a.style.display==='none')?'block':'none'; }
+
+function startTimer() { setInterval(() => { if(!isExamStarted || isExamFinished) return; totalSeconds--; let m=Math.floor(totalSeconds/60), s=totalSeconds%60; document.getElementById('totalTimer').innerText=`${m}:${s<10?'0'+s:s}`; if(totalSeconds<=0) finish(); }, 1000); }
+const canvas = document.getElementById('particles-js'); const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+let pts = Array.from({length:40},()=>({x:Math.random()*canvas.width, y:Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5}));
+function anim(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="rgba(255, 255, 255, 0.6)"; pts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>canvas.width)p.vx*=-1; if(p.y<0||p.y>canvas.height)p.vy*=-1; ctx.beginPath(); ctx.arc(p.x,p.y,1.5,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
+anim();
+</script>
+</body>
+</html>
