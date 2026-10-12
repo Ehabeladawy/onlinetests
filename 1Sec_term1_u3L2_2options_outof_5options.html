@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr. Ehab - 1SEC Term1 U3 L2 synonyms 2 Options out of 5 (7127)</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    --primary: #6366f1; --purple-glow: #8b5cf6; --success: #10b981;
+    --danger: #ef4444; --bg-dark: #020617; 
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+body { background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; color: white; position: relative; overflow-x: hidden; }
+
+#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+.main-card { 
+    background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); 
+    width: 100%; max-width: 850px; border-radius: 40px; 
+    border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 0 50px rgba(99, 102, 241, 0.2); 
+    overflow: hidden; position: relative; z-index: 2; margin: 20px 0;
+}
+
+.quiz-header { padding: 20px 40px; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+.logo-container { 
+    width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--danger); 
+    overflow: hidden; background: #000; box-shadow: 0 0 15px var(--danger);
+    animation: glow-pulse 2s infinite ease-in-out;
+}
+@keyframes glow-pulse {
+    0% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
+    50% { box-shadow: 0 0 25px var(--danger), 0 0 40px rgba(239, 68, 68, 0.4); transform: scale(1.05); }
+    100% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
+}
+.logo-img { width: 100%; height: 100%; object-fit: cover; }
+
+.header-text { text-align: left; }
+.header-text h1 { font-size: 1.3rem; font-weight: 900; color: white; }
+.animated-name {
+    background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1.1rem;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+.progress-section { padding: 15px 40px; background: rgba(0,0,0,0.3); display: none; }
+.progress-info { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; color: #94a3b8; }
+.progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #d946ef); transition: width 0.5s ease; }
+
+.question-row { 
+    background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 25px; 
+    margin-bottom: 25px; border: 1px solid var(--danger); 
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+    display: flex; align-items: center; gap: 20px; direction: ltr;
+}
+.question-text { font-size: 1.2rem; font-weight: 800; text-align: left; flex: 1; color: #f8fafc; line-height: 1.6; }
+.instruction-badge { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 6px 14px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; display: inline-block; direction: rtl; }
+
+.timer-wrapper { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+.timer-svg { transform: rotate(-90deg); width: 80px; height: 80px; }
+.timer-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 6; }
+.timer-progress { 
+    fill: none; stroke: var(--success); stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 226; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+#timer-text { position: absolute; font-size: 1.6rem; font-weight: 900; }
+
+.option-box { 
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); 
+    padding: 15px 20px; border-radius: 18px; cursor: pointer; font-weight: 700; font-size: 1.1rem; 
+    margin-bottom: 12px; color: white; width: 100%; direction: ltr; transition: 0.3s all;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.option-box:hover { background: rgba(99, 102, 241, 0.15); transform: translateX(10px); }
+
+.correct { background: var(--success) !important; border-color: #fff !important; }
+.wrong { background: var(--danger) !important; border-color: #fff !important; }
+.selected { border-color: var(--primary) !important; background: rgba(99, 102, 241, 0.25) !important; }
+.disabled { pointer-events: none; }
+
+.btn { 
+    background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 16px 35px; 
+    border: none; border-radius: 18px; font-size: 1.2rem; font-weight: 800; cursor: pointer; 
+    margin: 10px; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
+}
+.scene { display: none; padding: 40px; text-align: center; }
+.active { display: block; animation: zoomIn 0.5s ease; }
+@keyframes zoomIn { from { opacity:0; transform: scale(0.9); } to { opacity:1; transform: scale(1); } }
+
+input[type="text"] { width: 85%; padding: 20px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; text-align: center; font-size: 1.3rem; outline: none; margin-bottom: 30px; }
+.review-area { background: rgba(0,0,0,0.4); border-radius: 20px; padding: 25px; margin-top: 25px; text-align: center; display: none; border: 1px solid rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+
+<canvas id="particles-js"></canvas>
+
+<div class="main-card" id="card">
+    <div class="quiz-header">
+        <div class="logo-container">
+            <img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img">
+        </div>
+        <div class="header-text">
+            <h1>1SEC Term1 U3 L2 synonyms 2 Options out of 5</h1>
+            <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
+        </div>
+    </div>
+
+    <div class="progress-section" id="progressArea">
+        <div class="progress-info">
+            <span id="progStep">السؤال 1</span>
+            <span id="progPercent">0%</span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="pBar"></div>
+        </div>
+    </div>
+
+    <div id="welcome-scene" class="scene active">
+        <img src="https://drive.google.com/thumbnail?id=1cF-j-60otMztzK5ruWOGf02aem5WUG7R&sz=w600" style="width: 250px; margin-bottom: 20px;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 20px;">تحدي اختر إجابتين صحيحتين من 5 اختيارات</h2>
+        <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي يا بطل">
+        <br>
+        <button class="btn" onclick="startTest()">بدء الاختبار <i class="fa-solid fa-bolt"></i></button>
+    </div>
+
+    <div id="quiz-scene" class="scene">
+        <div id="quiz-content"></div>
+    </div>
+
+    <div id="result-scene" class="scene">
+        <h2 id="result-title" style="font-size: 2.2rem; margin-bottom: 25px;">النتيجة النهائية</h2>
+        <div id="result-container" style="position:relative; width:100%; max-width:600px; margin: 0 auto 30px;"></div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <button class="btn" onclick="toggleReview()" style="background:rgba(255,255,255,0.1)"><i class="fa-solid fa-eye"></i> مراجعة الأخطاء</button>
+            <button class="btn" onclick="location.reload()" style="background:rgba(255,255,255,0.05)"><i class="fa-solid fa-rotate"></i> جرب مرة تانية</button>
+        </div>
+        <div id="reviewArea" class="review-area"></div>
+    </div>
+</div>
+
+<audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+
+<script>
+// 7127 - All 15 Questions extracted from image (Choose 2 options out of 5)
+const quizData = [
+    { 
+        q: "Don't betray your friends. Betray can be replaced by ......... and ......... .", 
+        options: ["trick", "guide", "mislead", "verify", "trust"], 
+        correct: ["trick", "mislead"] 
+    },
+    { 
+        q: "That bad boy used to trick his friends. \"Trick\" here is similar in meaning to ......... and ......... .", 
+        options: ["lead", "receive", "deceive", "cheat", "help"], 
+        correct: ["deceive", "cheat"] 
+    },
+    { 
+        q: "A good ......... can help a person find better opportunities in life. Choose TWO:", 
+        options: ["reputation", "name", "accident", "problem", "rumor"], 
+        correct: ["reputation", "name"] 
+    },
+    { 
+        q: "That firm has a good reputation. The synonym of reputation is ......... and ......... .", 
+        options: ["name", "fame", "shame", "fraud", "disgrace"], 
+        correct: ["name", "fame"] 
+    },
+    { 
+        q: "I don't believe \"false\" news. The synonyms of the underlined word \"false\" are ......... and ......... .", 
+        options: ["untrue", "correct", "honest", "happy", "fake"], 
+        correct: ["untrue", "fake"] 
+    },
+    { 
+        q: "That necklace looks fake and cheap. The synonyms of the word \"fake\" are ......... and ......... .", 
+        options: ["real", "false", "forged", "genuine", "authentic"], 
+        correct: ["false", "forged"] 
+    },
+    { 
+        q: "\"Some companies exploit young workers by paying them very little.\" The underlined verb \"exploit\" in this context is near in meaning to ......... and ......... .", 
+        options: ["protect", "abuse", "support", "respect", "misuse"], 
+        correct: ["abuse", "misuse"] 
+    },
+    { 
+        q: "\"Good interaction between teachers and students improves learning.\" The underlined noun \"interaction\" here has a similar meaning to ......... and ......... .", 
+        options: ["isolation", "silence", "communication", "separation", "contact"], 
+        correct: ["communication", "contact"] 
+    },
+    { 
+        q: "\"The police warned people about a new online scam.\" The underlined noun \"scam\" here can be replaced by ......... and ......... .", 
+        options: ["honesty", "truth", "fraud", "fairness", "swindle"], 
+        correct: ["fraud", "swindle"] 
+    },
+    { 
+        q: "\"The coach spoke supportively to the young player after the match.\" The underlined adverb \"supportively\" in this context is near in meaning to ......... and ......... .", 
+        options: ["cruelly", "kindly", "harshly", "encouragingly", "unhelpfully"], 
+        correct: ["kindly", "encouragingly"] 
+    },
+    { 
+        q: "\"Tactics\" is to ......... and ......... as \"methods\" is to \"ways\".", 
+        options: ["accidents", "failures", "problems", "strategies", "plans"], 
+        correct: ["strategies", "plans"] 
+    },
+    { 
+        q: "He is known for his good reputation. The opposites of the word \"reputation\" are ......... and ......... .", 
+        options: ["disgrace", "fame", "well-known", "shame", "standing"], 
+        correct: ["disgrace", "shame"] 
+    },
+    { 
+        q: "The story was full of deception. The antonyms of the word \"deception\" are ......... and ......... .", 
+        options: ["trickery", "fraud", "honesty", "smartness", "trust"], 
+        correct: ["honesty", "trust"] 
+    },
+    { 
+        q: "\"Cruel employers may exploit workers for their own profit.\" The underlined verb \"exploit\" in this context is opposite in meaning to ......... and ......... .", 
+        options: ["abuse", "protect", "manipulate", "misuse", "support"], 
+        correct: ["protect", "support"] 
+    },
+    { 
+        q: "\"He would never betray his best friend in a difficult situation.\" The underlined verb \"betray\" in this context is opposite in meaning to ......... and ......... .", 
+        options: ["backstab", "deceive", "support", "cheat", "defend"], 
+        correct: ["support", "defend"] 
+    }
+];
+
+let shuffled = [], currentIdx = 0, score = 0, name = "", timer, timeLeft = 60, wrongs = [], selectedOptions = [];
+
+function startTest() {
+    name = document.getElementById('studentName').value.trim();
+    if(name.length < 3) return alert("الاسم الثلاثي يا بطل!");
+    shuffled = quizData.sort(() => Math.random() - 0.5);
+    document.getElementById('progressArea').style.display = "block";
+    showScene('quiz-scene');
+    loadQuestion();
+}
+
+function loadQuestion() {
+    clearInterval(timer);
+    timeLeft = 60;
+    selectedOptions = [];
+    const q = shuffled[currentIdx];
+    const p = (currentIdx / shuffled.length) * 100;
+    document.getElementById('pBar').style.width = p + "%";
+    document.getElementById('progStep').innerText = `سؤال ${currentIdx + 1} من ${shuffled.length}`;
+    document.getElementById('progPercent').innerText = Math.round(p) + "%";
+
+    document.getElementById('quiz-scene').innerHTML = `
+        <div style="text-align: right;"><span class="instruction-badge"><i class="fa-solid fa-circle-info"></i> اختر إجابتين صحيحتين ثم اضغط تحقق</span></div>
+        <div class="question-row">
+            <div class="question-text">${q.q}</div>
+            <div class="timer-wrapper">
+                <svg class="timer-svg" viewBox="0 0 80 80">
+                    <circle class="timer-bg" cx="40" cy="40" r="36"></circle>
+                    <circle id="timerRing" class="timer-progress" cx="40" cy="40" r="36"></circle>
+                </svg>
+                <div id="timer-text">60</div>
+            </div>
+        </div>
+        <div id="optionsGrid"></div>
+        <div style="text-align: center; margin-top: 25px;">
+            <button class="btn" id="submitBtn" onclick="checkAnswers()" style="opacity: 0.5; pointer-events: none;"><i class="fa-solid fa-check"></i> تحقق من الإجابة</button>
+        </div>
+    `;
+
+    let currentOptions = [...q.options].sort(() => Math.random() - 0.5);
+    currentOptions.forEach((optText) => {
+        const div = document.createElement('div');
+        div.className = "option-box";
+        div.innerHTML = `<span>${optText}</span><i class="fa-regular fa-square" style="font-size: 1.2rem;"></i>`;
+        div.onclick = () => toggleSelect(div, optText);
+        document.getElementById('optionsGrid').appendChild(div);
+    });
+    startTimer();
+}
+
+function toggleSelect(el, optText) {
+    if(el.classList.contains('disabled')) return;
+    
+    const icon = el.querySelector('i');
+    if(selectedOptions.includes(optText)) {
+        selectedOptions = selectedOptions.filter(item => item !== optText);
+        el.classList.remove('selected');
+        icon.className = "fa-regular fa-square";
+    } else {
+        if(selectedOptions.length >= 2) {
+            alert("يمكنك اختيار إجابتين فقط!");
+            return;
+        }
+        selectedOptions.push(optText);
+        el.classList.add('selected');
+        icon.className = "fa-solid fa-square-check";
+    }
+
+    const subBtn = document.getElementById('submitBtn');
+    if(selectedOptions.length === 2) {
+        subBtn.style.opacity = "1";
+        subBtn.style.pointerEvents = "auto";
+    } else {
+        subBtn.style.opacity = "0.5";
+        subBtn.style.pointerEvents = "none";
+    }
+}
+
+function startTimer() {
+    const tText = document.getElementById('timer-text');
+    const ring = document.getElementById('timerRing');
+    timer = setInterval(() => {
+        timeLeft--;
+        tText.innerText = timeLeft;
+        let offset = 226 - (timeLeft * (226 / 60));
+        ring.style.strokeDashoffset = offset;
+        if(timeLeft <= 0) { clearInterval(timer); checkAnswers(true); }
+    }, 1000);
+}
+
+function checkAnswers(isTimeout = false) {
+    clearInterval(timer);
+    document.querySelectorAll('.option-box').forEach(b => b.classList.add('disabled'));
+    const subBtn = document.getElementById('submitBtn');
+    if(subBtn) subBtn.style.pointerEvents = 'none';
+
+    const q = shuffled[currentIdx];
+    
+    if(isTimeout) {
+        selectedOptions = [];
+    }
+
+    const isCorrect = selectedOptions.length === 2 && 
+                      q.correct.every(val => selectedOptions.includes(val)) &&
+                      selectedOptions.every(val => q.correct.includes(val));
+
+    document.querySelectorAll('.option-box').forEach(b => {
+        const text = b.querySelector('span').innerText.trim();
+        const icon = b.querySelector('i');
+        if(q.correct.includes(text)) {
+            b.classList.add('correct');
+            icon.className = "fa-solid fa-circle-check";
+            b.style.borderColor = "var(--success)";
+            b.style.borderWidth = "3px";
+            b.style.boxShadow = "0 0 20px var(--success)";
+            b.querySelector('span').style.color = "var(--success)";
+        } else if(selectedOptions.includes(text)) {
+            b.classList.add('wrong');
+            icon.className = "fa-solid fa-circle-xmark";
+        }
+    });
+
+    if(isCorrect) {
+        document.getElementById('sound-correct').play();
+        score++;
+    } else {
+        document.getElementById('sound-wrong').play();
+        wrongs.push({q: q.q, a: q.correct.join(" و ")});
+    }
+
+    setTimeout(() => {
+        currentIdx++;
+        if(currentIdx < shuffled.length) loadQuestion(); else finish();
+    }, 2000); 
+}
+
+function finish() {
+    document.getElementById('progressArea').style.display = "none";
+    showScene('result-scene');
+    const percentage = (score / shuffled.length) * 100;
+    const resContainer = document.getElementById('result-container');
+    const rev = document.getElementById('reviewArea');
+
+    if (percentage >= 50) {
+        confetti({ particleCount: 150, spread: 60 });
+        resContainer.innerHTML = `
+            <img src="https://drive.google.com/thumbnail?id=1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM&sz=w800" style="width:100%; border-radius:30px;">
+            <div style="position:absolute; top:45%; left:50%; transform:translateX(-50%); color:#1e3a8a; font-size:1.8rem; font-weight:900; width:80%;">${name}</div>
+            <div style="position:absolute; top:60%; left:50%; transform:translateX(-50%); color:#dc2626; font-size:1.4rem; font-weight:900;">الدرجة: ${score} من ${shuffled.length}</div>
+        `;
+    } else {
+        resContainer.innerHTML = `
+            <div style="padding:60px; background: rgba(239, 68, 68, 0.1); border:2px solid var(--danger); border-radius:30px; margin-bottom: 20px;">
+                <h3 style="font-size: 2rem; color: var(--danger);">حاول مرة أخرى</h3>
+                <p style="font-size: 1.3rem; margin-top: 10px;">يا بطل ${name}، درجتك ${score} من ${shuffled.length}.</p>
+            </div>
+        `;
+    }
+
+    if (wrongs.length === 0) {
+        rev.innerHTML = `<h3 style="color:var(--success); font-size: 1.8rem;">ممتاز يا بطل! مفيش أخطاء 🌟</h3>`;
+    } else {
+        rev.innerHTML = "<h3 style='margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;'>الأخطاء:</h3>";
+        wrongs.forEach(w => rev.innerHTML += `<div style="margin:10px 0; padding:15px; background:rgba(255,255,255,0.05); border-radius:15px; text-align:right;" dir="ltr">السؤال: ${w.q}<br><span style="color:var(--success)">الإجابتان الصحيحتان: ${w.a}</span></div>`);
+    }
+}
+
+function toggleReview() {
+    const r = document.getElementById('reviewArea');
+    r.style.display = (r.style.display === "none" || r.style.display === "") ? "block" : "none";
+}
+
+function showScene(id) {
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+const canvas = document.getElementById('particles-js');
+const ctx = canvas.getContext('2d');
+let pts = [];
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+class P {
+    constructor() { this.reset(); }
+    reset() { this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.s=Math.random()*2+1; this.vx=(Math.random()-0.5)*0.5; this.vy=(Math.random()-0.5)*0.5; }
+    update() { this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height) this.reset(); }
+    draw() { ctx.fillStyle="rgba(139,92,246,0.3)"; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); }
+}
+for(let i=0;i<50;i++) pts.push(new P());
+function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.update(); p.draw();}); requestAnimationFrame(animate); }
+animate();
+</script>
+</body>
+</html>
