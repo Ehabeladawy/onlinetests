@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr. Ehab - If conditionals advanced 63QS Secondary stage (7127)</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    --primary: #6366f1; --purple-glow: #8b5cf6; --success: #10b981;
+    --danger: #ef4444; --bg-dark: #020617; 
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+body { background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; color: white; position: relative; overflow-x: hidden; }
+
+#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+.main-card { 
+    background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); 
+    width: 100%; max-width: 850px; border-radius: 40px; 
+    border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 0 50px rgba(99, 102, 241, 0.2); 
+    overflow: hidden; position: relative; z-index: 2; margin: 20px 0;
+}
+
+.quiz-header { padding: 20px 40px; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+.logo-container { 
+    width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--danger); 
+    overflow: hidden; background: #000; box-shadow: 0 0 15px var(--danger);
+    animation: glow-pulse 2s infinite ease-in-out;
+}
+@keyframes glow-pulse {
+    0% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
+    50% { box-shadow: 0 0 25px var(--danger), 0 0 40px rgba(239, 68, 68, 0.4); transform: scale(1.05); }
+    100% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
+}
+.logo-img { width: 100%; height: 100%; object-fit: cover; }
+
+.header-text { text-align: left; }
+.header-text h1 { font-size: 1.4rem; font-weight: 900; color: white; }
+.animated-name {
+    background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1.1rem;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+.progress-section { padding: 15px 40px; background: rgba(0,0,0,0.3); display: none; }
+.progress-info { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; color: #94a3b8; }
+.progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #d946ef); transition: width 0.5s ease; }
+
+.question-row { 
+    background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; 
+    margin-bottom: 30px; border: 1px solid var(--danger); 
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+    display: flex; align-items: center; gap: 20px; direction: ltr;
+}
+.question-text { font-size: 1.3rem; font-weight: 800; text-align: left; flex: 1; color: #f8fafc; line-height: 1.6; }
+
+.timer-wrapper { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+.timer-svg { transform: rotate(-90deg); width: 80px; height: 80px; }
+.timer-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 6; }
+.timer-progress { 
+    fill: none; stroke: var(--success); stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 226; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+#timer-text { position: absolute; font-size: 1.6rem; font-weight: 900; }
+
+.option-box { 
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); 
+    padding: 15px 25px; border-radius: 18px; cursor: pointer; font-weight: 700; font-size: 1.1rem; 
+    margin-bottom: 12px; color: white; width: 100%; direction: ltr; transition: 0.3s all;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.option-box:hover { background: rgba(99, 102, 241, 0.15); transform: translateX(10px); }
+
+.correct { background: var(--success) !important; border-color: #fff !important; }
+.wrong { background: var(--danger) !important; border-color: #fff !important; }
+.disabled { pointer-events: none; }
+
+.btn { 
+    background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 16px 35px; 
+    border: none; border-radius: 18px; font-size: 1.2rem; font-weight: 800; cursor: pointer; 
+    margin: 10px; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
+}
+.scene { display: none; padding: 40px; text-align: center; }
+.active { display: block; animation: zoomIn 0.5s ease; }
+@keyframes zoomIn { from { opacity:0; transform: scale(0.9); } to { opacity:1; transform: scale(1); } }
+
+input[type="text"] { width: 85%; padding: 20px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; text-align: center; font-size: 1.3rem; outline: none; margin-bottom: 30px; }
+.review-area { background: rgba(0,0,0,0.4); border-radius: 20px; padding: 25px; margin-top: 25px; text-align: center; display: none; border: 1px solid rgba(255,255,255,0.1); max-height: 350px; overflow-y: auto; text-align: left; direction: ltr; }
+</style>
+</head>
+<body>
+
+<canvas id="particles-js"></canvas>
+
+<div class="main-card" id="card">
+    <div class="quiz-header">
+        <div class="logo-container">
+            <img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img">
+        </div>
+        <div class="header-text">
+            <h1>If conditionals advanced 63QS Secondary stage</h1>
+            <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
+        </div>
+    </div>
+
+    <div class="progress-section" id="progressArea">
+        <div class="progress-info">
+            <span id="progStep">السؤال 1</span>
+            <span id="progPercent">0%</span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="pBar"></div>
+        </div>
+    </div>
+
+    <div id="welcome-scene" class="scene active">
+        <img src="https://drive.google.com/thumbnail?id=1cF-j-60otMztzK5ruWOGf02aem5WUG7R&sz=w600" style="width: 250px; margin-bottom: 20px;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 20px;">تحدي قواعد If المتقدمة</h2>
+        <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي يا بطل">
+        <br>
+        <button class="btn" onclick="startTest()">بدء الاختبار <i class="fa-solid fa-bolt"></i></button>
+    </div>
+
+    <div id="quiz-scene" class="scene">
+        <div id="quiz-content"></div>
+    </div>
+
+    <div id="result-scene" class="scene">
+        <h2 id="result-title" style="font-size: 2.2rem; margin-bottom: 25px;">النتيجة النهائية</h2>
+        <div id="result-container" style="position:relative; width:100%; max-width:600px; margin: 0 auto 30px;"></div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <button class="btn" onclick="toggleReview()" style="background:rgba(255,255,255,0.1)"><i class="fa-solid fa-eye"></i> مراجعة الأخطاء</button>
+            <button class="btn" onclick="location.reload()" style="background:rgba(255,255,255,0.05)"><i class="fa-solid fa-rotate"></i> جرب مرة تانية</button>
+        </div>
+        <div id="reviewArea" class="review-area"></div>
+    </div>
+</div>
+
+<audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+
+<script>
+// Complete 63 Questions Data
+const quizData = [
+    { q: "If you ............ early, you will get up early.", options: ["slept", "would sleep", "sleep", "sleeping"], correct: "sleep" },
+    { q: "If he didn’t phone, I ............ .", options: ["won’t go", "wouldn’t go", "don’t go", "hadn’t gone"], correct: "wouldn’t go" },
+    { q: "If it is hot tomorrow, we ............ visit the zoo.", options: ["wouldn’t", "won’t", "hadn’t", "haven’t"], correct: "won’t" },
+    { q: "They would travel if they ............ free time.", options: ["would have", "will have", "had", "have had"], correct: "had" },
+    { q: "If they played well, they ............ .", options: ["win", "would win", "will win", "won"], correct: "would win" },
+    { q: "If she went to the club, she ............ her friends.", options: ["met", "will meet", "meets", "would meet"], correct: "would meet" },
+    { q: "If I ........ help with a school project, I look online.", options: ["needed", "need", "will need", "had needed"], correct: "need" },
+    { q: "If a piece of iron ......... in the open air, it rusts.", options: ["leave", "is left", "leaves", "was left"], correct: "is left" },
+    { q: "If Ali joined the school trip, he .......... a happy day.", options: ["would be", "has", "would have", "had had"], correct: "would have" },
+    { q: "If Mazen had enough money, he ......... that mobile phone.", options: ["will buy", "would buy", "would have bought", "buys"], correct: "would buy" },
+    { q: "If he had traveled to Egypt, he ......... wonderful places.", options: ["will see", "would see", "had seen", "would have seen"], correct: "would have seen" },
+    { q: "......... training hard, you can’t win the match.", options: ["Unless", "If", "Without", "Should"], correct: "Without" },
+    { q: "If Ali had to get up early, he ......... to bed early.", options: ["would go", "will go", "would have gone", "go"], correct: "would go" },
+    { q: "If our car ........., we’d have gone on a picnic.", options: ["had checked", "has been checked", "had been checked", "checked"], correct: "had been checked" },
+    { q: "If you ......... more care, you would have minimized your mistakes.", options: ["were", "had", "had had", "had been"], correct: "had had" },
+    { q: "If he let me go early, I ......... come on time.", options: ["will", "would", "would have", "can"], correct: "would" },
+    { q: "How......... Noha feel if she read this novel again?", options: ["does", "did", "would", "will"], correct: "would" },
+    { q: "If she cut her finger, she ......... go to hospital.", options: ["will", "may", "might", "might have"], correct: "might" },
+    { q: "What ......... do if you get lost in a big city is to check your GPS.", options: ["you will", "will you", "would you", "you would"], correct: "will you" },
+    { q: "Grandma usually ......... a short nap if she feels tired.", options: ["will take", "takes", "took", "take"], correct: "takes" },
+    { q: "If you ......... what I say, ask your teacher.", options: ["won’t believe", "didn’t believe", "don’t believe", "hadn’t believed"], correct: "don’t believe" },
+    { q: "If you asked me, I ......... you.", options: ["help", "am helping", "would help", "will help"], correct: "would help" },
+    { q: "If she ......... the competition, she’d probably win a prize.", options: ["will enter", "enters", "entered", "had entered"], correct: "entered" },
+    { q: "He wouldn’t take a taxi if someone ......... for him at the airport.", options: ["had waited", "waited", "has waited", "waiting"], correct: "waited" },
+    { q: "If I ......... a holiday, I would have a swim in the sea.", options: ["had had", "have had", "had", "don’t have"], correct: "had" },
+    { q: "......... he felt tired, he’d go to bed early.", options: ["But for", "With", "If", "Without"], correct: "If" },
+    { q: "They won’t come to the party ......... we invite them.", options: ["without", "unless", "in case of", "if"], correct: "unless" },
+    { q: "If I ......... enough money for the project, I wouldn’t have to borrow from the bank.", options: ["had had", "didn’t have", "had", "have"], correct: "had" },
+    { q: "If people don’t get enough food, they ......... weak.", options: ["became", "would become", "become", "would have become"], correct: "become" },
+    { q: "I’d fly if I ......... a bird.", options: ["will be", "had been", "were", "am"], correct: "were" },
+    { q: "I’d have been pleased with you if you ......... the homework.", options: ["hadn’t done", "had done", "would do", "do"], correct: "had done" },
+    { q: "If he read the novel carefully, he ......... the end very well.", options: ["will know", "would know", "knows", "knew"], correct: "would know" },
+    { q: "If she cut the flowers, her mother ......... angry.", options: ["will be", "is", "would be", "was"], correct: "would be" },
+    { q: "......... her courage, the kid wouldn’t have been saved.", options: ["If", "Unless", "In case of", "Without"], correct: "Without" },
+    { q: "Rodayna wouldn’t have been a doctor ......... studying hard hadn’t been an important thing to her.", options: ["unless", "without", "in case of", "if"], correct: "if" },
+    { q: "Should my father ......... me, I would achieve my goal.", options: ["encourage", "encourages", "encouraged", "encouraging"], correct: "encourage" },
+    { q: "......... he to study hard, he would get high marks.", options: ["If", "Had", "Would", "Were"], correct: "Were" },
+    { q: "......... staying up affects my health badly, I’ll sleep earlier from now on.", options: ["If", "Without", "In case of", "Unless"], correct: "If" },
+    { q: "The referee will wear two watches on both hands ......... one of them stops.", options: ["unless", "in case of", "if", "in case"], correct: "in case of" },
+    { q: "If I had written work, I ......... it at once.", options: ["will do", "would do", "had done", "would have done"], correct: "would do" },
+    { q: "If I had money, I’d donate some to charity. Unfortunately, I ......... any.", options: ["hadn’t", "don’t have", "didn’t have", "hadn’t had"], correct: "don’t have" },
+    { q: "If I were busy, I wouldn’t come to the party. This means that I ......... busy.", options: ["am not", "am", "was not", "was"], correct: "am not" },
+    { q: "......... Malak to read the book, she would get much information.", options: ["If", "Unless", "Were", "Should"], correct: "Were" },
+    { q: "I’d rather start now if I ......... to finish in time.", options: ["have", "don’t have", "had", "had had"], correct: "had" },
+    { q: "If this trip cost much money, I ......... join it.", options: ["am not", "don’t", "won’t", "wouldn’t"], correct: "wouldn’t" },
+    { q: "It’s important to take your medicine if you ......... ill.", options: ["are felt", "feel", "felt", "had felt"], correct: "feel" },
+    { q: "We’d better train hard if we ......... to win the match.", options: ["had wanted", "wanted", "want", "don’t want"], correct: "want" },
+    { q: "If you give me your pen, I ......... you draw the map.", options: ["will help", "would help", "helped", "would have helped"], correct: "will help" },
+    { q: "If she had run fast, she ......... the bus.", options: ["will catch", "would catch", "would have caught", "caught"], correct: "would have caught" },
+    { q: "If water reaches 100°C, it ......... .", options: ["boil", "boils", "boiled", "will boil"], correct: "boils" },
+    { q: "If I were you, I ......... accept the job offer.", options: ["will", "would", "can", "may"], correct: "would" },
+    { q: "If he had studied hard, he ......... the exam.", options: ["passed", "would pass", "would have passed", "passes"], correct: "would have passed" },
+    { q: "If it rains, we ......... stay at home.", options: ["will", "would", "would have", "had"], correct: "will" },
+    { q: "If she invites me, I ......... go to the party.", options: ["will", "would", "would have", "did"], correct: "will" },
+    { q: "If you heat ice, it ......... .", options: ["melt", "melts", "melted", "will melt"], correct: "melts" },
+    { q: "Which of the following sentences is structurally correct?", options: ["If you pour water on fire, it go out.", "If you pour water on fire, it goes out.", "If you pour water on fire, it will go out.", "If you pour water on fire, it went out."], correct: "If you pour water on fire, it goes out." },
+    { q: "Which of the following sentences is structurally correct?", options: ["If I was a famous singer, I will help children in need.", "If I were a famous singer, I would help children in need.", "If I am a famous singer, I would help children in need.", "If I had been a famous singer, I would help children in need."], correct: "If I were a famous singer, I would help children in need." },
+    { q: "Which of the following sentences is structurally correct?", options: ["If you click this icon, the program starts.", "If you click this icon, the program started.", "If you click this icon, the program starting.", "If you clicked this icon, the program starts."], correct: "If you click this icon, the program starts." },
+    { q: "Which of the following sentences is structurally correct?", options: ["If plants don’t get sunlight, they die.", "If plants don’t get sunlight, they died.", "If plants don’t get sunlight, they dying.", "If plants didn’t get sunlight, they die."], correct: "If plants don’t get sunlight, they die." },
+    { q: "Which of the following sentences is structurally correct?", options: ["If you eat healthily, you feel better.", "If you eat healthily, you will feel better.", "If you eat healthily, you felt better.", "If you ate healthily, you will feel better."], correct: "If you eat healthily, you will feel better." },
+    { q: "Which of the following sentences is structurally correct?", options: ["If I had knew, I would come.", "If I known, I would have come.", "If I knew, I would come.", "If I had knew, I would have come."], correct: "If I knew, I would come." },
+    { q: "\"If I come first this year, I’ll get a reward\". This means ......... .", options: ["It is impossible that I come first", "I will probably come first", "It is not likely that I come first", "I did not come first"], correct: "I will probably come first" },
+    { q: "\"If I came first this year, I’d get a reward\". This means ......... .", options: ["it’s possible that I will come first", "I will probably come first", "it is not likely that I will come first", "I did not come first"], correct: "it is not likely that I will come first" }
+];
+
+let shuffled = [], currentIdx = 0, score = 0, name = "", timer, timeLeft = 60, wrongs = [];
+
+function startTest() {
+    name = document.getElementById('studentName').value.trim();
+    if(name.length < 3) return alert("الاسم الثلاثي يا بطل!");
+    shuffled = [...quizData];
+    document.getElementById('progressArea').style.display = "block";
+    showScene('quiz-scene');
+    loadQuestion();
+}
+
+function loadQuestion() {
+    clearInterval(timer);
+    timeLeft = 60;
+    const q = shuffled[currentIdx];
+    const p = ((currentIdx + 1) / shuffled.length) * 100;
+    document.getElementById('pBar').style.width = p + "%";
+    document.getElementById('progStep').innerText = `سؤال ${currentIdx + 1} من ${shuffled.length}`;
+    document.getElementById('progPercent').innerText = Math.round(p) + "%";
+
+    document.getElementById('quiz-scene').innerHTML = `
+        <div class="question-row">
+            <div class="question-text">${q.q}</div>
+            <div class="timer-wrapper">
+                <svg class="timer-svg" viewBox="0 0 80 80">
+                    <circle class="timer-bg" cx="40" cy="40" r="36"></circle>
+                    <circle id="timerRing" class="timer-progress" cx="40" cy="40" r="36"></circle>
+                </svg>
+                <div id="timer-text">60</div>
+            </div>
+        </div>
+        <div id="optionsGrid"></div>
+    `;
+
+    let currentOptions = [...q.options];
+    currentOptions.forEach((optText) => {
+        const div = document.createElement('div');
+        div.className = "option-box";
+        div.innerHTML = `<span>${optText}</span>`;
+        div.onclick = () => check(div, optText === q.correct);
+        document.getElementById('optionsGrid').appendChild(div);
+    });
+    startTimer();
+}
+
+function startTimer() {
+    const tText = document.getElementById('timer-text');
+    const ring = document.getElementById('timerRing');
+    timer = setInterval(() => {
+        timeLeft--;
+        tText.innerText = timeLeft;
+        let offset = 226 - (timeLeft * (226 / 60));
+        ring.style.strokeDashoffset = offset;
+        if(timeLeft <= 0) { clearInterval(timer); check(null, false); }
+    }, 1000);
+}
+
+function check(el, isCorrect) {
+    clearInterval(timer);
+    document.querySelectorAll('.option-box').forEach(b => b.classList.add('disabled'));
+    const q = shuffled[currentIdx];
+
+    if(el) {
+        if(isCorrect) {
+            el.classList.add('correct');
+            document.getElementById('sound-correct').play();
+            score++;
+        } else {
+            el.classList.add('wrong');
+            document.getElementById('sound-wrong').play();
+            wrongs.push({q: q.q, a: q.correct});
+            highlightCorrect(q.correct);
+        }
+    } else {
+        wrongs.push({q: q.q, a: q.correct});
+        highlightCorrect(q.correct);
+    }
+
+    setTimeout(() => {
+        currentIdx++;
+        if(currentIdx < shuffled.length) loadQuestion(); else finish();
+    }, 1500); 
+}
+
+function highlightCorrect(correctText) {
+    document.querySelectorAll('.option-box').forEach(b => {
+        if(b.innerText.trim() === correctText.trim()) {
+            b.style.borderColor = "var(--success)";
+            b.style.borderWidth = "3px";
+            b.style.boxShadow = "0 0 20px var(--success)";
+            b.querySelector('span').style.color = "var(--success)";
+            b.querySelector('span').innerHTML += " <i class='fa-solid fa-check-circle'></i>";
+        }
+    });
+}
+
+function finish() {
+    document.getElementById('progressArea').style.display = "none";
+    showScene('result-scene');
+    const percentage = (score / shuffled.length) * 100;
+    const resContainer = document.getElementById('result-container');
+    const rev = document.getElementById('reviewArea');
+
+    if (percentage >= 50) {
+        confetti({ particleCount: 150, spread: 60 });
+        resContainer.innerHTML = `
+            <img src="https://drive.google.com/thumbnail?id=1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM&sz=w800" style="width:100%; border-radius:30px;">
+            <div style="position:absolute; top:45%; left:50%; transform:translateX(-50%); color:#1e3a8a; font-size:1.8rem; font-weight:900; width:80%;">${name}</div>
+            <div style="position:absolute; top:60%; left:50%; transform:translateX(-50%); color:#dc2626; font-size:1.4rem; font-weight:900;">الدرجة: ${score} من ${shuffled.length}</div>
+        `;
+    } else {
+        resContainer.innerHTML = `
+            <div style="padding:60px; background: rgba(239, 68, 68, 0.1); border:2px solid var(--danger); border-radius:30px; margin-bottom: 20px;">
+                <h3 style="font-size: 2rem; color: var(--danger);">حاول مرة أخرى</h3>
+                <p style="font-size: 1.3rem; margin-top: 10px;">يا بطل ${name}، درجتك ${score} من ${shuffled.length}.</p>
+            </div>
+        `;
+    }
+
+    if (wrongs.length === 0) {
+        rev.innerHTML = `<h3 style="color:var(--success); font-size: 1.8rem;">ممتاز يا بطل! مفيش أخطاء 🌟</h3>`;
+    } else {
+        rev.innerHTML = "<h3 style='margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;'>الأخطاء:</h3>";
+        wrongs.forEach(w => rev.innerHTML += `<div style="margin:10px 0; padding:15px; background:rgba(255,255,255,0.05); border-radius:15px;">السؤال: ${w.q}<br><span style="color:var(--success)">الإجابة الصح: ${w.a}</span></div>`);
+    }
+}
+
+function toggleReview() {
+    const r = document.getElementById('reviewArea');
+    r.style.display = (r.style.display === "none" || r.style.display === "") ? "block" : "none";
+}
+
+function showScene(id) {
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+const canvas = document.getElementById('particles-js');
+const ctx = canvas.getContext('2d');
+let pts = [];
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+class P {
+    constructor() { this.reset(); }
+    reset() { this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.s=Math.random()*2+1; this.vx=(Math.random()-0.5)*0.5; this.vy=(Math.random()-0.5)*0.5; }
+    update() { this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height) this.reset(); }
+    draw() { ctx.fillStyle="rgba(139,92,246,0.3)"; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); }
+}
+for(let i=0;i<50;i++) pts.push(new P());
+function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.update(); p.draw();}); requestAnimationFrame(animate); }
+animate();
+</script>
+</body>
+</html>
