@@ -61,7 +61,7 @@ body { background: var(--bg-dark); min-height: 100vh; display: flex; align-items
     box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
     display: flex; align-items: center; gap: 20px; direction: ltr;
 }
-.question-text { font-size: 1.3rem; font-weight: 800; text-align: left; flex: 1; color: #f8fafc; line-height: 1.6; }
+.question-text { font-size: 1.2rem; font-weight: 800; text-align: left; flex: 1; color: #f8fafc; line-height: 1.6; }
 
 .timer-wrapper { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
 .timer-svg { transform: rotate(-90deg); width: 80px; height: 80px; }
@@ -157,12 +157,12 @@ const quizData = [
     { q: "........ is information meant to make people believe something false.", options: ["Rumor", "Defense", "Awareness", "Misinformation"], correct: "Misinformation", type: "single" },
     { q: "........ is the art of protecting someone or something from attack.", options: ["Rumor", "Defense", "Awareness", "Misinformation"], correct: "Defense", type: "single" },
     { q: "To ......... is to spoil or destroy something completely.", options: ["ruin", "spread", "require", "combine"], correct: "ruin", type: "single" },
-    { q: "The country builds a strong defense. The word \"defense\" here can be replaced by ........", options: ["offense", "ignorance", "protection", "strike", "safeguard"], correct: ["protection", "safeguard"], type: "multi" },
-    { q: "The stars became invisible because of the heavy clouds. The synonyms of the word \"invisible\" are ........ and ........ .", options: ["hidden", "bright", "unseen", "noticeable", "clear"], correct: ["hidden", "unseen"], type: "multi" },
-    { q: "The friendship between the two families is lasting. The synonyms of the word \"lasting\" are ........ and ........ .", options: ["permanent", "outdated", "enduring", "temporary", "short-lived"], correct: ["permanent", "enduring"], type: "multi" },
-    { q: "Today's wars are not fought with soldiers but with words, lies, half-truths, and rumors. The antonyms of the word \"rumor\" are ........ and ........ .", options: ["offense", "gossip", "fact", "hearsay", "truth"], correct: ["fact", "truth"], type: "multi" },
-    { q: "The insect was invisible in the dark room.\" The word \"invisible\" is an antonym of ........", options: ["defended", "visible", "ruined", "clear"], correct: "visible", type: "single" },
-    { q: "The friendship between the two families is lasting. The antonyms of the word \"lasting\" are ........ and ........ .", options: ["permanent", "short-lived", "enduring", "temporary", "constant"], correct: ["short-lived", "temporary"], type: "multi" },
+    { q: "The country builds a strong defense. The word \"defense\" here can be replaced by ........ (Choose TWO)", options: ["offense", "ignorance", "protection", "strike", "safeguard"], correct: ["protection", "safeguard"], type: "multi" },
+    { q: "The stars became invisible because of the heavy clouds. The synonyms of the word \"invisible\" are ........ and ........ . (Choose TWO)", options: ["hidden", "bright", "unseen", "noticeable", "clear"], correct: ["hidden", "unseen"], type: "multi" },
+    { q: "The friendship between the two families is lasting. The synonyms of the word \"lasting\" are ........ and ........ . (Choose TWO)", options: ["permanent", "outdated", "enduring", "temporary", "short-lived"], correct: ["permanent", "enduring"], type: "multi" },
+    { q: "Today's wars are not fought with soldiers but with words, lies, half-truths, and rumors. The antonyms of the word \"rumor\" are ........ and ........ . (Choose TWO)", options: ["offense", "gossip", "fact", "hearsay", "truth"], correct: ["fact", "truth"], type: "multi" },
+    { q: "The insect was invisible in the dark room. The word \"invisible\" is an antonym of ........", options: ["defended", "visible", "ruined", "clear"], correct: "visible", type: "single" },
+    { q: "The friendship between the two families is lasting. The antonyms of the word \"lasting\" are ........ and ........ . (Choose TWO)", options: ["permanent", "short-lived", "enduring", "temporary", "constant"], correct: ["short-lived", "temporary"], type: "multi" },
     { q: "Honest communication can ........ trust between customers and merchants.", options: ["build", "min", "damage", "hide"], correct: "build", type: "single" },
     { q: "Losers usually ........ behind illusions instead of facing the truth.", options: ["introduce", "state", "create", "hide"], correct: "hide", type: "single" },
     { q: "One of the team members has ........ a great idea about online safety.", options: ["introduced", "damaged", "built", "valued"], correct: "introduced", type: "single" },
@@ -176,15 +176,15 @@ const quizData = [
     { q: "The teacher asked us to reflect ........ our mistakes after the test.", options: ["ever", "across", "from", "on"], correct: "on", type: "single" },
     { q: "This photo reminds me ........ my old school days.", options: ["en", "of", "over", "across"], correct: "of", type: "single" },
     { q: "When you are attacked, you are expected to fight ........ .", options: ["back", "with", "on", "over"], correct: "back", type: "single" },
-    { q: "You should be ........ of online tricks before you click strange links.", options: ["awful", "awareness", "unaware", "unawareness"], correct: "unaware", type: "single" },
-    { q: "Good citizen should ........ their country in difficult times.", options: ["defender", "defensive", "defend", "defensively"], correct: "defend", type: "single" },
+    { q: "You should be ........ of online tricks before you click strange links.", options: ["awful", "awareness", "aware", "unawareness"], correct: "aware", type: "single" },
+    { q: "Good citizens should ........ their country in difficult times.", options: ["defender", "defensive", "defend", "defensively"], correct: "defend", type: "single" },
     { q: "He answered ........ because he felt blamed.", options: ["defend", "defense", "defensive", "defensively"], correct: "defensively", type: "single" },
     { q: "Some websites may ........ readers with false facts.", options: ["misinform", "misinformation", "misinformed", "informing"], correct: "misinform", type: "single" },
     { q: "The ........ road made the journey slow and difficult.", options: ["ruin", "ruins", "ruined", "ruining"], correct: "ruined", type: "single" },
     { q: "Some people ........ false stories about others.", options: ["rumored", "rumor", "rumors", "rumoring"], correct: "rumors", type: "single" },
     { q: "Which sentence is structurally correct?", options: ["I find homework difficult.", "I find to do homework difficult.", "I find homework to difficult.", "I find difficult homework."], correct: "I find homework difficult.", type: "single" },
     { q: "Which sentence has the correct structure?", options: ["The news made me to sad.", "The news made me sad.", "The news made me to be sad.", "The news made sad me."], correct: "The news made me sad.", type: "single" },
-    { q: "Which is the correct structure?", options: ["The teacher made the students to read.", "The teacher made the students read.", "The teacher made to the students read.", "The teacher made reading the students."], correct: "The teacher made the students read.", type: "single" },
+    { q: "Which is the correct structure?", options: ["The teacher made the students to read.", "The teacher made the students read.", "The teacher made to the students read.", "The teacher made reading the students."], correct: "The teacher made reading the students.", type: "single" },
     { q: "Which sentence is structurally correct?", options: ["The children were made leave the room.", "The children were made to leave the room.", "The children made to leave the room", "The children were made to leave the room."], correct: "The children were made to leave the room.", type: "single" },
     { q: "Choose the correct passive sentence:", options: ["Amira was made to clean the board", "Amira was made clean the board", "Amira was to he made clean the board", "Amira mada to clean the board"], correct: "Amira was made to clean the board", type: "single" },
     { q: "After years as a teacher, she had a successful ........ .", options: ["work", "disinformation", "misinformation", "career"], correct: "career", type: "single" },
@@ -215,7 +215,7 @@ function loadQuestion() {
     document.getElementById('progStep').innerText = `سؤال ${currentIdx + 1} من ${shuffled.length}`;
     document.getElementById('progPercent').innerText = Math.round(p) + "%";
 
-    let instructionText = q.type === "multi" ? "Choose the (Two) correct answers:" : q.q;
+    let instructionText = q.q;
 
     document.getElementById('quiz-scene').innerHTML = `
         <div class="question-row">
