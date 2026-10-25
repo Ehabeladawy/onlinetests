@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>1Sec term1 plus U2 L1</title>
+    <title>تحدي الكلمات التفاعلي - مستر إيهاب العدوي</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -72,7 +72,7 @@
         .btn { 
             background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; padding: 15px 40px; 
             border: none; border-radius: 20px; font-size: 1.3rem; font-weight: 800; cursor: pointer; 
-            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif;
+            transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Cairo', sans-serif;
             box-shadow: 0 0 15px rgba(255, 75, 43, 0.4);
         }
         .btn:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 75, 43, 0.8); }
@@ -97,9 +97,25 @@
             border-radius: 15px; display: flex; flex-direction: column; padding: 10px;
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
         }
+
+        .game-header-bar {
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px 20px; background: rgba(0, 0, 0, 0.5); border-radius: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); height: 12%;
+        }
+
+        .timer-display {
+            font-size: 1.5rem; font-weight: 900; color: #ff4d4d; background: rgba(255,0,0,0.1); 
+            padding: 5px 15px; border-radius: 10px; border: 1px solid #ff4d4d;
+            box-shadow: 0 0 10px rgba(255,0,0,0.3); display: flex; align-items: center; gap: 8px;
+        }
+
         .game-area { position: relative; flex-grow: 1; display: flex; justify-content: space-between; padding: 15px 5%; height: 75%; }
-        #lines-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
-        svg path { fill: none; stroke-width: 4; stroke-linecap: round; stroke: #fff; }
+        
+        /* جعل الخطوط تظهر فوق المستطيلات */
+        #lines-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+        svg path { fill: none; stroke-width: 5; stroke-linecap: round; stroke: #fff; filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.8)); }
+        
         .column { display: flex; flex-direction: column; justify-content: space-evenly; height: 100%; width: 38%; z-index: 10; }
         
         .word-item {
@@ -135,7 +151,8 @@
         @media (max-width: 768px) {
             #main-box-game { width: 100vw; height: 100vh; border-radius: 0; border-width: 2px; }
             .game-area { padding: 10px 2%; } .column { width: 46%; } 
-            .quiz-header { flex-direction: column; text-align: center; } .header-text { text-align: center; }
+            .game-header-bar { flex-direction: column; justify-content: center; gap: 5px; height: 15%; }
+            .timer-display { font-size: 1.2rem; padding: 2px 10px; }
         }
     </style>
 </head>
@@ -245,9 +262,15 @@
     <!-- 6. شاشة اللعبة (التوصيل) للطالب -->
     <div id="game-scene" class="scene">
         <div id="main-box-game">
-            <div class="quiz-header" style="height: 12%; border-radius: 10px;">
-                <div class="logo-container" style="width: 50px; height: 50px; border-width: 2px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
-                <h1 style="font-size: 18px;">1Sec term1 plus U2 L1</h1>
+            
+            <div class="game-header-bar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="logo-container" style="width: 50px; height: 50px; border-width: 2px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+                    <h1 style="font-size: 18px;">1Sec term1 plus U2 L1</h1>
+                </div>
+                <div class="timer-display" id="timer-display">
+                    <i class="fa-regular fa-clock"></i> <span id="time-left">100</span> ث
+                </div>
             </div>
 
             <div class="game-area" id="game-area" dir="ltr">
@@ -273,7 +296,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // 2. إعدادات Firebase (الأكواد التي قمت أنت بإرسالها)
+        // 2. إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyC_ed0XfZkBt_xRf8dN3ciM37uidGZrCt8",
             authDomain: "mrehabgames.firebaseapp.com",
@@ -283,15 +306,14 @@
             appId: "1:379463494744:web:983a5677afb5b92faf2e2d"
         };
 
-        // تهيئة قاعدة البيانات
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // متغيرات عامة للتطبيق
         let currentPin = "";
         let currentStudent = "";
+        let timerInterval = null;
+        let timeLeft = 100;
 
-        // دوال مساعدة للانتقال بين الشاشات
         window.showScene = function(sceneId) {
             document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
             document.getElementById(sceneId).classList.add('active');
@@ -304,42 +326,29 @@
         }
 
         // ==========================================
-        // 3. أكواد المعلم (Teacher Logic)
+        // أكواد المعلم
         // ==========================================
         function createRoom() {
-            // إنشاء كود عشوائي من 4 أرقام
             currentPin = Math.floor(1000 + Math.random() * 9000).toString();
             document.getElementById('teacher-pin').innerText = currentPin;
 
-            // تسجيل الغرفة في Firebase
-            set(ref(db, 'rooms/' + currentPin), {
-                status: 'waiting',
-                players: {}
-            });
+            set(ref(db, 'rooms/' + currentPin), { status: 'waiting', players: {} });
 
-            // الاستماع المباشر لدخول الطلاب (تحديث الشاشة لحظياً)
             onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
                 const players = snapshot.val();
                 const list = document.getElementById('teacher-students-list');
                 const leaderboardBody = document.getElementById('leaderboard-body');
-                list.innerHTML = '';
-                leaderboardBody.innerHTML = '';
+                list.innerHTML = ''; leaderboardBody.innerHTML = '';
 
                 if(players) {
-                    // تحويل كائن اللاعبين إلى مصفوفة لترتيبهم حسب الدرجة
                     let playersArray = [];
                     for(let name in players) {
                         playersArray.push({ name: name, score: players[name].score, finished: players[name].finished });
                     }
-                    
-                    // الترتيب: من الأكبر للأصغر
                     playersArray.sort((a, b) => b.score - a.score);
 
                     playersArray.forEach((p, index) => {
-                        // إضافة الطالب لغرفة الانتظار
                         list.innerHTML += `<div class="student-badge">🧑‍🎓 ${p.name}</div>`;
-                        
-                        // إضافة الطالب للوحة الصدارة
                         let statusText = p.finished ? "✅ انتهى" : "⏳ يحل الآن...";
                         let row = `<tr>
                             <td>${index + 1}</td>
@@ -354,13 +363,12 @@
         }
 
         window.startMultiplayerGame = function() {
-            // تغيير حالة الغرفة إلى 'playing' لينطلق الاختبار عند جميع الطلاب
             update(ref(db, 'rooms/' + currentPin), { status: 'playing' });
             showScene('teacher-leaderboard-scene');
         }
 
         // ==========================================
-        // 4. أكواد الطالب (Student Logic)
+        // أكواد الطالب و العداد الزمني
         // ==========================================
         window.joinRoom = function() {
             currentStudent = document.getElementById('studentName').value.trim();
@@ -371,37 +379,42 @@
                 return;
             }
 
-            // التحقق من وجود الغرفة
             get(ref(db, 'rooms/' + currentPin)).then((snapshot) => {
                 if (snapshot.exists()) {
                     let roomData = snapshot.val();
                     if(roomData.status === 'waiting') {
-                        // تسجيل دخول الطالب لقاعدة البيانات
-                        set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), {
-                            score: 0,
-                            finished: false
-                        });
-
+                        set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false });
                         showScene('student-waiting-scene');
 
-                        // الاستماع لقرار المعلم ببدء اللعبة
                         onValue(ref(db, 'rooms/' + currentPin + '/status'), (statusSnapshot) => {
                             if(statusSnapshot.val() === 'playing') {
                                 showScene('game-scene');
-                                initGameUI(); // رسم الكلمات وتجهيز اللعبة
+                                initGameUI();
+                                startCountdown(); // تشغيل العداد للطالب
                             }
                         });
-                    } else {
-                        alert("الاختبار بدأ بالفعل! لا يمكنك الدخول الآن.");
-                    }
-                } else {
-                    alert("كود الغرفة غير صحيح!");
-                }
+                    } else { alert("الاختبار بدأ بالفعل! لا يمكنك الدخول الآن."); }
+                } else { alert("كود الغرفة غير صحيح!"); }
             });
         }
 
+        function startCountdown() {
+            timeLeft = 100;
+            document.getElementById('time-left').innerText = timeLeft;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time-left').innerText = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitGame(); // سحب الورقة تلقائياً عند انتهاء الوقت
+                }
+            }, 1000);
+        }
+
         // ==========================================
-        // 5. نظام اللعبة الأصلي (التوصيل والسحب)
+        // نظام اللعبة
         // ==========================================
         const wordsData = [
             { id: 1, en: "engagement", ar: "خطوبة" },
@@ -534,9 +547,11 @@
         document.addEventListener('mousemove', drag); document.addEventListener('touchmove', drag, {passive: false});
         document.addEventListener('mouseup', endDrag); document.addEventListener('touchend', endDrag);
 
-        // إنهاء وإرسال النتيجة
-        document.getElementById('finish-btn').addEventListener('click', () => {
+        // وظيفة إنهاء وتقييم اللعبة (زر الإنهاء أو انتهاء الوقت)
+        function submitGame() {
+            clearInterval(timerInterval); // إيقاف العداد
             let score = 0;
+
             for (let enId in connections) {
                 let conn = connections[enId];
                 let isCorrect = (conn.enId === conn.arId);
@@ -556,13 +571,12 @@
                 if(!Object.values(connections).some(c => c.arId == item.id)) document.getElementById(`ar-word-${item.id}`).classList.add('wrong-word');
             });
 
-            // إرسال النتيجة إلى Firebase للمعلم
+            // إرسال النتيجة
             update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), {
                 score: score,
                 finished: true
             });
 
-            // إظهار النتيجة للطالب
             const resultOverlay = document.getElementById('result-overlay');
             const scoreText = document.getElementById('score-text');
             const messageText = document.getElementById('message-text');
@@ -580,9 +594,11 @@
             
             document.querySelectorAll('.word-item').forEach(item => item.style.pointerEvents = 'none');
             document.getElementById('finish-btn').style.display = 'none';
-        });
+        }
 
-        // الجزيئات المتحركة (توضيحي)
+        document.getElementById('finish-btn').addEventListener('click', submitGame);
+
+        // الجزيئات المتحركة
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
