@@ -140,15 +140,15 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <div id="role-scene" class="scene active">
     <div class="main-card">
         <div class="quiz-header">
-            <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
             <div class="header-text">
                 <h1>ثاني اعدادي جماعي وحدة 4 درس 5</h1>
                 <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
             </div>
         </div>
         <div class="content-area">
-            <!-- الصورة المتحركة فوق عبارة من أنت -->
-            <img src="https://drive.google.com/thumbnail?id=1cF-j-60otMztzK5ruWOGf02aem5WUG7R&sz=w300" style="width: 140px; margin-bottom: -10px; animation: float 3s ease-in-out infinite;">
+            <!-- الصورة المتحركة مكبرة وواضحة فوق عبارة من أنت -->
+            <img src="https://drive.google.com/thumbnail?id=1cF-j-60otMztzK5ruWOGf02aem5WUG7R&sz=w600" style="width: 220px; margin-bottom: -5px; animation: float 3s ease-in-out infinite;">
             <h2 style="font-size: 1.5rem; margin-bottom: 10px;">من أنت؟</h2>
             <button class="btn btn-green" onclick="showScene('teacher-setup-scene')" style="width: 80%; max-width: 320px;">👨‍🏫 مستر إيهاب (منشئ التحدي)</button>
             <button class="btn" onclick="showScene('student-login-scene')" style="width: 80%; max-width: 320px;">🧑‍🎓 أنا طالب (دخول التحدي)</button>
@@ -160,7 +160,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <div id="teacher-setup-scene" class="scene">
     <div class="main-card">
         <div class="quiz-header">
-            <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
             <div class="header-text"><h1>لوحة تحكم المعلم</h1></div>
         </div>
         <div class="content-area">
@@ -177,7 +177,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <div id="teacher-leaderboard-scene" class="scene">
     <div class="main-card" style="max-width: 900px;">
         <div class="quiz-header">
-            <div class="logo-container" style="width: 50px; height: 50px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+            <div class="logo-container" style="width: 50px; height: 50px;"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
             <div class="header-text"><h1>لوحة الصدارة المباشرة 🏆</h1></div>
         </div>
         <div class="content-area" style="overflow-x: auto; width: 100%; padding-top:10px;">
@@ -207,7 +207,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <div id="student-login-scene" class="scene">
     <div class="main-card">
         <div class="quiz-header">
-            <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
             <div class="header-text">
                 <h1>ثاني اعدادي جماعي وحدة 4 درس 5</h1>
                 <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
@@ -225,7 +225,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <div id="student-waiting-scene" class="scene">
     <div class="main-card">
         <div class="quiz-header">
-            <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
             <div class="header-text"><h1>انتظار بدء التحدي</h1></div>
         </div>
         <div class="content-area">
@@ -320,14 +320,12 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         document.getElementById('teacher-pin').innerText = currentPin;
         set(ref(db, 'rooms/' + currentPin), { status: 'waiting', players: {} });
 
-        // متابعة المتصدرين وإنهاء الاختبار قسرياً من المعلم
         onValue(ref(db, 'rooms/' + currentPin), (snapshot) => {
             const roomData = snapshot.val();
             if(!roomData) return;
 
-            // التحقق من أمر الإنهاء القسري من المعلم
             if(roomData.status === 'ended' && !window.isFinished && document.getElementById('quiz-scene').classList.contains('active')) {
-                window.submitQuiz(); // إنهاء الاختبار للطالب تلقائياً
+                window.submitQuiz(); 
             }
 
             const players = roomData.players;
@@ -344,7 +342,6 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
                     list.innerHTML += `<div class="student-badge">🧑‍🎓 ${p.name}</div>`;
                     let statusText = p.finished ? "✅ سلم الاختبار" : "⏳ يحل الآن...";
                     
-                    // تحديد الدروع والأحجام للمراكز الثلاثة الأولى
                     let rankDisplay = `${index + 1}`;
                     let rowClass = "";
                     if(index === 0) {
@@ -376,7 +373,6 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         renderAllQuestions('teacher-questions-view', true);
     }
 
-    // زر الإنهاء القسري الخاص بمستر إيهاب فقط
     window.forceEndQuiz = function() {
         if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم الآن؟")) {
             update(ref(db, 'rooms/' + currentPin), { status: 'ended' });
@@ -422,7 +418,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
                 let optBox = document.createElement('div');
                 optBox.className = 'option-box';
                 optBox.innerHTML = `<span>${optText}</span>`;
-                optBox.classList.add('disabled'); // تعطيل الضغط للمعلم وعدم إظهار الإجابة الصحيحة
+                optBox.classList.add('disabled'); 
                 optsDiv.appendChild(optBox);
             });
             qDiv.appendChild(optsDiv);
@@ -436,7 +432,6 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         window.isFinished = false;
         showScene('quiz-scene');
         
-        // رسم الأسئلة للطالب
         const container = document.getElementById('quiz-content');
         container.innerHTML = '';
         shuffled.forEach((q, qIndex) => {
