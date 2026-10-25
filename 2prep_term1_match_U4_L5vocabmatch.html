@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تحدي الكلمات - مستر إيهاب العدوي</title>
+    
+    <!-- مكتبة الأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&family=Poppins:wght@500;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #000;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            overflow: hidden; 
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* الجزئيات المتحركة */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* ----- إدارة المشاهد (الشاشات) ----- */
+        .scene {
+            display: none;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 10;
+        }
+        .scene.active {
+            display: flex;
+            animation: zoomIn 0.5s ease;
+        }
+        @keyframes zoomIn { 
+            from { opacity: 0; transform: scale(0.9); } 
+            to { opacity: 1; transform: scale(1); } 
+        }
+
+        /* ----- تصميم شاشة الترحيب ----- */
+        .main-card { 
+            background: rgba(15, 23, 42, 0.85); 
+            backdrop-filter: blur(20px); 
+            width: 90%; 
+            max-width: 600px; 
+            border-radius: 40px; 
+            border: 2px solid red; 
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3); 
+            overflow: hidden; 
+            text-align: center;
+        }
+
+        .quiz-header { 
+            padding: 20px; 
+            background: rgba(0, 0, 0, 0.5); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+        }
+
+        .logo-container { 
+            width: 80px; height: 80px; border-radius: 50%; border: 2px solid red; 
+            overflow: hidden; background: #000; box-shadow: 0 0 15px red;
+            animation: glow-pulse 2s infinite ease-in-out;
+            flex-shrink: 0;
+        }
+        @keyframes glow-pulse {
+            0% { box-shadow: 0 0 5px red; transform: scale(1); }
+            50% { box-shadow: 0 0 25px red, 0 0 40px rgba(239, 68, 68, 0.4); transform: scale(1.05); }
+            100% { box-shadow: 0 0 5px red; transform: scale(1); }
+        }
+        .logo-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .header-text { text-align: right; }
+        .header-text h1 { font-size: clamp(18px, 4vw, 24px); font-weight: 900; color: white; }
+        .animated-name {
+            background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1rem;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .welcome-content { padding: 40px 20px; }
+        input[type="text"] { 
+            width: 85%; max-width: 400px; padding: 15px; border-radius: 20px; 
+            border: 2px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); 
+            color: white; text-align: center; font-size: 1.2rem; outline: none; margin-bottom: 25px; 
+            font-family: 'Cairo', sans-serif;
+        }
+        input[type="text"]:focus { border-color: red; box-shadow: 0 0 15px rgba(255,0,0,0.5); }
+
+        .btn-start { 
+            background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; padding: 15px 40px; 
+            border: none; border-radius: 20px; font-size: 1.3rem; font-weight: 800; cursor: pointer; 
+            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif;
+        }
+        .btn-start:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 75, 43, 0.6); }
+
+        /* ----- تصميم اللعبة (سحب وإدراج) ----- */
+        #main-box {
+            width: 95vw;
+            height: 95vh;
+            background-color: #1a1a1a;
+            border: 4px solid red;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .game-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 15%;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            padding: 5px;
+        }
+        .game-header h1 {
+            font-size: clamp(14px, 2.5vw, 20px);
+            margin: 0;
+        }
+        .sub-header-title {
+            font-size: clamp(12px, 2vw, 16px);
+            color: #00f3ff;
+            font-weight: 800;
+        }
+
+        .game-area {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 5%;
+            height: 73%;
+        }
+
+        #lines-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        svg path {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke: #fff;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            height: 100%;
+            width: 38%; 
+            z-index: 10;
+        }
+
+        .word-item {
+            width: 100%; 
+            height: auto;
+            min-height: 42px; 
+            padding: 6px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(40, 40, 40, 1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .word-item:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(60, 60, 60, 1);
+        }
+
+        .word-item.english { font-family: 'Poppins', sans-serif; }
+        
+        .word-text {
+            font-size: clamp(11px, 2.2vh, 16px);
+            font-weight: bold;
+            text-align: center;
+            pointer-events: none;
+            word-wrap: break-word; 
+        }
+
+        .dot {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff, 0 0 15px #00f3ff;
+            pointer-events: none; 
+        }
+
+        .arabic .dot { right: 8px; }
+        .english .dot { left: 8px; }
+
+        .footer-area {
+            height: 12%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .game-btn {
+            padding: 8px 25px;
+            font-size: clamp(14px, 1.8vw, 18px);
+            font-weight: bold;
+            font-family: 'Cairo', sans-serif;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        #finish-btn { background: linear-gradient(45deg, #00c6ff, #0072ff); box-shadow: 0 0 10px rgba(0, 114, 255, 0.6); }
+        #show-answers-btn { background: linear-gradient(45deg, #28a745, #218838); box-shadow: 0 0 10px rgba(40, 167, 69, 0.6); display: none; }
+        #restart-btn { background: linear-gradient(45deg, #ff416c, #ff4b2b); box-shadow: 0 0 10px rgba(255, 75, 43, 0.6); display: none; }
+
+        .game-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        /* نافذة النتيجة */
+        #result-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%; 
+            max-width: 450px;
+            aspect-ratio: 1.6 / 1;
+            background-image: url('https://lh3.googleusercontent.com/d/1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.2);
+            z-index: 100;
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .student-name-result { font-size: clamp(16px, 4vw, 22px); font-family: 'Cairo', sans-serif; font-weight: 800; color: #fff; text-shadow: 2px 2px 5px #000; margin-top: 5%; color: #00f3ff;}
+        .result-score { font-size: clamp(30px, 8vw, 45px); font-family: 'Poppins', sans-serif; font-weight: 800; color: #fff; text-shadow: 2px 2px 5px #000; margin-top: 5px; }
+        .result-message { font-size: clamp(14px, 4vw, 18px); font-family: 'Poppins', sans-serif; font-weight: 600; text-shadow: 1px 1px 3px #000; margin-top: 5px; }
+        
+        .msg-success { color: #00ff88; }
+        .msg-fail { color: #ff4d4d; }
+
+        .correct-word { box-shadow: 0 0 15px rgba(0, 255, 0, 0.6) !important; border-color: #00ff00 !important; }
+        .wrong-word { box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important; border-color: #ff0000 !important; }
+
+        @media (max-width: 768px) {
+            #main-box { width: 100vw; height: 100vh; border-radius: 0; border-width: 2px; }
+            .game-area { padding: 10px 2%; }
+            .column { width: 46%; } 
+            .game-header { height: 16%; gap: 3px; }
+            .dot { width: 12px; height: 12px; }
+            .arabic .dot { right: 4px; }
+            .english .dot { left: 4px; }
+            .word-item { padding: 4px 15px; }
+            .quiz-header { flex-direction: column; text-align: center; }
+            .header-text { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ملفات الصوت -->
+    <audio id="sound-connect" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
+    <audio id="sound-fail" src="https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3" preload="auto"></audio>
+
+    <canvas id="particles"></canvas>
+
+    <!-- شاشة الترحيب -->
+    <div id="welcome-scene" class="scene active">
+        <div class="main-card">
+            <div class="quiz-header">
+                <div class="logo-container">
+                    <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img">
+                </div>
+                <div class="header-text">
+                    <h1>تحدي توصيل الكلمات</h1>
+                    <span class="animated-name">إعداد وبرمجة / مستر إيهاب العدوي</span>
+                </div>
+            </div>
+            
+            <div class="welcome-content">
+                <h2 style="font-size: 1.8rem; margin-bottom: 25px;">مستعد للتحدي؟</h2>
+                <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي يا بطل">
+                <br>
+                <button class="btn-start" onclick="startTest()">بدء الاختبار <i class="fa-solid fa-bolt"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة اللعبة الأساسية -->
+    <div id="game-scene" class="scene">
+        <div id="main-box">
+            <div class="game-header">
+                <h1>تحدي الكلمات - برمجة مستر / ايهاب العدوي</h1>
+                <div class="sub-header-title">2Prep term1 U4 L5 vocab match</div>
+            </div>
+
+            <div class="game-area" id="game-area" dir="ltr">
+                <svg id="lines-svg"></svg>
+                <div class="column arabic" id="arabic-col"></div>
+                <div class="column english" id="english-col"></div>
+            </div>
+
+            <div class="footer-area">
+                <button id="finish-btn" class="game-btn">إنهاء التحدي</button>
+                <button id="show-answers-btn" class="game-btn">إظهار الإجابات الصحيحة</button>
+                <button id="restart-btn" class="game-btn">إعادة الاختبار</button>
+            </div>
+
+            <div id="result-overlay">
+                <div class="student-name-result" id="student-name-display"></div>
+                <div class="result-score" id="score-text"></div>
+                <div class="result-message" id="message-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // المتغيرات العامة
+        let currentStudentName = "";
+        
+        // الأصوات
+        const soundConnect = document.getElementById('sound-connect');
+        const soundSuccess = document.getElementById('sound-success');
+        const soundFail = document.getElementById('sound-fail');
+
+        function playSound(audioElement) {
+            audioElement.currentTime = 0;
+            audioElement.play().catch(e => console.log("الصوت يحتاج لتفاعل"));
+        }
+
+        // نظام الجزيئات
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particlesArray = [];
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if(this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+                if(this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        for(let i = 0; i < 70; i++) particlesArray.push(new Particle());
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesArray.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // 10 كلمات مختارة من الصورة المرفقة (Unit 4 - Lesson 5 & 6)
+        const wordsData = [
+            { id: 1, en: "Talent", ar: "موهبة" },
+            { id: 2, en: "Passion", ar: "شغف" },
+            { id: 3, en: "Perfect", ar: "مثالي / كامل" },
+            { id: 4, en: "Actress", ar: "ممثلة" },
+            { id: 5, en: "Meaningful", ar: "ذو معنى / هادف" },
+            { id: 6, en: "Absolutely", ar: "على الإطلاق" },
+            { id: 7, en: "Musician", ar: "موسيقار" },
+            { id: 8, en: "Feelings", ar: "مشاعر" },
+            { id: 9, en: "Immediately", ar: "على الفور" },
+            { id: 10, en: "Modern art", ar: "فن حديث" }
+        ];
+
+        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+
+        const englishCol = document.getElementById('english-col');
+        const arabicCol = document.getElementById('arabic-col');
+        
+        let englishList = [...wordsData];
+        let arabicList = shuffle([...wordsData]);
+
+        // وظيفة بدء الاختبار من شاشة الترحيب
+        function startTest() {
+            const nameInput = document.getElementById('studentName').value.trim();
+            if(nameInput.length < 3) {
+                alert("اكتب اسمك الثلاثي يا بطل عشان نبدأ!");
+                return;
+            }
+            
+            currentStudentName = nameInput;
+            
+            // إخفاء الترحيب وإظهار اللعبة
+            document.getElementById('welcome-scene').classList.remove('active');
+            document.getElementById('game-scene').classList.add('active');
+            
+            // بناء الكلمات بعد ظهور الشاشة لضمان حساب الأبعاد بشكل صحيح
+            renderWords();
+        }
+
+        function renderWords() {
+            englishCol.innerHTML = '';
+            arabicCol.innerHTML = '';
+            
+            englishList.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'word-item english';
+                div.id = `en-word-${item.id}`;
+                div.setAttribute('data-id', item.id);
+                div.setAttribute('data-type', 'en');
+                div.innerHTML = `<div class="dot" id="en-dot-${item.id}"></div><span class="word-text">${item.en}</span>`;
+                englishCol.appendChild(div);
+            });
+
+            arabicList.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'word-item arabic';
+                div.id = `ar-word-${item.id}`;
+                div.setAttribute('data-id', item.id);
+                div.setAttribute('data-type', 'ar');
+                div.innerHTML = `<span class="word-text">${item.ar}</span><div class="dot" id="ar-dot-${item.id}"></div>`;
+                arabicCol.appendChild(div);
+            });
+
+            document.querySelectorAll('.word-item').forEach(item => {
+                item.addEventListener('mousedown', startDrag);
+                item.addEventListener('touchstart', startDrag, {passive: false});
+            });
+        }
+
+        // السحب والإفلات
+        const svg = document.getElementById('lines-svg');
+        const gameArea = document.getElementById('game-area');
+        
+        let isDrawing = false;
+        let currentPath = null;
+        let startItem = null;
+        let connections = {}; 
+
+        function getDotCoords(itemElement) {
+            const dot = itemElement.querySelector('.dot');
+            const dotRect = dot.getBoundingClientRect();
+            const areaRect = gameArea.getBoundingClientRect();
+            return {
+                x: dotRect.left - areaRect.left + (dotRect.width / 2),
+                y: dotRect.top - areaRect.top + (dotRect.height / 2)
+            };
+        }
+
+        function drawLine(pathElement, x1, y1, x2, y2) {
+            pathElement.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2}`);
+        }
+
+        function startDrag(e) {
+            if(e.type === 'touchstart') e.preventDefault();
+            
+            startItem = e.target.closest('.word-item');
+            if(!startItem) return;
+
+            isDrawing = true;
+            
+            const coords = getDotCoords(startItem);
+            currentPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            drawLine(currentPath, coords.x, coords.y, coords.x, coords.y);
+            svg.appendChild(currentPath);
+        }
+
+        function drag(e) {
+            if (!isDrawing || !currentPath) return;
+            if(e.type === 'touchmove') e.preventDefault();
+            
+            let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            let clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+
+            const areaRect = gameArea.getBoundingClientRect();
+            let startCoords = getDotCoords(startItem);
+            let endX = clientX - areaRect.left;
+            let endY = clientY - areaRect.top;
+
+            drawLine(currentPath, startCoords.x, startCoords.y, endX, endY);
+        }
+
+        function endDrag(e) {
+            if (!isDrawing) return;
+            isDrawing = false;
+
+            let clientX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+            let clientY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
+
+            startItem.style.pointerEvents = 'none';
+            let elementBelow = document.elementFromPoint(clientX, clientY);
+            startItem.style.pointerEvents = 'auto';
+
+            let endItem = elementBelow ? elementBelow.closest('.word-item') : null;
+
+            if (endItem && endItem !== startItem) {
+                let startType = startItem.getAttribute('data-type');
+                let endType = endItem.getAttribute('data-type');
+
+                if (startType !== endType) {
+                    let enItem = startType === 'en' ? startItem : endItem;
+                    let arItem = startType === 'ar' ? startItem : endItem;
+                    
+                    let enId = enItem.getAttribute('data-id');
+                    let arId = arItem.getAttribute('data-id');
+
+                    if (connections[enId]) {
+                        svg.removeChild(connections[enId].pathElement);
+                        delete connections[enId];
+                    }
+
+                    for (let key in connections) {
+                        if (connections[key].arId === arId) {
+                            svg.removeChild(connections[key].pathElement);
+                            delete connections[key];
+                        }
+                    }
+
+                    const startCoords = getDotCoords(startItem);
+                    const endCoords = getDotCoords(endItem);
+                    
+                    drawLine(currentPath, startCoords.x, startCoords.y, endCoords.x, endCoords.y);
+                    connections[enId] = { arId: arId, pathElement: currentPath, enId: enId };
+                    
+                    playSound(soundConnect);
+                    return;
+                }
+            }
+            
+            svg.removeChild(currentPath);
+            currentPath = null;
+        }
+
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, {passive: false});
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+
+        window.addEventListener('resize', () => {
+            for (let enId in connections) {
+                let conn = connections[enId];
+                let enItem = document.getElementById(`en-word-${conn.enId}`);
+                let arItem = document.getElementById(`ar-word-${conn.arId}`);
+                if(enItem && arItem) {
+                    let startCoords = getDotCoords(enItem);
+                    let endCoords = getDotCoords(arItem);
+                    drawLine(conn.pathElement, startCoords.x, startCoords.y, endCoords.x, endCoords.y);
+                }
+            }
+        });
+
+        // أزرار التحكم
+        const finishBtn = document.getElementById('finish-btn');
+        const showAnswersBtn = document.getElementById('show-answers-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const resultOverlay = document.getElementById('result-overlay');
+
+        finishBtn.addEventListener('click', () => {
+            let score = 0;
+
+            for (let enId in connections) {
+                let conn = connections[enId];
+                let isCorrect = (conn.enId === conn.arId);
+                
+                let enBox = document.getElementById(`en-word-${conn.enId}`);
+                let arBox = document.getElementById(`ar-word-${conn.arId}`);
+
+                if (isCorrect) {
+                    score += 1;
+                    conn.pathElement.setAttribute('stroke', '#00ff00'); 
+                    enBox.classList.add('correct-word');
+                    arBox.classList.add('correct-word');
+                } else {
+                    conn.pathElement.setAttribute('stroke', '#ff0000'); 
+                    enBox.classList.add('wrong-word');
+                    arBox.classList.add('wrong-word');
+                }
+            }
+
+            wordsData.forEach(item => {
+                if(!connections[item.id]) {
+                    document.getElementById(`en-word-${item.id}`).classList.add('wrong-word');
+                }
+                let arConnected = Object.values(connections).some(c => c.arId == item.id);
+                if(!arConnected) {
+                    document.getElementById(`ar-word-${item.id}`).classList.add('wrong-word');
+                }
+            });
+
+            // طباعة اسم الطالب ودرجته
+            document.getElementById('student-name-display').innerText = `البطل: ${currentStudentName}`;
+            const scoreText = document.getElementById('score-text');
+            const messageText = document.getElementById('message-text');
+
+            resultOverlay.style.display = 'flex';
+            scoreText.innerText = `${score} / 10`;
+
+            if (score >= 5) {
+                playSound(soundSuccess);
+                messageText.innerText = "Well Done - Regards, Mr Ehab";
+                messageText.className = "result-message msg-success";
+            } else {
+                playSound(soundFail);
+                messageText.innerText = "Do it again - Don't stop";
+                messageText.className = "result-message msg-fail";
+            }
+            
+            document.querySelectorAll('.word-item').forEach(item => item.style.pointerEvents = 'none');
+            
+            finishBtn.style.display = 'none';
+            showAnswersBtn.style.display = 'block';
+            restartBtn.style.display = 'block';
+        });
+
+        showAnswersBtn.addEventListener('click', () => {
+            resultOverlay.style.display = 'none';
+            svg.innerHTML = '';
+            connections = {}; 
+            
+            wordsData.forEach(item => {
+                let enItem = document.getElementById(`en-word-${item.id}`);
+                let arItem = document.getElementById(`ar-word-${item.id}`);
+                
+                enItem.classList.remove('wrong-word');
+                arItem.classList.remove('wrong-word');
+                enItem.classList.add('correct-word');
+                arItem.classList.add('correct-word');
+
+                let startCoords = getDotCoords(enItem);
+                let endCoords = getDotCoords(arItem);
+                
+                let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                drawLine(path, startCoords.x, startCoords.y, endCoords.x, endCoords.y);
+                path.setAttribute('stroke', '#00ff00');
+                svg.appendChild(path);
+            });
+
+            showAnswersBtn.style.display = 'none'; 
+        });
+
+        restartBtn.addEventListener('click', () => {
+            resultOverlay.style.display = 'none';
+            finishBtn.style.display = 'block';
+            showAnswersBtn.style.display = 'none';
+            restartBtn.style.display = 'none';
+            
+            svg.innerHTML = '';
+            connections = {};
+            
+            let arr = Array.from(arabicCol.children);
+            shuffle(arr);
+            arr.forEach(node => arabicCol.appendChild(node));
+
+            document.querySelectorAll('.word-item').forEach(item => {
+                item.classList.remove('correct-word', 'wrong-word');
+                item.style.pointerEvents = 'auto'; 
+            });
+        });
+
+    </script>
+</body>
+</html>
