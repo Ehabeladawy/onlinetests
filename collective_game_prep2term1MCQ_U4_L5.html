@@ -72,7 +72,7 @@
         .btn { 
             background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; padding: 15px 40px; 
             border: none; border-radius: 20px; font-size: 1.3rem; font-weight: 800; cursor: pointer; 
-            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif;
+            transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; text-align: center; gap: 10px; font-family: 'Cairo', sans-serif;
             box-shadow: 0 0 15px rgba(255, 75, 43, 0.4);
         }
         .btn:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 75, 43, 0.8); }
@@ -93,4 +93,515 @@
 
         /* ----- تصميم اللعبة (سحب وإدراج) ----- */
         #main-box-game {
-            width: 95vw; height: 9
+            width: 95vw; height: 95vh; background-color: #1a1a1a; border: 4px solid red;
+            border-radius: 15px; display: flex; flex-direction: column; padding: 10px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+        .game-area { position: relative; flex-grow: 1; display: flex; justify-content: space-between; padding: 15px 5%; height: 75%; }
+        #lines-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+        svg path { fill: none; stroke-width: 5; stroke-linecap: round; stroke: #fff; filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.8)); }
+        .column { display: flex; flex-direction: column; justify-content: space-evenly; height: 100%; width: 38%; z-index: 10; }
+        
+        .word-item {
+            width: 100%; height: auto; min-height: 45px; padding: 8px 25px; display: flex; align-items: center; justify-content: center;
+            background: rgba(40, 40, 40, 1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px;
+            transition: all 0.3s ease; position: relative; cursor: pointer; z-index: 10;
+        }
+        .word-item:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); border-color: rgba(255, 255, 255, 0.6); background: rgba(60, 60, 60, 1); }
+        .word-item.english { font-family: 'Poppins', sans-serif; }
+        .word-text { font-size: clamp(12px, 2.5vh, 18px); font-weight: bold; text-align: center; pointer-events: none; word-wrap: break-word; }
+        .dot {
+            position: absolute; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background-color: #fff;
+            border-radius: 50%; box-shadow: 0 0 10px #fff, 0 0 15px #00f3ff; pointer-events: none; 
+        }
+        .arabic .dot { right: 8px; } .english .dot { left: 8px; }
+        .footer-area { height: 12%; display: flex; justify-content: center; align-items: center; gap: 15px; }
+
+        .correct-word { box-shadow: 0 0 15px rgba(0, 255, 0, 0.6) !important; border-color: #00ff00 !important; }
+        .wrong-word { box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important; border-color: #ff0000 !important; }
+
+        /* نافذة النتيجة في اللعبة */
+        #result-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 90%; max-width: 450px; aspect-ratio: 1.6 / 1;
+            background-image: url('https://lh3.googleusercontent.com/d/1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM'); background-size: cover; background-position: center;
+            border-radius: 20px; box-shadow: 0 0 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.2);
+            z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .result-score { font-size: clamp(30px, 8vw, 45px); font-family: 'Poppins', sans-serif; font-weight: 800; color: #fff; text-shadow: 2px 2px 5px #000; margin-top: 30px; }
+        .result-message { font-size: clamp(14px, 4vw, 18px); font-family: 'Poppins', sans-serif; font-weight: 600; text-shadow: 1px 1px 3px #000; margin-top: 5px; }
+        .msg-success { color: #00ff88; } .msg-fail { color: #ff4d4d; }
+
+        .game-header-bar {
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px 20px; background: rgba(0, 0, 0, 0.5); border-radius: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); height: 12%;
+        }
+        .timer-display {
+            font-size: 1.5rem; font-weight: 900; color: #ff4d4d; background: rgba(255,0,0,0.1); 
+            padding: 5px 15px; border-radius: 10px; border: 1px solid #ff4d4d;
+            box-shadow: 0 0 10px rgba(255,0,0,0.3); display: flex; align-items: center; gap: 8px;
+        }
+
+        @media (max-width: 768px) {
+            #main-box-game { width: 100vw; height: 100vh; border-radius: 0; border-width: 2px; }
+            .game-area { padding: 10px 2%; } .column { width: 46%; } 
+            .quiz-header { flex-direction: column; text-align: center; } .header-text { text-align: center; }
+            .game-header-bar { flex-direction: column; justify-content: center; gap: 5px; height: 15%; }
+            .timer-display { font-size: 1.2rem; padding: 2px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ملفات الصوت -->
+    <audio id="sound-connect" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
+    <audio id="sound-fail" src="https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3" preload="auto"></audio>
+
+    <canvas id="particles"></canvas>
+
+    <!-- 1. شاشة اختيار الدور -->
+    <div id="role-scene" class="scene active">
+        <div class="main-card">
+            <div class="quiz-header">
+                <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+                <div class="header-text">
+                    <h1>2prep term1 U4 L5 جماعي</h1>
+                    <span class="animated-name">إعداد وبرمجة / مستر إيهاب العدوي</span>
+                </div>
+            </div>
+            <div class="content-area">
+                <h2 style="font-size: 1.5rem;">من أنت؟</h2>
+                <button class="btn btn-blue" onclick="showScene('teacher-setup-scene')" style="width: 80%;">👨‍🏫 مستر إيهاب (منشئ المحتوى)</button>
+                <button class="btn" onclick="showScene('student-login-scene')" style="width: 80%;">🧑‍🎓 أنا طالب (دخول التحدي)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. شاشة إعداد المعلم (غرفة الانتظار) -->
+    <div id="teacher-setup-scene" class="scene">
+        <div class="main-card">
+            <div class="quiz-header">
+                <div class="header-text" style="text-align:center; width:100%;">
+                    <h1>لوحة تحكم المعلم</h1>
+                </div>
+            </div>
+            <div class="content-area">
+                <h3>كود الغرفة الخاص بك للطلاب:</h3>
+                <div class="pin-display" id="teacher-pin">----</div>
+                <p>اطلب من الطلاب الدخول وإدخال هذا الكود.</p>
+                <div class="students-list" id="teacher-students-list">
+                    <!-- سيتم إضافة الطلاب هنا لحظياً -->
+                </div>
+                <button class="btn btn-blue" onclick="startMultiplayerGame()" style="margin-top: 20px;">🚀 بدء التحدي للجميع</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. شاشة لوحة الصدارة للمعلم (Leaderboard) -->
+    <div id="teacher-leaderboard-scene" class="scene">
+        <div class="main-card" style="max-width: 800px;">
+            <div class="quiz-header">
+                <div class="header-text" style="text-align:center; width:100%;">
+                    <h1>لوحة الصدارة المباشرة 🏆</h1>
+                </div>
+            </div>
+            <div class="content-area">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>المركز</th>
+                            <th>اسم البطل</th>
+                            <th>الدرجة</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- نتائج الطلاب تظهر هنا -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. شاشة دخول الطالب -->
+    <div id="student-login-scene" class="scene">
+        <div class="main-card">
+            <div class="quiz-header">
+                <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+                <div class="header-text">
+                    <h1>2prep term1 U4 L5 جماعي</h1>
+                    <span class="animated-name">إعداد وبرمجة / مستر إيهاب العدوي</span>
+                </div>
+            </div>
+            <div class="content-area">
+                <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي يا بطل">
+                <input type="number" id="roomPin" placeholder="أدخل كود التحدي (PIN)">
+                <button class="btn" onclick="joinRoom()">دخول الغرفة <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. شاشة انتظار الطالب -->
+    <div id="student-waiting-scene" class="scene">
+        <div class="main-card">
+            <div class="content-area">
+                <div class="logo-container" style="margin-bottom: 20px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+                <h2 style="font-size: 1.8rem; color: #00f3ff;">أنت الآن داخل الغرفة!</h2>
+                <p style="font-size: 1.2rem; margin-top: 15px;">استعد يا بطل، نحن في انتظار بدء المعلم للاختبار...</p>
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 3rem; margin-top: 30px; color: red;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. شاشة اللعبة (التوصيل) للطالب -->
+    <div id="game-scene" class="scene">
+        <div id="main-box-game">
+            
+            <div class="game-header-bar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="logo-container" style="width: 50px; height: 50px; border-width: 2px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+                    <h1 style="font-size: 18px;">2prep term1 U4 L5 جماعي</h1>
+                </div>
+                <div class="timer-display" id="timer-display">
+                    <i class="fa-regular fa-clock"></i> <span id="time-left">100</span> ث
+                </div>
+            </div>
+
+            <div class="game-area" id="game-area" dir="ltr">
+                <svg id="lines-svg"></svg>
+                <div class="column arabic" id="arabic-col"></div>
+                <div class="column english" id="english-col"></div>
+            </div>
+
+            <div class="footer-area">
+                <button id="finish-btn" class="btn btn-blue" style="font-size: 16px; padding: 10px 30px;">إنهاء التحدي وإرسال النتيجة</button>
+            </div>
+
+            <div id="result-overlay">
+                <div class="result-score" id="score-text"></div>
+                <div class="result-message" id="message-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== سكربت النظام واللعبة ===== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_ed0XfZkBt_xRf8dN3ciM37uidGZrCt8",
+            authDomain: "mrehabgames.firebaseapp.com",
+            projectId: "mrehabgames",
+            storageBucket: "mrehabgames.firebasestorage.app",
+            messagingSenderId: "379463494744",
+            appId: "1:379463494744:web:983a5677afb5b92faf2e2d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let currentPin = "";
+        let currentStudent = "";
+        let timerInterval = null;
+        let timeLeft = 100;
+
+        window.showScene = function(sceneId) {
+            document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+            document.getElementById(sceneId).classList.add('active');
+            if(sceneId === 'teacher-setup-scene' && !currentPin) createRoom();
+        }
+
+        function playSound(audioElement) {
+            audioElement.currentTime = 0;
+            audioElement.play().catch(e => console.log("الصوت يحتاج للتفاعل"));
+        }
+
+        function createRoom() {
+            currentPin = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById('teacher-pin').innerText = currentPin;
+
+            set(ref(db, 'rooms/' + currentPin), { status: 'waiting', players: {} });
+
+            onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
+                const players = snapshot.val();
+                const list = document.getElementById('teacher-students-list');
+                const leaderboardBody = document.getElementById('leaderboard-body');
+                list.innerHTML = ''; leaderboardBody.innerHTML = '';
+
+                if(players) {
+                    let playersArray = [];
+                    for(let name in players) {
+                        playersArray.push({ name: name, score: players[name].score, finished: players[name].finished });
+                    }
+                    playersArray.sort((a, b) => b.score - a.score);
+
+                    playersArray.forEach((p, index) => {
+                        list.innerHTML += `<div class="student-badge">🧑‍🎓 ${p.name}</div>`;
+                        let statusText = p.finished ? "✅ انتهى" : "⏳ يحل الآن...";
+                        let row = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${p.name}</td>
+                            <td>${p.score} / 10</td>
+                            <td>${statusText}</td>
+                        </tr>`;
+                        leaderboardBody.innerHTML += row;
+                    });
+                }
+            });
+        }
+
+        window.startMultiplayerGame = function() {
+            update(ref(db, 'rooms/' + currentPin), { status: 'playing' });
+            showScene('teacher-leaderboard-scene');
+        }
+
+        window.joinRoom = function() {
+            currentStudent = document.getElementById('studentName').value.trim();
+            currentPin = document.getElementById('roomPin').value.trim();
+
+            if(currentStudent.length < 3 || currentPin.length !== 4) {
+                alert("تأكد من كتابة اسمك الثلاثي وكود الغرفة الصحيح (4 أرقام)!");
+                return;
+            }
+
+            get(ref(db, 'rooms/' + currentPin)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    let roomData = snapshot.val();
+                    if(roomData.status === 'waiting') {
+                        set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false });
+                        showScene('student-waiting-scene');
+
+                        onValue(ref(db, 'rooms/' + currentPin + '/status'), (statusSnapshot) => {
+                            if(statusSnapshot.val() === 'playing') {
+                                showScene('game-scene');
+                                initGameUI();
+                                startCountdown(); 
+                            }
+                        });
+                    } else { alert("الاختبار بدأ بالفعل! لا يمكنك الدخول الآن."); }
+                } else { alert("كود الغرفة غير صحيح!"); }
+            });
+        }
+
+        function startCountdown() {
+            timeLeft = 100;
+            document.getElementById('time-left').innerText = timeLeft;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time-left').innerText = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitGame();
+                }
+            }, 1000);
+        }
+
+        // ==========================================
+        // بيانات الاختبار (قم بتغييرها في أي وقت)
+        // ==========================================
+        const wordsData = [
+            { id: 1, en: "event", ar: "حدث" },
+            { id: 2, en: "imagination", ar: "خيال" },
+            { id: 3, en: "detail", ar: "تفصيل" },
+            { id: 4, en: "setting", ar: "مكان وزمان القصة" },
+            { id: 5, en: "complain", ar: "يشتكى" },
+            { id: 6, en: "wonder", ar: "يتساءل" },
+            { id: 7, en: "organized", ar: "منظم" },
+            { id: 8, en: "entertain", ar: "يسلّي" },
+            { id: 9, en: "benefit", ar: "فائدة" },
+            { id: 10, en: "lie", ar: "يكذب" }
+        ];
+
+        let connections = {};
+        const svg = document.getElementById('lines-svg');
+        const gameArea = document.getElementById('game-area');
+
+        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+
+        function initGameUI() {
+            const englishCol = document.getElementById('english-col');
+            const arabicCol = document.getElementById('arabic-col');
+            let englishList = [...wordsData];
+            let arabicList = shuffle([...wordsData]);
+            
+            englishCol.innerHTML = ''; arabicCol.innerHTML = '';
+            
+            englishList.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'word-item english'; div.id = `en-word-${item.id}`;
+                div.setAttribute('data-id', item.id); div.setAttribute('data-type', 'en');
+                div.innerHTML = `<div class="dot"></div><span class="word-text">${item.en}</span>`;
+                englishCol.appendChild(div);
+            });
+
+            arabicList.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'word-item arabic'; div.id = `ar-word-${item.id}`;
+                div.setAttribute('data-id', item.id); div.setAttribute('data-type', 'ar');
+                div.innerHTML = `<span class="word-text">${item.ar}</span><div class="dot"></div>`;
+                arabicCol.appendChild(div);
+            });
+
+            document.querySelectorAll('.word-item').forEach(item => {
+                item.addEventListener('mousedown', startDrag);
+                item.addEventListener('touchstart', startDrag, {passive: false});
+            });
+        }
+
+        let isDrawing = false;
+        let currentPath = null;
+        let startItem = null;
+
+        function getDotCoords(itemElement) {
+            const dot = itemElement.querySelector('.dot');
+            const dotRect = dot.getBoundingClientRect();
+            const areaRect = gameArea.getBoundingClientRect();
+            return {
+                x: dotRect.left - areaRect.left + (dotRect.width / 2),
+                y: dotRect.top - areaRect.top + (dotRect.height / 2)
+            };
+        }
+
+        function drawLine(pathElement, x1, y1, x2, y2) { pathElement.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2}`); }
+
+        function startDrag(e) {
+            if(e.type === 'touchstart') e.preventDefault();
+            startItem = e.target.closest('.word-item');
+            if(!startItem) return;
+
+            isDrawing = true;
+            const coords = getDotCoords(startItem);
+            currentPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            drawLine(currentPath, coords.x, coords.y, coords.x, coords.y);
+            svg.appendChild(currentPath);
+        }
+
+        function drag(e) {
+            if (!isDrawing || !currentPath) return;
+            if(e.type === 'touchmove') e.preventDefault();
+            
+            let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            let clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+
+            const areaRect = gameArea.getBoundingClientRect();
+            let startCoords = getDotCoords(startItem);
+            drawLine(currentPath, startCoords.x, startCoords.y, clientX - areaRect.left, clientY - areaRect.top);
+        }
+
+        function endDrag(e) {
+            if (!isDrawing) return;
+            isDrawing = false;
+
+            let clientX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+            let clientY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
+
+            startItem.style.pointerEvents = 'none';
+            let elementBelow = document.elementFromPoint(clientX, clientY);
+            startItem.style.pointerEvents = 'auto';
+
+            let endItem = elementBelow ? elementBelow.closest('.word-item') : null;
+
+            if (endItem && endItem !== startItem) {
+                let startType = startItem.getAttribute('data-type');
+                let endType = endItem.getAttribute('data-type');
+
+                if (startType !== endType) {
+                    let enItem = startType === 'en' ? startItem : endItem;
+                    let arItem = startType === 'ar' ? startItem : endItem;
+                    let enId = enItem.getAttribute('data-id');
+                    let arId = arItem.getAttribute('data-id');
+
+                    if (connections[enId]) { svg.removeChild(connections[enId].pathElement); delete connections[enId]; }
+                    for (let key in connections) {
+                        if (connections[key].arId === arId) { svg.removeChild(connections[key].pathElement); delete connections[key]; }
+                    }
+
+                    const startCoords = getDotCoords(startItem);
+                    const endCoords = getDotCoords(endItem);
+                    drawLine(currentPath, startCoords.x, startCoords.y, endCoords.x, endCoords.y);
+                    connections[enId] = { arId: arId, pathElement: currentPath, enId: enId };
+                    playSound(document.getElementById('sound-connect'));
+                    return;
+                }
+            }
+            svg.removeChild(currentPath); currentPath = null;
+        }
+
+        document.addEventListener('mousemove', drag); document.addEventListener('touchmove', drag, {passive: false});
+        document.addEventListener('mouseup', endDrag); document.addEventListener('touchend', endDrag);
+
+        function submitGame() {
+            clearInterval(timerInterval);
+            let score = 0;
+
+            for (let enId in connections) {
+                let conn = connections[enId];
+                let isCorrect = (conn.enId === conn.arId);
+                let enBox = document.getElementById(`en-word-${conn.enId}`);
+                let arBox = document.getElementById(`ar-word-${conn.arId}`);
+
+                if (isCorrect) {
+                    score += 1; conn.pathElement.setAttribute('stroke', '#00ff00'); 
+                    enBox.classList.add('correct-word'); arBox.classList.add('correct-word');
+                } else {
+                    conn.pathElement.setAttribute('stroke', '#ff0000'); 
+                    enBox.classList.add('wrong-word'); arBox.classList.add('wrong-word');
+                }
+            }
+            wordsData.forEach(item => {
+                if(!connections[item.id]) document.getElementById(`en-word-${item.id}`).classList.add('wrong-word');
+                if(!Object.values(connections).some(c => c.arId == item.id)) document.getElementById(`ar-word-${item.id}`).classList.add('wrong-word');
+            });
+
+            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), {
+                score: score,
+                finished: true
+            });
+
+            const resultOverlay = document.getElementById('result-overlay');
+            const scoreText = document.getElementById('score-text');
+            const messageText = document.getElementById('message-text');
+
+            resultOverlay.style.display = 'flex';
+            scoreText.innerText = `${score} / 10`;
+
+            if (score >= 5) {
+                playSound(document.getElementById('sound-success'));
+                messageText.innerText = "Well Done يا بطل"; messageText.className = "result-message msg-success";
+            } else {
+                playSound(document.getElementById('sound-fail'));
+                messageText.innerText = "حاول مرة تانية"; messageText.className = "result-message msg-fail";
+            }
+            
+            document.querySelectorAll('.word-item').forEach(item => item.style.pointerEvents = 'none');
+            document.getElementById('finish-btn').style.display = 'none';
+        }
+
+        document.getElementById('finish-btn').addEventListener('click', submitGame);
+
+        // الجزيئات المتحركة
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let particles = Array.from({length: 50}, () => ({
+            x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+            s: Math.random()*2+1, vx: (Math.random()-0.5)*1, vy: (Math.random()-0.5)*1
+        }));
+        function drawParticles() {
+            ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = 'rgba(255,255,255,0.4)';
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x<0 || p.x>canvas.width) p.vx*=-1; if(p.y<0 || p.y>canvas.height) p.vy*=-1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(drawParticles);
+        }
+        drawParticles();
+    </script>
+</body>
+</html>
