@@ -38,14 +38,14 @@ body { background: var(--bg-dark); min-height: 100vh; padding: 10px; color: whit
 .quiz-header { padding: 15px 30px; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 15px;}
 
 .logo-container { 
-    width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--danger); 
-    overflow: hidden; background: #000; box-shadow: 0 0 15px var(--danger);
-    animation: glow-pulse 2s infinite ease-in-out; margin: 0 auto;
+    width: 75px; height: 75px; border-radius: 50%; border: 3px solid #00f3ff; 
+    overflow: hidden; background: #000; box-shadow: 0 0 20px #00f3ff;
+    animation: glow-pulse 2s infinite ease-in-out; margin: 0 auto; flex-shrink: 0;
 }
 @keyframes glow-pulse {
-    0% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
-    50% { box-shadow: 0 0 20px var(--danger), 0 0 30px rgba(239, 68, 68, 0.3); transform: scale(1.05); }
-    100% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
+    0% { box-shadow: 0 0 10px #00f3ff; transform: scale(1); }
+    50% { box-shadow: 0 0 25px #00f3ff, 0 0 40px rgba(0, 243, 255, 0.5); transform: scale(1.05); }
+    100% { box-shadow: 0 0 10px #00f3ff; transform: scale(1); }
 }
 .logo-img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -75,6 +75,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 }
 .btn:hover { transform: translateY(-3px); box-shadow: 0 0 25px rgba(99, 102, 241, 0.8); }
 .btn-green { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+.btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
 
 /* ----- شاشات المعلم ----- */
 .pin-display { font-size: 3.5rem; font-weight: 900; letter-spacing: 5px; color: #00f3ff; text-shadow: 0 0 20px #00f3ff; margin: 10px 0; }
@@ -82,11 +83,13 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 .student-badge { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; }
 
 .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-.leaderboard-table th, .leaderboard-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 1rem;}
+.leaderboard-table th, .leaderboard-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 1.05rem;}
 .leaderboard-table th { color: #00f3ff; font-weight: 900; }
-.leaderboard-table tr:nth-child(1) td { color: gold; font-weight: bold; font-size: 1.1rem; }
-.leaderboard-table tr:nth-child(2) td { color: silver; font-weight: bold; }
-.leaderboard-table tr:nth-child(3) td { color: #cd7f32; font-weight: bold; }
+
+/* تنسيق الدروع للمراكز الثلاثة الأولى */
+.rank-1 { color: gold; font-weight: 900; background: rgba(255, 215, 0, 0.1); }
+.rank-2 { color: silver; font-weight: 900; background: rgba(192, 192, 192, 0.1); }
+.rank-3 { color: #cd7f32; font-weight: 900; background: rgba(205, 127, 50, 0.1); }
 
 /* ----- العداد الزمني الكلي للطالب ----- */
 .sticky-timer {
@@ -137,13 +140,15 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <div id="role-scene" class="scene active">
     <div class="main-card">
         <div class="quiz-header">
-            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img"></div>
+            <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
             <div class="header-text">
                 <h1>ثاني اعدادي جماعي وحدة 4 درس 5</h1>
                 <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
             </div>
         </div>
         <div class="content-area">
+            <!-- الصورة المتحركة فوق عبارة من أنت -->
+            <img src="https://drive.google.com/thumbnail?id=1cF-j-60otMztzK5ruWOGf02aem5WUG7R&sz=w300" style="width: 140px; margin-bottom: -10px; animation: float 3s ease-in-out infinite;">
             <h2 style="font-size: 1.5rem; margin-bottom: 10px;">من أنت؟</h2>
             <button class="btn btn-green" onclick="showScene('teacher-setup-scene')" style="width: 80%; max-width: 320px;">👨‍🏫 مستر إيهاب (منشئ التحدي)</button>
             <button class="btn" onclick="showScene('student-login-scene')" style="width: 80%; max-width: 320px;">🧑‍🎓 أنا طالب (دخول التحدي)</button>
@@ -155,6 +160,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <div id="teacher-setup-scene" class="scene">
     <div class="main-card">
         <div class="quiz-header">
+            <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
             <div class="header-text"><h1>لوحة تحكم المعلم</h1></div>
         </div>
         <div class="content-area">
@@ -162,7 +168,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             <div class="pin-display" id="teacher-pin">----</div>
             <p>اطلب من الطلاب إدخال هذا الكود.</p>
             <div class="students-list" id="teacher-students-list"></div>
-            <button class="btn btn-green" onclick="startMultiplayerGame()">🚀 بدء التحدي</button>
+            <button class="btn btn-green" onclick="startMultiplayerGame()" style="margin-top:15px;">🚀 بدء التحدي</button>
         </div>
     </div>
 </div>
@@ -171,9 +177,18 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <div id="teacher-leaderboard-scene" class="scene">
     <div class="main-card" style="max-width: 900px;">
         <div class="quiz-header">
+            <div class="logo-container" style="width: 50px; height: 50px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
             <div class="header-text"><h1>لوحة الصدارة المباشرة 🏆</h1></div>
         </div>
         <div class="content-area" style="overflow-x: auto; width: 100%; padding-top:10px;">
+            
+            <!-- زر الإنهاء القسري للاختبار (خاص بمستر إيهاب فقط) -->
+            <div style="width: 100%; text-align: center; margin-bottom: 20px;">
+                <button class="btn btn-danger" onclick="forceEndQuiz()" style="font-size: 1.2rem; padding: 12px 30px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);">
+                    <i class="fa-solid fa-stop-circle"></i> 🛑 إنهاء الاختبار للجميع الآن
+                </button>
+            </div>
+
             <!-- جدول المتصدرين -->
             <table class="leaderboard-table">
                 <thead><tr><th>المركز</th><th>البطل</th><th>الدرجة</th><th>الحالة</th></tr></thead>
@@ -183,7 +198,6 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             <hr style="width: 100%; border-color: rgba(255,255,255,0.1); margin: 30px 0;">
             
             <h3 style="color: var(--success); margin-bottom: 15px;">أسئلة الاختبار للإشراف:</h3>
-            <!-- عرض الأسئلة للمعلم بدون تحديد الإجابة الصحيحة -->
             <div id="teacher-questions-view" style="width: 100%; text-align: left; direction: ltr;"></div>
         </div>
     </div>
@@ -193,7 +207,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <div id="student-login-scene" class="scene">
     <div class="main-card">
         <div class="quiz-header">
-            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img"></div>
+            <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
             <div class="header-text">
                 <h1>ثاني اعدادي جماعي وحدة 4 درس 5</h1>
                 <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
@@ -210,8 +224,11 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <!-- 5. شاشة انتظار الطالب -->
 <div id="student-waiting-scene" class="scene">
     <div class="main-card">
+        <div class="quiz-header">
+            <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+            <div class="header-text"><h1>انتظار بدء التحدي</h1></div>
+        </div>
         <div class="content-area">
-            <div class="logo-container" style="margin-bottom: 20px;"><img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img"></div>
             <h2 style="font-size: 1.8rem; color: #10b981;">أنت الآن داخل الغرفة!</h2>
             <p style="font-size: 1.2rem; margin-top: 15px;">استعد يا بطل، بانتظار إشارة المعلم لبدء الاختبار...</p>
             <i class="fa-solid fa-spinner fa-spin" style="font-size: 3rem; margin-top: 30px; color: var(--danger);"></i>
@@ -221,16 +238,13 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 
 <!-- 6. شاشة مسابقة الطالب (شريحة واحدة كاملة) -->
 <div id="quiz-scene" class="scene" style="padding: 0;">
-    <!-- العداد الثابت بالأعلى -->
     <div class="sticky-timer" style="width: 100%; max-width: 850px; margin: 0 auto;">
         <div style="font-weight: bold; font-size: 1.1rem;">الوقت المتبقي:</div>
         <div class="timer-countdown"><i class="fa-regular fa-clock"></i> <span id="global-timer-text">200</span>ث</div>
     </div>
 
     <div class="main-card" style="margin: 0 auto; border-radius: 20px; border: none; box-shadow: none; background: transparent;">
-        <div class="content-area" id="quiz-content" style="padding: 10px; width: 100%;">
-            <!-- سيتم حقن جميع الأسئلة هنا تحت بعضها -->
-        </div>
+        <div class="content-area" id="quiz-content" style="padding: 10px; width: 100%;"></div>
         <div style="padding: 20px; text-align: center; margin-bottom: 40px;">
             <button class="btn btn-green" id="submitBtn" onclick="submitQuiz()" style="font-size: 1.4rem; padding: 15px 40px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);">تسليم الاختبار لمستر ايهاب <i class="fa-solid fa-paper-plane"></i></button>
         </div>
@@ -255,7 +269,6 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 <audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
 
 <script type="module">
-    // إعدادات Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
@@ -275,9 +288,6 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
     let currentStudent = "";
     let isMultiplayer = false;
 
-    // ==========================================
-    // بيانات الأسئلة
-    // ==========================================
     const quizData = [
         { q: "Mona has a wonderful .......... for drawing and painting.", options: ["excuse", "fear", "weakness", "talent"], correct: "talent" },
         { q: "Yesterday, the weather was .......... for a picnic. We really enjoyed.", options: ["perfect", "rough", "awful", "terrible"], correct: "perfect" },
@@ -305,17 +315,22 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         if(id === 'teacher-setup-scene' && !currentPin) createRoom();
     }
 
-    // ==========================================
-    // أكواد المعلم
-    // ==========================================
     function createRoom() {
         currentPin = Math.floor(1000 + Math.random() * 9000).toString();
         document.getElementById('teacher-pin').innerText = currentPin;
         set(ref(db, 'rooms/' + currentPin), { status: 'waiting', players: {} });
 
-        // متابعة المتصدرين
-        onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
-            const players = snapshot.val();
+        // متابعة المتصدرين وإنهاء الاختبار قسرياً من المعلم
+        onValue(ref(db, 'rooms/' + currentPin), (snapshot) => {
+            const roomData = snapshot.val();
+            if(!roomData) return;
+
+            // التحقق من أمر الإنهاء القسري من المعلم
+            if(roomData.status === 'ended' && !window.isFinished && document.getElementById('quiz-scene').classList.contains('active')) {
+                window.submitQuiz(); // إنهاء الاختبار للطالب تلقائياً
+            }
+
+            const players = roomData.players;
             const leaderboardBody = document.getElementById('leaderboard-body');
             const list = document.getElementById('teacher-students-list');
             list.innerHTML = ''; leaderboardBody.innerHTML = '';
@@ -328,7 +343,27 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
                 playersArray.forEach((p, index) => {
                     list.innerHTML += `<div class="student-badge">🧑‍🎓 ${p.name}</div>`;
                     let statusText = p.finished ? "✅ سلم الاختبار" : "⏳ يحل الآن...";
-                    let row = `<tr><td>${index + 1}</td><td>${p.name}</td><td>${p.score} / ${quizData.length}</td><td>${statusText}</td></tr>`;
+                    
+                    // تحديد الدروع والأحجام للمراكز الثلاثة الأولى
+                    let rankDisplay = `${index + 1}`;
+                    let rowClass = "";
+                    if(index === 0) {
+                        rankDisplay = `🥇 <span style="font-size: 1.4rem;">🛡️</span>`;
+                        rowClass = "rank-1";
+                    } else if(index === 1) {
+                        rankDisplay = `🥈 <span style="font-size: 1.2rem;">🛡️</span>`;
+                        rowClass = "rank-2";
+                    } else if(index === 2) {
+                        rankDisplay = `🥉 <span style="font-size: 1rem;">🛡️</span>`;
+                        rowClass = "rank-3";
+                    }
+
+                    let row = `<tr class="${rowClass}">
+                        <td>${rankDisplay}</td>
+                        <td>${p.name}</td>
+                        <td>${p.score} / ${quizData.length}</td>
+                        <td>${statusText}</td>
+                    </tr>`;
                     leaderboardBody.innerHTML += row;
                 });
             }
@@ -338,12 +373,16 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
     window.startMultiplayerGame = function() {
         update(ref(db, 'rooms/' + currentPin), { status: 'playing' });
         showScene('teacher-leaderboard-scene');
-        renderAllQuestions('teacher-questions-view', true); // عرض الأسئلة للمعلم
+        renderAllQuestions('teacher-questions-view', true);
     }
 
-    // ==========================================
-    // دخول الطالب
-    // ==========================================
+    // زر الإنهاء القسري الخاص بمستر إيهاب فقط
+    window.forceEndQuiz = function() {
+        if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم الآن؟")) {
+            update(ref(db, 'rooms/' + currentPin), { status: 'ended' });
+        }
+    }
+
     window.joinRoom = function() {
         currentStudent = document.getElementById('studentName').value.trim();
         currentPin = document.getElementById('roomPin').value.trim();
@@ -362,19 +401,14 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         });
     }
 
-    // ==========================================
-    // رسم الأسئلة (للطالب والمعلم)
-    // ==========================================
     function renderAllQuestions(containerId, forTeacher = false) {
         const container = document.getElementById(containerId);
         container.innerHTML = '';
-        
         let listToRender = forTeacher ? quizData : shuffled;
 
         listToRender.forEach((q, qIndex) => {
             let qDiv = document.createElement('div');
             qDiv.className = 'question-row';
-            
             let qText = document.createElement('div');
             qText.className = 'question-text';
             qText.innerHTML = `${qIndex + 1}. ${q.q}`;
@@ -382,20 +416,13 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             
             let optsDiv = document.createElement('div');
             optsDiv.className = 'options-grid';
-            
             let currentOptions = forTeacher ? q.options : [...q.options].sort(() => Math.random() - 0.5);
             
             currentOptions.forEach((optText) => {
                 let optBox = document.createElement('div');
                 optBox.className = 'option-box';
                 optBox.innerHTML = `<span>${optText}</span>`;
-                
-                if(forTeacher) {
-                    optBox.classList.add('disabled');
-                } else {
-                    optBox.onclick = () => window.selectOption(qIndex, optText, optBox, q.correct);
-                }
-                
+                optBox.classList.add('disabled'); // تعطيل الضغط للمعلم وعدم إظهار الإجابة الصحيحة
                 optsDiv.appendChild(optBox);
             });
             qDiv.appendChild(optsDiv);
@@ -403,16 +430,34 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         });
     }
 
-    // ==========================================
-    // منطق الاختبار للطالب
-    // ==========================================
     function startStudentQuiz() {
         shuffled = quizData.sort(() => Math.random() - 0.5);
         studentAnswers = {};
         window.isFinished = false;
         showScene('quiz-scene');
-        renderAllQuestions('quiz-content', false);
         
+        // رسم الأسئلة للطالب
+        const container = document.getElementById('quiz-content');
+        container.innerHTML = '';
+        shuffled.forEach((q, qIndex) => {
+            let qDiv = document.createElement('div');
+            qDiv.className = 'question-row';
+            qDiv.innerHTML = `<div class="question-text">${qIndex + 1}. ${q.q}</div>`;
+            let optsDiv = document.createElement('div');
+            optsDiv.className = 'options-grid';
+            
+            let currentOptions = [...q.options].sort(() => Math.random() - 0.5);
+            currentOptions.forEach((optText) => {
+                let optBox = document.createElement('div');
+                optBox.className = 'option-box';
+                optBox.innerHTML = `<span>${optText}</span>`;
+                optBox.onclick = () => window.selectOption(qIndex, optText, optBox);
+                optsDiv.appendChild(optBox);
+            });
+            qDiv.appendChild(optsDiv);
+            container.appendChild(qDiv);
+        });
+
         timeLeft = 200;
         document.getElementById('global-timer-text').innerText = timeLeft;
         globalTimer = setInterval(() => {
@@ -420,17 +465,15 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             document.getElementById('global-timer-text').innerText = timeLeft;
             if(timeLeft <= 0) {
                 clearInterval(globalTimer);
-                window.submitQuiz(); // سحب الورقة
+                window.submitQuiz();
             }
         }, 1000);
     }
 
-    window.selectOption = function(qIndex, optText, box, correctText) {
+    window.selectOption = function(qIndex, optText, box) {
         if(window.isFinished) return;
-        
         let siblings = box.parentElement.children;
         for(let s of siblings) s.classList.remove('selected-opt');
-        
         box.classList.add('selected-opt');
         studentAnswers[qIndex] = optText;
         
@@ -449,16 +492,18 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         if(window.isFinished) return;
         window.isFinished = true;
         clearInterval(globalTimer);
-        document.getElementById('submitBtn').style.display = 'none';
+        const submitBtn = document.getElementById('submitBtn');
+        if(submitBtn) submitBtn.style.display = 'none';
 
         shuffled.forEach((q, qIndex) => {
             let selectedAns = studentAnswers[qIndex];
-            let opts = document.getElementById('quiz-content').children[qIndex].lastChild.children;
+            let qRow = document.getElementById('quiz-content').children[qIndex];
+            if(!qRow) return;
+            let opts = qRow.lastChild.children;
             
             for(let box of opts) {
                 let text = box.innerText.trim();
                 box.classList.remove('selected-opt'); 
-                
                 if(text === q.correct) {
                     box.classList.add('correct');
                 } else if(text === selectedAns && text !== q.correct) {
