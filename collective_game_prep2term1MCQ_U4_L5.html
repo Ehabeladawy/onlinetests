@@ -1,607 +1,507 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2prep term1 U4 L5 جماعي</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&family=Poppins:wght@500;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثاني اعدادي جماعي وحدة 4 درس 5</title>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-        body {
-            background-color: #000; color: white; font-family: 'Cairo', sans-serif;
-            overflow: hidden; height: 100vh; display: flex; align-items: center; justify-content: center;
-        }
+<style>
+:root {
+    --primary: #6366f1; --purple-glow: #8b5cf6; --success: #10b981;
+    --danger: #ef4444; --bg-dark: #020617; 
+}
 
-        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent;}
+body { background: var(--bg-dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; color: white; position: relative; overflow-x: hidden; }
 
-        /* ----- إدارة المشاهد ----- */
-        .scene {
-            display: none; width: 100%; height: 100%; justify-content: center; align-items: center;
-            position: absolute; top: 0; left: 0; z-index: 10; flex-direction: column;
-        }
-        .scene.active { display: flex; animation: zoomIn 0.4s ease; }
-        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
-        /* ----- البطاقات العامة ----- */
-        .main-card { 
-            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); 
-            width: 90%; max-width: 600px; border-radius: 40px; border: 2px solid red; 
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3); overflow: hidden; text-align: center;
-            display: flex; flex-direction: column;
-        }
+/* ----- إدارة المشاهد ----- */
+.scene {
+    display: none; width: 100%; height: 100%; justify-content: center; align-items: center;
+    position: absolute; top: 0; left: 0; z-index: 10; flex-direction: column;
+}
+.scene.active { display: flex; animation: zoomIn 0.4s ease; }
+@keyframes zoomIn { from { opacity:0; transform: scale(0.9); } to { opacity:1; transform: scale(1); } }
 
-        .quiz-header { 
-            padding: 20px; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; 
-            justify-content: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); 
-        }
+/* ----- البطاقات العامة ----- */
+.main-card { 
+    background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); 
+    width: 100%; max-width: 850px; border-radius: 40px; 
+    border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 0 50px rgba(99, 102, 241, 0.2); 
+    overflow: hidden; position: relative; z-index: 2; margin: 20px 0; text-align: center;
+    display: flex; flex-direction: column;
+}
 
-        .logo-container { 
-            width: 80px; height: 80px; border-radius: 50%; border: 2px solid red; 
-            overflow: hidden; background: #000; box-shadow: 0 0 15px red;
-            animation: glow-pulse 2s infinite ease-in-out; flex-shrink: 0;
-        }
-        @keyframes glow-pulse {
-            0% { box-shadow: 0 0 5px red; transform: scale(1); }
-            50% { box-shadow: 0 0 25px red, 0 0 40px rgba(239, 68, 68, 0.4); transform: scale(1.05); }
-            100% { box-shadow: 0 0 5px red; transform: scale(1); }
-        }
-        .logo-img { width: 100%; height: 100%; object-fit: cover; }
-        .header-text { text-align: right; }
-        .header-text h1 { font-size: clamp(18px, 4vw, 24px); font-weight: 900; color: white; }
-        .animated-name {
-            background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1rem;
-        }
+.quiz-header { padding: 20px 40px; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-        .content-area { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.logo-container { 
+    width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--danger); 
+    overflow: hidden; background: #000; box-shadow: 0 0 15px var(--danger);
+    animation: glow-pulse 2s infinite ease-in-out; margin: 0 auto;
+}
+@keyframes glow-pulse {
+    0% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
+    50% { box-shadow: 0 0 25px var(--danger), 0 0 40px rgba(239, 68, 68, 0.4); transform: scale(1.05); }
+    100% { box-shadow: 0 0 5px var(--danger); transform: scale(1); }
+}
+.logo-img { width: 100%; height: 100%; object-fit: cover; }
 
-        input[type="text"], input[type="number"] { 
-            width: 85%; max-width: 400px; padding: 15px; border-radius: 20px; 
-            border: 2px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); 
-            color: white; text-align: center; font-size: 1.2rem; outline: none; 
-            font-family: 'Cairo', sans-serif;
-        }
-        input:focus { border-color: red; box-shadow: 0 0 15px rgba(255,0,0,0.5); }
+.header-text { text-align: center; flex: 1;}
+.header-text h1 { font-size: 1.6rem; font-weight: 900; color: white; margin-top: 10px;}
+.animated-name {
+    background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1.1rem;
+}
+@keyframes shine { to { background-position: 200% center; } }
 
-        .btn { 
-            background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; padding: 15px 40px; 
-            border: none; border-radius: 20px; font-size: 1.3rem; font-weight: 800; cursor: pointer; 
-            transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; text-align: center; gap: 10px; font-family: 'Cairo', sans-serif;
-            box-shadow: 0 0 15px rgba(255, 75, 43, 0.4);
-        }
-        .btn:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 75, 43, 0.8); }
-        .btn-blue { background: linear-gradient(135deg, #00c6ff, #0072ff); box-shadow: 0 0 15px rgba(0, 114, 255, 0.4); }
-        .btn-blue:hover { box-shadow: 0 0 25px rgba(0, 114, 255, 0.8); }
+.content-area { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
 
-        /* ----- شاشات المعلم ----- */
-        .pin-display { font-size: 4rem; font-weight: 900; letter-spacing: 5px; color: #00f3ff; text-shadow: 0 0 20px #00f3ff; margin: 10px 0; }
-        .students-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; max-height: 200px; overflow-y: auto; }
-        .student-badge { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; }
-        
-        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .leaderboard-table th, .leaderboard-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
-        .leaderboard-table th { color: #00f3ff; font-weight: 900; }
-        .leaderboard-table tr:nth-child(1) td { color: gold; font-weight: bold; font-size: 1.2rem; }
-        .leaderboard-table tr:nth-child(2) td { color: silver; font-weight: bold; }
-        .leaderboard-table tr:nth-child(3) td { color: #cd7f32; font-weight: bold; }
+input[type="text"], input[type="number"] { 
+    width: 85%; max-width: 400px; padding: 15px; border-radius: 20px; 
+    border: 2px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); 
+    color: white; text-align: center; font-size: 1.2rem; outline: none; margin-bottom: 15px;
+    font-family: 'Cairo', sans-serif;
+}
+input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.5); }
 
-        /* ----- تصميم اللعبة (سحب وإدراج) ----- */
-        #main-box-game {
-            width: 95vw; height: 95vh; background-color: #1a1a1a; border: 4px solid red;
-            border-radius: 15px; display: flex; flex-direction: column; padding: 10px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
-        }
-        .game-area { position: relative; flex-grow: 1; display: flex; justify-content: space-between; padding: 15px 5%; height: 75%; }
-        #lines-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
-        svg path { fill: none; stroke-width: 5; stroke-linecap: round; stroke: #fff; filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.8)); }
-        .column { display: flex; flex-direction: column; justify-content: space-evenly; height: 100%; width: 38%; z-index: 10; }
-        
-        .word-item {
-            width: 100%; height: auto; min-height: 45px; padding: 8px 25px; display: flex; align-items: center; justify-content: center;
-            background: rgba(40, 40, 40, 1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px;
-            transition: all 0.3s ease; position: relative; cursor: pointer; z-index: 10;
-        }
-        .word-item:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); border-color: rgba(255, 255, 255, 0.6); background: rgba(60, 60, 60, 1); }
-        .word-item.english { font-family: 'Poppins', sans-serif; }
-        .word-text { font-size: clamp(12px, 2.5vh, 18px); font-weight: bold; text-align: center; pointer-events: none; word-wrap: break-word; }
-        .dot {
-            position: absolute; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background-color: #fff;
-            border-radius: 50%; box-shadow: 0 0 10px #fff, 0 0 15px #00f3ff; pointer-events: none; 
-        }
-        .arabic .dot { right: 8px; } .english .dot { left: 8px; }
-        .footer-area { height: 12%; display: flex; justify-content: center; align-items: center; gap: 15px; }
+.btn { 
+    background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 15px 40px; 
+    border: none; border-radius: 20px; font-size: 1.3rem; font-weight: 800; cursor: pointer; 
+    transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Cairo', sans-serif;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+.btn:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(99, 102, 241, 0.8); }
+.btn-green { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
 
-        .correct-word { box-shadow: 0 0 15px rgba(0, 255, 0, 0.6) !important; border-color: #00ff00 !important; }
-        .wrong-word { box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important; border-color: #ff0000 !important; }
+/* ----- شاشات المعلم (Multiplayer) ----- */
+.pin-display { font-size: 4rem; font-weight: 900; letter-spacing: 5px; color: #00f3ff; text-shadow: 0 0 20px #00f3ff; margin: 10px 0; }
+.students-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; max-height: 250px; overflow-y: auto; width: 100%;}
+.student-badge { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; }
 
-        /* نافذة النتيجة في اللعبة */
-        #result-overlay {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90%; max-width: 450px; aspect-ratio: 1.6 / 1;
-            background-image: url('https://lh3.googleusercontent.com/d/1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM'); background-size: cover; background-position: center;
-            border-radius: 20px; box-shadow: 0 0 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.2);
-            z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        }
-        .result-score { font-size: clamp(30px, 8vw, 45px); font-family: 'Poppins', sans-serif; font-weight: 800; color: #fff; text-shadow: 2px 2px 5px #000; margin-top: 30px; }
-        .result-message { font-size: clamp(14px, 4vw, 18px); font-family: 'Poppins', sans-serif; font-weight: 600; text-shadow: 1px 1px 3px #000; margin-top: 5px; }
-        .msg-success { color: #00ff88; } .msg-fail { color: #ff4d4d; }
+.leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.leaderboard-table th, .leaderboard-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
+.leaderboard-table th { color: #00f3ff; font-weight: 900; }
+.leaderboard-table tr:nth-child(1) td { color: gold; font-weight: bold; font-size: 1.2rem; }
+.leaderboard-table tr:nth-child(2) td { color: silver; font-weight: bold; }
+.leaderboard-table tr:nth-child(3) td { color: #cd7f32; font-weight: bold; }
 
-        .game-header-bar {
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 10px 20px; background: rgba(0, 0, 0, 0.5); border-radius: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05); height: 12%;
-        }
-        .timer-display {
-            font-size: 1.5rem; font-weight: 900; color: #ff4d4d; background: rgba(255,0,0,0.1); 
-            padding: 5px 15px; border-radius: 10px; border: 1px solid #ff4d4d;
-            box-shadow: 0 0 10px rgba(255,0,0,0.3); display: flex; align-items: center; gap: 8px;
-        }
+/* ----- تصميم مسابقة الـ Quiz ----- */
+.progress-section { padding: 15px 40px; background: rgba(0,0,0,0.3); display: none; }
+.progress-info { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; color: #94a3b8; }
+.progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #d946ef); transition: width 0.5s ease; }
 
-        @media (max-width: 768px) {
-            #main-box-game { width: 100vw; height: 100vh; border-radius: 0; border-width: 2px; }
-            .game-area { padding: 10px 2%; } .column { width: 46%; } 
-            .quiz-header { flex-direction: column; text-align: center; } .header-text { text-align: center; }
-            .game-header-bar { flex-direction: column; justify-content: center; gap: 5px; height: 15%; }
-            .timer-display { font-size: 1.2rem; padding: 2px 10px; }
-        }
-    </style>
+.question-row { 
+    background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; 
+    margin-bottom: 30px; border: 1px solid var(--danger); 
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+    display: flex; align-items: center; gap: 20px; direction: ltr; width: 100%;
+}
+.question-text { font-size: 1.4rem; font-weight: 800; text-align: left; flex: 1; color: #f8fafc; line-height: 1.6; font-family: 'Poppins', sans-serif;}
+
+.timer-wrapper { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+.timer-svg { transform: rotate(-90deg); width: 80px; height: 80px; }
+.timer-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 6; }
+.timer-progress { 
+    fill: none; stroke: var(--success); stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 226; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+#timer-text { position: absolute; font-size: 1.6rem; font-weight: 900; }
+
+#optionsGrid { display: flex; flex-direction: column; width: 100%; gap: 12px;}
+.option-box { 
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); 
+    padding: 18px 25px; border-radius: 18px; cursor: pointer; font-weight: 700; font-size: 1.2rem; 
+    color: white; width: 100%; direction: ltr; transition: 0.3s all;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+.option-box:hover { background: rgba(99, 102, 241, 0.15); transform: translateX(10px); }
+
+.correct { background: var(--success) !important; border-color: #fff !important; }
+.wrong { background: var(--danger) !important; border-color: #fff !important; }
+.disabled { pointer-events: none; }
+.review-area { background: rgba(0,0,0,0.4); border-radius: 20px; padding: 25px; margin-top: 25px; text-align: center; display: none; border: 1px solid rgba(255,255,255,0.1); }
+
+@media (max-width: 768px) {
+    .question-row { flex-direction: column; text-align: center; }
+    .question-text { text-align: center; }
+    .quiz-header { flex-direction: column; text-align: center; }
+}
+</style>
 </head>
 <body>
 
-    <!-- ملفات الصوت -->
-    <audio id="sound-connect" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
-    <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
-    <audio id="sound-fail" src="https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3" preload="auto"></audio>
+<canvas id="particles-js"></canvas>
 
-    <canvas id="particles"></canvas>
-
-    <!-- 1. شاشة اختيار الدور -->
-    <div id="role-scene" class="scene active">
-        <div class="main-card">
-            <div class="quiz-header">
-                <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
-                <div class="header-text">
-                    <h1>2prep term1 U4 L5 جماعي</h1>
-                    <span class="animated-name">إعداد وبرمجة / مستر إيهاب العدوي</span>
-                </div>
-            </div>
-            <div class="content-area">
-                <h2 style="font-size: 1.5rem;">من أنت؟</h2>
-                <button class="btn btn-blue" onclick="showScene('teacher-setup-scene')" style="width: 80%;">👨‍🏫 مستر إيهاب (منشئ المحتوى)</button>
-                <button class="btn" onclick="showScene('student-login-scene')" style="width: 80%;">🧑‍🎓 أنا طالب (دخول التحدي)</button>
+<!-- 1. شاشة اختيار الدور -->
+<div id="role-scene" class="scene active">
+    <div class="main-card">
+        <div class="quiz-header">
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img"></div>
+            <div class="header-text">
+                <h1>ثاني اعدادي جماعي وحدة 4 درس 5</h1>
+                <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
             </div>
         </div>
-    </div>
-
-    <!-- 2. شاشة إعداد المعلم (غرفة الانتظار) -->
-    <div id="teacher-setup-scene" class="scene">
-        <div class="main-card">
-            <div class="quiz-header">
-                <div class="header-text" style="text-align:center; width:100%;">
-                    <h1>لوحة تحكم المعلم</h1>
-                </div>
-            </div>
-            <div class="content-area">
-                <h3>كود الغرفة الخاص بك للطلاب:</h3>
-                <div class="pin-display" id="teacher-pin">----</div>
-                <p>اطلب من الطلاب الدخول وإدخال هذا الكود.</p>
-                <div class="students-list" id="teacher-students-list">
-                    <!-- سيتم إضافة الطلاب هنا لحظياً -->
-                </div>
-                <button class="btn btn-blue" onclick="startMultiplayerGame()" style="margin-top: 20px;">🚀 بدء التحدي للجميع</button>
-            </div>
+        <div class="content-area">
+            <h2 style="font-size: 1.5rem; margin-bottom: 10px;">من أنت؟</h2>
+            <button class="btn btn-green" onclick="showScene('teacher-setup-scene')" style="width: 80%; max-width: 300px;">👨‍🏫 مستر إيهاب (منشئ التحدي)</button>
+            <button class="btn" onclick="showScene('student-login-scene')" style="width: 80%; max-width: 300px;">🧑‍🎓 أنا طالب (دخول التحدي)</button>
         </div>
     </div>
+</div>
 
-    <!-- 3. شاشة لوحة الصدارة للمعلم (Leaderboard) -->
-    <div id="teacher-leaderboard-scene" class="scene">
-        <div class="main-card" style="max-width: 800px;">
-            <div class="quiz-header">
-                <div class="header-text" style="text-align:center; width:100%;">
-                    <h1>لوحة الصدارة المباشرة 🏆</h1>
-                </div>
-            </div>
-            <div class="content-area">
-                <table class="leaderboard-table">
-                    <thead>
-                        <tr>
-                            <th>المركز</th>
-                            <th>اسم البطل</th>
-                            <th>الدرجة</th>
-                            <th>الحالة</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body">
-                        <!-- نتائج الطلاب تظهر هنا -->
-                    </tbody>
-                </table>
-            </div>
+<!-- 2. شاشة إعداد المعلم (غرفة الانتظار) -->
+<div id="teacher-setup-scene" class="scene">
+    <div class="main-card">
+        <div class="quiz-header">
+            <div class="header-text"><h1>لوحة تحكم المعلم</h1></div>
+        </div>
+        <div class="content-area">
+            <h3>كود الغرفة للطلاب:</h3>
+            <div class="pin-display" id="teacher-pin">----</div>
+            <p>اطلب من الطلاب إدخال هذا الكود.</p>
+            <div class="students-list" id="teacher-students-list"></div>
+            <button class="btn btn-green" onclick="startMultiplayerGame()">🚀 بدء التحدي</button>
         </div>
     </div>
+</div>
 
-    <!-- 4. شاشة دخول الطالب -->
-    <div id="student-login-scene" class="scene">
-        <div class="main-card">
-            <div class="quiz-header">
-                <div class="logo-container"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
-                <div class="header-text">
-                    <h1>2prep term1 U4 L5 جماعي</h1>
-                    <span class="animated-name">إعداد وبرمجة / مستر إيهاب العدوي</span>
-                </div>
-            </div>
-            <div class="content-area">
-                <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي يا بطل">
-                <input type="number" id="roomPin" placeholder="أدخل كود التحدي (PIN)">
-                <button class="btn" onclick="joinRoom()">دخول الغرفة <i class="fa-solid fa-arrow-right"></i></button>
-            </div>
+<!-- 3. شاشة لوحة الصدارة للمعلم (Leaderboard) -->
+<div id="teacher-leaderboard-scene" class="scene">
+    <div class="main-card" style="max-width: 800px;">
+        <div class="quiz-header">
+            <div class="header-text"><h1>لوحة الصدارة المباشرة 🏆</h1></div>
+        </div>
+        <div class="content-area" style="overflow-x: auto; width: 100%;">
+            <table class="leaderboard-table">
+                <thead><tr><th>المركز</th><th>البطل</th><th>الدرجة</th><th>الحالة</th></tr></thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
         </div>
     </div>
+</div>
 
-    <!-- 5. شاشة انتظار الطالب -->
-    <div id="student-waiting-scene" class="scene">
-        <div class="main-card">
-            <div class="content-area">
-                <div class="logo-container" style="margin-bottom: 20px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
-                <h2 style="font-size: 1.8rem; color: #00f3ff;">أنت الآن داخل الغرفة!</h2>
-                <p style="font-size: 1.2rem; margin-top: 15px;">استعد يا بطل، نحن في انتظار بدء المعلم للاختبار...</p>
-                <i class="fa-solid fa-spinner fa-spin" style="font-size: 3rem; margin-top: 30px; color: red;"></i>
+<!-- 4. شاشة دخول الطالب -->
+<div id="student-login-scene" class="scene">
+    <div class="main-card">
+        <div class="quiz-header">
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img"></div>
+            <div class="header-text">
+                <h1>ثاني اعدادي جماعي وحدة 4 درس 5</h1>
+                <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
             </div>
         </div>
-    </div>
-
-    <!-- 6. شاشة اللعبة (التوصيل) للطالب -->
-    <div id="game-scene" class="scene">
-        <div id="main-box-game">
-            
-            <div class="game-header-bar">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="logo-container" style="width: 50px; height: 50px; border-width: 2px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
-                    <h1 style="font-size: 18px;">2prep term1 U4 L5 جماعي</h1>
-                </div>
-                <div class="timer-display" id="timer-display">
-                    <i class="fa-regular fa-clock"></i> <span id="time-left">100</span> ث
-                </div>
-            </div>
-
-            <div class="game-area" id="game-area" dir="ltr">
-                <svg id="lines-svg"></svg>
-                <div class="column arabic" id="arabic-col"></div>
-                <div class="column english" id="english-col"></div>
-            </div>
-
-            <div class="footer-area">
-                <button id="finish-btn" class="btn btn-blue" style="font-size: 16px; padding: 10px 30px;">إنهاء التحدي وإرسال النتيجة</button>
-            </div>
-
-            <div id="result-overlay">
-                <div class="result-score" id="score-text"></div>
-                <div class="result-message" id="message-text"></div>
-            </div>
+        <div class="content-area">
+            <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي">
+            <input type="number" id="roomPin" placeholder="كود الغرفة (PIN)">
+            <button class="btn" onclick="joinRoom()">دخول الغرفة <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </div>
+</div>
 
-    <!-- ===== سكربت النظام واللعبة ===== -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+<!-- 5. شاشة انتظار الطالب -->
+<div id="student-waiting-scene" class="scene">
+    <div class="main-card">
+        <div class="content-area">
+            <div class="logo-container" style="margin-bottom: 20px;"><img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img"></div>
+            <h2 style="font-size: 1.8rem; color: #10b981;">أنت الآن داخل الغرفة!</h2>
+            <p style="font-size: 1.2rem; margin-top: 15px;">استعد يا بطل، بانتظار إشارة المعلم لبدء الاختبار...</p>
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 3rem; margin-top: 30px; color: var(--danger);"></i>
+        </div>
+    </div>
+</div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyC_ed0XfZkBt_xRf8dN3ciM37uidGZrCt8",
-            authDomain: "mrehabgames.firebaseapp.com",
-            projectId: "mrehabgames",
-            storageBucket: "mrehabgames.firebasestorage.app",
-            messagingSenderId: "379463494744",
-            appId: "1:379463494744:web:983a5677afb5b92faf2e2d"
-        };
+<!-- 6. شاشة مسابقة الطالب (الـ Quiz) -->
+<div id="quiz-scene" class="scene" style="align-items: flex-start; padding-top: 20px; overflow-y: auto;">
+    <div class="main-card" style="margin: 0 auto;">
+        <div class="quiz-header" style="padding: 15px 30px;">
+            <div class="logo-container" style="width: 60px; height: 60px;"><img src="https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200" class="logo-img"></div>
+            <div class="header-text"><h1>ثاني اعدادي جماعي وحدة 4 درس 5</h1></div>
+        </div>
+        
+        <div class="progress-section" id="progressArea" style="display: block;">
+            <div class="progress-info">
+                <span id="progStep">السؤال 1</span>
+                <span id="progPercent">0%</span>
+            </div>
+            <div class="progress-container"><div class="progress-bar" id="pBar"></div></div>
+        </div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        <div class="content-area" id="quiz-content" style="padding: 30px; width: 100%;">
+            <!-- يتم حقن السؤال هنا -->
+        </div>
+    </div>
+</div>
 
-        let currentPin = "";
-        let currentStudent = "";
-        let timerInterval = null;
-        let timeLeft = 100;
+<!-- 7. شاشة النتيجة النهائية للطالب -->
+<div id="result-scene" class="scene" style="overflow-y: auto;">
+    <div class="main-card">
+        <div class="content-area">
+            <h2 id="result-title" style="font-size: 2.2rem; margin-bottom: 15px;">النتيجة النهائية</h2>
+            <div id="result-container" style="position:relative; width:100%; max-width:600px; margin: 0 auto 20px;"></div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+                <button class="btn" onclick="toggleReview()" style="background:rgba(255,255,255,0.1)"><i class="fa-solid fa-eye"></i> مراجعة الأخطاء</button>
+            </div>
+            <div id="reviewArea" class="review-area" style="width: 100%;"></div>
+        </div>
+    </div>
+</div>
 
-        window.showScene = function(sceneId) {
-            document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
-            document.getElementById(sceneId).classList.add('active');
-            if(sceneId === 'teacher-setup-scene' && !currentPin) createRoom();
-        }
+<audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
 
-        function playSound(audioElement) {
-            audioElement.currentTime = 0;
-            audioElement.play().catch(e => console.log("الصوت يحتاج للتفاعل"));
-        }
+<script type="module">
+    // 1. إعدادات Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        function createRoom() {
-            currentPin = Math.floor(1000 + Math.random() * 9000).toString();
-            document.getElementById('teacher-pin').innerText = currentPin;
+    const firebaseConfig = {
+        apiKey: "AIzaSyC_ed0XfZkBt_xRf8dN3ciM37uidGZrCt8",
+        authDomain: "mrehabgames.firebaseapp.com",
+        projectId: "mrehabgames",
+        storageBucket: "mrehabgames.firebasestorage.app",
+        messagingSenderId: "379463494744",
+        appId: "1:379463494744:web:983a5677afb5b92faf2e2d"
+    };
 
-            set(ref(db, 'rooms/' + currentPin), { status: 'waiting', players: {} });
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-            onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
-                const players = snapshot.val();
-                const list = document.getElementById('teacher-students-list');
-                const leaderboardBody = document.getElementById('leaderboard-body');
-                list.innerHTML = ''; leaderboardBody.innerHTML = '';
+    let currentPin = "";
+    let currentStudent = "";
+    let isMultiplayer = false;
 
-                if(players) {
-                    let playersArray = [];
-                    for(let name in players) {
-                        playersArray.push({ name: name, score: players[name].score, finished: players[name].finished });
-                    }
-                    playersArray.sort((a, b) => b.score - a.score);
+    window.showScene = function(id) {
+        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'teacher-setup-scene' && !currentPin) createRoom();
+    }
 
-                    playersArray.forEach((p, index) => {
-                        list.innerHTML += `<div class="student-badge">🧑‍🎓 ${p.name}</div>`;
-                        let statusText = p.finished ? "✅ انتهى" : "⏳ يحل الآن...";
-                        let row = `<tr>
-                            <td>${index + 1}</td>
-                            <td>${p.name}</td>
-                            <td>${p.score} / 10</td>
-                            <td>${statusText}</td>
-                        </tr>`;
-                        leaderboardBody.innerHTML += row;
-                    });
-                }
-            });
-        }
+    // ==========================================
+    // بيانات الأسئلة (مستخرجة من الصورة المرفقة)
+    // ==========================================
+    const quizData = [
+        { q: "Mona has a wonderful .......... for drawing and painting.", options: ["excuse", "fear", "weakness", "talent"], correct: "talent" },
+        { q: "Yesterday, the weather was .......... for a picnic. We really enjoyed.", options: ["perfect", "rough", "awful", "terrible"], correct: "perfect" },
+        { q: "The talented .......... acted in several successful movies.", options: ["farmer", "explorer", "actress", "inventor"], correct: "actress" },
+        { q: "Volunteering is a really .......... experience.", options: ["meaningless", "meaningful", "careless", "noisy"], correct: "meaningful" },
+        { q: '".........." means having a serious, important, or useful quality.', options: ["Harmful", "Ordinary", "Meaningless", "Meaningful"], correct: "Meaningful" },
+        { q: "To come up with new ideas means .......... .", options: ["respect", "collaboration", "museum", "creativity"], correct: "creativity" },
+        { q: "Her original roles as a kind mother .......... the hearts of many people.", options: ["touched", "flew", "hurt", "played"], correct: "touched" },
+        { q: "Parents play an important .......... in their children's development.", options: ["invention", "rule", "role", "challenge"], correct: "role" },
+        { q: 'To turn the verb "act" into a noun, we add the suffix "..........".', options: ["-ment", "-ian", "-or", "-er"], correct: "-or" },
+        { q: '"Perfect" and "ideal" are .......... .', options: ["synonyms", "antonyms", "opposites", "nouns"], correct: "synonyms" }
+    ];
 
-        window.startMultiplayerGame = function() {
-            update(ref(db, 'rooms/' + currentPin), { status: 'playing' });
-            showScene('teacher-leaderboard-scene');
-        }
+    let shuffled = [], currentIdx = 0, score = 0, timer, timeLeft = 60, wrongs = [];
 
-        window.joinRoom = function() {
-            currentStudent = document.getElementById('studentName').value.trim();
-            currentPin = document.getElementById('roomPin').value.trim();
+    // ==========================================
+    // أكواد المعلم
+    // ==========================================
+    function createRoom() {
+        currentPin = Math.floor(1000 + Math.random() * 9000).toString();
+        document.getElementById('teacher-pin').innerText = currentPin;
+        set(ref(db, 'rooms/' + currentPin), { status: 'waiting', players: {} });
 
-            if(currentStudent.length < 3 || currentPin.length !== 4) {
-                alert("تأكد من كتابة اسمك الثلاثي وكود الغرفة الصحيح (4 أرقام)!");
-                return;
+        onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
+            const players = snapshot.val();
+            const list = document.getElementById('teacher-students-list');
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            list.innerHTML = ''; leaderboardBody.innerHTML = '';
+
+            if(players) {
+                let playersArray = [];
+                for(let name in players) playersArray.push({ name: name, score: players[name].score, finished: players[name].finished });
+                playersArray.sort((a, b) => b.score - a.score);
+
+                playersArray.forEach((p, index) => {
+                    list.innerHTML += `<div class="student-badge">🧑‍🎓 ${p.name}</div>`;
+                    let statusText = p.finished ? "✅ انتهى" : "⏳ يحل الآن...";
+                    let row = `<tr><td>${index + 1}</td><td>${p.name}</td><td>${p.score} / ${quizData.length}</td><td>${statusText}</td></tr>`;
+                    leaderboardBody.innerHTML += row;
+                });
             }
+        });
+    }
 
-            get(ref(db, 'rooms/' + currentPin)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    let roomData = snapshot.val();
-                    if(roomData.status === 'waiting') {
-                        set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false });
-                        showScene('student-waiting-scene');
+    window.startMultiplayerGame = function() {
+        update(ref(db, 'rooms/' + currentPin), { status: 'playing' });
+        showScene('teacher-leaderboard-scene');
+    }
 
-                        onValue(ref(db, 'rooms/' + currentPin + '/status'), (statusSnapshot) => {
-                            if(statusSnapshot.val() === 'playing') {
-                                showScene('game-scene');
-                                initGameUI();
-                                startCountdown(); 
-                            }
-                        });
-                    } else { alert("الاختبار بدأ بالفعل! لا يمكنك الدخول الآن."); }
-                } else { alert("كود الغرفة غير صحيح!"); }
-            });
-        }
+    // ==========================================
+    // أكواد الطالب والدخول
+    // ==========================================
+    window.joinRoom = function() {
+        currentStudent = document.getElementById('studentName').value.trim();
+        currentPin = document.getElementById('roomPin').value.trim();
+        if(currentStudent.length < 3 || currentPin.length !== 4) return alert("الاسم الثلاثي وكود الغرفة 4 أرقام!");
 
-        function startCountdown() {
-            timeLeft = 100;
-            document.getElementById('time-left').innerText = timeLeft;
-            
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('time-left').innerText = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    submitGame();
-                }
-            }, 1000);
-        }
+        get(ref(db, 'rooms/' + currentPin)).then((snapshot) => {
+            if (snapshot.exists() && snapshot.val().status === 'waiting') {
+                isMultiplayer = true;
+                set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false });
+                showScene('student-waiting-scene');
 
-        // ==========================================
-        // بيانات الاختبار (قم بتغييرها في أي وقت)
-        // ==========================================
-        const wordsData = [
-            { id: 1, en: "event", ar: "حدث" },
-            { id: 2, en: "imagination", ar: "خيال" },
-            { id: 3, en: "detail", ar: "تفصيل" },
-            { id: 4, en: "setting", ar: "مكان وزمان القصة" },
-            { id: 5, en: "complain", ar: "يشتكى" },
-            { id: 6, en: "wonder", ar: "يتساءل" },
-            { id: 7, en: "organized", ar: "منظم" },
-            { id: 8, en: "entertain", ar: "يسلّي" },
-            { id: 9, en: "benefit", ar: "فائدة" },
-            { id: 10, en: "lie", ar: "يكذب" }
-        ];
+                onValue(ref(db, 'rooms/' + currentPin + '/status'), (statusSnap) => {
+                    if(statusSnap.val() === 'playing') startQuiz();
+                });
+            } else { alert("الكود خطأ أو الاختبار بدأ!"); }
+        });
+    }
 
-        let connections = {};
-        const svg = document.getElementById('lines-svg');
-        const gameArea = document.getElementById('game-area');
+    // ==========================================
+    // نظام الاختبار (Quiz Logic)
+    // ==========================================
+    function startQuiz() {
+        shuffled = quizData.sort(() => Math.random() - 0.5); // خلط الأسئلة
+        showScene('quiz-scene');
+        loadQuestion();
+    }
 
-        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+    function loadQuestion() {
+        clearInterval(timer); timeLeft = 60;
+        const q = shuffled[currentIdx];
+        const p = (currentIdx / shuffled.length) * 100;
+        document.getElementById('pBar').style.width = p + "%";
+        document.getElementById('progStep').innerText = `سؤال ${currentIdx + 1} من ${shuffled.length}`;
+        document.getElementById('progPercent').innerText = Math.round(p) + "%";
 
-        function initGameUI() {
-            const englishCol = document.getElementById('english-col');
-            const arabicCol = document.getElementById('arabic-col');
-            let englishList = [...wordsData];
-            let arabicList = shuffle([...wordsData]);
-            
-            englishCol.innerHTML = ''; arabicCol.innerHTML = '';
-            
-            englishList.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'word-item english'; div.id = `en-word-${item.id}`;
-                div.setAttribute('data-id', item.id); div.setAttribute('data-type', 'en');
-                div.innerHTML = `<div class="dot"></div><span class="word-text">${item.en}</span>`;
-                englishCol.appendChild(div);
-            });
+        document.getElementById('quiz-content').innerHTML = `
+            <div class="question-row">
+                <div class="question-text">${q.q}</div>
+                <div class="timer-wrapper">
+                    <svg class="timer-svg" viewBox="0 0 80 80">
+                        <circle class="timer-bg" cx="40" cy="40" r="36"></circle>
+                        <circle id="timerRing" class="timer-progress" cx="40" cy="40" r="36"></circle>
+                    </svg>
+                    <div id="timer-text">60</div>
+                </div>
+            </div>
+            <div id="optionsGrid"></div>
+        `;
 
-            arabicList.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'word-item arabic'; div.id = `ar-word-${item.id}`;
-                div.setAttribute('data-id', item.id); div.setAttribute('data-type', 'ar');
-                div.innerHTML = `<span class="word-text">${item.ar}</span><div class="dot"></div>`;
-                arabicCol.appendChild(div);
-            });
+        let currentOptions = [...q.options].sort(() => Math.random() - 0.5); // خلط الاختيارات
+        currentOptions.forEach((optText) => {
+            const div = document.createElement('div');
+            div.className = "option-box";
+            div.innerHTML = `<span>${optText}</span>`;
+            div.onclick = () => window.checkAnswer(div, optText === q.correct);
+            document.getElementById('optionsGrid').appendChild(div);
+        });
+        startTimer();
+    }
 
-            document.querySelectorAll('.word-item').forEach(item => {
-                item.addEventListener('mousedown', startDrag);
-                item.addEventListener('touchstart', startDrag, {passive: false});
-            });
-        }
+    function startTimer() {
+        const tText = document.getElementById('timer-text');
+        const ring = document.getElementById('timerRing');
+        timer = setInterval(() => {
+            timeLeft--; tText.innerText = timeLeft;
+            let offset = 226 - (timeLeft * (226 / 60)); ring.style.strokeDashoffset = offset;
+            if(timeLeft <= 0) { clearInterval(timer); window.checkAnswer(null, false); }
+        }, 1000);
+    }
 
-        let isDrawing = false;
-        let currentPath = null;
-        let startItem = null;
+    window.checkAnswer = function(el, isCorrect) {
+        clearInterval(timer);
+        document.querySelectorAll('.option-box').forEach(b => b.classList.add('disabled'));
+        const q = shuffled[currentIdx];
 
-        function getDotCoords(itemElement) {
-            const dot = itemElement.querySelector('.dot');
-            const dotRect = dot.getBoundingClientRect();
-            const areaRect = gameArea.getBoundingClientRect();
-            return {
-                x: dotRect.left - areaRect.left + (dotRect.width / 2),
-                y: dotRect.top - areaRect.top + (dotRect.height / 2)
-            };
-        }
-
-        function drawLine(pathElement, x1, y1, x2, y2) { pathElement.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2}`); }
-
-        function startDrag(e) {
-            if(e.type === 'touchstart') e.preventDefault();
-            startItem = e.target.closest('.word-item');
-            if(!startItem) return;
-
-            isDrawing = true;
-            const coords = getDotCoords(startItem);
-            currentPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            drawLine(currentPath, coords.x, coords.y, coords.x, coords.y);
-            svg.appendChild(currentPath);
-        }
-
-        function drag(e) {
-            if (!isDrawing || !currentPath) return;
-            if(e.type === 'touchmove') e.preventDefault();
-            
-            let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-            let clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
-
-            const areaRect = gameArea.getBoundingClientRect();
-            let startCoords = getDotCoords(startItem);
-            drawLine(currentPath, startCoords.x, startCoords.y, clientX - areaRect.left, clientY - areaRect.top);
-        }
-
-        function endDrag(e) {
-            if (!isDrawing) return;
-            isDrawing = false;
-
-            let clientX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
-            let clientY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
-
-            startItem.style.pointerEvents = 'none';
-            let elementBelow = document.elementFromPoint(clientX, clientY);
-            startItem.style.pointerEvents = 'auto';
-
-            let endItem = elementBelow ? elementBelow.closest('.word-item') : null;
-
-            if (endItem && endItem !== startItem) {
-                let startType = startItem.getAttribute('data-type');
-                let endType = endItem.getAttribute('data-type');
-
-                if (startType !== endType) {
-                    let enItem = startType === 'en' ? startItem : endItem;
-                    let arItem = startType === 'ar' ? startItem : endItem;
-                    let enId = enItem.getAttribute('data-id');
-                    let arId = arItem.getAttribute('data-id');
-
-                    if (connections[enId]) { svg.removeChild(connections[enId].pathElement); delete connections[enId]; }
-                    for (let key in connections) {
-                        if (connections[key].arId === arId) { svg.removeChild(connections[key].pathElement); delete connections[key]; }
-                    }
-
-                    const startCoords = getDotCoords(startItem);
-                    const endCoords = getDotCoords(endItem);
-                    drawLine(currentPath, startCoords.x, startCoords.y, endCoords.x, endCoords.y);
-                    connections[enId] = { arId: arId, pathElement: currentPath, enId: enId };
-                    playSound(document.getElementById('sound-connect'));
-                    return;
-                }
-            }
-            svg.removeChild(currentPath); currentPath = null;
-        }
-
-        document.addEventListener('mousemove', drag); document.addEventListener('touchmove', drag, {passive: false});
-        document.addEventListener('mouseup', endDrag); document.addEventListener('touchend', endDrag);
-
-        function submitGame() {
-            clearInterval(timerInterval);
-            let score = 0;
-
-            for (let enId in connections) {
-                let conn = connections[enId];
-                let isCorrect = (conn.enId === conn.arId);
-                let enBox = document.getElementById(`en-word-${conn.enId}`);
-                let arBox = document.getElementById(`ar-word-${conn.arId}`);
-
-                if (isCorrect) {
-                    score += 1; conn.pathElement.setAttribute('stroke', '#00ff00'); 
-                    enBox.classList.add('correct-word'); arBox.classList.add('correct-word');
-                } else {
-                    conn.pathElement.setAttribute('stroke', '#ff0000'); 
-                    enBox.classList.add('wrong-word'); arBox.classList.add('wrong-word');
-                }
-            }
-            wordsData.forEach(item => {
-                if(!connections[item.id]) document.getElementById(`en-word-${item.id}`).classList.add('wrong-word');
-                if(!Object.values(connections).some(c => c.arId == item.id)) document.getElementById(`ar-word-${item.id}`).classList.add('wrong-word');
-            });
-
-            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), {
-                score: score,
-                finished: true
-            });
-
-            const resultOverlay = document.getElementById('result-overlay');
-            const scoreText = document.getElementById('score-text');
-            const messageText = document.getElementById('message-text');
-
-            resultOverlay.style.display = 'flex';
-            scoreText.innerText = `${score} / 10`;
-
-            if (score >= 5) {
-                playSound(document.getElementById('sound-success'));
-                messageText.innerText = "Well Done يا بطل"; messageText.className = "result-message msg-success";
+        if(el) {
+            if(isCorrect) {
+                el.classList.add('correct');
+                document.getElementById('sound-correct').play();
+                score++;
+                // تحديث الدرجة لحظياً للمعلم في لوحة الصدارة
+                if(isMultiplayer) update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: score });
             } else {
-                playSound(document.getElementById('sound-fail'));
-                messageText.innerText = "حاول مرة تانية"; messageText.className = "result-message msg-fail";
+                el.classList.add('wrong');
+                document.getElementById('sound-wrong').play();
+                wrongs.push({q: q.q, a: q.correct});
+                highlightCorrect(q.correct);
             }
-            
-            document.querySelectorAll('.word-item').forEach(item => item.style.pointerEvents = 'none');
-            document.getElementById('finish-btn').style.display = 'none';
+        } else {
+            wrongs.push({q: q.q, a: q.correct}); highlightCorrect(q.correct);
         }
 
-        document.getElementById('finish-btn').addEventListener('click', submitGame);
+        setTimeout(() => {
+            currentIdx++;
+            if(currentIdx < shuffled.length) loadQuestion(); else finishTest();
+        }, 1500); 
+    }
 
-        // الجزيئات المتحركة
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        let particles = Array.from({length: 50}, () => ({
-            x: Math.random()*canvas.width, y: Math.random()*canvas.height,
-            s: Math.random()*2+1, vx: (Math.random()-0.5)*1, vy: (Math.random()-0.5)*1
-        }));
-        function drawParticles() {
-            ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = 'rgba(255,255,255,0.4)';
-            particles.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if(p.x<0 || p.x>canvas.width) p.vx*=-1; if(p.y<0 || p.y>canvas.height) p.vy*=-1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
-            });
-            requestAnimationFrame(drawParticles);
+    function highlightCorrect(correctText) {
+        document.querySelectorAll('.option-box').forEach(b => {
+            if(b.innerText.trim() === correctText) {
+                b.style.borderColor = "var(--success)"; b.style.borderWidth = "3px";
+                b.style.boxShadow = "0 0 20px var(--success)";
+                b.querySelector('span').style.color = "var(--success)";
+            }
+        });
+    }
+
+    function finishTest() {
+        if(isMultiplayer) update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { finished: true });
+        
+        showScene('result-scene');
+        const percentage = (score / shuffled.length) * 100;
+        const resContainer = document.getElementById('result-container');
+        const rev = document.getElementById('reviewArea');
+
+        if (percentage >= 50) {
+            confetti({ particleCount: 150, spread: 60 });
+            resContainer.innerHTML = `
+                <img src="https://drive.google.com/thumbnail?id=1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM&sz=w800" style="width:100%; border-radius:30px;">
+                <div style="position:absolute; top:45%; left:50%; transform:translateX(-50%); color:#1e3a8a; font-size:1.8rem; font-weight:900; width:80%;">${currentStudent}</div>
+                <div style="position:absolute; top:60%; left:50%; transform:translateX(-50%); color:#dc2626; font-size:1.4rem; font-weight:900;">الدرجة: ${score} من ${shuffled.length}</div>
+            `;
+        } else {
+            resContainer.innerHTML = `
+                <div style="padding:60px; background: rgba(239, 68, 68, 0.1); border:2px solid var(--danger); border-radius:30px;">
+                    <h3 style="font-size: 2rem; color: var(--danger);">حاول مرة أخرى</h3>
+                    <p style="font-size: 1.3rem; margin-top: 10px;">يا بطل ${currentStudent}، درجتك ${score} من ${shuffled.length}.</p>
+                </div>
+            `;
         }
-        drawParticles();
-    </script>
+
+        if (wrongs.length === 0) {
+            rev.innerHTML = `<h3 style="color:var(--success); font-size: 1.8rem;">ممتاز يا بطل! مفيش أخطاء 🌟</h3>`;
+        } else {
+            rev.innerHTML = "<h3 style='margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;'>الأخطاء:</h3>";
+            wrongs.forEach(w => rev.innerHTML += `<div style="margin:10px 0; padding:15px; background:rgba(255,255,255,0.05); border-radius:15px; text-align:left; direction:ltr;">Q: ${w.q}<br><span style="color:var(--success)">Ans: ${w.a}</span></div>`);
+        }
+    }
+
+    window.toggleReview = function() {
+        const r = document.getElementById('reviewArea');
+        r.style.display = (r.style.display === "none" || r.style.display === "") ? "block" : "none";
+    }
+
+    // الجزيئات
+    const canvas = document.getElementById('particles-js'); const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let pts = Array.from({length: 50}, () => ({
+        x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2+1, 
+        vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5
+    }));
+    function animate() { 
+        ctx.clearRect(0,0,canvas.width,canvas.height); 
+        pts.forEach(p=>{
+            p.x+=p.vx; p.y+=p.vy; 
+            if(p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height) {p.x=Math.random()*canvas.width; p.y=Math.random()*canvas.height;}
+            ctx.fillStyle="rgba(139,92,246,0.3)"; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill();
+        }); 
+        requestAnimationFrame(animate); 
+    }
+    animate();
+</script>
 </body>
 </html>
