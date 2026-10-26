@@ -104,7 +104,6 @@
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); max-height: 85vh; overflow-y: auto;
         }
 
-        /* حاوية عرض الكلمات المشابهة للطالب في لوحة تحكم المعلم */
         .teacher-preview-box {
             display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; height: 350px; background: #1a1a1a; border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px;
         }
@@ -128,15 +127,8 @@
             border-bottom: 1px solid rgba(255,255,255,0.05); height: 12%;
         }
 
-        .timer-display {
-            font-size: 1.4rem; font-weight: 900; color: #ff4d4d; background: rgba(255,0,0,0.1); 
-            padding: 5px 15px; border-radius: 10px; border: 1px solid #ff4d4d;
-            box-shadow: 0 0 10px rgba(255,0,0,0.3); display: flex; align-items: center; gap: 8px;
-        }
-
         .game-area { position: relative; flex-grow: 1; display: flex; justify-content: space-between; padding: 15px 5%; height: 75%; overflow-y: auto; }
         
-        /* جعل خطوط التوصيل تظهر أمام الكلمات بوضوح تام عبر زيادة الـ z-index */
         #lines-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 500; }
         svg path { fill: none; stroke-width: 5; stroke-linecap: round; filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.9)); }
         
@@ -176,7 +168,6 @@
             #main-box-game { width: 100vw; height: 95vh; border-radius: 0; border-width: 2px; }
             .game-area { padding: 10px 2%; } .column { width: 46%; } 
             .game-header-bar { flex-direction: column; justify-content: center; gap: 5px; height: 18%; }
-            .timer-display { font-size: 1.1rem; padding: 2px 10px; }
         }
     </style>
 </head>
@@ -302,8 +293,8 @@
                     <div class="logo-container" style="width: 45px; height: 45px; border-width: 2px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
                     <h1 style="font-size: 16px;">1Sec term1 plus U2 L1</h1>
                 </div>
-                <div class="timer-display" id="timer-display">
-                    <i class="fa-regular fa-clock"></i> <span id="time-left">100</span> ث
+                <div style="font-size: 1.1rem; font-weight: bold; color: #38ef7d; background: rgba(56,239,125,0.1); padding: 5px 12px; border-radius: 8px; border: 1px solid #38ef7d;">
+                    <i class="fa-regular fa-face-smile"></i> خذ وقتك يا بطل
                 </div>
             </div>
 
@@ -344,8 +335,6 @@
 
         let currentPin = "";
         let currentStudent = "";
-        let timerInterval = null;
-        let timeLeft = 100;
         let hasSubmitted = false;
 
         const wordsData = [
@@ -384,7 +373,6 @@
 
             set(ref(db, 'rooms/' + currentPin), { status: 'waiting', players: {} });
 
-            // تعبئة معاينة الكلمات للمعلم بنفس هيكل الطالب
             const prevArabic = document.getElementById('teacher-prev-arabic');
             const prevEnglish = document.getElementById('teacher-prev-english');
             if(prevArabic && prevEnglish) {
@@ -452,7 +440,7 @@
         }
 
         // ==========================================
-        // أكواد الطالب والعداد الزمني
+        // أكواد الطالب
         // ==========================================
         window.joinRoom = function() {
             currentStudent = document.getElementById('studentName').value.trim();
@@ -474,7 +462,6 @@
                             if(statusSnapshot.val() === 'playing') {
                                 showScene('game-scene');
                                 initGameUI();
-                                startCountdown(); 
                             } else if(statusSnapshot.val() === 'ended') {
                                 alert("تم إنهاء التحدي بواسطة المعلم.");
                                 location.reload();
@@ -483,22 +470,6 @@
                     } else { alert("الاختبار بدأ بالفعل! لا يمكنك الدخول الآن."); }
                 } else { alert("كود الغرفة غير صحيح!"); }
             });
-        }
-
-        function startCountdown() {
-            timeLeft = 100;
-            hasSubmitted = false;
-            document.getElementById('time-left').innerText = timeLeft;
-            
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('time-left').innerText = timeLeft;
-                
-                if (timeLeft <= 0 && !hasSubmitted) {
-                    clearInterval(timerInterval);
-                    submitGame(); 
-                }
-            }, 1000);
         }
 
         // ==========================================
@@ -519,6 +490,7 @@
             englishCol.innerHTML = ''; arabicCol.innerHTML = '';
             svg.innerHTML = '';
             connections = {};
+            hasSubmitted = false;
             
             englishList.forEach(item => {
                 const div = document.createElement('div');
@@ -568,7 +540,6 @@
             const coords = getDotCoords(startItem);
             currentPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             
-            // اختيار لون عشوائي من الائمة الخمسة للخط الجديد
             let randomColor = lineColors[Math.floor(Math.random() * lineColors.length)];
             currentPath.setAttribute('stroke', randomColor);
 
@@ -636,7 +607,6 @@
         function submitGame() {
             if(hasSubmitted) return;
             hasSubmitted = true;
-            clearInterval(timerInterval); 
             let score = 0;
 
             for (let enId in connections) {
@@ -684,17 +654,14 @@
             document.getElementById('show-answers-btn').style.display = 'inline-block';
         }
 
-        // دالة عرض الإجابات الصحيحة للطالب
         window.showCorrectAnswers = function() {
             document.getElementById('result-overlay').style.display = 'none';
             
-            // إزالة الخطوط والملصقات السابقة
             svg.innerHTML = '';
             document.querySelectorAll('.word-item').forEach(item => {
                 item.classList.remove('correct-word', 'wrong-word');
             });
 
-            // رسم خطوط الإجابات الصحيحة باللون الأخضر الصريح
             wordsData.forEach(item => {
                 let enBox = document.getElementById(`en-word-${item.id}`);
                 let arBox = document.getElementById(`ar-word-${item.id}`);
