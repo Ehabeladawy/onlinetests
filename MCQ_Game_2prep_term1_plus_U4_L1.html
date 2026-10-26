@@ -346,13 +346,6 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             const roomData = snapshot.val();
             if(!roomData) return;
 
-            // الاستماع الحتمي لأمر إيقاف الاختبار للطلاب فقط
-            if(roomData.forceStop && roomData.forceStop > 0 && !window.isFinished) {
-                if(document.getElementById('quiz-scene').classList.contains('active')) {
-                    window.submitQuiz(); 
-                }
-            }
-
             // إظهار الإجابات الصحيحة في شاشة المعلم للشرح
             if(roomData.showAnswers && roomData.showAnswers > 0) {
                 highlightCorrectAnswersOnScreen();
@@ -422,7 +415,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         renderAllQuestions('teacher-questions-view');
     }
 
-    // زر الإنهاء الإجباري المضمون والمؤكد 100% للطلاب فقط عبر إرسال طابع زمني فريد
+    // زر الإنهاء الإجباري: يكتب طابعاً زمنياً فريداً والطلاب يستمعون له داخل joinRoom
     window.forceEndQuiz = function() {
         if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم الآن؟")) {
             set(ref(db, 'rooms/' + currentPin + '/forceStop'), Date.now());
@@ -457,9 +450,14 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 
     window.restartGame = function() {
         if(confirm("هل أنت متأكد من إعادة بدء اللعبة وتصفير الغرفة؟")) {
-            update(ref(db, 'rooms/' + currentPin), { status: 'restarted' }).then(() => {
+            // المعلم فقط يغيّر حالة الغرفة؛ الطالب يعيد تحميل صفحته فقط
+            if(isMultiplayer) {
                 location.reload();
-            });
+            } else {
+                update(ref(db, 'rooms/' + currentPin), { status: 'restarted' }).then(() => {
+                    location.reload();
+                });
+            }
         }
     }
 
@@ -474,8 +472,28 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
                 set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false, finishTime: 0 });
                 showScene('student-waiting-scene');
 
-                onValue(ref(db, 'rooms/' + currentPin + '/status'), (statusSnap) => {
-                    if(statusSnap.val() === 'playing') startStudentQuiz();
+                let quizStarted = false;
+
+                // الطالب يستمع للغرفة كاملة (بدء + إنهاء إجباري + إعادة)
+                onValue(ref(db, 'rooms/' + currentPin), (snap) => {
+                    const room = snap.val();
+                    if(!room) return;
+
+                    // بدء الاختبار
+                    if(room.status === 'playing' && !quizStarted) {
+                        quizStarted = true;
+                        startStudentQuiz();
+                    }
+
+                    // إنهاء الاختبار إجبارياً من المعلم
+                    if(room.forceStop && room.forceStop > 0 && quizStarted && !window.isFinished) {
+                        window.submitQuiz();
+                    }
+
+                    // إعادة اللعبة من المعلم
+                    if(room.status === 'restarted') {
+                        location.reload();
+                    }
                 });
             } else { alert("الكود خطأ أو الاختبار بدأ!"); }
         });
@@ -506,7 +524,8 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
     }
 
     function startStudentQuiz() {
-        shuffled = quizData.sort(() => Math.random() - 0.5);
+        // نسخة جديدة حتى لا نغيّر ترتيب المصفوفة الأصلية
+        shuffled = [...quizData].sort(() => Math.random() - 0.5);
         studentAnswers = {};
         window.isFinished = false;
         showScene('quiz-scene');
