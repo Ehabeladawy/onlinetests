@@ -52,6 +52,13 @@
             100% { box-shadow: 0 0 5px red; transform: scale(1); }
         }
         .logo-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .big-logo-container {
+            width: 220px; height: 220px;
+            margin: 10px auto 15px auto; display: flex; align-items: center; justify-content: center;
+        }
+        .big-logo-img { width: 100%; height: 100%; object-fit: contain; }
+
         .header-text { text-align: right; }
         .header-text h1 { font-size: clamp(18px, 4vw, 24px); font-weight: 900; color: white; }
         .animated-name {
@@ -60,7 +67,7 @@
             background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1rem;
         }
 
-        .content-area { padding: 30px 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .content-area { padding: 25px 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
 
         input[type="text"], input[type="number"] { 
             width: 85%; max-width: 400px; padding: 15px; border-radius: 20px; 
@@ -84,7 +91,11 @@
 
         /* ----- شاشات المعلم ----- */
         .pin-display { font-size: 3.5rem; font-weight: 900; letter-spacing: 5px; color: #00f3ff; text-shadow: 0 0 20px #00f3ff; margin: 5px 0; }
-        .students-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px; max-height: 150px; overflow-y: auto; width: 100%; }
+        
+        .students-list { 
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; 
+            margin-top: 10px; max-height: none; overflow-y: visible; width: 100%; 
+        }
         .student-badge { background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; font-size: 0.9rem; }
         
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -101,17 +112,21 @@
 
         .dashboard-box {
             background: rgba(15, 23, 42, 0.9); border: 2px solid #00f3ff; border-radius: 25px; padding: 20px;
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); max-height: 85vh; overflow-y: auto; position: relative;
         }
 
         .teacher-preview-box {
-            display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; height: 350px; background: #1a1a1a; border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px;
+            display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; height: 350px; background: #1a1a1a; border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; position: relative;
         }
-        .teacher-preview-col { display: flex; flex-direction: column; justify-content: space-evenly; width: 48%; height: 100%; }
+        #teacher-lines-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
+        
+        .teacher-preview-col { display: flex; flex-direction: column; justify-content: space-evenly; width: 48%; height: 100%; z-index: 10; }
+        
         .word-item-preview {
             width: 100%; min-height: 30px; padding: 4px 10px; display: flex; align-items: center; justify-content: center;
             background: rgba(40, 40, 40, 1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px;
-            font-size: 0.8rem; text-align: center; font-weight: bold;
+            font-size: 0.8rem; text-align: center; font-weight: bold; position: relative;
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         /* ----- تصميم اللعبة (سحب وإدراج) ----- */
@@ -130,7 +145,7 @@
         .game-area { position: relative; flex-grow: 1; display: flex; justify-content: space-between; padding: 15px 5%; height: 75%; overflow-y: auto; }
         
         #lines-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 500; }
-        svg path { fill: none; stroke-width: 5; stroke-linecap: round; filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.9)); }
+        svg path { fill: none; stroke-width: 5; stroke-linecap: round; filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.9)); transition: all 0.8s ease; }
         
         .column { display: flex; flex-direction: column; justify-content: space-evenly; height: 100%; width: 38%; z-index: 10; position: relative; }
         
@@ -149,18 +164,15 @@
         .arabic .dot { right: 8px; } .english .dot { left: 8px; }
         .footer-area { height: 12%; display: flex; justify-content: center; align-items: center; gap: 15px; }
 
-        .correct-word { box-shadow: 0 0 15px rgba(0, 255, 0, 0.6) !important; border-color: #00ff00 !important; }
-        .wrong-word { box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important; border-color: #ff0000 !important; }
-
         /* نافذة النتيجة في اللعبة */
         #result-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90%; max-width: 420px; aspect-ratio: 1.5 / 1;
+            width: 90%; max-width: 440px;
             background-image: url('https://lh3.googleusercontent.com/d/1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM'); background-size: cover; background-position: center;
             border-radius: 20px; box-shadow: 0 0 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.2);
-            z-index: 600; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 15px;
+            z-index: 600; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px 15px;
         }
-        .result-score { font-size: clamp(22px, 6vw, 35px); font-family: 'Poppins', sans-serif; font-weight: 800; color: #fff; text-shadow: 2px 2px 5px #000; margin-top: 15px; }
+        .result-score { font-size: clamp(22px, 6vw, 32px); font-family: 'Poppins', sans-serif; font-weight: 800; color: #fff; text-shadow: 2px 2px 5px #000; margin-top: 5px; }
         .result-message { font-size: clamp(13px, 3vw, 15px); font-family: 'Poppins', sans-serif; font-weight: 600; text-shadow: 1px 1px 3px #000; margin-top: 2px; }
         .msg-success { color: #00ff88; } .msg-fail { color: #ff4d4d; }
 
@@ -192,6 +204,9 @@
             </div>
             <div class="content-area">
                 <h2 style="font-size: 1.5rem;">من أنت؟</h2>
+                <div class="big-logo-container">
+                    <img src="https://lh3.googleusercontent.com/d/1cF-j-60otMztzK5ruWOGf02aem5WUG7R" class="big-logo-img">
+                </div>
                 <button class="btn btn-blue" onclick="showScene('teacher-setup-scene')" style="width: 80%;">👨‍🏫 مستر إيهاب (إنشاء تحدي)</button>
                 <button class="btn" onclick="showScene('student-login-scene')" style="width: 80%;">🧑‍🎓 أنا طالب (دخول التحدي)</button>
             </div>
@@ -202,17 +217,16 @@
     <div id="teacher-setup-scene" class="scene">
         <div class="main-card">
             <div class="quiz-header">
-                <div class="header-text" style="text-align:center; width:100%;">
-                    <h1>لوحة تحكم المعلم</h1>
+                <div class="logo-container" style="width: 60px; height: 60px;"><img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img"></div>
+                <div class="header-text" style="text-align:right;">
+                    <h1 style="font-size: 1.3rem;">لوحة تحكم مستر إيهاب</h1>
                 </div>
             </div>
             <div class="content-area">
                 <h3>كود الغرفة الخاص بك للطلاب:</h3>
                 <div class="pin-display" id="teacher-pin">----</div>
                 <p>اطلب من الطلاب الدخول وإدخال هذا الكود.</p>
-                <div class="students-list" id="teacher-students-list">
-                    <!-- سيتم إضافة الطلاب هنا لحظياً -->
-                </div>
+                <div class="students-list" id="teacher-students-list"></div>
                 <button class="btn btn-blue" onclick="startMultiplayerGame()" style="margin-top: 20px;">🚀 بدء التحدي للجميع</button>
             </div>
         </div>
@@ -220,21 +234,21 @@
 
     <!-- 3. لوحة تحكم المعلم الشاملة أثناء الاختبار -->
     <div id="teacher-dashboard-scene" class="scene">
-        <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 15px;">
-            <button class="btn btn-danger" onclick="forceEndGame()" style="padding: 10px 25px; font-size: 1.1rem;"><i class="fa-solid fa-stop-circle"></i> إنهاء الامتحان قسراً للجميع 🛑</button>
+        <div style="width: 100%; display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+            <button class="btn btn-danger" onclick="forceEndGame()" style="padding: 10px 20px; font-size: 1rem;"><i class="fa-solid fa-stop-circle"></i> إنهاء الامتحان قسراً 🛑</button>
+            <button class="btn btn-green" onclick="teacherShowCorrectAnswers()" style="padding: 10px 20px; font-size: 1rem;"><i class="fa-solid fa-check-double"></i> إظهار الإجابات الصحيحة ✅</button>
         </div>
         
         <div class="teacher-dashboard-container">
-            <!-- معاينة كلمات الدرس للمعلم بنفس شكل الطالب -->
             <div class="dashboard-box">
                 <h3 style="color: #00f3ff; text-align: center; margin-bottom: 5px;"><i class="fa-solid fa-book"></i> معاينة كلمات الدرس</h3>
-                <div class="teacher-preview-box" dir="ltr">
-                    <div class="teacher-preview-col" id="teacher-prev-arabic"></div>
-                    <div class="teacher-preview-col" id="teacher-prev-english"></div>
+                <div class="teacher-preview-box" id="teacher-preview-area" dir="ltr">
+                    <svg id="teacher-lines-svg"></svg>
+                    <div class="teacher-preview-col teacher-prev-arabic" id="teacher-prev-arabic"></div>
+                    <div class="teacher-preview-col teacher-prev-english" id="teacher-prev-english"></div>
                 </div>
             </div>
 
-            <!-- لوحة الصدارة المباشرة -->
             <div class="dashboard-box">
                 <h3 style="color: gold; text-align: center; margin-bottom: 10px;"><i class="fa-solid fa-trophy"></i> لوحة الصدارة المباشرة</h3>
                 <table class="leaderboard-table">
@@ -246,9 +260,7 @@
                             <th>الحالة</th>
                         </tr>
                     </thead>
-                    <tbody id="leaderboard-body">
-                        <!-- نتائج الطلاب تظهر هنا -->
-                    </tbody>
+                    <tbody id="leaderboard-body"></tbody>
                 </table>
             </div>
         </div>
@@ -308,10 +320,17 @@
                 <button id="finish-btn" class="btn btn-blue" style="font-size: 15px; padding: 8px 25px;">إنهاء التحدي وإرسال النتيجة</button>
             </div>
 
+            <!-- شاشة النتيجة متضمنة لوجو الاختبار وعنوانه -->
             <div id="result-overlay">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px;">
+                    <div style="width: 45px; height: 45px; border-radius: 50%; overflow: hidden; border: 1px solid #00f3ff; background: #000;">
+                        <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h3 style="font-size: 14px; color: #00f3ff; font-weight: 900;">1Sec term1 plus U2 L1</h3>
+                </div>
                 <div class="result-score" id="score-text"></div>
                 <div class="result-message" id="message-text"></div>
-                <button id="show-answers-btn" class="btn btn-green" style="font-size: 13px; padding: 8px 15px; margin-top: 10px; display: none;" onclick="showCorrectAnswers()">🔍 عرض الإجابات الصحيحة</button>
+                <button id="show-answers-btn" class="btn btn-green" style="font-size: 13px; padding: 6px 15px; margin-top: 8px; display: none;" onclick="showCorrectAnswers()">🔍 عرض الإجابات الصحيحة</button>
             </div>
         </div>
     </div>
@@ -350,7 +369,6 @@
             { id: 10, en: "personal injury or illness", ar: "جرح شخصي" }
         ];
 
-        // 5 ألوان مميزة لخطوط التوصيل
         const lineColors = ["#00f3ff", "#b967ff", "#38ef7d", "#ff9900", "#ff416c"];
 
         window.showScene = function(sceneId) {
@@ -373,15 +391,7 @@
 
             set(ref(db, 'rooms/' + currentPin), { status: 'waiting', players: {} });
 
-            const prevArabic = document.getElementById('teacher-prev-arabic');
-            const prevEnglish = document.getElementById('teacher-prev-english');
-            if(prevArabic && prevEnglish) {
-                prevArabic.innerHTML = ''; prevEnglish.innerHTML = '';
-                wordsData.forEach(w => {
-                    prevArabic.innerHTML += `<div class="word-item-preview">${w.ar}</div>`;
-                    prevEnglish.innerHTML += `<div class="word-item-preview">${w.en}</div>`;
-                });
-            }
+            initTeacherPreview();
 
             onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
                 const players = snapshot.val();
@@ -426,6 +436,65 @@
                     showScene('teacher-dashboard-scene');
                 }
             });
+        }
+
+        function initTeacherPreview() {
+            const prevArabic = document.getElementById('teacher-prev-arabic');
+            const prevEnglish = document.getElementById('teacher-prev-english');
+            if(prevArabic && prevEnglish) {
+                prevArabic.innerHTML = ''; prevEnglish.innerHTML = '';
+                
+                let shuffledAr = [...wordsData].sort(() => Math.random() - 0.5);
+                let shuffledEn = [...wordsData].sort(() => Math.random() - 0.5);
+
+                shuffledAr.forEach(w => {
+                    prevArabic.innerHTML += `<div class="word-item-preview" data-id="${w.id}" id="teacher-ar-${w.id}">${w.ar}</div>`;
+                });
+                shuffledEn.forEach(w => {
+                    prevEnglish.innerHTML += `<div class="word-item-preview" data-id="${w.id}" id="teacher-en-${w.id}">${w.en}</div>`;
+                });
+            }
+        }
+
+        window.teacherShowCorrectAnswers = function() {
+            const prevArabic = document.getElementById('teacher-prev-arabic');
+            const prevEnglish = document.getElementById('teacher-prev-english');
+            
+            let arItems = wordsData.map(w => document.getElementById(`teacher-ar-${w.id}`));
+            let enItems = wordsData.map(w => document.getElementById(`teacher-en-${w.id}`));
+
+            prevArabic.innerHTML = '';
+            prevEnglish.innerHTML = '';
+
+            arItems.forEach(el => prevArabic.appendChild(el));
+            enItems.forEach(el => prevEnglish.appendChild(el));
+
+            setTimeout(() => {
+                const svg = document.getElementById('teacher-lines-svg');
+                const previewArea = document.getElementById('teacher-preview-area');
+                svg.innerHTML = '';
+
+                wordsData.forEach(item => {
+                    let enBox = document.getElementById(`teacher-en-${item.id}`);
+                    let arBox = document.getElementById(`teacher-ar-${item.id}`);
+                    if(enBox && arBox) {
+                        let r1 = enBox.getBoundingClientRect();
+                        let r2 = arBox.getBoundingClientRect();
+                        let ra = previewArea.getBoundingClientRect();
+
+                        let x1 = r1.left - ra.left;
+                        let y1 = r1.top - ra.top + (r1.height / 2);
+                        let x2 = r2.right - ra.left;
+                        let y2 = r2.top - ra.top + (r2.height / 2);
+
+                        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2}`);
+                        path.setAttribute('stroke', '#38ef7d');
+                        path.setAttribute('stroke-width', '4');
+                        svg.appendChild(path);
+                    }
+                });
+            }, 500);
         }
 
         window.startMultiplayerGame = function() {
@@ -473,7 +542,7 @@
         }
 
         // ==========================================
-        // نظام اللعبة والتوصيل
+        // نظام اللعبة والتوصيل للطالب
         // ==========================================
         let connections = {};
         const svg = document.getElementById('lines-svg');
