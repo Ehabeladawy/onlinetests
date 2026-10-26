@@ -213,7 +213,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             
             <hr style="width: 100%; border-color: rgba(255,255,255,0.1); margin: 30px 0;">
             
-            <h3 style="color: var(--success); margin-bottom: 15px;">أسئلة الاختبار للإشراف:</h3>
+            <h3 style="color: var(--success); margin-bottom: 15px;">أسئلة الاختبار للإشراف والشرح:</h3>
             <div id="teacher-questions-view" style="width: 100%; text-align: left; direction: ltr;"></div>
         </div>
     </div>
@@ -277,6 +277,13 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             
             <h3 style="margin-top: 20px; color: #00f3ff; font-size: 1.4rem;">مراجعة إجابات الاختبار:</h3>
             <div id="reviewArea" class="review-area" style="width: 100%; text-align: left; direction: ltr;"></div>
+            
+            <!-- أيقونة إعادة اللعبة للطالب في أسفل صفحة النتيجة -->
+            <div style="padding: 30px 0; text-align: center; width: 100%;">
+                <button class="btn" onclick="restartGame()" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); font-size: 1.2rem; padding: 12px 35px; box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);">
+                    <i class="fa-solid fa-rotate-right"></i> إعادة اللعبة
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -304,7 +311,6 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
     let currentStudent = "";
     let isMultiplayer = false;
 
-    // تم تحديث الأسئلة حصراً بناءً على الصورة المرفقة الجديدة بدون أرقام وبدقة كاملة
     const quizData = [
         { q: 'The word "incredible" is a synonym for "..........".', options: ["ordinary", "boring", "amazing", "ugly"], correct: "amazing" },
         { q: 'The opposite of "beautiful" is "..........".', options: ["lovely", "pretty", "attractive", "ugly"], correct: "ugly" },
@@ -340,10 +346,14 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             const roomData = snapshot.val();
             if(!roomData) return;
 
-            if(roomData.status === 'ended' && !window.isFinished && document.getElementById('quiz-scene').classList.contains('active')) {
-                window.submitQuiz(); 
+            // عندما يضغط المعلم إنهاء الاختبار، يتأثر الطلاب فقط إذا كانوا في شاشة الاختبار
+            if(roomData.status === 'ended' && !window.isFinished) {
+                if(document.getElementById('quiz-scene').classList.contains('active')) {
+                    window.submitQuiz(); 
+                }
             }
 
+            // إظهار الإجابات الصحيحة في شاشة إشراف المعلم ليراها الطلاب معه أثناء الشرح
             if(roomData.showAnswers) {
                 highlightCorrectAnswersOnScreen();
             }
@@ -414,12 +424,13 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 
     window.forceEndQuiz = function() {
         if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم الآن؟")) {
+            // تحديث الحالة للطلاب فقط لتسليم الاختبار، مع بقاء صفحة المعلم كما هي
             update(ref(db, 'rooms/' + currentPin), { status: 'ended' });
         }
     }
 
     window.revealAnswersToStudents = function() {
-        if(confirm("هل تريد إظهار الإجابات الصحيحة بوضوح للجميع الآن؟")) {
+        if(confirm("هل تريد إظهار الإجابات الصحيحة في لوحة الإشراف للشرح؟")) {
             update(ref(db, 'rooms/' + currentPin), { showAnswers: true });
         }
     }
