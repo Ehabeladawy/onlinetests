@@ -147,7 +147,6 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             </div>
         </div>
         <div class="content-area">
-            <!-- الصورة المتحركة مكبرة وواضحة فوق عبارة من أنت -->
             <img src="https://drive.google.com/thumbnail?id=1cF-j-60otMztzK5ruWOGf02aem5WUG7R&sz=w600" style="width: 220px; margin-bottom: -5px; animation: float 3s ease-in-out infinite;">
             <h2 style="font-size: 1.5rem; margin-bottom: 10px;">من أنت؟</h2>
             <button class="btn btn-green" onclick="showScene('teacher-setup-scene')" style="width: 80%; max-width: 320px;">👨‍🏫 مستر إيهاب (منشئ التحدي)</button>
@@ -156,7 +155,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
     </div>
 </div>
 
-<!-- 2. شاشة إعداد المعلم (غرفة الانتظار) -->
+<!-- 2. شاشة إعداد المعلم -->
 <div id="teacher-setup-scene" class="scene">
     <div class="main-card">
         <div class="quiz-header">
@@ -182,14 +181,12 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         </div>
         <div class="content-area" style="overflow-x: auto; width: 100%; padding-top:10px;">
             
-            <!-- زر الإنهاء القسري للاختبار (خاص بمستر إيهاب فقط) -->
             <div style="width: 100%; text-align: center; margin-bottom: 20px;">
                 <button class="btn btn-danger" onclick="forceEndQuiz()" style="font-size: 1.2rem; padding: 12px 30px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);">
                     <i class="fa-solid fa-stop-circle"></i> 🛑 إنهاء الاختبار للجميع الآن
                 </button>
             </div>
 
-            <!-- جدول المتصدرين -->
             <table class="leaderboard-table">
                 <thead><tr><th>المركز</th><th>البطل</th><th>الدرجة</th><th>الحالة</th></tr></thead>
                 <tbody id="leaderboard-body"></tbody>
@@ -236,7 +233,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
     </div>
 </div>
 
-<!-- 6. شاشة مسابقة الطالب (شريحة واحدة كاملة) -->
+<!-- 6. شاشة مسابقة الطالب -->
 <div id="quiz-scene" class="scene" style="padding: 0;">
     <div class="sticky-timer" style="width: 100%; max-width: 850px; margin: 0 auto;">
         <div style="font-weight: bold; font-size: 1.1rem;">الوقت المتبقي:</div>
@@ -251,7 +248,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
     </div>
 </div>
 
-<!-- 7. شاشة النتيجة النهائية للطالب -->
+<!-- 7. شاشة النتيجة النهائية -->
 <div id="result-scene" class="scene" style="overflow-y: auto;">
     <div class="main-card">
         <div class="content-area">
@@ -335,8 +332,25 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
 
             if(players) {
                 let playersArray = [];
-                for(let name in players) playersArray.push({ name: name, score: players[name].score, finished: players[name].finished });
-                playersArray.sort((a, b) => b.score - a.score);
+                for(let name in players) {
+                    playersArray.push({ 
+                        name: name, 
+                        score: players[name].score || 0, 
+                        finished: players[name].finished || false,
+                        finishTime: players[name].finishTime || 9999999999999 // وقت التسليم (إذا لم يسلم يأخذ وقتاً وهمياً كبيراً)
+                    });
+                }
+
+                // الترتيب حسب المعيارين: 
+                // 1. الدرجة (الأكبر أولاً)
+                // 2. وقت التسليم (الأسرع/الأقل وقتاً أولاً عند التساوي)
+                playersArray.sort((a, b) => {
+                    if (b.score !== a.score) {
+                        return b.score - a.score; // الأقاليم بالدرجة الأعلى
+                    } else {
+                        return a.finishTime - b.finishTime; // الأسرع في التسليم يتقدم عند تساوي الدرجات
+                    }
+                });
 
                 playersArray.forEach((p, index) => {
                     list.innerHTML += `<div class="student-badge">🧑‍🎓 ${p.name}</div>`;
@@ -387,7 +401,7 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         get(ref(db, 'rooms/' + currentPin)).then((snapshot) => {
             if (snapshot.exists() && snapshot.val().status === 'waiting') {
                 isMultiplayer = true;
-                set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false });
+                set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false, finishTime: 0 });
                 showScene('student-waiting-scene');
 
                 onValue(ref(db, 'rooms/' + currentPin + '/status'), (statusSnap) => {
@@ -479,7 +493,11 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
         finalScore = tempScore;
 
         if(isMultiplayer) {
-            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: finalScore });
+            // تحديث الدرجة وأيضاً تسجيل وقت حدوث التغيير (لتحديد السرعة بناءً على آخر تفاعل أو التسليم)
+            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
+                score: finalScore,
+                finishTime: Date.now() 
+            });
         }
     }
 
@@ -510,7 +528,14 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
             if(!selectedAns) wrongs.push({q: q.q, a: q.correct});
         });
 
-        if(isMultiplayer) update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { finished: true, score: finalScore });
+        if(isMultiplayer) {
+            // تسجيل وقت التسليم الفعلي بدقة ليكون معياراً للسرعة عند تساوي الدرجات
+            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
+                finished: true, 
+                score: finalScore,
+                finishTime: Date.now() 
+            });
+        }
         
         setTimeout(() => {
             showScene('result-scene');
