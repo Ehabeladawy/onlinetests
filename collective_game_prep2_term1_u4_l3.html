@@ -164,16 +164,19 @@
         .arabic .dot { right: 8px; } .english .dot { left: 8px; }
         .footer-area { height: 12%; display: flex; justify-content: center; align-items: center; gap: 15px; }
 
-        /* نافذة النتيجة في اللعبة */
+        .correct-word { box-shadow: 0 0 15px rgba(0, 255, 0, 0.6) !important; border-color: #00ff00 !important; }
+        .wrong-word { box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important; border-color: #ff0000 !important; }
+
+        /* نافذة النتيجة في اللعبة (خالية من اللوجو والعنوان الخاص بالطالب) */
         #result-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90%; max-width: 440px;
+            width: 90%; max-width: 400px; aspect-ratio: 1.6 / 1;
             background-image: url('https://lh3.googleusercontent.com/d/1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM'); background-size: cover; background-position: center;
             border-radius: 20px; box-shadow: 0 0 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.2);
-            z-index: 600; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px 15px;
+            z-index: 600; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 15px;
         }
-        .result-score { font-size: clamp(22px, 6vw, 32px); font-family: 'Poppins', sans-serif; font-weight: 800; color: #fff; text-shadow: 2px 2px 5px #000; margin-top: 5px; }
-        .result-message { font-size: clamp(13px, 3vw, 15px); font-family: 'Poppins', sans-serif; font-weight: 600; text-shadow: 1px 1px 3px #000; margin-top: 2px; }
+        .result-score { font-size: clamp(25px, 7vw, 40px); font-family: 'Poppins', sans-serif; font-weight: 800; color: #fff; text-shadow: 2px 2px 5px #000; margin-top: 25px; }
+        .result-message { font-size: clamp(14px, 3.5vw, 16px); font-family: 'Poppins', sans-serif; font-weight: 600; text-shadow: 1px 1px 3px #000; margin-top: 5px; }
         .msg-success { color: #00ff88; } .msg-fail { color: #ff4d4d; }
 
         @media (max-width: 768px) {
@@ -232,11 +235,19 @@
         </div>
     </div>
 
-    <!-- 3. لوحة تحكم المعلم الشاملة أثناء الاختبار -->
+    <!-- 3. لوحة تحكم المعلم الشاملة أثناء الاختبار (تتضمن عنوان الاختبار واللوجو الخاص بك) -->
     <div id="teacher-dashboard-scene" class="scene">
-        <div style="width: 100%; display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
-            <button class="btn btn-danger" onclick="forceEndGame()" style="padding: 10px 20px; font-size: 1rem;"><i class="fa-solid fa-stop-circle"></i> إنهاء الامتحان قسراً 🛑</button>
-            <button class="btn btn-green" onclick="teacherShowCorrectAnswers()" style="padding: 10px 20px; font-size: 1rem;"><i class="fa-solid fa-check-double"></i> إظهار الإجابات الصحيحة ✅</button>
+        <div style="width: 95%; max-width: 1200px; display: flex; align-items: center; justify-content: space-between; background: rgba(15, 23, 42, 0.9); border: 2px solid #00f3ff; border-radius: 20px; padding: 15px 25px; margin-bottom: 15px; box-shadow: 0 0 20px rgba(0,243,255,0.2);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 55px; height: 55px; border-radius: 50%; border: 2px solid #00f3ff; overflow: hidden; background: #000; box-shadow: 0 0 10px #00f3ff;">
+                    <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <h2 style="font-size: 1.2rem; color: #00f3ff; font-weight: 900;">1Sec term1 plus U2 L1</h2>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-green" onclick="teacherShowCorrectAnswers()" style="padding: 10px 18px; font-size: 0.95rem;"><i class="fa-solid fa-check-double"></i> إظهار الإجابات الصحيحة ✅</button>
+                <button class="btn btn-danger" onclick="forceEndGame()" style="padding: 10px 18px; font-size: 0.95rem;"><i class="fa-solid fa-stop-circle"></i> إنهاء قسراً 🛑</button>
+            </div>
         </div>
         
         <div class="teacher-dashboard-container">
@@ -320,17 +331,11 @@
                 <button id="finish-btn" class="btn btn-blue" style="font-size: 15px; padding: 8px 25px;">إنهاء التحدي وإرسال النتيجة</button>
             </div>
 
-            <!-- شاشة النتيجة متضمنة لوجو الاختبار وعنوانه -->
+            <!-- شاشة النتيجة للطالب (نظيفة وخالية من اللوجو والعنوان) -->
             <div id="result-overlay">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px;">
-                    <div style="width: 45px; height: 45px; border-radius: 50%; overflow: hidden; border: 1px solid #00f3ff; background: #000;">
-                        <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
-                    <h3 style="font-size: 14px; color: #00f3ff; font-weight: 900;">1Sec term1 plus U2 L1</h3>
-                </div>
                 <div class="result-score" id="score-text"></div>
                 <div class="result-message" id="message-text"></div>
-                <button id="show-answers-btn" class="btn btn-green" style="font-size: 13px; padding: 6px 15px; margin-top: 8px; display: none;" onclick="showCorrectAnswers()">🔍 عرض الإجابات الصحيحة</button>
+                <button id="show-answers-btn" class="btn btn-green" style="font-size: 13px; padding: 8px 15px; margin-top: 10px; display: none;" onclick="showCorrectAnswers()">🔍 عرض الإجابات الصحيحة</button>
             </div>
         </div>
     </div>
