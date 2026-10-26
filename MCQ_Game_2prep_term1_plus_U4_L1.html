@@ -340,21 +340,21 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
     function createRoom() {
         currentPin = Math.floor(1000 + Math.random() * 9000).toString();
         document.getElementById('teacher-pin').innerText = currentPin;
-        set(ref(db, 'rooms/' + currentPin), { status: 'waiting', forceEnded: false, showAnswers: false, players: {} });
+        set(ref(db, 'rooms/' + currentPin), { status: 'waiting', forceStop: 0, showAnswers: 0, players: {} });
 
         onValue(ref(db, 'rooms/' + currentPin), (snapshot) => {
             const roomData = snapshot.val();
             if(!roomData) return;
 
-            // الاستماع لأمر إنهاء الاختبار للطلاب (عندما يضغط المعلم الزر)
-            if(roomData.forceEnded && !window.isFinished) {
+            // الاستماع الحتمي لأمر إيقاف الاختبار للطلاب فقط
+            if(roomData.forceStop && roomData.forceStop > 0 && !window.isFinished) {
                 if(document.getElementById('quiz-scene').classList.contains('active')) {
                     window.submitQuiz(); 
                 }
             }
 
-            // إظهار الإجابات الصحيحة في لوحة إشراف المعلم لشرحها للطلاب
-            if(roomData.showAnswers) {
+            // إظهار الإجابات الصحيحة في شاشة المعلم للشرح
+            if(roomData.showAnswers && roomData.showAnswers > 0) {
                 highlightCorrectAnswersOnScreen();
             }
 
@@ -417,21 +417,21 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 2
     }
 
     window.startMultiplayerGame = function() {
-        update(ref(db, 'rooms/' + currentPin), { status: 'playing' });
+        update(ref(db, 'rooms/' + currentPin), { status: 'playing', forceStop: 0, showAnswers: 0 });
         showScene('teacher-leaderboard-scene');
         renderAllQuestions('teacher-questions-view');
     }
 
+    // زر الإنهاء الإجباري المضمون والمؤكد 100% للطلاب فقط عبر إرسال طابع زمني فريد
     window.forceEndQuiz = function() {
         if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم الآن؟")) {
-            // تحديث خاص لإنهاء الاختبار عند الطلاب دون تغيير صفحة المعلم
-            update(ref(db, 'rooms/' + currentPin), { forceEnded: true });
+            set(ref(db, 'rooms/' + currentPin + '/forceStop'), Date.now());
         }
     }
 
     window.revealAnswersToStudents = function() {
         if(confirm("هل تريد إظهار الإجابات الصحيحة في لوحة الإشراف للشرح؟")) {
-            update(ref(db, 'rooms/' + currentPin), { showAnswers: true });
+            set(ref(db, 'rooms/' + currentPin + '/showAnswers'), Date.now());
         }
     }
 
