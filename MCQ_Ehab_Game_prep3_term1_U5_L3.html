@@ -149,15 +149,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
 .review-area { background: rgba(0,0,0,0.4); border-radius: 20px; padding: 25px; margin-top: 25px; text-align: center; display: block; border: 1px solid rgba(255,255,255,0.1); width: 100%; }
 
-/* مؤشر الحماس */
-#streak-popup {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5);
-    background: rgba(249, 115, 22, 0.95); padding: 20px 40px; border-radius: 30px;
-    color: white; font-size: 2rem; font-weight: 900; z-index: 9999; display: none;
-    box-shadow: 0 0 50px var(--danger); text-align: center; pointer-events: none;
-}
-@keyframes popIn { 0%{transform: translate(-50%, -50%) scale(0.5); opacity:0;} 50%{transform: translate(-50%, -50%) scale(1.1); opacity:1;} 100%{transform: translate(-50%, -50%) scale(1); opacity:1;} }
-
 /* الإحصائيات للمعلم */
 #analytics-box { display: none; background: rgba(239, 68, 68, 0.1); border: 2px dashed var(--danger); padding: 20px; border-radius: 15px; margin-top: 20px; width: 100%; text-align: center; }
 
@@ -167,9 +158,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 <body>
 
 <canvas id="particles-js"></canvas>
-
-<!-- مؤشر الحماس -->
-<div id="streak-popup">🔥 3 إجابات متتالية.. بطل! 🔥</div>
 
 <!-- 1. شاشة اختيار الدور -->
 <div id="role-scene" class="scene active">
@@ -309,10 +297,14 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
             <div class="header-text"><h1>انتظار بدء التحدي</h1></div>
         </div>
-        <div class="content-area">
+        <div class="content-area" style="text-align: center;">
             <h2 style="font-size: 1.8rem; color: var(--success);">أنت الآن داخل الغرفة!</h2>
-            <p style="font-size: 1.2rem; margin-top: 15px;">استعد يا بطل، بانتظار إشارة المعلم لبدء الاختبار...</p>
-            <i class="fa-solid fa-spinner fa-spin" style="font-size: 3rem; margin-top: 30px; color: var(--danger);"></i>
+            <p style="font-size: 1.2rem; margin-top: 10px; margin-bottom: 15px;">استعد يا بطل، بانتظار إشارة المعلم لبدء الاختبار...</p>
+            
+            <!-- اللوجو المتحرك في غرفة الانتظار -->
+            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Logo GIF" style="width: 180px; border-radius: 20px; margin: 10px auto; box-shadow: 0 0 20px rgba(14, 165, 233, 0.5); display: block;">
+
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; margin-top: 15px; color: var(--danger);"></i>
         </div>
     </div>
 </div>
@@ -365,7 +357,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
 <audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
 <audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
-<audio id="sound-streak" src="https://assets.mixkit.co/active_storage/sfx/1045/1045-preview.mp3"></audio>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -388,7 +379,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     let currentAvatar = "🧑‍🎓";
     let isMultiplayer = false;
     let used5050 = false;
-    let currentStreak = 0;
 
     // الدخول السري
     window.logoClickCount = 0;
@@ -432,7 +422,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     const originalQuizData = [
         { id: 0, q: "Ali is my best ........... . We play football together every day.", options: ["guide", "tourist", "visitor", "buddy"], correct: "buddy" },
         { id: 1, q: "The ring is ........... gold, not a copy.", options: ["real", "false", "easy", "fake"], correct: "real" },
-        { id: 2, q: "...........", isDef: true, q: "........... is a partner assigned to help someone feel welcome.", options: ["Model", "Buddy", "Head", "Colleague"], correct: "Buddy" },
+        { id: 2, q: "........... is a partner assigned to help someone feel welcome.", options: ["Model", "Buddy", "Head", "Colleague"], correct: "Buddy" },
         { id: 3, q: "To \"see through their eyes\" means to ........... how someone else feels.", options: ["ignore", "forget", "understand", "watch"], correct: "understand" },
         { id: 4, q: 'He watched Karim closely. The word "closely" here means ........... .', options: ["quickly", "carefully", "quietly", "slowly"], correct: "carefully" },
         { id: 5, q: 'The word "greet" has the same meaning as "...........".', options: ["quit", "leave", "see off", "welcome"], correct: "welcome" },
@@ -705,7 +695,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         studentAnswers = {};
         window.isFinished = false;
         used5050 = false;
-        currentStreak = 0;
         showScene('quiz-scene');
         
         renderAllQuestions('quiz-content', true);
@@ -726,20 +715,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         let siblings = box.parentElement.children;
         for(let s of siblings) s.classList.remove('selected-opt');
         box.classList.add('selected-opt');
-        
-        // نظام الحماس المخفي
-        if(studentAnswers[originalId] !== optText) {
-            let isCorrect = (optText === shuffled[qIndex].correct);
-            if(isCorrect) {
-                currentStreak++;
-                if(currentStreak === 3) {
-                    currentStreak = 0; 
-                    showStreakAnimation();
-                }
-            } else {
-                currentStreak = 0; 
-            }
-        }
 
         studentAnswers[originalId] = optText;
         
@@ -757,16 +732,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 finishTime: Date.now() 
             });
         }
-    }
-
-    function showStreakAnimation() {
-        const popup = document.getElementById('streak-popup');
-        popup.style.display = 'block';
-        popup.style.animation = 'popIn 0.5s ease forwards';
-        document.getElementById('sound-streak').play().catch(()=>{});
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 2500);
     }
 
     window.submitQuiz = function() {
@@ -788,6 +753,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         
         setTimeout(() => {
             showScene('result-scene');
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // انتقال تلقائي لأعلى الصفحة لرؤية النتيجة
+            
             const percentage = (finalScore / shuffled.length) * 100;
             const resContainer = document.getElementById('result-container');
             const rev = document.getElementById('reviewArea');
