@@ -149,9 +149,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
 .review-area { background: rgba(0,0,0,0.4); border-radius: 20px; padding: 25px; margin-top: 25px; text-align: center; display: block; border: 1px solid rgba(255,255,255,0.1); width: 100%; }
 
-/* الإحصائيات للمعلم */
-#analytics-box { display: none; background: rgba(239, 68, 68, 0.1); border: 2px dashed var(--danger); padding: 20px; border-radius: 15px; margin-top: 20px; width: 100%; text-align: center; }
-
 @media (max-width: 768px) { .quiz-header { flex-direction: column; text-align: center; } }
 </style>
 </head>
@@ -240,12 +237,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 <button class="btn" onclick="restartGame()" style="font-size: 1rem; padding: 12px 18px;">
                     <i class="fa-solid fa-rotate-right"></i> 🔄 إعادة اللعبة
                 </button>
-            </div>
-
-            <!-- إحصائيات المعلم تظهر هنا بعد الإنهاء -->
-            <div id="analytics-box">
-                <h3 style="color: var(--danger); margin-bottom: 10px;"><i class="fa-solid fa-chart-pie"></i> إحصائيات الأخطاء الشائعة:</h3>
-                <p id="most-wrong-q" style="font-size: 1.2rem; font-family: 'Poppins', sans-serif; direction: ltr; font-weight: bold; color: white;"></p>
             </div>
 
             <table class="leaderboard-table" style="margin-top: 20px;">
@@ -454,7 +445,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             const roomData = snapshot.val();
             if(!roomData) return;
 
-            if(roomData.showAnswers && roomData.showAnswers > 0) {
+            // تفعيل أمر إظهار الإجابات لجميع الطلاب والمعلم
+            if(roomData.status === 'show_answers') {
                 highlightCorrectAnswersOnScreen();
             }
 
@@ -467,35 +459,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             const leaderboardBody = document.getElementById('leaderboard-body');
             const list = document.getElementById('teacher-students-list');
             list.innerHTML = ''; leaderboardBody.innerHTML = '';
-
-            // نظام الإحصائيات للمعلم
-            if(roomData.status === 'ended' && players) {
-                let wrongCounts = {};
-                originalQuizData.forEach(q => wrongCounts[q.id] = 0);
-                let totalSubmitted = 0;
-
-                for(let name in players) {
-                    if(players[name].finished) totalSubmitted++;
-                    let ans = players[name].answers || {};
-                    originalQuizData.forEach(q => {
-                        if(ans[q.id] !== q.correct) wrongCounts[q.id]++;
-                    });
-                }
-                
-                if(totalSubmitted > 0) {
-                    let maxWrongId = -1; let maxWrongCount = -1;
-                    for(let id in wrongCounts) {
-                        if(wrongCounts[id] > maxWrongCount) { maxWrongCount = wrongCounts[id]; maxWrongId = id; }
-                    }
-                    if(maxWrongCount > 0) {
-                        document.getElementById('analytics-box').style.display = 'block';
-                        document.getElementById('most-wrong-q').innerHTML = `
-                            أكثر سؤال خطأ فيه الطلاب (${maxWrongCount} طلاب):<br><br>
-                            <span style="color:var(--gold); font-size:1rem;">${originalQuizData[maxWrongId].q}</span>
-                        `;
-                    }
-                }
-            }
 
             if(players) {
                 let playersArray = [];
@@ -564,12 +527,13 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     }
 
     window.revealAnswersToStudents = function() {
-        if(confirm("هل تريد إظهار الإجابات الصحيحة في لوحة الإشراف للشرح؟")) {
+        if(confirm("هل تريد إظهار الإجابات الصحيحة للجميع الآن؟")) {
             update(ref(db, 'rooms/' + currentPin), { status: 'show_answers', lastAction: Date.now() });
         }
     }
 
     function highlightCorrectAnswersOnScreen() {
+        // تلوين الإجابات في شاشة الإشراف للمعلم
         const teacherView = document.getElementById('teacher-questions-view');
         if(teacherView && teacherView.children.length > 0) {
             originalQuizData.forEach((q, qIndex) => {
@@ -583,6 +547,22 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                         if(!box.innerHTML.includes('fa-check')) {
                             box.innerHTML = `<span>${text}</span> <i class="fa-solid fa-check-circle" style="color:#fff; font-size:1.2rem;"></i>`;
                         }
+                    }
+                }
+            });
+        }
+
+        // تلوين الإجابات أيضاً في شاشة المراجعة للطالب إذا كانت مفتوحة
+        const reviewArea = document.getElementById('reviewArea');
+        if(reviewArea && reviewArea.children.length > 0) {
+            originalQuizData.forEach((q, qIndex) => {
+                let qRow = reviewArea.children[qIndex];
+                if(!qRow) return;
+                let opts = qRow.querySelector('.options-grid').children;
+                for(let box of opts) {
+                    let text = box.innerText.replace('✓', '').replace('✗', '').trim();
+                    if(text === q.correct) {
+                        box.classList.add('correct');
                     }
                 }
             });
@@ -626,6 +606,9 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                             break;
                         case 'ended':
                             if (quizStarted && !window.isFinished) window.submitQuiz();
+                            break;
+                        case 'show_answers':
+                            highlightCorrectAnswersOnScreen();
                             break;
                         case 'restarted':
                             location.reload();
@@ -753,7 +736,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         
         setTimeout(() => {
             showScene('result-scene');
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // انتقال تلقائي لأعلى الصفحة لرؤية النتيجة
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // صعود تلقائي لأعلى لرؤية النتيجة والبطاقة المتحركة
             
             const percentage = (finalScore / shuffled.length) * 100;
             const resContainer = document.getElementById('result-container');
@@ -768,7 +751,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
             resContainer.innerHTML = `
                 <div style="position: relative; width: 100%; text-align: center;">
-                    <img src="https://drive.google.com/thumbnail?id=1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM&sz=w800" style="width:150%; border-radius:30px; display: block; margin: 0 auto;">
+                    <img src="https://lh3.googleusercontent.com/d/1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM" style="width:100%; max-width:500px; border-radius:30px; display: block; margin: 0 auto; box-shadow: 0 0 30px rgba(0,0,0,0.8);">
                     <div style="position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center;">
                         <div style="color:#1e3a8a; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 900; text-shadow: 0 0 10px rgba(255,255,255,0.8);">${currentAvatar} ${currentStudent}</div>
                         <div style="color:#dc2626; font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight: 900; margin-top: 5px; text-shadow: 0 0 10px rgba(255,255,255,0.8);">الدرجة: ${finalScore} من ${shuffled.length}</div>
