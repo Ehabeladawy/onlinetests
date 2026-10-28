@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mr Game - Past perfect</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    --primary: #6366f1; --purple-glow: #8b5cf6; --success: #10b981;
+    --danger: #ef4444; --bg-dark: #020617; 
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent;}
+body { background: var(--bg-dark); min-height: 100vh; padding: 10px; color: white; overflow-x: hidden; overflow-y: auto; }
+
+#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+/* ----- إدارة المشاهد ----- */
+.scene {
+    display: none; width: 100%; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px 0;
+}
+.scene.active { display: flex; animation: zoomIn 0.4s ease; }
+@keyframes zoomIn { from { opacity:0; transform: scale(0.95); } to { opacity:1; transform: scale(1); } }
+
+/* ----- البطاقات العامة مع جلو أبيض للصندوق ----- */
+.main-card { 
+    background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); 
+    width: 100%; max-width: 850px; border-radius: 30px; 
+    border: 1px solid rgba(255, 255, 255, 0.25); 
+    box-shadow: 0 0 35px rgba(255, 255, 255, 0.2), 0 0 50px rgba(99, 102, 241, 0.2); 
+    overflow: hidden; position: relative; margin: 0 auto; display: flex; flex-direction: column;
+}
+
+.quiz-header { padding: 15px 30px; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 15px;}
+
+.logo-container { 
+    width: 75px; height: 75px; border-radius: 50%; border: 3px solid #00f3ff; 
+    overflow: hidden; background: #000; box-shadow: 0 0 20px #00f3ff;
+    animation: glow-pulse 2s infinite ease-in-out; margin: 0 auto; flex-shrink: 0;
+}
+
+/* لوجو كبير جداً خاص بشاشة من أنت */
+.logo-container-large { 
+    width: 140px; height: 140px; border-radius: 50%; border: 4px solid #00f3ff; 
+    overflow: hidden; background: #000; box-shadow: 0 0 35px #00f3ff, 0 0 60px rgba(0, 243, 255, 0.6);
+    animation: glow-pulse 2s infinite ease-in-out; margin: 0 auto; flex-shrink: 0;
+    cursor: pointer;
+}
+
+@keyframes glow-pulse {
+    0% { box-shadow: 0 0 15px #00f3ff; transform: scale(1); }
+    50% { box-shadow: 0 0 35px #00f3ff, 0 0 55px rgba(0, 243, 255, 0.7); transform: scale(1.05); }
+    100% { box-shadow: 0 0 15px #00f3ff; transform: scale(1); }
+}
+.logo-img { width: 100%; height: 100%; object-fit: cover; }
+
+.header-text { text-align: center; flex: 1;}
+.header-text h1 { font-size: clamp(1.4rem, 4vw, 1.8rem); font-weight: 900; color: white; margin-top: 5px;}
+.animated-name {
+    background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1rem;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+.content-area { padding: 30px 15px; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
+
+input[type="text"], input[type="number"], input[type="password"] { 
+    width: 90%; max-width: 400px; padding: 12px 20px; border-radius: 15px; 
+    border: 2px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); 
+    color: white; text-align: center; font-size: 1.1rem; outline: none; margin-bottom: 10px;
+}
+input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.5); }
+
+.btn { 
+    background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 12px 30px; 
+    border: none; border-radius: 15px; font-size: 1.2rem; font-weight: 800; cursor: pointer; 
+    transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    white-space: nowrap; 
+}
+.btn:hover { transform: translateY(-3px); box-shadow: 0 0 25px rgba(99, 102, 241, 0.8); }
+.btn-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+.btn-green { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+.btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+
+/* ----- شاشات المعلم ----- */
+.pin-display { font-size: 3.5rem; font-weight: 900; letter-spacing: 5px; color: #00f3ff; text-shadow: 0 0 20px #00f3ff; margin: 10px 0; }
+.students-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 15px; max-height: 200px; overflow-y: auto; width: 100%;}
+.student-badge { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; }
+
+.leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.leaderboard-table th, .leaderboard-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 1.05rem;}
+.leaderboard-table th { color: #00f3ff; font-weight: 900; }
+
+.rank-1 { color: gold; font-weight: 900; background: rgba(255, 215, 0, 0.12); }
+.rank-2 { color: silver; font-weight: 900; background: rgba(192, 192, 192, 0.12); }
+.rank-3 { color: #cd7f32; font-weight: 900; background: rgba(205, 127, 50, 0.12); }
+
+/* ----- العداد الزمني الكلي للطالب ----- */
+.sticky-timer {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
+    padding: 15px 25px; border-bottom: 2px solid var(--danger);
+    display: flex; justify-content: space-between; align-items: center;
+    border-radius: 0 0 20px 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.timer-countdown { font-size: 1.6rem; font-weight: 900; color: var(--danger); display:flex; align-items:center; gap:8px;}
+
+/* ----- تصميم الأسئلة في شريحة واحدة ----- */
+.question-row { 
+    background: rgba(255, 255, 255, 0.03); padding: 25px 20px; border-radius: 20px; 
+    margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); 
+    display: flex; flex-direction: column; align-items: flex-start; direction: ltr; width: 100%;
+}
+.question-text { font-size: clamp(1.1rem, 3.5vw, 1.4rem); font-weight: 800; text-align: left; color: #f8fafc; line-height: 1.5; font-family: 'Poppins', sans-serif; margin-bottom: 15px; width: 100%;}
+
+.options-grid { display: flex; flex-direction: column; width: 100%; gap: 10px;}
+.option-box { 
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); 
+    padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: clamp(1rem, 3vw, 1.2rem); 
+    color: white; width: 100%; transition: 0.2s all;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+.option-box:hover { background: rgba(255, 255, 255, 0.1); transform: translateX(5px); }
+
+.selected-opt { background: rgba(99, 102, 241, 0.4) !important; border-color: var(--primary) !important; }
+.correct { background: var(--success) !important; border-color: #fff !important; color: white !important;}
+.wrong { background: var(--danger) !important; border-color: #fff !important; color: white !important;}
+.disabled { pointer-events: none; }
+
+.review-area { background: rgba(0,0,0,0.4); border-radius: 20px; padding: 25px; margin-top: 25px; text-align: center; display: block; border: 1px solid rgba(255,255,255,0.1); width: 100%; }
+
+@media (max-width: 768px) {
+    .quiz-header { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles-js"></canvas>
+
+<!-- 1. شاشة اختيار الدور -->
+<div id="role-scene" class="scene active">
+    <div class="main-card">
+        <div class="quiz-header" style="flex-direction: column; text-align: center; padding: 25px;">
+            <div class="logo-container-large" onclick="handleLogoClick()"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" class="logo-img"></div>
+            <div class="header-text" style="width: 100%; margin-top: 15px;">
+                <h1>Mr Game - Past perfect</h1>
+                <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
+            </div>
+        </div>
+        <div class="content-area">
+            <img src="https://drive.google.com/thumbnail?id=1cF-j-60otMztzK5ruWOGf02aem5WUG7R&sz=w600" style="width: 220px; margin-bottom: -5px; animation: float 3s ease-in-out infinite;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 10px;">أهلاً بك يا بطل!</h2>
+            <button class="btn" onclick="showScene('student-login-scene')" style="width: 90%; max-width: 360px;">🧑‍🎓 أنا طالب (دخول التحدي)</button>
+        </div>
+    </div>
+</div>
+
+<!-- 2. شاشة إعداد المعلم -->
+<div id="teacher-setup-scene" class="scene">
+    <div class="main-card">
+        <div class="quiz-header">
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
+            <div class="header-text"><h1>لوحة تحكم مستر إيهاب</h1></div>
+        </div>
+        <div class="content-area">
+            <h3>كود الغرفة للطلاب:</h3>
+            <div class="pin-display" id="teacher-pin">----</div>
+            <p>اطلب من الطلاب إدخال هذا الكود.</p>
+            <div class="students-list" id="teacher-students-list"></div>
+            <button class="btn btn-green" onclick="startMultiplayerGame()" style="margin-top:15px;">🚀 بدء التحدي</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3. شاشة لوحة الصدارة وعرض الأسئلة للمعلم -->
+<div id="teacher-leaderboard-scene" class="scene">
+    <div class="main-card" style="max-width: 900px;">
+        <div class="quiz-header" style="flex-direction: column; text-align: center; gap: 5px;">
+            <div class="logo-container" style="width: 50px; height: 50px;"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
+            <div class="header-text" style="width: 100%;">
+                <h1 style="font-size: 1.3rem; color: #94a3b8; font-weight: 700;">لوحة تحكم مستر إيهاب والأسئلة</h1>
+                <h2 style="font-size: 1.6rem; color: #00f3ff; margin-top: 5px; font-weight: 900;">لوحة الصدارة للعبة مستر إيهاب 🏆</h2>
+            </div>
+        </div>
+        <div class="content-area" style="overflow-x: auto; width: 100%; padding-top:10px;">
+            
+            <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 20px;">
+                <button class="btn btn-danger" onclick="forceEndQuiz()" style="font-size: 1rem; padding: 12px 18px;">
+                    <i class="fa-solid fa-stop-circle"></i> 🛑 إنهاء الاختبار للجميع
+                </button>
+                <button class="btn btn-danger" onclick="revealAnswersToStudents()" style="font-size: 1rem; padding: 12px 18px; background: linear-gradient(135deg, #dc2626, #991b1b);">
+                    <i class="fa-solid fa-eye"></i> 🔴 اظهار الاجابات الصحيحة
+                </button>
+                <button class="btn" onclick="restartGame()" style="font-size: 1rem; padding: 12px 18px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                    <i class="fa-solid fa-rotate-right"></i> 🔄 إعادة اللعبة
+                </button>
+            </div>
+
+            <table class="leaderboard-table">
+                <thead><tr><th>المركز</th><th>البطل</th><th>الدرجة</th><th>الحالة</th></tr></thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+            
+            <hr style="width: 100%; border-color: rgba(255,255,255,0.1); margin: 30px 0;">
+            
+            <h3 style="color: var(--success); margin-bottom: 15px;">أسئلة الاختبار للإشراف والشرح:</h3>
+            <div id="teacher-questions-view" style="width: 100%; text-align: left; direction: ltr;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. شاشة دخول الطالب -->
+<div id="student-login-scene" class="scene">
+    <div class="main-card">
+        <div class="quiz-header">
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
+            <div class="header-text">
+                <h1>Mr Game - Past perfect</h1>
+                <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
+            </div>
+        </div>
+        <div class="content-area">
+            <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي">
+            <input type="number" id="roomPin" placeholder="كود الغرفة (PIN)">
+            <button class="btn" onclick="joinRoom()">دخول الغرفة <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- 5. شاشة انتظار الطالب -->
+<div id="student-waiting-scene" class="scene">
+    <div class="main-card">
+        <div class="quiz-header">
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
+            <div class="header-text"><h1>انتظار بدء التحدي</h1></div>
+        </div>
+        <div class="content-area">
+            <h2 style="font-size: 1.8rem; color: #10b981;">أنت الآن داخل الغرفة!</h2>
+            <p style="font-size: 1.2rem; margin-top: 15px;">استعد يا بطل، بانتظار إشارة المعلم لبدء الاختبار...</p>
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 3rem; margin-top: 30px; color: var(--danger);"></i>
+        </div>
+    </div>
+</div>
+
+<!-- 6. شاشة مسابقة الطالب -->
+<div id="quiz-scene" class="scene" style="padding: 0;">
+    <div class="sticky-timer" style="width: 100%; max-width: 850px; margin: 0 auto;">
+        <div style="font-weight: bold; font-size: 1.1rem;">الوقت المتبقي:</div>
+        <div class="timer-countdown"><i class="fa-regular fa-clock"></i> <span id="global-timer-text">200</span>ث</div>
+    </div>
+
+    <div class="main-card" style="margin: 0 auto; border-radius: 20px; border: none; box-shadow: none; background: transparent;">
+        <div class="content-area" id="quiz-content" style="padding: 10px; width: 100%;"></div>
+        <div style="padding: 20px; text-align: center; margin-bottom: 40px;">
+            <button class="btn btn-green" id="submitBtn" onclick="submitQuiz()" style="font-size: 1.4rem; padding: 15px 40px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);">تسليم الاختبار لمستر ايهاب <i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- 7. شاشة النتيجة النهائية -->
+<div id="result-scene" class="scene" style="overflow-y: auto;">
+    <div class="main-card">
+        <div class="content-area">
+            <h2 id="result-title" style="font-size: 2.2rem; margin-bottom: 15px;">النتيجة النهائية</h2>
+            
+            <div id="result-container" style="position:relative; width:100%; max-width:600px; margin: 0 auto 20px;"></div>
+            
+            <h3 style="margin-top: 20px; color: #00f3ff; font-size: 1.4rem;">مراجعة إجابات الاختبار:</h3>
+            <div id="reviewArea" class="review-area" style="width: 100%; text-align: left; direction: ltr;"></div>
+            
+            <div style="padding: 30px 0; text-align: center; width: 100%;">
+                <button class="btn" onclick="restartGame()" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); font-size: 1.2rem; padding: 12px 35px; box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);">
+                    <i class="fa-solid fa-rotate-right"></i> إعادة اللعبة
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة الرقم السري المخفية -->
+<div id="password-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(5px);">
+    <div style="background: rgba(15, 23, 42, 0.95); padding: 30px; border-radius: 20px; border: 2px solid #00f3ff; text-align: center; box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);">
+        <h3 style="color: white; margin-bottom: 20px; font-size: 1.5rem;">أدخل الرمز السري للإدارة</h3>
+        <input type="password" id="teacher-pass-input" placeholder="••••" maxlength="4" style="width: 150px; text-align: center; font-size: 2.5rem; letter-spacing: 15px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
+        <br>
+        <button class="btn btn-blue" onclick="verifyPassword()" style="padding: 10px 30px;">دخول</button>
+        <button class="btn btn-danger" onclick="document.getElementById('password-modal').style.display='none'" style="padding: 10px 30px; margin-right: 10px;">إلغاء</button>
+    </div>
+</div>
+
+<audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC_ed0XfZkBt_xRf8dN3ciM37uidGZrCt8",
+        authDomain: "mrehabgames.firebaseapp.com",
+        projectId: "mrehabgames",
+        storageBucket: "mrehabgames.firebasestorage.app",
+        messagingSenderId: "379463494744",
+        appId: "1:379463494744:web:983a5677afb5b92faf2e2d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let currentPin = "";
+    let currentStudent = "";
+    let isMultiplayer = false;
+
+    // نظام الدخول السري للمعلم
+    window.logoClickCount = 0;
+    window.logoClickTimer = null;
+
+    window.handleLogoClick = function() {
+        window.logoClickCount++;
+        if (window.logoClickTimer) clearTimeout(window.logoClickTimer);
+        window.logoClickTimer = setTimeout(() => {
+            window.logoClickCount = 0;
+        }, 1000);
+
+        if (window.logoClickCount === 5) {
+            window.logoClickCount = 0;
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('teacher-pass-input').value = '';
+            document.getElementById('teacher-pass-input').focus();
+        }
+    };
+
+    window.verifyPassword = function() {
+        const pass = document.getElementById('teacher-pass-input').value;
+        if (pass === '7127') {
+            document.getElementById('password-modal').style.display = 'none';
+            showScene('teacher-setup-scene');
+        } else {
+            alert('الرمز السري غير صحيح!');
+            document.getElementById('teacher-pass-input').value = '';
+            document.getElementById('teacher-pass-input').focus();
+        }
+    };
+
+    document.getElementById('teacher-pass-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            window.verifyPassword();
+        }
+    });
+
+    const quizData = [
+        { q: "I didn't eat anything at lunchtime as I ........... a big delicious breakfast.", options: ["have eaten", "eat", "had eaten", "ate"], correct: "had eaten" },
+        { q: "I wasn't hungry because I ........... my lunch.", options: ["have had", "has had", "have", "had had"], correct: "had had" },
+        { q: "Helen didn't take any photos because she ........... her phone.", options: ["loses", "don't lose", "losing", "had lost"], correct: "had lost" },
+        { q: "Dina didn't answer her phone because she had ........... to bed.", options: ["already go", "already gone", "went already", "goes already"], correct: "already gone" },
+        { q: "Karim won the table tennis game because he ........... played many times before.", options: ["had", "have", "was", "is"], correct: "had" },
+        { q: "Frank bought a new computer because his old one ........... working.", options: ["had stopped", "have stopped", "was stopped", "will stop"], correct: "had stopped" },
+        { q: "I couldn't call Amira because she had not ........... me her phone number.", options: ["gave", "given", "gives", "giving"], correct: "given" },
+        { q: "My parents asked me to have dinner with them, but I had ........... eaten.", options: ["never", "yet", "already", "ago"], correct: "already" },
+        { q: "He didn't play soccer because he ........... his leg.", options: ["has hurt", "hurts", "had hurt", "have hurt"], correct: "had hurt" },
+        { q: "When I arrived at the station, the train ........... .", options: ["has already left", "leaves already", "already leaving", "had already left"], correct: "had already left" }
+    ];
+
+    let shuffled = [];
+    let studentAnswers = {};
+    let globalTimer;
+    let timeLeft = 200;
+    window.isFinished = false;
+    let finalScore = 0;
+
+    window.showScene = function(id) {
+        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'teacher-setup-scene' && !currentPin) createRoom();
+    }
+
+    function createRoom() {
+        currentPin = Math.floor(1000 + Math.random() * 9000).toString();
+        document.getElementById('teacher-pin').innerText = currentPin;
+        set(ref(db, 'rooms/' + currentPin), { status: 'waiting', forceStop: 0, showAnswers: 0, players: {} });
+
+        onValue(ref(db, 'rooms/' + currentPin), (snapshot) => {
+            const roomData = snapshot.val();
+            if(!roomData) return;
+
+            if(roomData.showAnswers && roomData.showAnswers > 0) {
+                highlightCorrectAnswersOnScreen();
+            }
+
+            if(roomData.status === 'restarted') {
+                alert("قام المعلم بإعادة بدء اللعبة!");
+                location.reload();
+            }
+
+            const players = roomData.players;
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            const list = document.getElementById('teacher-students-list');
+            list.innerHTML = ''; leaderboardBody.innerHTML = '';
+
+            if(players) {
+                let playersArray = [];
+                for(let name in players) {
+                    playersArray.push({ 
+                        name: name, 
+                        score: players[name].score || 0, 
+                        finished: players[name].finished || false,
+                        finishTime: players[name].finishTime || 9999999999999 
+                    });
+                }
+
+                playersArray.sort((a, b) => {
+                    if (b.score !== a.score) {
+                        return b.score - a.score; 
+                    } else {
+                        return a.finishTime - b.finishTime; 
+                    }
+                });
+
+                playersArray.forEach((p, index) => {
+                    list.innerHTML += `<div class="student-badge">🧑‍🎓 ${p.name}</div>`;
+                    let statusText = p.finished ? "✅ سلم الاختبار" : "⏳ يحل الآن...";
+                    
+                    let rankDisplay = `${index + 1}`;
+                    let rowClass = "";
+                    if(index === 0) {
+                        rankDisplay = `🥇 <span style="font-size: 1.8rem; filter: drop-shadow(0 0 8px gold);">🏆</span>`;
+                        rowClass = "rank-1";
+                    } else if(index === 1) {
+                        rankDisplay = `🥈 <span style="font-size: 1.5rem; filter: drop-shadow(0 0 6px silver);">🏆</span>`;
+                        rowClass = "rank-2";
+                    } else if(index === 2) {
+                        rankDisplay = `🥉 <span style="font-size: 1.3rem; filter: drop-shadow(0 0 5px #cd7f32);">🏆</span>`;
+                        rowClass = "rank-3";
+                    }
+
+                    let row = `<tr class="${rowClass}">
+                        <td>${rankDisplay}</td>
+                        <td>${p.name}</td>
+                        <td>${p.score} / ${quizData.length}</td>
+                        <td>${statusText}</td>
+                    </tr>`;
+                    leaderboardBody.innerHTML += row;
+                });
+            }
+        });
+    }
+
+    window.startMultiplayerGame = function() {
+        update(ref(db, 'rooms/' + currentPin), { status: 'playing', forceStop: 0, showAnswers: 0 });
+        showScene('teacher-leaderboard-scene');
+        renderAllQuestions('teacher-questions-view');
+    }
+
+    window.forceEndQuiz = function() {
+        if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم الآن؟")) {
+            set(ref(db, 'rooms/' + currentPin + '/forceStop'), Date.now());
+        }
+    }
+
+    window.revealAnswersToStudents = function() {
+        if(confirm("هل تريد إظهار الإجابات الصحيحة في لوحة الإشراف للشرح؟")) {
+            set(ref(db, 'rooms/' + currentPin + '/showAnswers'), Date.now());
+        }
+    }
+
+    function highlightCorrectAnswersOnScreen() {
+        const teacherView = document.getElementById('teacher-questions-view');
+        if(teacherView && teacherView.children.length > 0) {
+            quizData.forEach((q, qIndex) => {
+                let qRow = teacherView.children[qIndex];
+                if(!qRow) return;
+                let opts = qRow.lastChild.children;
+                for(let box of opts) {
+                    let text = box.innerText.replace('✓', '').trim();
+                    if(text === q.correct) {
+                        box.classList.add('correct');
+                        if(!box.innerHTML.includes('fa-check')) {
+                            box.innerHTML = `<span>${text}</span> <i class="fa-solid fa-check-circle" style="color:#fff; font-size:1.2rem;"></i>`;
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    window.restartGame = function() {
+        if(confirm("هل أنت متأكد من إعادة بدء اللعبة وتصفير الغرفة؟")) {
+            if(isMultiplayer) {
+                location.reload();
+            } else {
+                update(ref(db, 'rooms/' + currentPin), { status: 'restarted' }).then(() => {
+                    location.reload();
+                });
+            }
+        }
+    }
+
+    window.joinRoom = function() {
+        currentStudent = document.getElementById('studentName').value.trim();
+        currentPin = document.getElementById('roomPin').value.trim();
+        if(currentStudent.length < 3 || currentPin.length !== 4) return alert("الاسم الثلاثي وكود الغرفة 4 أرقام!");
+
+        get(ref(db, 'rooms/' + currentPin)).then((snapshot) => {
+            if (snapshot.exists() && snapshot.val().status === 'waiting') {
+                isMultiplayer = true;
+                set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false, finishTime: 0 });
+                showScene('student-waiting-scene');
+
+                let quizStarted = false;
+
+                onValue(ref(db, 'rooms/' + currentPin), (snap) => {
+                    const room = snap.val();
+                    if(!room) return;
+
+                    if(room.status === 'playing' && !quizStarted) {
+                        quizStarted = true;
+                        startStudentQuiz();
+                    }
+
+                    if(room.forceStop && room.forceStop > 0 && quizStarted && !window.isFinished) {
+                        window.submitQuiz();
+                    }
+
+                    if(room.status === 'restarted') {
+                        location.reload();
+                    }
+                });
+            } else { alert("الكود خطأ أو الاختبار بدأ!"); }
+        });
+    }
+
+    function renderAllQuestions(containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        quizData.forEach((q, qIndex) => {
+            let qDiv = document.createElement('div');
+            qDiv.className = 'question-row';
+            let qText = document.createElement('div');
+            qText.className = 'question-text';
+            qText.innerHTML = `${qIndex + 1}. ${q.q}`;
+            qDiv.appendChild(qText);
+            
+            let optsDiv = document.createElement('div');
+            optsDiv.className = 'options-grid';
+            q.options.forEach((optText) => {
+                let optBox = document.createElement('div');
+                optBox.className = 'option-box disabled';
+                optBox.innerHTML = `<span>${optText}</span>`;
+                optsDiv.appendChild(optBox);
+            });
+            qDiv.appendChild(optsDiv);
+            container.appendChild(qDiv);
+        });
+    }
+
+    function startStudentQuiz() {
+        shuffled = [...quizData].sort(() => Math.random() - 0.5);
+        studentAnswers = {};
+        window.isFinished = false;
+        showScene('quiz-scene');
+        
+        const container = document.getElementById('quiz-content');
+        container.innerHTML = '';
+        shuffled.forEach((q, qIndex) => {
+            let qDiv = document.createElement('div');
+            qDiv.className = 'question-row';
+            qDiv.innerHTML = `<div class="question-text">${qIndex + 1}. ${q.q}</div>`;
+            let optsDiv = document.createElement('div');
+            optsDiv.className = 'options-grid';
+            
+            let currentOptions = [...q.options].sort(() => Math.random() - 0.5);
+            currentOptions.forEach((optText) => {
+                let optBox = document.createElement('div');
+                optBox.className = 'option-box';
+                optBox.innerHTML = `<span>${optText}</span>`;
+                optBox.onclick = () => window.selectOption(qIndex, optText, optBox);
+                optsDiv.appendChild(optBox);
+            });
+            qDiv.appendChild(optsDiv);
+            container.appendChild(qDiv);
+        });
+
+        timeLeft = 200;
+        document.getElementById('global-timer-text').innerText = timeLeft;
+        globalTimer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('global-timer-text').innerText = timeLeft;
+            if(timeLeft <= 0) {
+                clearInterval(globalTimer);
+                window.submitQuiz();
+            }
+        }, 1000);
+    }
+
+    window.selectOption = function(qIndex, optText, box) {
+        if(window.isFinished) return;
+        let siblings = box.parentElement.children;
+        for(let s of siblings) s.classList.remove('selected-opt');
+        box.classList.add('selected-opt');
+        studentAnswers[qIndex] = optText;
+        
+        let tempScore = 0;
+        for(let i in studentAnswers) {
+            if(studentAnswers[i] === shuffled[i].correct) tempScore++;
+        }
+        finalScore = tempScore;
+
+        if(isMultiplayer) {
+            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
+                score: finalScore,
+                finishTime: Date.now() 
+            });
+        }
+    }
+
+    window.submitQuiz = function() {
+        if(window.isFinished) return;
+        window.isFinished = true;
+        clearInterval(globalTimer);
+        const submitBtn = document.getElementById('submitBtn');
+        if(submitBtn) submitBtn.style.display = 'none';
+
+        if(isMultiplayer) {
+            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
+                finished: true, 
+                score: finalScore,
+                finishTime: Date.now() 
+            });
+        }
+        
+        setTimeout(() => {
+            showScene('result-scene');
+            const percentage = (finalScore / shuffled.length) * 100;
+            const resContainer = document.getElementById('result-container');
+            const rev = document.getElementById('reviewArea');
+
+            if (percentage >= 50) {
+                confetti({ particleCount: 150, spread: 60 });
+                document.getElementById('sound-correct').play();
+            } else {
+                document.getElementById('sound-wrong').play();
+            }
+
+            resContainer.innerHTML = `
+                <div style="position: relative; width: 100%; text-align: center;">
+                    <img src="https://drive.google.com/thumbnail?id=1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM&sz=w800" style="width:150%; border-radius:30px; display: block; margin: 0 auto;">
+                    <div style="position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center;">
+                        <div style="color:#1e3a8a; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 900; text-shadow: 0 0 10px rgba(255,255,255,0.8);">${currentStudent}</div>
+                        <div style="color:#dc2626; font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight: 900; margin-top: 5px; text-shadow: 0 0 10px rgba(255,255,255,0.8);">الدرجة: ${finalScore} من ${shuffled.length}</div>
+                    </div>
+                </div>
+            `;
+
+            rev.innerHTML = '';
+            shuffled.forEach((q, qIndex) => {
+                let selectedAns = studentAnswers[qIndex];
+                let qDiv = document.createElement('div');
+                qDiv.className = 'question-row';
+                qDiv.innerHTML = `<div class="question-text">${qIndex + 1}. ${q.q}</div>`;
+                
+                let optsDiv = document.createElement('div');
+                optsDiv.className = 'options-grid';
+                
+                q.options.forEach((optText) => {
+                    let optBox = document.createElement('div');
+                    optBox.className = 'option-box disabled';
+                    optBox.innerHTML = `<span>${optText}</span>`;
+                    
+                    if(optText === q.correct) {
+                        optBox.classList.add('correct');
+                        optBox.innerHTML += ` <i class="fa-solid fa-check-circle" style="color:#fff; font-size:1.2rem;"></i>`;
+                    } else if(optText === selectedAns && optText !== q.correct) {
+                        optBox.classList.add('wrong');
+                        optBox.innerHTML += ` <i class="fa-solid fa-times-circle" style="color:#fff; font-size:1.2rem;"></i>`;
+                    }
+                    
+                    optsDiv.appendChild(optBox);
+                });
+                qDiv.appendChild(optsDiv);
+                rev.appendChild(qDiv);
+            });
+
+        }, 1000);
+    }
+
+    const canvas = document.getElementById('particles-js'); const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let pts = Array.from({length: 75}, () => ({
+        x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*3 + 1.2, 
+        vx: (Math.random()-0.5)*0.8, vy: (Math.random()-0.5)*0.8,
+        color: Math.random() > 0.5 ? "rgba(0, 243, 255, 0.45)" : "rgba(139, 92, 246, 0.45)"
+    }));
+    function animate() { 
+        ctx.clearRect(0,0,canvas.width,canvas.height); 
+        pts.forEach(p=>{
+            p.x+=p.vx; p.y+=p.vy; 
+            if(p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height) {p.x=Math.random()*canvas.width; p.y=Math.random()*canvas.height;}
+            ctx.fillStyle = p.color; 
+            ctx.beginPath(); 
+            ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); 
+            ctx.fill();
+        }); 
+        requestAnimationFrame(animate); 
+    }
+    animate();
+</script>
+</body>
+</html>
