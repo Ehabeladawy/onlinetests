@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 :root {
@@ -102,7 +103,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 .student-badge { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; display: flex; align-items: center; gap: 5px;}
 
 .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-.leaderboard-table th, .leaderboard-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 1.05rem;}
+.leaderboard-table th, .leaderboard-table td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.95rem;}
 .leaderboard-table th { color: var(--primary); font-weight: 900; }
 
 .rank-1 { color: gold; font-weight: 900; background: rgba(255, 215, 0, 0.12); }
@@ -143,9 +144,10 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 .option-box:hover:not(.disabled) { background: rgba(255, 255, 255, 0.1); transform: translateX(5px); }
 
 .selected-opt { background: rgba(14, 165, 233, 0.4) !important; border-color: var(--primary) !important; }
-.correct { background: var(--success) !important; border-color: #fff !important; color: white !important;}
-.wrong { background: #dc2626 !important; border-color: #fff !important; color: white !important;}
-.disabled { pointer-events: none; opacity: 0.3; }
+.correct { background: var(--success) !important; border-color: #fff !important; color: white !important; opacity: 1 !important; box-shadow: 0 0 15px var(--success); }
+.wrong { background: #dc2626 !important; border-color: #fff !important; color: white !important; opacity: 0.3 !important; }
+.faded-option { opacity: 0.3 !important; }
+.disabled { pointer-events: none; }
 
 .review-area { background: rgba(0,0,0,0.4); border-radius: 20px; padding: 25px; margin-top: 25px; text-align: center; display: block; border: 1px solid rgba(255,255,255,0.1); width: 100%; }
 
@@ -168,21 +170,26 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         </div>
         <div class="content-area">
             
-            <!-- اللوجو المتحرك (GIF) -->
-            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Logo GIF" style="width: 250px; border-radius: 20px; margin-bottom: 5px; box-shadow: 0 0 20px rgba(14, 165, 233, 0.5);">
+            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Logo GIF" style="width: 220px; border-radius: 20px; margin-bottom: 5px; box-shadow: 0 0 20px rgba(14, 165, 233, 0.5);">
 
-            <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: 15px; border: 1px dashed rgba(14, 165, 233, 0.5); width: 90%; max-width: 450px; text-align: right; margin-bottom: 15px; box-shadow: 0 0 15px rgba(0,0,0,0.3);">
-                <h3 style="text-align: center; color: var(--primary); font-size: 1.5rem; font-weight: 900; margin-bottom: 15px; text-shadow: 0 0 10px rgba(14, 165, 233, 0.7);">قواعد اللعبة الجماعية</h3>
-                <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 8px;"></i>سجل اسمك وادخل الكود اللى استلمته من مستر ايهاب</p>
-                <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 8px;"></i>هتدخل غرفة انتظار المتسابقين</p>
-                <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 8px;"></i>بعد تجمع المتسابقين يضغط مستر ايهاب على ايقونة البدء</p>
-                <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 8px;"></i>داخل المسابقة هناك عد تنازلي أحرص على الانتهاء قبله</p>
-                <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 15px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 8px;"></i>ترتيب الفائزين بناء على ( أعلى الدرجات - ثم من أنهى أسرع )</p>
-                <p style="font-size: 1.05rem; color: var(--gold); font-weight: bold; text-align: center; margin-bottom: 0;">بالتوفيق .... مستر ايهاب العدوي</p>
+            <div style="background: rgba(0, 0, 0, 0.4); padding: 15px; border-radius: 15px; border: 1px dashed rgba(14, 165, 233, 0.5); width: 90%; max-width: 450px; text-align: right; margin-bottom: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.3);">
+                <h3 style="text-align: center; color: var(--primary); font-size: 1.3rem; font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 10px rgba(14, 165, 233, 0.7);">قواعد اللعبة الجماعية والفردية</h3>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>للتحدي الجماعي: سجل اسمك وادخل الكود من مستر إيهاب</p>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>للتحدي الفردي: العب بمفردك في أي وقت وفي أي مكان</p>
+                <p style="font-size: 1rem; color: var(--gold); font-weight: bold; text-align: center; margin-top: 8px; margin-bottom: 0;">بالتوفيق .... مستر إيهاب العدوي</p>
             </div>
 
-            <h2 style="font-size: 1.5rem; margin-bottom: 10px;">هل تقبل التحدي ؟!</h2>
-            <button class="btn" onclick="showScene('student-login-scene')" style="width: 90%; max-width: 360px;">🧑‍🎓 أنا قبلت التحدي</button>
+            <h2 style="font-size: 1.3rem; margin-bottom: 5px; text-align: center;">اختر نوع التحدي المناسب لك:</h2>
+            <div style="display: flex; flex-direction: column; gap: 12px; width: 90%; max-width: 360px; margin-bottom: 10px;">
+                <button class="btn" onclick="prepareLogin('multi')" style="width: 100%;">🧑‍🎓 قبلت التحدي الجماعي</button>
+                <button class="btn btn-gold" onclick="prepareLogin('solo')" style="width: 100%;">🏃‍♂️ قبلت التحدي الفردي</button>
+            </div>
+
+            <div style="background: rgba(0, 0, 0, 0.6); padding: 12px 20px; border-radius: 20px; border: 2px dashed var(--primary); display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: 0 0 20px rgba(14,165,233,0.3);">
+                <span style="font-size: 0.9rem; color: var(--gold); font-weight: bold;"><i class="fa-solid fa-qrcode"></i> امسح الكود بالموبايل للدخول الفوري:</span>
+                <div id="qrcode-container" style="background: white; padding: 8px; border-radius: 10px; display: inline-block;"></div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -201,10 +208,11 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             <div style="width: 90%; max-width: 300px; margin-top: 10px;">
                 <label style="display:block; margin-bottom:5px; color:var(--gold); font-weight:bold;">⏳ حدد وقت التحدي:</label>
                 <select id="teacher-time-select">
+                    <option value="300" selected>5 دقائق (الافتراضي)</option>
                     <option value="60">1 دقيقة</option>
                     <option value="120">2 دقيقة</option>
                     <option value="180">3 دقائق</option>
-                    <option value="300" selected>5 دقائق</option>
+                    <option value="999999">وقت مفتوح (بدون تايمر)</option>
                 </select>
             </div>
 
@@ -217,7 +225,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
 <!-- 3. شاشة لوحة الصدارة وعرض الأسئلة للمعلم -->
 <div id="teacher-leaderboard-scene" class="scene">
-    <div class="main-card" style="max-width: 900px;">
+    <div class="main-card" style="max-width: 950px;">
         <div class="quiz-header" style="flex-direction: column; text-align: center; gap: 5px;">
             <div class="logo-container" style="width: 50px; height: 50px;"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
             <div class="header-text" style="width: 100%;">
@@ -239,8 +247,16 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 </button>
             </div>
 
-            <table class="leaderboard-table" style="margin-top: 20px;">
-                <thead><tr><th>المركز</th><th>البطل</th><th>الدرجة</th><th>الحالة</th></tr></thead>
+            <table class="leaderboard-table" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>المركز</th>
+                        <th>البطل</th>
+                        <th>التقدم (تم حلها)</th>
+                        <th>الدرجة</th>
+                        <th>الحالة</th>
+                    </tr>
+                </thead>
                 <tbody id="leaderboard-body"></tbody>
             </table>
             
@@ -264,8 +280,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         </div>
         <div class="content-area">
             
-            <!-- اختيار شخصية 3D (أولاد فقط) -->
-            <h3 style="font-size: 1.1rem; margin-bottom: 5px; color: var(--primary);">اختر شخصيتك:</h3>
+            <h3 style="font-size: 1.1rem; margin-bottom: 5px; color: var(--primary);" id="login-mode-title">اختر شخصيتك:</h3>
             <div class="avatar-grid" id="avatar-grid">
                 <div class="avatar-opt selected" onclick="selectAvatar(this, '🧑‍🎓')">🧑‍🎓</div>
                 <div class="avatar-opt" onclick="selectAvatar(this, '🦸‍♂️')">🦸‍♂️</div>
@@ -276,7 +291,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
             <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي">
             <input type="number" id="roomPin" placeholder="كود الغرفة (PIN)">
-            <button class="btn" onclick="joinRoom()">دخول الغرفة <i class="fa-solid fa-arrow-right"></i></button>
+            <button class="btn" onclick="proceedLogin()">دخول الغرفة <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </div>
 </div>
@@ -292,7 +307,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             <h2 style="font-size: 1.8rem; color: var(--success);">أنت الآن داخل الغرفة!</h2>
             <p style="font-size: 1.2rem; margin-top: 10px; margin-bottom: 15px;">استعد يا بطل، بانتظار إشارة المعلم لبدء الاختبار...</p>
             
-            <!-- اللوجو المتحرك في غرفة الانتظار -->
             <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Logo GIF" style="width: 180px; border-radius: 20px; margin: 10px auto; box-shadow: 0 0 20px rgba(14, 165, 233, 0.5); display: block;">
 
             <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; margin-top: 15px; color: var(--danger);"></i>
@@ -302,9 +316,9 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
 <!-- 6. شاشة مسابقة الطالب -->
 <div id="quiz-scene" class="scene" style="padding: 0;">
-    <div class="sticky-timer" style="width: 100%; max-width: 850px; margin: 0 auto;">
+    <div class="sticky-timer" id="timer-bar-container" style="width: 100%; max-width: 850px; margin: 0 auto;">
         <div style="font-weight: bold; font-size: 1.1rem;">الوقت المتبقي:</div>
-        <div class="timer-countdown"><i class="fa-regular fa-clock"></i> <span id="global-timer-text">200</span>ث</div>
+        <div class="timer-countdown"><i class="fa-regular fa-clock"></i> <span id="global-timer-text">300</span>ث</div>
     </div>
 
     <div class="main-card" style="margin: 0 auto; border-radius: 20px; border: none; box-shadow: none; background: transparent;">
@@ -369,9 +383,25 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     let currentStudent = "";
     let currentAvatar = "🧑‍🎓";
     let isMultiplayer = false;
+    let isSoloMode = false;
     let used5050 = false;
 
-    // الدخول السري
+    window.addEventListener('DOMContentLoaded', () => {
+        const currentUrl = window.location.href;
+        const qrContainer = document.getElementById('qrcode-container');
+        if(qrContainer && window.QRCode) {
+            qrContainer.innerHTML = ""; 
+            new QRCode(qrContainer, {
+                text: currentUrl,
+                width: 110,
+                height: 110,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+    });
+
     window.logoClickCount = 0;
     window.logoClickTimer = null;
 
@@ -426,7 +456,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     let shuffled = [];
     let studentAnswers = {}; 
     let globalTimer;
-    let timeLeft = 200;
+    let timeLeft = 300;
     window.isFinished = false;
     let finalScore = 0;
 
@@ -434,6 +464,19 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if(id === 'teacher-setup-scene' && !currentPin) createRoom();
+    }
+
+    window.prepareLogin = function(mode) {
+        isSoloMode = (mode === 'solo');
+        const pinInput = document.getElementById('roomPin');
+        if(isSoloMode) {
+            pinInput.style.display = 'none';
+            currentPin = "SOLO_" + Math.floor(1000 + Math.random() * 9000);
+        } else {
+            pinInput.style.display = 'block';
+            currentPin = "";
+        }
+        showScene('student-login-scene');
     }
 
     function createRoom() {
@@ -466,6 +509,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                         name: name, 
                         avatar: players[name].avatar || "🧑‍🎓",
                         score: players[name].score || 0, 
+                        progressCount: players[name].progressCount || 0,
                         finished: players[name].finished || false,
                         finishTime: players[name].finishTime || 9999999999999 
                     });
@@ -478,7 +522,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
                 playersArray.forEach((p, index) => {
                     list.innerHTML += `<div class="student-badge">${p.avatar} ${p.name}</div>`;
-                    let statusText = p.finished ? "✅ سلم الاختبار" : "⏳ يحل الآن...";
+                    let statusText = p.finished ? "✅ انتهى" : "⏳ يحل الآن";
                     
                     let rankDisplay = `${index + 1}`;
                     let rowClass = "";
@@ -486,10 +530,13 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                     else if(index === 1) { rankDisplay = `🥈`; rowClass = "rank-2"; } 
                     else if(index === 2) { rankDisplay = `🥉`; rowClass = "rank-3"; }
 
+                    let scoreDisplay = p.finished ? `${p.score} / ${originalQuizData.length}` : `<span style="color:var(--gold);">-</span>`;
+
                     let row = `<tr class="${rowClass}">
                         <td>${rankDisplay}</td>
                         <td>${p.avatar} ${p.name}</td>
-                        <td>${p.score} / ${originalQuizData.length}</td>
+                        <td style="font-weight:bold; color:var(--primary);">${p.progressCount} / ${originalQuizData.length}</td>
+                        <td>${scoreDisplay}</td>
                         <td>${statusText}</td>
                     </tr>`;
                     leaderboardBody.innerHTML += row;
@@ -545,6 +592,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                         if(!box.innerHTML.includes('fa-check')) {
                             box.innerHTML = `<span>${text}</span> <i class="fa-solid fa-check-circle" style="color:#fff; font-size:1.2rem;"></i>`;
                         }
+                    } else {
+                        box.classList.add('faded-option');
                     }
                 }
             });
@@ -560,6 +609,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                     let text = box.innerText.replace('✓', '').replace('✗', '').trim();
                     if(text === q.correct) {
                         box.classList.add('correct');
+                    } else {
+                        box.classList.add('faded-option');
                     }
                 }
             });
@@ -567,57 +618,67 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     }
 
     window.restartGame = function() {
-        if(confirm("هل أنت متأكد من خروجك وتصفير الغرفة؟")) {
-            if(isMultiplayer) {
+        if(confirm("هل أنت متأكد من خروجك وتصفير اللعبة؟")) {
+            if(isMultiplayer && !isSoloMode) {
                 location.reload();
             } else {
-                update(ref(db, 'rooms/' + currentPin), { status: 'restarted' }).then(() => { location.reload(); });
+                update(ref(db, 'rooms/' + currentPin), { status: 'restarted' }).then(() => { location.reload(); }).catch(() => { location.reload(); });
             }
         }
     }
 
-    window.joinRoom = function() {
+    window.proceedLogin = function() {
         currentStudent = document.getElementById('studentName').value.trim();
-        currentPin = document.getElementById('roomPin').value.trim();
-        if(currentStudent.length < 3 || currentPin.length !== 4) return alert("الاسم الثلاثي وكود الغرفة 4 أرقام!");
+        if(currentStudent.length < 3) return alert("يرجى أدخال اسمك الثلاثي بشكل صحيح!");
 
-        get(ref(db, 'rooms/' + currentPin)).then((snapshot) => {
-            if (snapshot.exists() && snapshot.val().status === 'waiting') {
-                isMultiplayer = true;
-                set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false, finishTime: 0, avatar: currentAvatar, answers: {} });
-                showScene('student-waiting-scene');
+        if(isSoloMode) {
+            set(ref(db, 'rooms/' + currentPin), { status: 'playing', timeLimit: 999999, players: {} });
+            set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, progressCount: 0, finished: false, finishTime: 0, avatar: currentAvatar, answers: {} });
+            
+            timeLeft = 999999;
+            startStudentQuiz();
+        } else {
+            currentPin = document.getElementById('roomPin').value.trim();
+            if(currentPin.length !== 4) return alert("كود الغرفة يتكون من 4 أرقام!");
 
-                let quizStarted = false;
+            get(ref(db, 'rooms/' + currentPin)).then((snapshot) => {
+                if (snapshot.exists() && snapshot.val().status === 'waiting') {
+                    isMultiplayer = true;
+                    set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, progressCount: 0, finished: false, finishTime: 0, avatar: currentAvatar, answers: {} });
+                    showScene('student-waiting-scene');
 
-                onValue(ref(db, 'rooms/' + currentPin), (snap) => {
-                    const room = snap.val();
-                    if(!room) return;
+                    let quizStarted = false;
 
-                    switch (room.status) {
-                        case 'playing':
-                            if (!quizStarted) {
-                                quizStarted = true;
-                                timeLeft = room.timeLimit || 300;
-                                startStudentQuiz();
-                            }
-                            break;
-                        case 'ended':
-                            if (quizStarted && !window.isFinished) window.submitQuiz();
-                            break;
-                        case 'show_answers':
-                            highlightCorrectAnswersOnScreen();
-                            break;
-                        case 'restarted':
-                            location.reload();
-                            break;
-                    }
+                    onValue(ref(db, 'rooms/' + currentPin), (snap) => {
+                        const room = snap.val();
+                        if(!room) return;
 
-                    if(room.forceStop && room.forceStop > 0 && quizStarted && !window.isFinished) {
-                        window.submitQuiz();
-                    }
-                });
-            } else { alert("الكود خطأ أو الاختبار بدأ!"); }
-        });
+                        switch (room.status) {
+                            case 'playing':
+                                if (!quizStarted) {
+                                    quizStarted = true;
+                                    timeLeft = room.timeLimit || 300;
+                                    startStudentQuiz();
+                                }
+                                break;
+                            case 'ended':
+                                if (quizStarted && !window.isFinished) window.submitQuiz();
+                                break;
+                            case 'show_answers':
+                                highlightCorrectAnswersOnScreen();
+                                break;
+                            case 'restarted':
+                                location.reload();
+                                break;
+                        }
+
+                        if(room.forceStop && room.forceStop > 0 && quizStarted && !window.isFinished) {
+                            window.submitQuiz();
+                        }
+                    });
+                } else { alert("الكود خطأ أو الاختبار بدأ بالفعل!"); }
+            });
+        }
     }
 
     window.use5050 = function(qIndex, btnElem) {
@@ -633,6 +694,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             let text = box.innerText.trim();
             if(wrongOpts.includes(text)) {
                 box.classList.add('disabled');
+                box.classList.add('faded-option');
             }
         });
     }
@@ -678,15 +740,21 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         
         renderAllQuestions('quiz-content', true);
 
-        document.getElementById('global-timer-text').innerText = timeLeft;
-        globalTimer = setInterval(() => {
-            timeLeft--;
+        const timerContainer = document.getElementById('timer-bar-container');
+        if (timeLeft >= 999999) {
+            if(timerContainer) timerContainer.style.display = 'none';
+        } else {
+            if(timerContainer) timerContainer.style.display = 'flex';
             document.getElementById('global-timer-text').innerText = timeLeft;
-            if(timeLeft <= 0) {
-                clearInterval(globalTimer);
-                window.submitQuiz();
-            }
-        }, 1000);
+            globalTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('global-timer-text').innerText = timeLeft;
+                if(timeLeft <= 0) {
+                    clearInterval(globalTimer);
+                    window.submitQuiz();
+                }
+            }, 1000);
+        }
     }
 
     window.selectOption = function(qIndex, optText, box, originalId) {
@@ -698,37 +766,38 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         studentAnswers[originalId] = optText;
         
         let tempScore = 0;
+        let answeredCount = Object.keys(studentAnswers).length;
+
         for(let id in studentAnswers) {
             let origQ = originalQuizData.find(oq => oq.id == id);
             if(origQ && studentAnswers[id] === origQ.correct) tempScore++;
         }
         finalScore = tempScore;
 
-        if(isMultiplayer) {
-            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
-                score: finalScore,
-                answers: studentAnswers,
-                finishTime: Date.now() 
-            });
-        }
+        update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
+            score: finalScore,
+            progressCount: answeredCount,
+            answers: studentAnswers,
+            finishTime: Date.now() 
+        });
     }
 
     window.submitQuiz = function() {
         if(window.isFinished) return;
         window.isFinished = true;
-        clearInterval(globalTimer);
+        if(globalTimer) clearInterval(globalTimer);
         const submitBtn = document.getElementById('submitBtn');
         if(submitBtn) submitBtn.style.display = 'none';
         document.querySelectorAll('.btn-5050').forEach(b => b.style.display = 'none'); 
 
-        if(isMultiplayer) {
-            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
-                finished: true, 
-                score: finalScore,
-                answers: studentAnswers,
-                finishTime: Date.now() 
-            });
-        }
+        let answeredCount = Object.keys(studentAnswers).length;
+        update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
+            finished: true, 
+            score: finalScore,
+            progressCount: answeredCount,
+            answers: studentAnswers,
+            finishTime: Date.now() 
+        });
         
         setTimeout(() => {
             showScene('result-scene');
@@ -773,9 +842,12 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                     if(optText === q.correct) {
                         optBox.classList.add('correct');
                         optBox.innerHTML += ` <i class="fa-solid fa-check-circle" style="color:#fff; font-size:1.2rem;"></i>`;
-                    } else if(optText === selectedAns && optText !== q.correct) {
-                        optBox.classList.add('wrong');
-                        optBox.innerHTML += ` <i class="fa-solid fa-times-circle" style="color:#fff; font-size:1.2rem;"></i>`;
+                    } else {
+                        optBox.classList.add('faded-option');
+                        if(optText === selectedAns && optText !== q.correct) {
+                            optBox.classList.add('wrong');
+                            optBox.innerHTML += ` <i class="fa-solid fa-times-circle" style="color:#fff; font-size:1.2rem;"></i>`;
+                        }
                     }
                     
                     optsDiv.appendChild(optBox);
