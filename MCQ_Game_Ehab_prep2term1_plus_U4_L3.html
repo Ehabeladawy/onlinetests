@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>2Prep term1 Plus U4 L3</title>
+<title>ثاني ع ترم أول - بلس وحدة4 درس 3</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
@@ -162,7 +162,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         <div class="quiz-header" style="flex-direction: column; text-align: center; padding: 25px;">
             <div class="logo-container-large" onclick="handleLogoClick()"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" class="logo-img"></div>
             <div class="header-text" style="width: 100%; margin-top: 15px;">
-                <h1>2Prep term1 Plus U4 L3</h1>
+                <h1>ثاني ع ترم أول - بلس وحدة4 درس 3</h1>
                 <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
             </div>
         </div>
@@ -258,7 +258,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         <div class="quiz-header">
             <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img"></div>
             <div class="header-text">
-                <h1>2Prep term1 Plus U4 L3</h1>
+                <h1>ثاني ع ترم أول - بلس وحدة4 درس 3</h1>
                 <span class="animated-name">إعداد وبرمجة / أ. إيهاب العدوي</span>
             </div>
         </div>
@@ -295,4 +295,518 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             <!-- اللوجو المتحرك في غرفة الانتظار -->
             <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Logo GIF" style="width: 180px; border-radius: 20px; margin: 10px auto; box-shadow: 0 0 20px rgba(14, 165, 233, 0.5); display: block;">
 
-            <i class="fa
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; margin-top: 15px; color: var(--danger);"></i>
+        </div>
+    </div>
+</div>
+
+<!-- 6. شاشة مسابقة الطالب -->
+<div id="quiz-scene" class="scene" style="padding: 0;">
+    <div class="sticky-timer" style="width: 100%; max-width: 850px; margin: 0 auto;">
+        <div style="font-weight: bold; font-size: 1.1rem;">الوقت المتبقي:</div>
+        <div class="timer-countdown"><i class="fa-regular fa-clock"></i> <span id="global-timer-text">200</span>ث</div>
+    </div>
+
+    <div class="main-card" style="margin: 0 auto; border-radius: 20px; border: none; box-shadow: none; background: transparent;">
+        <div class="content-area" id="quiz-content" style="padding: 10px; width: 100%;"></div>
+        <div style="padding: 20px; text-align: center; margin-bottom: 40px;">
+            <button class="btn btn-green" id="submitBtn" onclick="submitQuiz()" style="font-size: 1.4rem; padding: 15px 40px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);">تسليم الاختبار لمستر ايهاب <i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- 7. شاشة النتيجة النهائية -->
+<div id="result-scene" class="scene" style="overflow-y: auto;">
+    <div class="main-card">
+        <div class="content-area">
+            <h2 id="result-title" style="font-size: 2.2rem; margin-bottom: 15px;">النتيجة النهائية</h2>
+            
+            <div id="result-container" style="position:relative; width:100%; max-width:600px; margin: 0 auto 20px;"></div>
+            
+            <h3 style="margin-top: 20px; color: var(--primary); font-size: 1.4rem;">مراجعة إجابات الاختبار:</h3>
+            <div id="reviewArea" class="review-area" style="width: 100%; text-align: left; direction: ltr;"></div>
+            
+            <div style="padding: 30px 0; text-align: center; width: 100%;">
+                <button class="btn" onclick="restartGame()" style="font-size: 1.2rem; padding: 12px 35px;">
+                    <i class="fa-solid fa-rotate-right"></i> خروج / إعادة اللعبة
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة الرقم السري المخفية -->
+<div id="password-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(5px);">
+    <div style="background: rgba(15, 23, 42, 0.95); padding: 30px; border-radius: 20px; border: 2px dashed var(--primary); text-align: center; box-shadow: 0 0 30px rgba(14, 165, 233, 0.3);">
+        <h3 style="color: white; margin-bottom: 20px; font-size: 1.5rem;">أدخل الرمز السري للإدارة</h3>
+        <input type="password" id="teacher-pass-input" placeholder="••••" maxlength="4" style="width: 150px; text-align: center; font-size: 2.5rem; letter-spacing: 15px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
+        <br>
+        <button class="btn btn-blue" onclick="verifyPassword()" style="padding: 10px 30px;">دخول</button>
+        <button class="btn btn-danger" onclick="document.getElementById('password-modal').style.display='none'" style="padding: 10px 30px; margin-right: 10px;">إلغاء</button>
+    </div>
+</div>
+
+<audio id="sound-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="sound-wrong" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC_ed0XfZkBt_xRf8dN3ciM37uidGZrCt8",
+        authDomain: "mrehabgames.firebaseapp.com",
+        projectId: "mrehabgames",
+        storageBucket: "mrehabgames.firebasestorage.app",
+        messagingSenderId: "379463494744",
+        appId: "1:379463494744:web:983a5677afb5b92faf2e2d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let currentPin = "";
+    let currentStudent = "";
+    let currentAvatar = "🧑‍🎓";
+    let isMultiplayer = false;
+    let used5050 = false;
+
+    // الدخول السري
+    window.logoClickCount = 0;
+    window.logoClickTimer = null;
+
+    window.handleLogoClick = function() {
+        window.logoClickCount++;
+        if (window.logoClickTimer) clearTimeout(window.logoClickTimer);
+        window.logoClickTimer = setTimeout(() => { window.logoClickCount = 0; }, 1000);
+
+        if (window.logoClickCount === 5) {
+            window.logoClickCount = 0;
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('teacher-pass-input').value = '';
+            document.getElementById('teacher-pass-input').focus();
+        }
+    };
+
+    window.verifyPassword = function() {
+        const pass = document.getElementById('teacher-pass-input').value;
+        if (pass === '7127') {
+            document.getElementById('password-modal').style.display = 'none';
+            showScene('teacher-setup-scene');
+        } else {
+            alert('الرمز السري غير صحيح!');
+            document.getElementById('teacher-pass-input').value = '';
+            document.getElementById('teacher-pass-input').focus();
+        }
+    };
+
+    document.getElementById('teacher-pass-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') window.verifyPassword();
+    });
+
+    window.selectAvatar = function(element, avatar) {
+        document.querySelectorAll('.avatar-opt').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        currentAvatar = avatar;
+    }
+
+    const originalQuizData = [
+        { id: 0, q: "When the storm stopped, a layer of ........... had covered the cars.", options: ["paper", "dust", "wood", "paint"], correct: "dust" },
+        { id: 1, q: "The Pyramids are one of the most ........... sights in the world.", options: ["usual", "impressive", "tiny", "hidden"], correct: "impressive" },
+        { id: 2, q: "The bus was ........... , so I couldn't find a seat.", options: ["empty", "quiet", "crowded", "clean"], correct: "crowded" },
+        { id: 3, q: "The ........... language of Egypt is Arabic.", options: ["tropical", "side", "business", "official"], correct: "official" },
+        { id: 4, q: "The architect is planning the ........... of a new bridge over the river.", options: ["construction", "transportation", "rainfall", "business"], correct: "construction" },
+        { id: 5, q: "The local ........... relies heavily on growing wheat and corn.", options: ["climate", "tourism", "agriculture", "temperature"], correct: "agriculture" },
+        { id: 6, q: "The view from the top of the tower was truly ........... .", options: ["empty", "official", "crowded", "magnificent"], correct: "magnificent" },
+        { id: 7, q: "What is the average daily ........... in your city during the summer.", options: ["heritage", "temperature", "landmark", "construction"], correct: "temperature" },
+        { id: 8, q: "The government made a/an ........... statement about the new laws.", options: ["official", "tropical", "crowded", "annual"], correct: "official" },
+        { id: 9, q: "One of the most famous ........... is the Abuja National Mosque.", options: ["jobs", "business", "landmarks", "transportation"], correct: "landmarks" }
+    ];
+
+    let shuffled = [];
+    let studentAnswers = {}; 
+    let globalTimer;
+    let timeLeft = 200;
+    window.isFinished = false;
+    let finalScore = 0;
+
+    window.showScene = function(id) {
+        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'teacher-setup-scene' && !currentPin) createRoom();
+    }
+
+    function createRoom() {
+        currentPin = Math.floor(1000 + Math.random() * 9000).toString();
+        document.getElementById('teacher-pin').innerText = currentPin;
+        set(ref(db, 'rooms/' + currentPin), { status: 'waiting', forceStop: 0, showAnswers: 0, timeLimit: 300, players: {} });
+
+        onValue(ref(db, 'rooms/' + currentPin), (snapshot) => {
+            const roomData = snapshot.val();
+            if(!roomData) return;
+
+            if(roomData.status === 'show_answers') {
+                highlightCorrectAnswersOnScreen();
+            }
+
+            if(roomData.status === 'restarted') {
+                alert("قام المعلم بإعادة بدء اللعبة!");
+                location.reload();
+            }
+
+            const players = roomData.players;
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            const list = document.getElementById('teacher-students-list');
+            list.innerHTML = ''; leaderboardBody.innerHTML = '';
+
+            if(players) {
+                let playersArray = [];
+                for(let name in players) {
+                    playersArray.push({ 
+                        name: name, 
+                        avatar: players[name].avatar || "🧑‍🎓",
+                        score: players[name].score || 0, 
+                        finished: players[name].finished || false,
+                        finishTime: players[name].finishTime || 9999999999999 
+                    });
+                }
+
+                playersArray.sort((a, b) => {
+                    if (b.score !== a.score) return b.score - a.score; 
+                    return a.finishTime - b.finishTime; 
+                });
+
+                playersArray.forEach((p, index) => {
+                    list.innerHTML += `<div class="student-badge">${p.avatar} ${p.name}</div>`;
+                    let statusText = p.finished ? "✅ سلم الاختبار" : "⏳ يحل الآن...";
+                    
+                    let rankDisplay = `${index + 1}`;
+                    let rowClass = "";
+                    if(index === 0) { rankDisplay = `🥇`; rowClass = "rank-1"; } 
+                    else if(index === 1) { rankDisplay = `🥈`; rowClass = "rank-2"; } 
+                    else if(index === 2) { rankDisplay = `🥉`; rowClass = "rank-3"; }
+
+                    let row = `<tr class="${rowClass}">
+                        <td>${rankDisplay}</td>
+                        <td>${p.avatar} ${p.name}</td>
+                        <td>${p.score} / ${originalQuizData.length}</td>
+                        <td>${statusText}</td>
+                    </tr>`;
+                    leaderboardBody.innerHTML += row;
+                });
+            }
+        });
+    }
+
+    window.startMultiplayerGame = function() {
+        const timeLimit = parseInt(document.getElementById('teacher-time-select').value) || 300;
+        update(ref(db, 'rooms/' + currentPin), { status: 'playing', forceStop: 0, showAnswers: 0, timeLimit: timeLimit });
+        showScene('teacher-leaderboard-scene');
+        renderAllQuestions('teacher-questions-view', false);
+    }
+
+    window.forceEndQuiz = function() {
+        if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم الآن؟")) {
+            update(ref(db, 'rooms/' + currentPin), { status: 'ended', forceStop: Date.now() });
+            
+            get(ref(db, 'rooms/' + currentPin + '/players')).then((snapshot) => {
+                if(snapshot.exists()) {
+                    let players = snapshot.val();
+                    let updates = {};
+                    for(let name in players) {
+                        if(!players[name].finished) {
+                            updates['rooms/' + currentPin + '/players/' + name + '/finished'] = true;
+                            updates['rooms/' + currentPin + '/players/' + name + '/finishTime'] = Date.now();
+                        }
+                    }
+                    if(Object.keys(updates).length > 0) update(ref(db), updates);
+                }
+            });
+        }
+    }
+
+    window.revealAnswersToStudents = function() {
+        if(confirm("هل تريد إظهار الإجابات الصحيحة للجميع الآن؟")) {
+            update(ref(db, 'rooms/' + currentPin), { status: 'show_answers', lastAction: Date.now() });
+        }
+    }
+
+    function highlightCorrectAnswersOnScreen() {
+        const teacherView = document.getElementById('teacher-questions-view');
+        if(teacherView && teacherView.children.length > 0) {
+            originalQuizData.forEach((q, qIndex) => {
+                let qRow = teacherView.children[qIndex];
+                if(!qRow) return;
+                let opts = qRow.querySelector('.options-grid').children;
+                for(let box of opts) {
+                    let text = box.innerText.replace('✓', '').trim();
+                    if(text === q.correct) {
+                        box.classList.add('correct');
+                        if(!box.innerHTML.includes('fa-check')) {
+                            box.innerHTML = `<span>${text}</span> <i class="fa-solid fa-check-circle" style="color:#fff; font-size:1.2rem;"></i>`;
+                        }
+                    }
+                }
+            });
+        }
+
+        const reviewArea = document.getElementById('reviewArea');
+        if(reviewArea && reviewArea.children.length > 0) {
+            originalQuizData.forEach((q, qIndex) => {
+                let qRow = reviewArea.children[qIndex];
+                if(!qRow) return;
+                let opts = qRow.querySelector('.options-grid').children;
+                for(let box of opts) {
+                    let text = box.innerText.replace('✓', '').replace('✗', '').trim();
+                    if(text === q.correct) {
+                        box.classList.add('correct');
+                    }
+                }
+            });
+        }
+    }
+
+    window.restartGame = function() {
+        if(confirm("هل أنت متأكد من خروجك وتصفير الغرفة؟")) {
+            if(isMultiplayer) {
+                location.reload();
+            } else {
+                update(ref(db, 'rooms/' + currentPin), { status: 'restarted' }).then(() => { location.reload(); });
+            }
+        }
+    }
+
+    window.joinRoom = function() {
+        currentStudent = document.getElementById('studentName').value.trim();
+        currentPin = document.getElementById('roomPin').value.trim();
+        if(currentStudent.length < 3 || currentPin.length !== 4) return alert("الاسم الثلاثي وكود الغرفة 4 أرقام!");
+
+        get(ref(db, 'rooms/' + currentPin)).then((snapshot) => {
+            if (snapshot.exists() && snapshot.val().status === 'waiting') {
+                isMultiplayer = true;
+                set(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { score: 0, finished: false, finishTime: 0, avatar: currentAvatar, answers: {} });
+                showScene('student-waiting-scene');
+
+                let quizStarted = false;
+
+                onValue(ref(db, 'rooms/' + currentPin), (snap) => {
+                    const room = snap.val();
+                    if(!room) return;
+
+                    switch (room.status) {
+                        case 'playing':
+                            if (!quizStarted) {
+                                quizStarted = true;
+                                timeLeft = room.timeLimit || 300;
+                                startStudentQuiz();
+                            }
+                            break;
+                        case 'ended':
+                            if (quizStarted && !window.isFinished) window.submitQuiz();
+                            break;
+                        case 'show_answers':
+                            highlightCorrectAnswersOnScreen();
+                            break;
+                        case 'restarted':
+                            location.reload();
+                            break;
+                    }
+
+                    if(room.forceStop && room.forceStop > 0 && quizStarted && !window.isFinished) {
+                        window.submitQuiz();
+                    }
+                });
+            } else { alert("الكود خطأ أو الاختبار بدأ!"); }
+        });
+    }
+
+    window.use5050 = function(qIndex, btnElem) {
+        if(used5050) return;
+        used5050 = true;
+        document.querySelectorAll('.btn-5050').forEach(b => b.style.display = 'none');
+        
+        let q = shuffled[qIndex];
+        let wrongOpts = q.options.filter(o => o !== q.correct).sort(() => Math.random() - 0.5).slice(0, 2);
+        
+        let optsDiv = btnElem.closest('.question-row').querySelector('.options-grid');
+        Array.from(optsDiv.children).forEach(box => {
+            let text = box.innerText.trim();
+            if(wrongOpts.includes(text)) {
+                box.classList.add('disabled');
+            }
+        });
+    }
+
+    function renderAllQuestions(containerId, isStudent = false) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        let dataToRender = isStudent ? shuffled : originalQuizData;
+        
+        dataToRender.forEach((q, qIndex) => {
+            let qDiv = document.createElement('div');
+            qDiv.className = 'question-row';
+            
+            let headerHTML = `<div class="question-text">${qIndex + 1}. ${q.q}</div>`;
+            if(isStudent && !used5050) {
+                headerHTML += `<button class="btn-5050" onclick="use5050(${qIndex}, this)">🪄 50:50</button>`;
+            }
+
+            qDiv.innerHTML = `<div class="question-header">${headerHTML}</div>`;
+            
+            let optsDiv = document.createElement('div');
+            optsDiv.className = 'options-grid';
+            
+            let currentOptions = isStudent ? [...q.options].sort(() => Math.random() - 0.5) : q.options;
+            currentOptions.forEach((optText) => {
+                let optBox = document.createElement('div');
+                optBox.className = 'option-box' + (!isStudent ? ' disabled' : '');
+                optBox.innerHTML = `<span>${optText}</span>`;
+                if(isStudent) optBox.onclick = () => window.selectOption(qIndex, optText, optBox, q.id);
+                optsDiv.appendChild(optBox);
+            });
+            qDiv.appendChild(optsDiv);
+            container.appendChild(qDiv);
+        });
+    }
+
+    function startStudentQuiz() {
+        shuffled = [...originalQuizData].sort(() => Math.random() - 0.5);
+        studentAnswers = {};
+        window.isFinished = false;
+        used5050 = false;
+        showScene('quiz-scene');
+        
+        renderAllQuestions('quiz-content', true);
+
+        document.getElementById('global-timer-text').innerText = timeLeft;
+        globalTimer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('global-timer-text').innerText = timeLeft;
+            if(timeLeft <= 0) {
+                clearInterval(globalTimer);
+                window.submitQuiz();
+            }
+        }, 1000);
+    }
+
+    window.selectOption = function(qIndex, optText, box, originalId) {
+        if(window.isFinished) return;
+        let siblings = box.parentElement.children;
+        for(let s of siblings) s.classList.remove('selected-opt');
+        box.classList.add('selected-opt');
+
+        studentAnswers[originalId] = optText;
+        
+        let tempScore = 0;
+        for(let id in studentAnswers) {
+            let origQ = originalQuizData.find(oq => oq.id == id);
+            if(origQ && studentAnswers[id] === origQ.correct) tempScore++;
+        }
+        finalScore = tempScore;
+
+        if(isMultiplayer) {
+            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
+                score: finalScore,
+                answers: studentAnswers,
+                finishTime: Date.now() 
+            });
+        }
+    }
+
+    window.submitQuiz = function() {
+        if(window.isFinished) return;
+        window.isFinished = true;
+        clearInterval(globalTimer);
+        const submitBtn = document.getElementById('submitBtn');
+        if(submitBtn) submitBtn.style.display = 'none';
+        document.querySelectorAll('.btn-5050').forEach(b => b.style.display = 'none'); 
+
+        if(isMultiplayer) {
+            update(ref(db, 'rooms/' + currentPin + '/players/' + currentStudent), { 
+                finished: true, 
+                score: finalScore,
+                answers: studentAnswers,
+                finishTime: Date.now() 
+            });
+        }
+        
+        setTimeout(() => {
+            showScene('result-scene');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            const percentage = (finalScore / shuffled.length) * 100;
+            const resContainer = document.getElementById('result-container');
+            const rev = document.getElementById('reviewArea');
+
+            if (percentage >= 50) {
+                confetti({ particleCount: 150, spread: 60 });
+                document.getElementById('sound-correct').play();
+            } else {
+                document.getElementById('sound-wrong').play();
+            }
+
+            resContainer.innerHTML = `
+                <div style="position: relative; width: 100%; text-align: center;">
+                    <img src="https://lh3.googleusercontent.com/d/1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM" style="width:100%; max-width:500px; border-radius:30px; display: block; margin: 0 auto; box-shadow: 0 0 30px rgba(0,0,0,0.8);">
+                    <div style="position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center;">
+                        <div style="color:#1e3a8a; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 900; text-shadow: 0 0 10px rgba(255,255,255,0.8);">${currentAvatar} ${currentStudent}</div>
+                        <div style="color:#dc2626; font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight: 900; margin-top: 5px; text-shadow: 0 0 10px rgba(255,255,255,0.8);">الدرجة: ${finalScore} من ${shuffled.length}</div>
+                    </div>
+                </div>
+            `;
+
+            rev.innerHTML = '';
+            shuffled.forEach((q, qIndex) => {
+                let selectedAns = studentAnswers[q.id];
+                let qDiv = document.createElement('div');
+                qDiv.className = 'question-row';
+                qDiv.innerHTML = `<div class="question-text">${qIndex + 1}. ${q.q}</div>`;
+                
+                let optsDiv = document.createElement('div');
+                optsDiv.className = 'options-grid';
+                
+                q.options.forEach((optText) => {
+                    let optBox = document.createElement('div');
+                    optBox.className = 'option-box disabled';
+                    optBox.innerHTML = `<span>${optText}</span>`;
+                    
+                    if(optText === q.correct) {
+                        optBox.classList.add('correct');
+                        optBox.innerHTML += ` <i class="fa-solid fa-check-circle" style="color:#fff; font-size:1.2rem;"></i>`;
+                    } else if(optText === selectedAns && optText !== q.correct) {
+                        optBox.classList.add('wrong');
+                        optBox.innerHTML += ` <i class="fa-solid fa-times-circle" style="color:#fff; font-size:1.2rem;"></i>`;
+                    }
+                    
+                    optsDiv.appendChild(optBox);
+                });
+                qDiv.appendChild(optsDiv);
+                rev.appendChild(qDiv);
+            });
+
+        }, 1000);
+    }
+
+    const canvas = document.getElementById('particles-js'); const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let pts = Array.from({length: 75}, () => ({
+        x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*3 + 1.2, 
+        vx: (Math.random()-0.5)*0.8, vy: (Math.random()-0.5)*0.8,
+        color: Math.random() > 0.5 ? "rgba(14, 165, 233, 0.45)" : "rgba(245, 158, 11, 0.45)"
+    }));
+    function animate() { 
+        ctx.clearRect(0,0,canvas.width,canvas.height); 
+        pts.forEach(p=>{
+            p.x+=p.vx; p.y+=p.vy; 
+            if(p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height) {p.x=Math.random()*canvas.width; p.y=Math.random()*canvas.height;}
+            ctx.fillStyle = p.color; 
+            ctx.beginPath(); 
+            ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); 
+            ctx.fill();
+        }); 
+        requestAnimationFrame(animate); 
+    }
+    animate();
+</script>
+</body>
+</html>
