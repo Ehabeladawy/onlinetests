@@ -126,7 +126,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: 15px; border: 1px dashed rgba(14, 165, 233, 0.5); width: 100%; max-width: 500px; text-align: right; margin: 20px 0;">
             <h3 style="text-align: center; color: var(--primary); font-weight: 900; margin-bottom: 12px;">تعليمات الاختبار المعتمد</h3>
             <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>أدخل اسمك الثلاثي وكود الدخول (الافتراضي 0000 أو حسب ما يحدده المعلم)</p>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>الاختبار عبارة عن شريحة واحدة متصلة (تمرين التمرير Scroll بحرية)</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>الاختبار عبارة عن شريحة واحدة متصلة (التمرير Scroll بحرية للأسفل)</p>
             <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>حفظ تلقائي واستعادة تامة لإجاباتك عند التحديث (Refresh)</p>
         </div>
 
@@ -171,7 +171,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
     <div class="main-card" style="width: 100%; max-width: 900px; margin: 0 auto; background: rgba(15, 23, 42, 0.95); border: none;">
         <div id="missing-alert-box"></div>
-        <!-- تم دمج جميع الأسئلة في شريحة واحدة متصلة -->
         <div id="exam-content" style="width: 100%; display: flex; flex-direction: column; gap: 15px;"></div>
 
         <button id="finalSubmit" class="btn btn-green" onclick="confirmFinish()" style="width: 100%; margin-top: 30px; font-size: 1.4rem; padding: 18px;">تسليم الاختبار وإرسال النتيجة <i class="fas fa-paper-plane"></i></button>
@@ -217,7 +216,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 <tbody id="leaderboard-body"></tbody>
             </table>
 
-            <!-- بنك الأسئلة الحقيقي مطابق لما يراه الطالب في شريحة واحدة متصلة -->
+            <!-- بنك الأسئلة الحقيقي للمعلم مطابق لشكل أسئلة الطلاب في شريحة واحدة متصلة -->
             <div style="margin-top: 40px; border-top: 2px dashed rgba(255,255,255,0.2); padding-top: 20px; text-align: left; direction: ltr;">
                 <h3 style="color: var(--gold); text-align: center; margin-bottom: 20px; direction: rtl;">أسئلة الامتحان الفعلية الكاملة للإشراف على السبورة الذكية</h3>
                 <div id="teacher-questions-bank" style="display: flex; flex-direction: column; gap: 20px;"></div>
@@ -226,7 +225,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
-<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF المطابقة للشكل بالخلفية البيضاء واللوجو الأخضر -->
+<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF باللوجو الأخضر واللون الأسود -->
 <div id="pdf-report-scene" class="scene">
     <div class="main-card" style="max-width: 800px; text-align: center;">
         <h2 style="color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-file-pdf"></i> مركز تصدير تقارير الـ PDF للطلاب</h2>
@@ -242,39 +241,45 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             <button class="btn btn-danger" onclick="showScene('teacher-leaderboard-scene')" style="margin-right: 10px;">رجوع لوحة التحكم</button>
         </div>
 
-        <!-- المعاينة الحية للتقرير المطابق باللوجو الأخضر والـ Pie Chart -->
-        <div id="pdf-preview-container" style="background: white; color: #1e293b; padding: 35px; border-radius: 20px; text-align: left; direction: ltr; margin-top: 20px; display: none; box-shadow: 0 0 30px rgba(0,0,0,0.5);">
-            <div style="text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 15px; margin-bottom: 20px;">
+        <!-- المعاينة الحية للتقرير بالخلفية السوداء واللوجو الأخضر -->
+        <div id="pdf-preview-container" style="background: #0f172a; color: #f8fafc; padding: 35px; border-radius: 20px; text-align: left; direction: ltr; margin-top: 20px; display: none; box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 2px solid #0ea5e9;">
+            <div style="text-align: center; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 15px; margin-bottom: 20px;">
                 <!-- اللوجو الأخضر الخاص بك بشكل كبير في الأعلى -->
                 <img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" style="width: 110px; height: 110px; border-radius: 50%; border: 3px solid #10b981; object-fit: cover; margin-bottom: 10px;" alt="Logo">
-                <h2 style="color: #0f172a; margin-bottom: 5px;">مستر إيهاب العدوي - تقرير أداء الطالب</h2>
-                <h4 id="pdf-rep-name" style="color: #0ea5e9;">اسم الطالب: ---</h4>
-                <p id="pdf-rep-meta" style="color: #64748b; font-size: 0.9rem;">الصف الثاني الإعدادي | Unit 1 Full Exam</p>
+                <h2 style="color: #ffffff; margin-bottom: 5px;">مستر إيهاب العدوي - تقرير أداء الطالب</h2>
+                <h4 id="pdf-rep-name" style="color: #38bdf8;">اسم الطالب: ---</h4>
+                <p id="pdf-rep-meta" style="color: #94a3b8; font-size: 0.9rem;">الصف الثاني الإعدادي | Unit 1 Full Exam</p>
             </div>
 
             <!-- الرسم البياني SVG Pie Chart وبيانات النتيجة -->
-            <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 25px; flex-wrap: wrap; background: #f8fafc; padding: 15px; border-radius: 15px;">
+            <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 25px; flex-wrap: wrap; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px;">
                 <div id="svg-pie-container"></div>
                 <div style="text-align: right; direction: rtl;">
                     <h3 id="pdf-rep-score" style="color: #10b981; font-size: 1.8rem; margin-bottom: 5px;">الدرجة: 0 / 30</h3>
-                    <p id="pdf-rep-percentage" style="font-weight: bold; color: #475569;">النسبة المئوية: 0%</p>
+                    <p id="pdf-rep-percentage" style="font-weight: bold; color: #cbd5e1;">النسبة المئوية: 0%</p>
                     <p id="pdf-rep-cheat" style="color: #f97316; font-size: 0.9rem;">مخالفات الغش: 0</p>
                 </div>
             </div>
 
-            <h3 style="color: #0f172a; margin-bottom: 15px; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px;">مراجعة الأسئلة والإجابات التفصيلية:</h3>
+            <h3 style="color: #f8fafc; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">مراجعة الأسئلة والإجابات التفصيلية:</h3>
             <div id="pdf-rep-answers" style="display: flex; flex-direction: column; gap: 15px;"></div>
         </div>
     </div>
 </div>
 
-<!-- 7. شاشة النتيجة النهائية للطالب -->
+<!-- 7. شاشة النتيجة النهائية للطالب مع مراجعة الحلول وأيقونة تنزيل التقرير PDF -->
 <div id="result-scene" class="scene" style="text-align:center;">
     <div class="main-card" style="align-items: center;">
         <h1 style="color: var(--success); margin-bottom: 10px; font-size: 2.3rem;">تم تسليم الاختبار بنجاح</h1>
         <p id="result-score-text" style="font-size: 4rem; font-weight: 900; color: var(--gold); margin: 15px 0;">0 / 30</p>
-        <p style="color: #cbd5e1; font-weight: bold;">تم حفظ إجاباتك، تتبع التقدم، ورقم الـ IP وإرساله لشيت مستر إيهاب.</p>
-        <br>
+        <p style="color: #cbd5e1; font-weight: bold; margin-bottom: 20px;">تم حفظ إجاباتك، تتبع التقدم، ورقم الـ IP وإرساله لشيت مستر إيهاب.</p>
+        
+        <!-- زر تنزيل التقرير بصيغة PDF للطالب بعد انهاء الاختبار -->
+        <button class="btn btn-green" onclick="downloadMyPDFReport()" style="font-size: 1.2rem; padding: 12px 30px; margin-bottom: 20px;"><i class="fas fa-download"></i> تنزيل تقريری PDF</button>
+
+        <h3 style="color: var(--primary); margin-bottom: 15px; width: 100%; text-align: right;">مراجعة تفصيلية لحلولك:</h3>
+        <div id="student-self-review" style="width: 100%; text-align: left; direction: ltr; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+
         <button class="btn" onclick="location.reload()" style="font-size: 1.2rem; padding: 12px 35px;">خروج / إعادة الاختبار</button>
     </div>
 </div>
@@ -426,7 +431,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         return array;
     }
 
-    // منع الخروج نهائياً عند الـ Refresh أو إغلاق الصفحة بدون رسالة مزعجة
+    // منع الخروج نهائياً وبدون رسائل مزعجة
     window.addEventListener('beforeunload', (e) => {
         if(isExamStarted && !isExamFinished) {
             e.preventDefault();
@@ -482,7 +487,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     }
 
     window.forceEndExamForAll = function() {
-        if(confirm("هل أنت متأكد من إنهاء الاختبار وإجباره على التوقف وتسليم الدرجات لجميع الطلاب الآن؟")) {
+        if(confirm("هل أنت متأكد من إنهاء الاختبار وإجباره على التوقف وتسليم الدرجات للجميع؟")) {
             update(ref(db, 'rooms/' + currentPin), { status: 'ended' });
         }
     }
@@ -493,7 +498,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         }
     }
 
-    // بناء الأسئلة لشريحة واحدة متصلة بالكامل (Scroll) مع عشوائية الخيارات Random
+    // بناء الأسئلة في شريحة واحدة متصلة بالكامل مع ترتيب أصلي وعشوائية الاختيارات (Random)
     window.startExam = function() {
         let savedAns = localStorage.getItem('mrehab_ans_' + student.name);
         if(savedAns) {
@@ -501,13 +506,11 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         }
 
         const allQuestions = getAllQuestionsFlat();
-        // تفعيل الـ Random للخيارات لكل سؤال
         allQuestions.forEach(q => {
             if(q.o) q.o = shuffleArray([...q.o]);
         });
         window.examQuestionsList = allQuestions;
 
-        // استعادة البيانات الحالية عند الـ Refresh لكي لا يخرج الطالب أبداً
         isExamStarted = true;
         showScene('exam-scene');
         document.getElementById('info-display').innerText = `الطالب: ${student.name}`;
@@ -520,7 +523,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         let solvedCount = Object.keys(userAnswers).filter(k => userAnswers[k] && userAnswers[k].toString().trim() !== "").length;
         let h = `<div style="text-align:center; color:var(--gold); font-weight:bold; margin-bottom:15px; font-size:1.2rem;">اختبار الوحدة الأولى - شريحة واحدة متصلة (تم حل: <span id="solved-counter">${solvedCount}</span>/${totalQuestionsCount})</div>`;
 
-        // إضافة قسم الاستماع
+        // 1. قسم الاستماع (Listening Passage & Audio Player) بالترتيب الأصلي
         h += `<div class="passage-box" style="text-align:center;">
                 <h3 style="color:var(--gold); margin-bottom:12px;"><i class="fas fa-headphones"></i> Listen carefully:</h3>
                 <div style="margin-bottom: 12px; display:flex; gap:10px; justify-content:center;">
@@ -531,10 +534,32 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 <div style="color:#fff; font-size:1.2rem; line-height: 1.8; direction:ltr;">${listeningTextStr}</div>
               </div>`;
 
-        // إضافة سؤال السحب والإدراج (Fill-in Blanks) مع بنك الكلمات
+        // أسئلة الاستماع (من 1 إلى 7)
+        for(let i=0; i<7; i++) {
+            let q = window.examQuestionsList[i];
+            h += `<div class="q-card" id="q-card-${q.id}">
+                <div style="font-size:1.1rem; font-weight:bold; margin-bottom:12px;">${q.q}</div>
+                <div class="options-grid">
+                    ${q.o ? q.o.map(opt => `<div class="opt ${userAnswers[q.id] === opt ? 'selected' : ''}" onclick="selectOpt(${q.id}, \`${opt}\`)">${opt}</div>`).join('') : ''}
+                </div>
+            </div>`;
+        }
+
+        // 2. أسئلة الاختيارات العامة (من 8 إلى 11)
+        for(let i=7; i<11; i++) {
+            let q = window.examQuestionsList[i];
+            h += `<div class="q-card" id="q-card-${q.id}">
+                <div style="font-size:1.1rem; font-weight:bold; margin-bottom:12px;">${q.q}</div>
+                <div class="options-grid">
+                    ${q.o ? q.o.map(opt => `<div class="opt ${userAnswers[q.id] === opt ? 'selected' : ''}" onclick="selectOpt(${q.id}, \`${opt}\`)">${opt}</div>`).join('') : ''}
+                </div>
+            </div>`;
+        }
+
+        // 3. أسئلة السحب والإدراج (Fill-in Blanks من 12 إلى 15)
         shuffledWords = shuffleArray(["balance", "identity", "trends", "permission", "Gen", "way"]);
         h += `<div class="passage-box">
-                <h3 style="color:var(--gold); margin-bottom:10px; text-align:center; font-size:1.1rem;">اسحب الكلمة أو اضغط عليها ثم اضغط على الفراغ المناسب (اسحب الصفحة للأفل عند الحاجة):</h3>
+                <h3 style="color:var(--gold); margin-bottom:10px; text-align:center; font-size:1.1rem;">اسحب الكلمة أو اضغط عليها ثم اضغط على الفراغ المناسب:</h3>
                 <div class="word-bank">`;
         shuffledWords.forEach(w => {
             let activeClass = (activeWordToDrop === w) ? 'active-word' : '';
@@ -544,22 +569,19 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             My friend Ali is interested in technology. He is always following the latest (1) <input type='text' id='12' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> online. His parents taught him that his (2) <input type='text' id='13' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> is what makes him special. They also advised him to (3) <input type='text' id='14' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> his online and offline activities. He always asks for his parents' (4) <input type='text' id='15' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> before he downloads a new game.
         </div></div>`;
 
-        // عرض جميع الأسئلة تباعاً في شريحة متصلة واحدة
-        window.examQuestionsList.forEach((q, index) => {
-            if(q.id >= 12 && q.id <= 15) return; // تم عرض الفراغات بالأعلى
-            let isHighlight = (window.highlightMissing && (!userAnswers[q.id] || userAnswers[q.id].toString().trim() === ""));
-            h += `<div class="q-card ${isHighlight ? 'unanswered-highlight' : ''}" id="q-card-${q.id}">
+        // 4. باقي الأسئلة بالترتيب الأصلي (من 16 إلى 30 / أو حسب الإجمالي 37)
+        for(let i=11; i<window.examQuestionsList.length; i++) {
+            let q = window.examQuestionsList[i];
+            h += `<div class="q-card" id="q-card-${q.id}">
                 <div style="font-size:1.1rem; font-weight:bold; margin-bottom:12px;">${q.q}</div>
                 <div class="options-grid">
                     ${q.o ? q.o.map(opt => `<div class="opt ${userAnswers[q.id] === opt ? 'selected' : ''}" onclick="selectOpt(${q.id}, \`${opt}\`)">${opt}</div>`).join('') : ''}
                 </div>
             </div>`;
-        });
+        }
 
         box.innerHTML = h;
-        window.highlightMissing = false;
 
-        // استعادة القيم المحفوظة في الإجماليات والفراغات
         setTimeout(() => {
             Object.keys(userAnswers).forEach(id => {
                 let input = document.getElementById(id);
@@ -574,7 +596,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         renderContinuousExamPage();
     }
 
-    // دعم السحب والإدراج مع التمرير التلقائي (Auto-Scroll) عند سحب الكلمة لأسفل أو أعلى
     window.allowDrop = function(ev) { ev.preventDefault(); }
     window.dragWord = function(ev, word) { ev.dataTransfer.setData("text", word); }
     window.drop = function(ev) { ev.preventDefault(); let data = ev.dataTransfer.getData("text"); ev.target.value = data; saveInput(ev.target.id, data); }
@@ -603,6 +624,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         });
     }
 
+    // ترتيب الأسئلة الأصلي بالكامل دون إخلال
     function getAllQuestionsFlat() {
         const listeningSlide = [
             { id: 1, q: "1. Ali is trying to get more information about ........", o: ["Gen Z", "Gen Alpha", "old teachers", "school subjects"], a: "Gen Alpha" },
@@ -645,6 +667,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         let combined = [...listeningSlide, ...choicesSlide];
         Object.keys(fillBlanksMap).forEach(k => combined.push({ id: k, q: `Fill-in Blank (${k})`, a: fillBlanksMap[k] }));
         combined = combined.concat([...passageSlide, ...rewriteSlide, ...dialogueSlide]);
+        totalQuestionsCount = combined.length;
         return combined;
     }
 
@@ -652,7 +675,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         let solved = Object.keys(userAnswers).filter(k => userAnswers[k] && userAnswers[k].toString().trim() !== "").length;
         if(solved < totalQuestionsCount) {
             let missing = totalQuestionsCount - solved;
-            return alert(`عفواً يا بطل! لديك ${missing} أسئلة لم تقم بالإجابة عليها في الصفحة.`);
+            return alert(`عفواً يا بطل! لديك ${missing} أسئلة لم تقم بالإجابة عليها.`);
         }
         if(confirm("هل أنت متأكد من تسليم الاختبار نهائياً؟")) finishExam();
     }
@@ -689,9 +712,98 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         showScene('result-scene');
         document.getElementById('result-score-text').innerText = `${score} / ${totalQuestionsCount}`;
         
+        // بناء مراجعة الحلول للطالب تحت النتيجة مباشرة
+        let selfReviewHtml = "";
+        let studentAnsMap = userAnswers;
+        allQs.forEach((q, idx) => {
+            let stAns = studentAnsMap[q.id] || "لم يُجب";
+            let isCor = (stAns.toString().trim().toLowerCase() === q.a.toString().trim().toLowerCase());
+            let colorBorder = isCor ? "#10b981" : "#ef4444";
+            let badgeBg = isCor ? "#d1fae5" : "#fee2e2";
+            let badgeText = isCor ? "صحيح" : "خطأ";
+            let stAnsColor = isCor ? "#10b981" : "#ef4444";
+
+            let optionsPreview = q.o ? `<div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin: 10px 0;">${q.o.map(opt => `<div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; color:#cbd5e1; font-size:0.9rem;">${opt}</div>`).join('')}</div>` : "";
+
+            selfReviewHtml += `
+                <div style="border: 2px solid ${colorBorder}; background: rgba(0,0,0,0.6); padding: 20px; border-radius: 15px; width: 100%;">
+                    <div style="font-weight: bold; color: #fff; margin-bottom: 8px; font-size:1.1rem;">Q${idx+1}: ${q.q}</div>
+                    ${optionsPreview}
+                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top: 12px; font-weight: bold;">
+                        <span style="color: ${stAnsColor};">إجابتك: ${stAns}</span>
+                        <span style="color: #10b981;">الإجابة الصحيحة: ${q.a}</span>
+                        <span style="background: ${badgeBg}; color: ${colorBorder}; padding: 3px 10px; border-radius: 6px;">${badgeText}</span>
+                    </div>
+                </div>`;
+        });
+        document.getElementById('student-self-review').innerHTML = selfReviewHtml;
+
         const soundRes = document.getElementById('sound-result');
         if(soundRes) { soundRes.currentTime = 0; soundRes.play().catch(e => {}); }
         confetti({ particleCount: 150, spread: 70 });
+    }
+
+    // تنزيل تقرير الطالب PDF مباشرة بعد الانتهاء
+    window.downloadMyPDFReport = function() {
+        let previewBox = document.getElementById('pdf-preview-container');
+        // توليد بيانات المعاينة للطالب الحالي مؤقتاً لتنزيلها
+        let score = 0;
+        const allQs = getAllQuestionsFlat();
+        allQs.forEach(q => {
+            if((userAnswers[q.id]||"").toString().trim().toLowerCase() === q.a.toString().trim().toLowerCase()) score++;
+        });
+        let percentage = Math.round((score / totalQuestionsCount) * 100);
+
+        document.getElementById('pdf-rep-name').innerText = `اسم الطالب: ${student.name}`;
+        document.getElementById('pdf-rep-score').innerText = `الدرجة: ${score} / ${totalQuestionsCount}`;
+        document.getElementById('pdf-rep-percentage').innerText = `النسبة المئوية: ${percentage}%`;
+        document.getElementById('pdf-rep-cheat').innerText = `مخالفات الغش: ${cheatCount}`;
+
+        let strokeDash = `${percentage}, 100`;
+        let svgPie = `
+            <svg width="120" height="120" viewBox="0 0 36 36" style="transform: rotate(-90deg);">
+                <path class="circle-bg" stroke="#334155" stroke-width="3.8" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="circle" stroke="${percentage >= 50 ? '#10b981' : '#ef4444'}" stroke-dasharray="${strokeDash}" stroke-width="3.8" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <text x="18" y="20.3" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="bold" transform="rotate(90 18 18)">${percentage}%</text>
+            </svg>`;
+        document.getElementById('svg-pie-container').innerHTML = svgPie;
+
+        let ansHtml = "";
+        allQs.forEach((q, idx) => {
+            let stAns = userAnswers[q.id] || "لم يُجب";
+            let isCor = (stAns.toString().trim().toLowerCase() === q.a.toString().trim().toLowerCase());
+            let colorBorder = isCor ? "#10b981" : "#ef4444";
+            let badgeBg = isCor ? "#064e3b" : "#7f1d1d";
+            let badgeText = isCor ? "صحيح" : "خطأ";
+            let stAnsColor = isCor ? "#34d399" : "#f87171";
+
+            let optionsPreview = q.o ? `<div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; margin: 8px 0;">${q.o.map(opt => `<div style="background:#1e293b; padding:6px; border-radius:6px; color:#cbd5e1; font-size:0.85rem;">${opt}</div>`).join('')}</div>` : "";
+
+            ansHtml += `
+                <div style="border: 1px solid ${colorBorder}; background: #1e293b; padding: 15px; border-radius: 12px; font-size: 0.95rem;">
+                    <div style="font-weight: bold; color: #ffffff; margin-bottom: 6px;">Q${idx+1}: ${q.q}</div>
+                    ${optionsPreview}
+                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:5px; margin-top: 8px;">
+                        <span style="color: ${stAnsColor};">إجابة الطالب: <b>${stAns}</b></span>
+                        <span style="color: #34d399;">الإجابة النموذجية: <b>${q.a}</b></span>
+                        <span style="background: ${badgeBg}; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-weight: bold;">${badgeText}</span>
+                    </div>
+                </div>`;
+        });
+
+        document.getElementById('pdf-rep-answers').innerHTML = ansHtml;
+        previewBox.style.display = 'block';
+
+        let opt = {
+            margin:       10,
+            filename:     `MrEhab_Report_${student.name}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().from(previewBox).set(opt).save().then(() => {
+            previewBox.style.display = 'none';
+        });
     }
 
     window.listenToSubmissions = function() {
@@ -731,7 +843,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         alert(teacherAnswersVisible ? "تم إظهار الإجابات النموذجية في بنك الأسئلة بالأسفل" : "تم إخفاء الإجابات النموذجية");
     }
 
-    // بنك أسئلة المعلم (مطابق للشكل وموضوع في شريحة واحدة متصلة)
+    // بنك أسئلة المعلم مطابق للاسئلة الظاهرة للطالب في شريحة واحدة متصلة
     function renderTeacherQuestionsBank() {
         const bankContainer = document.getElementById('teacher-questions-bank');
         bankContainer.innerHTML = '';
@@ -769,7 +881,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         });
     }
 
-    // معاينة تقرير الـ PDF بالخلفية البيضاء واللوجو الأخضر الكبير في الأعلى وتلوين الإجابات
     window.document.getElementById('pdf-student-select').addEventListener('change', function() {
         let val = this.value;
         let previewBox = document.getElementById('pdf-preview-container');
@@ -790,9 +901,9 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         let strokeDash = `${percentage}, 100`;
         let svgPie = `
             <svg width="120" height="120" viewBox="0 0 36 36" style="transform: rotate(-90deg);">
-                <path class="circle-bg" stroke="#e2e8f0" stroke-width="3.8" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="circle-bg" stroke="#334155" stroke-width="3.8" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                 <path class="circle" stroke="${percentage >= 50 ? '#10b981' : '#ef4444'}" stroke-dasharray="${strokeDash}" stroke-width="3.8" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <text x="18" y="20.3" text-anchor="middle" fill="#0f172a" font-size="8" font-weight="bold" transform="rotate(90 18 18)">${percentage}%</text>
+                <text x="18" y="20.3" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="bold" transform="rotate(90 18 18)">${percentage}%</text>
             </svg>`;
         document.getElementById('svg-pie-container').innerHTML = svgPie;
 
@@ -804,20 +915,20 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             let stAns = studentAnsMap[q.id] || "لم يُجب";
             let isCor = (stAns.toString().trim().toLowerCase() === q.a.toString().trim().toLowerCase());
             let colorBorder = isCor ? "#10b981" : "#ef4444";
-            let badgeBg = isCor ? "#d1fae5" : "#fee2e2";
+            let badgeBg = isCor ? "#064e3b" : "#7f1d1d";
             let badgeText = isCor ? "صحيح" : "خطأ";
-            let stAnsColor = isCor ? "#047857" : "#dc2626"; // صحيح أخضر، خاطئ أحمر
+            let stAnsColor = isCor ? "#34d399" : "#f87171";
 
-            let optionsPreview = q.o ? `<div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; margin: 8px 0;">${q.o.map(opt => `<div style="background:#f1f5f9; padding:6px; border-radius:6px; color:#334155; font-size:0.85rem;">${opt}</div>`).join('')}</div>` : "";
+            let optionsPreview = q.o ? `<div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; margin: 8px 0;">${q.o.map(opt => `<div style="background:#1e293b; padding:6px; border-radius:6px; color:#cbd5e1; font-size:0.85rem;">${opt}</div>`).join('')}</div>` : "";
 
             ansHtml += `
-                <div style="border: 1px solid ${colorBorder}; background: #f8fafc; padding: 15px; border-radius: 12px; font-size: 0.95rem;">
-                    <div style="font-weight: bold; color: #0f172a; margin-bottom: 6px;">Q${idx+1}: ${q.q}</div>
+                <div style="border: 1px solid ${colorBorder}; background: #1e293b; padding: 15px; border-radius: 12px; font-size: 0.95rem;">
+                    <div style="font-weight: bold; color: #ffffff; margin-bottom: 6px;">Q${idx+1}: ${q.q}</div>
                     ${optionsPreview}
                     <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:5px; margin-top: 8px;">
                         <span style="color: ${stAnsColor};">إجابة الطالب: <b>${stAns}</b></span>
-                        <span style="color: #047857;">الإجابة النموذجية: <b>${q.a}</b></span>
-                        <span style="background: ${badgeBg}; color: ${colorBorder}; padding: 2px 8px; border-radius: 6px; font-weight: bold;">${badgeText}</span>
+                        <span style="color: #34d399;">الإجابة النموذجية: <b>${q.a}</b></span>
+                        <span style="background: ${badgeBg}; color: #ffffff; padding: 2px 8px; border-radius: 6px; font-weight: bold;">${badgeText}</span>
                     </div>
                 </div>`;
         });
@@ -830,6 +941,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         let val = document.getElementById('pdf-student-select').value;
         if(!val) return alert("يرجى اختيار طالب أو اختيار التصدير الشامل!");
 
+        let previewBox = document.getElementById('pdf-preview-container');
+
         if(val === "EXPORT_ALL_ZIP") {
             if(!window.allPlayersData) return alert("لا توجد بيانات طلاب!");
             alert("جاري تحضير وتصدير ملفات PDF لكل الطلاب تباعاً...");
@@ -837,7 +950,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 document.getElementById('pdf-student-select').value = name;
                 document.getElementById('pdf-student-select').dispatchEvent(new Event('change'));
                 await new Promise(r => setTimeout(r, 600));
-                let element = document.getElementById('pdf-preview-container');
                 let opt = {
                     margin: 10,
                     filename: `MrEhab_Report_${name}.pdf`,
@@ -845,13 +957,13 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                     html2canvas: { scale: 2, useCORS: true },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
-                await html2pdf().from(element).set(opt).save();
+                await html2pdf().from(previewBox).set(opt).save();
             }
+            previewBox.style.display = 'none';
             alert("تم الانتهاء من تصدير جميع نتائج الطلاب بنجاح!");
             return;
         }
 
-        let element = document.getElementById('pdf-preview-container');
         let opt = {
             margin:       10,
             filename:     `MrEhab_Report_${val}.pdf`,
@@ -859,8 +971,9 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             html2canvas:  { scale: 2, useCORS: true },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
-
-        html2pdf().from(element).set(opt).save();
+        html2pdf().from(previewBox).set(opt).save().then(() => {
+            previewBox.style.display = 'none';
+        });
     }
 
     function startTimer() {
