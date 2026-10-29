@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>2Prep term1 - Full Exam - مستر إيهاب العدوي</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+:root {
+    --primary: #0ea5e9; /* Sky Blue */
+    --gold: #f59e0b; /* Warm Gold */
+    --success: #10b981; /* Green */
+    --danger: #f97316; /* Orange */
+    --bg-dark: #0f172a; 
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent;}
+body { background: var(--bg-dark); min-height: 100vh; padding: 10px; color: white; overflow-x: hidden; overflow-y: auto; }
+
+#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+.scene { display: none; width: 100%; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px 0; }
+.scene.active { display: flex; animation: zoomIn 0.4s ease; }
+@keyframes zoomIn { from { opacity:0; transform: scale(0.95); } to { opacity:1; transform: scale(1); } }
+
+.main-card { 
+    background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); 
+    width: 100%; max-width: 850px; border-radius: 30px; 
+    border: 2px dashed rgba(14, 165, 233, 0.4); 
+    box-shadow: 0 0 35px rgba(255, 255, 255, 0.1), 0 0 50px rgba(14, 165, 233, 0.2); 
+    overflow: hidden; position: relative; margin: 0 auto; display: flex; flex-direction: column;
+}
+
+.quiz-header { padding: 15px 30px; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: space-between; border-bottom: 2px dashed rgba(255,255,255,0.1); flex-wrap: wrap; gap: 15px;}
+
+.logo-container { 
+    width: 75px; height: 75px; border-radius: 50%; border: 3px solid var(--primary); 
+    overflow: hidden; background: #000; box-shadow: 0 0 20px var(--primary);
+    animation: glow-pulse 2s infinite ease-in-out; margin: 0 auto; flex-shrink: 0; cursor: pointer;
+}
+
+.logo-container-large { 
+    width: 140px; height: 140px; border-radius: 50%; border: 4px solid var(--primary); 
+    overflow: hidden; background: #000; box-shadow: 0 0 35px var(--primary), 0 0 60px rgba(14, 165, 233, 0.6);
+    animation: glow-pulse 2s infinite ease-in-out; margin: 0 auto; flex-shrink: 0; cursor: pointer;
+}
+
+@keyframes glow-pulse {
+    0% { box-shadow: 0 0 15px var(--primary); transform: scale(1); }
+    50% { box-shadow: 0 0 35px var(--primary), 0 0 55px rgba(14, 165, 233, 0.7); transform: scale(1.05); }
+    100% { box-shadow: 0 0 15px var(--primary); transform: scale(1); }
+}
+.logo-img { width: 100%; height: 100%; object-fit: cover; }
+
+.header-text { text-align: center; flex: 1;}
+.header-text h1 { font-size: clamp(1.4rem, 4vw, 1.8rem); font-weight: 900; color: white; margin-top: 5px;}
+.animated-name {
+    background: linear-gradient(90deg, #fcd34d, #fffbeb, #f59e0b, #fffbeb, #fcd34d);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1rem;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+.content-area { padding: 30px 15px; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
+
+input[type="text"], input[type="number"], input[type="password"], select { 
+    width: 90%; max-width: 400px; padding: 12px 20px; border-radius: 15px; 
+    border: 2px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); 
+    color: white; text-align: center; font-size: 1.1rem; outline: none; margin-bottom: 10px; font-family: 'Tajawal', sans-serif;
+}
+select option { background: #0f172a; color: white; }
+input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(14, 165, 233, 0.5); }
+
+.btn { 
+    background: linear-gradient(135deg, var(--primary), #0284c7); color: white; padding: 12px 30px; 
+    border: none; border-radius: 15px; font-size: 1.2rem; font-weight: 800; cursor: pointer; 
+    transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); white-space: nowrap; 
+}
+.btn:hover { transform: translateY(-3px); box-shadow: 0 0 25px rgba(14, 165, 233, 0.8); }
+.btn-gold { background: linear-gradient(135deg, var(--gold), #d97706); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+.btn-green { background: linear-gradient(135deg, var(--success), #059669); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+.btn-danger { background: linear-gradient(135deg, var(--danger), #dc2626); box-shadow: 0 0 15px rgba(249, 115, 22, 0.5); }
+
+.pin-display { font-size: 3.5rem; font-weight: 900; letter-spacing: 5px; color: var(--primary); text-shadow: 0 0 20px var(--primary); margin: 10px 0; }
+.students-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 15px; max-height: 200px; overflow-y: auto; width: 100%;}
+.student-badge { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; display: flex; align-items: center; gap: 5px;}
+
+.leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.leaderboard-table th, .leaderboard-table td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.95rem;}
+.leaderboard-table th { color: var(--primary); font-weight: 900; }
+
+.sticky-timer {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
+    padding: 15px 25px; border-bottom: 2px dashed var(--danger);
+    display: flex; justify-content: space-between; align-items: center;
+    border-radius: 0 0 20px 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.timer-countdown { font-size: 1.6rem; font-weight: 900; color: var(--danger); display:flex; align-items:center; gap:8px;}
+
+.q-card { 
+    background: rgba(255, 255, 255, 0.03); padding: 25px 20px; border-radius: 20px; 
+    margin-bottom: 25px; border: 2px solid rgba(239, 68, 68, 0.6); 
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.35), inset 0 0 15px rgba(239, 68, 68, 0.15);
+    display: flex; flex-direction: column; align-items: flex-start; direction: ltr; width: 100%;
+}
+.q-card.unanswered-highlight { border-color: var(--danger); box-shadow: 0 0 30px rgba(249, 115, 22, 0.8); }
+.question-header { display: flex; justify-content: space-between; width: 100%; align-items: flex-start; margin-bottom: 15px; gap:10px; }
+.question-text { font-size: clamp(1.1rem, 3.5vw, 1.4rem); font-weight: 800; text-align: left; color: #f8fafc; line-height: 1.5; font-family: 'Poppins', sans-serif;}
+
+.options-grid { display: flex; flex-direction: column; width: 100%; gap: 10px;}
+.option-box { 
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); 
+    padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: clamp(1rem, 3vw, 1.2rem); 
+    color: white; width: 100%; transition: 0.2s all;
+    display: flex; justify-content: space-between; align-items: center; font-family: 'Poppins', sans-serif;
+}
+.option-box:hover { background: rgba(255, 255, 255, 0.1); transform: translateX(5px); }
+.selected-opt { background: rgba(14, 165, 233, 0.4) !important; border-color: var(--primary) !important; }
+
+.missing-badge { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: #fca5a5; padding: 10px 15px; border-radius: 12px; margin-bottom: 15px; font-weight: bold; display: flex; align-items: center; justify-content: space-between; width: 90%; }
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+<canvas id="particles-js"></canvas>
+
+<!-- 1. شاشة واجهة الألعاب والاختبار -->
+<div id="role-scene" class="scene active">
+    <div class="main-card">
+        <div class="quiz-header" style="flex-direction: column; text-align: center; padding: 25px;">
+            <div class="logo-container-large" onclick="handleLogoClick()"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" class="logo-img" alt="Logo"></div>
+            <div class="header-text" style="width: 100%; margin-top: 15px;">
+                <h1>ثاني ع ترم أول - اختبار شامل</h1>
+                <span class="animated-name">إعداد وبرمجة / مستر إيهاب العدوي</span>
+            </div>
+        </div>
+        <div class="content-area">
+            
+            <div style="background: rgba(0, 0, 0, 0.4); padding: 15px; border-radius: 15px; border: 1px dashed rgba(14, 165, 233, 0.5); width: 90%; max-width: 450px; text-align: right; margin-bottom: 10px;">
+                <h3 style="text-align: center; color: var(--primary); font-size: 1.3rem; font-weight: 900; margin-bottom: 10px;">تعليمات الاختبار الرسمي</h3>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>أدخل اسمك الثلاثي وكود الدخول المقدم من مستر إيهاب</p>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>يتم مراقبة محاولات الغش والخروج من الشاشة</p>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>لا يمكن تسليم الاختبار إلا بعد استكمال جميع الأسئلة</p>
+                <p style="font-size: 1rem; color: var(--gold); font-weight: bold; text-align: center; margin-top: 8px; margin-bottom: 0;">بالتوفيق يا بطل ... مستر إيهاب العدوي</p>
+            </div>
+
+            <button class="btn" onclick="goToStudentLogin()" style="width: 90%; max-width: 360px; font-size: 1.3rem;">🚀 دخول الاختبار الرسمي</button>
+
+            <div style="background: rgba(0, 0, 0, 0.6); padding: 12px 20px; border-radius: 20px; border: 2px dashed var(--primary); display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 10px;">
+                <span style="font-size: 0.9rem; color: var(--gold); font-weight: bold;"><i class="fa-solid fa-qrcode"></i> امسح الكود للموبايل:</span>
+                <div id="qrcode-container" style="background: white; padding: 8px; border-radius: 10px; display: inline-block;"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 2. شاشة إعداد المعلم (تظهر بعد النقر 5 مرات على اللوجو) -->
+<div id="teacher-setup-scene" class="scene">
+    <div class="main-card">
+        <div class="quiz-header">
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img" alt="Logo"></div>
+            <div class="header-text"><h1>لوحة تحكم مستر إيهاب</h1></div>
+        </div>
+        <div class="content-area">
+            <h3>كود الغرفة للطلاب (PIN):</h3>
+            <div class="pin-display" id="teacher-pin">----</div>
+            
+            <div style="width: 90%; max-width: 300px; margin-top: 10px;">
+                <label style="display:block; margin-bottom:5px; color:var(--gold); font-weight:bold;">⏳ حدد وقت الاختبار:</label>
+                <select id="teacher-time-select">
+                    <option value="1800" selected>30 دقيقة (الافتراضي)</option>
+                    <option value="600">10 دقائق</option>
+                    <option value="900">15 دقيقة</option>
+                    <option value="999999">وقت مفتوح</option>
+                </select>
+            </div>
+
+            <div class="students-list" id="teacher-students-list"></div>
+            <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center;">
+                <button class="btn btn-green" onclick="startExamSession()">🚀 بدء استقبال الطلاب</button>
+                <button class="btn btn-danger" onclick="showScene('role-scene')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3. شاشة لوحة تحكم المعلم أثناء الامتحان وتصدير الاكسيل -->
+<div id="teacher-leaderboard-scene" class="scene">
+    <div class="main-card" style="max-width: 950px;">
+        <div class="quiz-header" style="flex-direction: column; text-align: center; gap: 5px;">
+            <div class="logo-container" style="width: 50px; height: 50px;"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img" alt="Logo"></div>
+            <div class="header-text" style="width: 100%;">
+                <h1 style="font-size: 1.3rem; color: #94a3b8; font-weight: 700;">لوحة متابعة الغش والدرجات</h1>
+                <h2 style="font-size: 1.6rem; color: var(--primary); margin-top: 5px; font-weight: 900;">نتائج ومخالفات الطلاب 📊</h2>
+            </div>
+        </div>
+        <div class="content-area" style="overflow-x: auto; width: 100%; padding-top:10px;">
+            
+            <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 20px;">
+                <button class="btn btn-green" onclick="exportToExcel()">
+                    <i class="fa-solid fa-file-excel"></i> تصدير درجات وحلول Excel
+                </button>
+                <button class="btn btn-danger" onclick="forceEndQuiz()">
+                    <i class="fa-solid fa-stop-circle"></i> 🛑 إنهاء الاختبار
+                </button>
+                <button class="btn" onclick="location.reload()">
+                    <i class="fa-solid fa-rotate-right"></i> 🔄 إعادة اللعبة
+                </button>
+            </div>
+
+            <table class="leaderboard-table" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>الاسم الثلاثي</th>
+                        <th>الصف</th>
+                        <th>الاختبار</th>
+                        <th>الدرجة</th>
+                        <th>مخالفات الغش (ع. الخروج)</th>
+                        <th>عنوان IP</th>
+                        <th>الحالة</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 4. شاشة دخول الطالب بدون أفاتار -->
+<div id="student-login-scene" class="scene">
+    <div class="main-card">
+        <div class="quiz-header">
+            <div class="logo-container"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img" alt="Logo"></div>
+            <div class="header-text">
+                <h1>ثاني ع ترم أول - اختبار رسمي</h1>
+                <span class="animated-name">إعداد وبرمجة / مستر إيهاب العدوي</span>
+            </div>
+        </div>
+        <div class="content-area">
+            <h3 style="font-size: 1.2rem; margin-bottom: 10px; color: var(--primary);">بيانات الطالب:</h3>
+            <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي أو الرباعي" autocomplete="off">
+            <input type="text" id="roomPin" placeholder="أدخل كود الغرفة (PIN) المقدم من المعلم" autocomplete="off">
+            <button class="btn" onclick="proceedStudentLogin()" style="width: 90%; max-width: 400px;">دخول الاختبار <i class="fa-solid fa-arrow-right"></i></button>
+            <button class="btn btn-danger" onclick="showScene('role-scene')" style="margin-top: 5px;">رجوع</button>
+        </div>
+    </div>
+</div>
+
+<!-- 5. شاشة أسئلة الاختبار الرسمية (شرائح + منع غش + أسئلة متروكة) -->
+<div id="quiz-scene" class="scene" style="padding: 0;">
+    <div class="sticky-timer" id="timer-bar-container" style="width: 100%; max-width: 850px; margin: 0 auto;">
+        <div style="font-weight: bold; font-size: 1.1rem;" id="student-info-top">الطالب: ---</div>
+        <div class="timer-countdown"><i class="fa-regular fa-clock"></i> <span id="global-timer-text">30:00</span></div>
+    </div>
+
+    <div class="main-card" style="margin: 0 auto; border-radius: 20px; border: none; box-shadow: none; background: transparent; max-width: 850px; padding: 15px;">
+        <div id="missing-alert-box" style="width: 100%; display: flex; justify-content: center;"></div>
+        <div class="content-area" id="quiz-content" style="padding: 10px; width: 100%;"></div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 20px; width: 100%;">
+            <button id="btn-prev" class="btn" onclick="changeQ(-1)"><i class="fas fa-arrow-right"></i> السابق</button>
+            <button class="btn btn-gold" onclick="jumpToUnanswered()"><i class="fas fa-search-location"></i> الأسئلة المتروكة</button>
+            <button id="btn-next" class="btn" onclick="changeQ(1)">التالي <i class="fas fa-arrow-left"></i></button>
+        </div>
+        <div style="padding: 20px 0; text-align: center; width: 100%;">
+            <button id="finalSubmit" class="btn btn-green" onclick="confirmFinish()" style="font-size: 1.4rem; padding: 15px 40px; display:none; width: 100%;">تسليم الاختبار النهائي <i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- 6. شاشة النتيجة النهائية للطالب -->
+<div id="result-scene" class="scene" style="overflow-y: auto;">
+    <div class="main-card">
+        <div class="content-area">
+            <h2 style="font-size: 2.2rem; color: var(--success); margin-bottom: 10px;">تم إرسال الاختبار بنجاح</h2>
+            <div id="result-summary" style="font-size: 3rem; font-weight: 900; color: var(--gold); margin: 15px 0;">0 / 30</div>
+            <p style="color: #cbd5e1; font-weight: bold; margin-bottom: 20px;">تم تسجيل درجاتك، مخالفات الغش، ورقم الـ IP في شيت مستر إيهاب بنجاح.</p>
+            <button class="btn" onclick="location.reload()" style="font-size: 1.2rem; padding: 12px 35px;">خروج / إعادة</button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة الرقم السري المخفية -->
+<div id="password-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(5px);">
+    <div style="background: rgba(15, 23, 42, 0.95); padding: 30px; border-radius: 20px; border: 2px dashed var(--primary); text-align: center; box-shadow: 0 0 30px rgba(14, 165, 233, 0.3);">
+        <h3 style="color: white; margin-bottom: 20px; font-size: 1.5rem;">أدخل الرمز السري للإدارة</h3>
+        <input type="password" id="teacher-pass-input" placeholder="••••" maxlength="4" style="width: 150px; text-align: center; font-size: 2.5rem; letter-spacing: 15px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
+        <br>
+        <button class="btn" onclick="verifyPassword()" style="padding: 10px 30px;">دخول</button>
+        <button class="btn btn-danger" onclick="document.getElementById('password-modal').style.display='none'" style="padding: 10px 30px; margin-right: 10px;">إلغاء</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC_ed0XfZkBt_xRf8dN3ciM37uidGZrCt8",
+        authDomain: "mrehabgames.firebaseapp.com",
+        projectId: "mrehabgames",
+        storageBucket: "mrehabgames.firebasestorage.app",
+        messagingSenderId: "379463494744",
+        appId: "1:379463494744:web:983a5677afb5b92faf2e2d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let currentPin = "7777";
+    let studentIP = "192.168.1.10";
+    
+    // جلب الـ IP الحقيقي
+    fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => { studentIP = data.ip; })
+        .catch(e => console.log(e));
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const qrContainer = document.getElementById('qrcode-container');
+        if(qrContainer && window.QRCode) {
+            qrContainer.innerHTML = ""; 
+            new QRCode(qrContainer, {
+                text: window.location.href,
+                width: 110,
+                height: 110,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+    });
+
+    let logoClickCount = 0;
+    let logoClickTimer = null;
+    window.handleLogoClick = function() {
+        logoClickCount++;
+        if (logoClickTimer) clearTimeout(logoClickTimer);
+        logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1000);
+
+        if (logoClickCount === 5) {
+            logoClickCount = 0;
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('teacher-pass-input').value = '';
+            document.getElementById('teacher-pass-input').focus();
+        }
+    };
+
+    window.verifyPassword = function() {
+        const pass = document.getElementById('teacher-pass-input').value;
+        if (pass === '7127') {
+            document.getElementById('password-modal').style.display = 'none';
+            showScene('teacher-setup-scene');
+            setupTeacherRoom();
+        } else {
+            alert('الرمز السري غير صحيح!');
+            document.getElementById('teacher-pass-input').value = '';
+            document.getElementById('teacher-pass-input').focus();
+        }
+    };
+
+    window.showScene = function(id) {
+        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    window.goToStudentLogin = function() {
+        showScene('student-login-scene');
+    }
+
+    function setupTeacherRoom() {
+        currentPin = "7127";
+        document.getElementById('teacher-pin').innerText = currentPin;
+        set(ref(db, 'rooms/' + currentPin), { status: 'waiting', timeLimit: 1800, players: {} });
+    }
+
+    window.startExamSession = function() {
+        const timeLimit = parseInt(document.getElementById('teacher-time-select').value) || 1800;
+        update(ref(db, 'rooms/' + currentPin), { status: 'playing', timeLimit: timeLimit });
+        showScene('teacher-leaderboard-scene');
+        listenToRoomSubmissions();
+    }
+
+    window.forceEndQuiz = function() {
+        if(confirm("هل أنت متأكد من إنهاء الاختبار لجميع الطلاب؟")) {
+            update(ref(db, 'rooms/' + currentPin), { status: 'ended' });
+        }
+    }
+
+    function listenToRoomSubmissions() {
+        onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
+            const players = snapshot.val();
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '';
+            if(players) {
+                for(let name in players) {
+                    let p = players[name];
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${name}</td>
+                            <td>الصف الثاني الإعدادي</td>
+                            <td>Unit 1 Test</td>
+                            <td style="color:var(--gold); font-weight:bold;">${p.score || 0} / 30</td>
+                            <td style="color:var(--danger); font-weight:bold;">${p.cheatCount || 0}</td>
+                            <td>${p.ip || 'Local'}</td>
+                            <td>${p.finished ? '✅ انتهى' : '⏳ يحل الآن'}</td>
+                        </tr>`;
+                }
+            }
+        });
+    }
+
+    window.exportToExcel = function() {
+        get(ref(db, 'rooms/' + currentPin + '/players')).then((snapshot) => {
+            if(!snapshot.exists()) return alert("لا توجد بيانات طلاب للتصدير!");
+            let players = snapshot.val();
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "اسم الطالب,الصف,الاختبار,الدرجة النهائية,مخالفات الغش,عنوان IP,الحالة\n";
+            for(let name in players) {
+                let p = players[name];
+                csvContent += `"${name}","الصف الثاني الإعدادي","Unit 1 Test","${p.score || 0} / 30","${p.cheatCount || 0}","${p.ip || 'Local'}","${p.finished ? 'منتهي' : 'جاري'}"\n`;
+            }
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "MrEhab_Exam_Results.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
+
+    // بيانات الأسئلة والامتحان
+    const EXAM_NAME = "2Prep term1 - ordinary -Unit1 test1 full exam";
+    const GRADE_LEVEL = "الصف الثاني الإعدادي";
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwyI_20IR90uo8GbkEHjFLfeQYPxxierHZeIJBmGERZNJw6wzRd_-pXHL8N1MOhDfc/exec';
+
+    let student = { name: '', pin: '' };
+    let cheatCount = 0;
+    let isExamStarted = false;
+    let isExamFinished = false;
+    let totalSeconds = 1800;
+    let cur = 0;
+    let userAnswers = {};
+    let totalQuestionsCount = 30;
+    let examPages = [];
+
+    document.addEventListener('visibilitychange', () => { 
+        if(document.hidden && isExamStarted && !isExamFinished) { 
+            cheatCount++; 
+            alert("تحذير قوي من مستر إيهاب! تم رصد محاولة خروج وسجلت في نظام الغش."); 
+        } 
+    });
+    window.addEventListener('blur', () => { if(isExamStarted && !isExamFinished) cheatCount++; });
+    window.addEventListener('keyup', (e) => { if ((e.key === 'PrintScreen' || e.keyCode === 44) && isExamStarted && !isExamFinished) { cheatCount++; alert("محاولة تصوير الشاشة ممنوعة ورصدت!"); } });
+
+    window.proceedStudentLogin = function() {
+        student.name = document.getElementById('studentName').value.trim();
+        student.pin = document.getElementById('roomPin').value.trim();
+
+        if(student.name.split(' ').length < 2) return alert("يرجى إدخال اسمك الثلاثي بشكل صحيح.");
+        if(student.pin.length < 3) return alert("يرجى إدخال كود الغرفة الصحيح.");
+
+        currentPin = student.pin;
+        
+        // تجهيز الأسئلة
+        examPages = [
+            { type: 'normal', questions: [
+                { id: 1, q: "1. A ........ is a group of people born around the same time.", o: ["community", "family", "generation", "team"], a: "generation" },
+                { id: 2, q: "2. You should use your phone ........ . Too much screen time is an unhealthy habit.", o: ["rarely", "loudly", "wisely", "slowly"], a: "wisely" },
+                { id: 3, q: "3. The words 'agree' and 'refuse' are ........ .", o: ["synonyms", "antonyms", "prefixes", "adverbs"], a: "antonyms" },
+                { id: 4, q: "4. To get the opposite of 'healthy', we add the prefix '........'.", o: ["un-", "im-", "dis-", "in-"], a: "un-" }
+            ]},
+            { type: 'normal', questions: [
+                { id: 5, q: "5. The boys play football on Fridays in the garden. (Look!)", o: ["Look! The boys are playing football in the garden.", "Look! The boys play football.", "Look! The boys played football.", "Look! The boys will play football."], a: "Look! The boys are playing football in the garden." },
+                { id: 6, q: "6. I have arranged to meet my friends tonight. (am)", o: ["I am meeting my friends tonight.", "I am meet my friends.", "I am met my friends.", "I am meeting friends yesterday."], a: "I am meeting my friends tonight." },
+                { id: 7, q: "7. They usually travel by train. (At the moment)", o: ["At the moment, they are traveling by train.", "At the moment, they travel by train.", "At the moment, they traveled.", "At the moment, they will travel."], a: "At the moment, they are traveling by train." },
+                { id: 8, q: "8. He doesn't watch TV in the afternoon. (Now)", o: ["He isn't watching TV now.", "He doesn't watch TV now.", "He isn't watch TV now.", "He didn't watch TV now."], a: "He isn't watching TV now." }
+            ]}
+        ];
+
+        // تسجيل الطالب بالـ Firebase لحظياً
+        set(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
+            score: 0,
+            cheatCount: 0,
+            ip: studentIP,
+            finished: false
+        });
+
+        isExamStarted = true;
+        showScene('quiz-scene');
+        document.getElementById('student-info-top').innerText = `الطالب: ${student.name}`;
+        renderExamPage();
+        startGlobalTimer();
+    }
+
+    window.renderExamPage = function() {
+        const p = examPages[cur];
+        const box = document.getElementById('exam-content');
+        let h = `<div style="text-align:center; color:var(--gold); font-weight:bold; margin-bottom:15px;">الشريحة ${cur+1} من ${examPages.length}</div>`;
+
+        p.questions.forEach(q => {
+            let isHighlight = (window.highlightMissing && (!userAnswers[q.id] || userAnswers[q.id] === ""));
+            h += `<div class="q-card ${isHighlight ? 'unanswered-highlight' : ''}">
+                <div class="question-text">${q.q}</div>
+                <div class="options-grid">
+                    ${q.o.map(opt => `<div class="option-box ${userAnswers[q.id] === opt ? 'selected-opt' : ''}" onclick="selectOpt(${q.id}, \`${opt}\`)">${opt}</div>`).join('')}
+                </div>
+            </div>`;
+        });
+
+        box.innerHTML = h;
+        window.highlightMissing = false;
+
+        document.getElementById('btn-prev').style.display = (cur === 0) ? 'none' : 'flex';
+        document.getElementById('btn-next').style.display = (cur === examPages.length - 1) ? 'none' : 'flex';
+        document.getElementById('finalSubmit').style.display = (cur === examPages.length - 1) ? 'block' : 'none';
+    }
+
+    window.selectOpt = function(qId, val) {
+        userAnswers[qId] = val;
+        renderExamPage();
+    }
+
+    window.changeQ = function(dir) {
+        cur += dir;
+        renderExamPage();
+    }
+
+    window.jumpToUnanswered = function() {
+        let allQs = [];
+        examPages.forEach((pg, idx) => {
+            pg.questions.forEach(q => { allQs.push({ id: q.id, page: idx }); });
+        });
+        let missing = allQs.find(item => !userAnswers[item.id] || userAnswers[item.id] === "");
+        if(missing) {
+            cur = missing.page;
+            window.highlightMissing = true;
+            renderExamPage();
+            alert("تم نقلك للشريحة التي تحتوي على سؤال متروك!");
+        } else {
+            alert("ممتاز! لقد أجبت على جميع الأسئلة الحالية.");
+        }
+    }
+
+    window.confirmFinish = function() {
+        let solved = Object.keys(userAnswers).filter(k => userAnswers[k] && userAnswers[k] !== "").length;
+        if(solved < 8) {
+            document.getElementById('missing-alert-box').innerHTML = `
+                <div class="missing-badge">
+                    <span><i class="fas fa-exclamation-triangle"></i> تنبيه: لديك أسئلة لم تقم بحلها!</span>
+                    <button class="btn btn-gold" style="padding: 5px 10px; font-size: 0.8rem;" onclick="jumpToUnanswered()">الذهاب للمتروك</button>
+                </div>`;
+            return alert("عفواً يا بطل! لا يمكنك التسليم حتى تكتمل إجاباتك.");
+        }
+        if(confirm("هل أنت متأكد من تسليم الاختبار نهائياً؟")) finishExam();
+    }
+
+    function finishExam() {
+        isExamFinished = true;
+        let score = 0;
+        examPages.forEach(pg => {
+            pg.questions.forEach(q => {
+                if(userAnswers[q.id] && userAnswers[q.id].toLowerCase() === q.a.toLowerCase()) score++;
+            });
+        });
+
+        update(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
+            score: score,
+            cheatCount: cheatCount,
+            ip: studentIP,
+            finished: true
+        });
+
+        // إرسال البيانات للـ Google Sheet أيضاً
+        let payload = { name: student.name, roomPin: currentPin, totalScore: `${score} / 8`, cheatCount: cheatCount, studentIP: studentIP };
+        if(SCRIPT_URL !== 'YOUR_GOOGLE_SHEET_URL_HERE') {
+            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).catch(e => console.log(e));
+        }
+
+        showScene('result-scene');
+        document.getElementById('result-summary').innerText = `${score} / 8`;
+        confetti({ particleCount: 150, spread: 70 });
+    }
+
+    function startGlobalTimer() {
+        setInterval(() => {
+            if(!isExamStarted || isExamFinished) return;
+            totalSeconds--;
+            let m = Math.floor(totalSeconds / 60), s = totalSeconds % 60;
+            document.getElementById('global-timer-text').innerText = `${m}:${s < 10 ? '0' + s : s}`;
+            if(totalSeconds <= 0) finishExam();
+        }, 1000);
+    }
+
+    const canvas = document.getElementById('particles-js'); const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let pts = Array.from({length: 50}, () => ({
+        x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*3 + 1, 
+        vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5,
+        color: Math.random() > 0.5 ? "rgba(14, 165, 233, 0.4)" : "rgba(245, 158, 11, 0.4)"
+    }));
+    function animate() { 
+        ctx.clearRect(0,0,canvas.width,canvas.height); 
+        pts.forEach(p=>{
+            p.x+=p.vx; p.y+=p.vy; 
+            if(p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height) {p.x=Math.random()*canvas.width; p.y=Math.random()*canvas.height;}
+            ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+        }); 
+        requestAnimationFrame(animate); 
+    }
+    animate();
+</script>
+</body>
+</html>
