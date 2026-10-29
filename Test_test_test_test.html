@@ -147,7 +147,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
-<!-- 3. شاشة انتظار الطلاب (شكل مستطيل/مربع مع اللوجو المتحرك GIF) -->
+<!-- 3. شاشة انتظار الطلاب -->
 <div id="student-waiting-scene" class="scene">
     <div class="main-card" style="align-items: center; text-align: center;">
         <h2 style="color: var(--success); margin-bottom: 10px;">أهلاً بك يا بطل في غرفة الانتظار!</h2>
@@ -183,7 +183,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
-<!-- 5. لوحة تحكم المعلم الشاملة (مع خيار تعديل كود الغرفة وزر بدء الاختبار وأسئلة الامتحان في الأسفل للـ Smart Board) -->
+<!-- 5. لوحة تحكم المعلم الشاملة -->
 <div id="teacher-leaderboard-scene" class="scene">
     <div class="main-card" style="max-width: 950px;">
         <div class="quiz-header">
@@ -191,7 +191,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             <div class="header-text"><h1>لوحة تحكم مستر إيهاب ومتابعة التقدم والغش</h1></div>
         </div>
         <div class="content-area" style="width: 100%; overflow-x: auto;">
-            <!-- تحديد وتغيير كود الغرفة من لوحة المعلم -->
+            <!-- تعديل كود الغرفة الفعلي الفوري -->
             <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 15px; border: 1px dashed var(--primary); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap;">
                 <label style="color: var(--gold); font-weight: bold;">كود الغرفة الحالي للطلاب:</label>
                 <input type="text" id="custom-room-pin" value="7777" style="width: 120px; margin-bottom:0; padding: 8px; font-size: 1.2rem; font-weight: bold;">
@@ -199,10 +199,11 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             </div>
 
             <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
-                <button class="btn btn-green" onclick="startExamForAll()"><i class="fa-solid fa-play"></i> بدء الاختبار للجميع الآن</button>
-                <button class="btn btn-gold" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> تصدير درجات وحلول Excel</button>
-                <button class="btn btn-gold" onclick="showScene('pdf-report-scene')" style="background:var(--primary);"><i class="fa-solid fa-file-pdf"></i> مركز تقارير الـ PDF المستقل</button>
-                <button class="btn btn-danger" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> إعادة اللعبة</button>
+                <button class="btn btn-green" onclick="startExamForAll()"><i class="fa-solid fa-play"></i> بدء الاختبار للجميع</button>
+                <button class="btn btn-gold" onclick="toggleTeacherAnswers()"><i class="fa-solid fa-eye"></i> إظهار/إخفاء حلول الاختبار</button>
+                <button class="btn btn-gold" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> تصدير درجات Excel</button>
+                <button class="btn btn-gold" onclick="showScene('pdf-report-scene')" style="background:var(--primary);"><i class="fa-solid fa-file-pdf"></i> تقارير PDF</button>
+                <button class="btn btn-danger" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> إعادة الاختبار</button>
             </div>
             
             <table class="leaderboard-table">
@@ -220,16 +221,16 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 <tbody id="leaderboard-body"></tbody>
             </table>
 
-            <!-- قسم استعراض أسئلة الامتحان أسفل اللوحة للـ Smart Board -->
+            <!-- قسم استعراض أسئلة الامتحان الحقيقية أسفل اللوحة للـ Smart Board -->
             <div style="margin-top: 40px; border-top: 2px dashed rgba(255,255,255,0.2); padding-top: 20px; text-align: left; direction: ltr;">
-                <h3 style="color: var(--gold); text-align: center; margin-bottom: 20px; direction: rtl;">بنك أسئلة الاختبار للإشراف والشرح على السبورة الذكية</h3>
+                <h3 style="color: var(--gold); text-align: center; margin-bottom: 20px; direction: rtl;">أسئلة الامتحان الفعلية وخياراتها للإشراف على السبورة الذكية</h3>
                 <div id="teacher-questions-bank" style="display: flex; flex-direction: column; gap: 15px;"></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF لكل الطلاب أو الفردي مع الرسم البياني Pie Chart -->
+<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF -->
 <div id="pdf-report-scene" class="scene">
     <div class="main-card" style="max-width: 800px; text-align: center;">
         <h2 style="color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-file-pdf"></i> مركز تصدير تقارير الـ PDF للطلاب</h2>
@@ -276,7 +277,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         <p id="result-score-text" style="font-size: 4rem; font-weight: 900; color: var(--gold); margin: 15px 0;">0 / 30</p>
         <p style="color: #cbd5e1; font-weight: bold;">تم حفظ إجاباتك، تتبع التقدم، ورقم الـ IP وإرساله لشيت مستر إيهاب.</p>
         <br>
-        <button class="btn" onclick="location.reload()" style="font-size: 1.2rem; padding: 12px 35px;">خروج / إعادة</button>
+        <button class="btn" onclick="location.reload()" style="font-size: 1.2rem; padding: 12px 35px;">خروج / إعادة الاختبار</button>
     </div>
 </div>
 
@@ -291,7 +292,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
-<!-- مؤثر صوتي حصري للنتيجة النهائية -->
 <audio id="sound-result" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
 
 <script type="module">
@@ -309,7 +309,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let currentPin = "7777"; // الكود الافتراضي القابل للتعديل من لوحة المعلم
+    let currentPin = "7777";
     let studentIP = "Unknown";
     
     fetch('https://api.ipify.org?format=json')
@@ -333,7 +333,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
     window.verifyPassword = function() {
         const pass = document.getElementById('teacher-pass-input').value;
-        if (pass === '7127') { // كلمة سر الإدارة
+        if (pass === '7127') {
             document.getElementById('password-modal').style.display = 'none';
             showScene('teacher-leaderboard-scene');
             listenToSubmissions();
@@ -348,8 +348,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         let newPin = document.getElementById('custom-room-pin').value.trim();
         if(newPin.length < 2) return alert("يرجى إدخال كود غرفة صالح!");
         currentPin = newPin;
-        update(ref(db, 'rooms/' + currentPin), { roomPin: currentPin, status: 'waiting' });
-        alert(`تم تحديث كود الغرفة بنجاح إلى: ${currentPin}`);
+        set(ref(db, 'rooms/' + currentPin), { roomPin: currentPin, status: 'waiting' });
+        alert(`تم تحديث كود الغرفة الفوري بنجاح إلى: ${currentPin}`);
     }
 
     window.showScene = function(id) {
@@ -432,6 +432,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     }
 
     window.startExamForAll = function() {
+        let activePin = document.getElementById('custom-room-pin').value.trim();
+        currentPin = activePin;
         update(ref(db, 'rooms/' + currentPin), { status: 'playing' });
         alert("تم بدء الاختبار لجميع الطلاب في غرفة الانتظار بنجاح!");
     }
@@ -606,13 +608,49 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
     function getAllQuestionsFlat() {
         let list = [];
-        examPages.forEach(p => {
-            if(p.questions) p.questions.forEach(q => list.push(q));
-            else if(p.type === 'fill-blank') {
-                Object.keys(p.a).forEach(k => list.push({ id: k, q: "Fill-in Blank", a: p.a[k] }));
-            }
-        });
-        return list;
+        // إضافة أسئلة Listening
+        const listeningSlide = [
+            { id: 1, q: "1. Ali is trying to get more information about ........", o: ["Gen Z", "Gen Alpha", "old teachers", "school subjects"], a: "Gen Alpha" },
+            { id: 2, q: "2. Gen Alpha children like watching videos, creating content, and ........ with friends.", o: ["traveling", "working", "chatting", "reading"], a: "chatting" },
+            { id: 3, q: "3. Where does Mr. Ali work?", o: ["at a primary school", "at a hospital", "at a museum", "at a bank"], a: "at a primary school" },
+            { id: 4, q: "4. Why is Mr. Ali trying to get more information about Gen Alpha?", o: ["to understand them better", "to sell phones", "to play games", "to write a book"], a: "to understand them better" },
+            { id: 5, q: "5. When were Gen Alpha children born?", o: ["around 2010 and after", "in 1990", "before 2000", "in 2025"], a: "around 2010 and after" },
+            { id: 6, q: "6. What do Gen Alpha children use to show their feelings?", o: ["emojis", "letters", "drawings", "magazines"], a: "emojis" },
+            { id: 7, q: "7. What devices do they like using?", o: ["digital devices", "old radios", "typewriters", "landline phones"], a: "digital devices" }
+        ];
+        const choicesSlide = [
+            { id: 8, q: "8. A ........ is a group of people born around the same time.", o: ["community", "family", "generation", "team"], a: "generation" },
+            { id: 9, q: "9. You should use your phone ........ . Too much screen time is an unhealthy habit.", o: ["rarely", "loudly", "wisely", "slowly"], a: "wisely" },
+            { id: 10, q: "10. The words 'agree' and 'refuse' are ........ .", o: ["synonyms", "antonyms", "prefixes", "adverbs"], a: "antonyms" },
+            { id: 11, q: "11. To get the opposite of 'healthy', we add the prefix '........'.", o: ["un-", "im-", "dis-", "in-"], a: "un-" }
+        ];
+        const fillBlanksMap = { 12: "trends", 13: "identity", 14: "balance", 15: "permission" };
+        const passageSlide = [
+            { id: 16, q: "12. Gen Z and Gen Alpha both use ........ .", o: ["newspapers", "letters", "smartphones", "radios"], a: "smartphones" },
+            { id: 17, q: "13. The underlined word 'connect' is the opposite of '........'.", o: ["link", "join", "disconnect", "contact"], a: "disconnect" },
+            { id: 18, q: "14. What does the underlined pronoun 'they' refer to?", o: ["Gen Z and Gen Alpha", "smartphones", "videos", "games"], a: "Gen Z and Gen Alpha" },
+            { id: 19, q: "15. What is the passage mainly about?", o: ["Young generations in a digital world", "How to play video games", "The history of radios", "How to write letters"], a: "Young generations in a digital world" },
+            { id: 20, q: "16. How does social media help young generations?", o: ["It helps them connect", "It makes them sleep", "It stops communication", "It wastes time"], a: "It helps them connect" },
+            { id: 21, q: "17. How can technology make the world a better place?", o: ["By sharing ideas and working together", "By breaking things", "By stopping work", "By isolating people"], a: "By sharing ideas and working together" }
+        ];
+        const rewriteSlide = [
+            { id: 22, q: "18. The boys play football on Fridays in the garden. (Look!)", o: ["Look! The boys are playing football in the garden.", "Look! The boys play football.", "Look! The boys played football.", "Look! The boys will play football."], a: "Look! The boys are playing football in the garden." },
+            { id: 23, q: "19. I have arranged to meet my friends tonight. (am)", o: ["I am meeting my friends tonight.", "I am meet my friends.", "I am met my friends.", "I am meeting friends yesterday."], a: "I am meeting my friends tonight." },
+            { id: 24, q: "20. They usually travel by train. (At the moment)", o: ["At the moment, they are traveling by train.", "At the moment, they travel by train.", "At the moment, they traveled.", "At the moment, they will travel."], a: "At the moment, they are traveling by train." },
+            { id: 25, q: "21. He doesn't watch TV in the afternoon. (Now)", o: ["He isn't watching TV now.", "He doesn't watch TV now.", "He isn't watch TV now.", "He didn't watch TV now."], a: "He isn't watching TV now." }
+        ];
+        const dialogueSlide = [
+            { id: 26, q: "22. Rose: What are you doing now, Farah? Farah: I am reading an ........", o: ["ebook", "magazine", "newspaper", "letter"], a: "ebook" },
+            { id: 27, q: "23. Rose: An ebook? What is ........ about?", o: ["it", "they", "he", "she"], a: "it" },
+            { id: 28, q: "24. Farah: It's about digital devices. Rose: I ........ with you.", o: ["agree", "refuse", "disagree", "argue"], a: "agree" },
+            { id: 29, q: "25. Rose: ........ often do you read them?", o: ["How", "What", "Where", "When"], a: "How" },
+            { id: 30, q: "26. Farah: I often read them before bedtime. Rose: Good job.", o: ["Good job", "Bad habit", "I hate reading", "No"], a: "Good job" }
+        ];
+
+        let combined = [...listeningSlide, ...choicesSlide];
+        Object.keys(fillBlanksMap).forEach(k => combined.push({ id: k, q: `Fill-in Blank (${k})`, a: fillBlanksMap[k] }));
+        combined = combined.concat([...passageSlide, ...rewriteSlide, ...dialogueSlide]);
+        return combined;
     }
 
     window.changeQ = function(dir) {
@@ -717,15 +755,29 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         });
     }
 
+    // زر إظهار/إخفاء حلول الاختبار للمعلم
+    let teacherAnswersVisible = false;
+    window.toggleTeacherAnswers = function() {
+        teacherAnswersVisible = !teacherAnswersVisible;
+        renderTeacherQuestionsBank();
+        alert(teacherAnswersVisible ? "تم إظهار الإجابات النموذجية في بنك الأسئلة بالأسفل" : "تم إخفاء الإجابات النموذجية");
+    }
+
+    // استعراض بنك الأسئلة الحقيقي مع إمكانية عرض الإجابة الصحيحة للمعلم
     function renderTeacherQuestionsBank() {
         const bankContainer = document.getElementById('teacher-questions-bank');
         bankContainer.innerHTML = '';
         let allQs = getAllQuestionsFlat();
         allQs.forEach((q, idx) => {
+            let answerStyle = teacherAnswersVisible ? "color: var(--success); font-weight: bold;" : "color: #94a3b8; font-style: italic;";
+            let answerText = teacherAnswersVisible ? `الإجابة الصحيحة: ${q.a}` : "الإجابة الصحيحة: (اضغط زر إظهار حلول الاختبار بالأعلى لكشفها)";
+            let optionsStr = q.o ? `<div style="margin-top:5px; color:#cbd5e1; font-size:0.9rem;">الخيارات: ${q.o.join(' | ')}</div>` : "";
+
             bankContainer.innerHTML += `
                 <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                    <div style="font-weight: bold; color: #fff; margin-bottom: 8px;">Q${idx+1}: ${q.q}</div>
-                    <div style="color: var(--success); font-weight: bold;">الإجابة الصحيحة: ${q.a}</div>
+                    <div style="font-weight: bold; color: #fff; margin-bottom: 5px;">Q${idx+1}: ${q.q}</div>
+                    ${optionsStr}
+                    <div style="margin-top: 8px; ${answerStyle}">${answerText}</div>
                 </div>`;
         });
     }
