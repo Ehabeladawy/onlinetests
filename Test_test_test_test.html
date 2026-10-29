@@ -65,7 +65,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 .opt:hover { background: rgba(255,255,255,0.1); }
 .opt.selected { border-color: var(--primary); background: rgba(14, 165, 233, 0.25); color: var(--primary); box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
 
-/* ألوان الإجابات في المراجعة (للطالب والمعلم) */
 .opt.correct-ans { border-color: var(--success) !important; background: rgba(16, 185, 129, 0.3) !important; color: #fff !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5) !important; }
 .opt.wrong-ans { border-color: var(--danger) !important; background: rgba(239, 68, 68, 0.3) !important; color: #fff !important; text-decoration: line-through; }
 .opt.faded { opacity: 0.4; }
@@ -82,6 +81,10 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 .leaderboard-table th, .leaderboard-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.95rem; }
 .leaderboard-table th { color: var(--primary); font-weight: 900; }
+
+/* إطارات منقطة لنتيجة الطالب */
+.dashed-box { border: 2px dashed var(--gold); padding: 20px; border-radius: 20px; background: rgba(0,0,0,0.4); margin-bottom: 20px; width: 100%; max-width: 500px; margin: 0 auto 20px auto;}
+.dashed-box-btn { border: 2px dashed var(--primary); padding: 15px; border-radius: 20px; background: rgba(14, 165, 233, 0.1); width: 100%; max-width: 500px; margin: 0 auto 25px auto;}
 </style>
 </head>
 <body oncontextmenu="return false;">
@@ -91,7 +94,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 <!-- 1. واجهة الدخول الرئيسية -->
 <div id="role-scene" class="scene active">
     <div class="main-card" style="align-items: center; text-align: center;">
-        <div class="logo-container-large" onclick="handleLogoClick()"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" class="logo-img" alt="Logo"></div>
+        <div class="logo-container-large" onclick="handleLogoClick()"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" crossorigin="anonymous" class="logo-img" alt="Logo"></div>
         <div class="header-text" style="width: 100%; margin-top: 15px;">
             <h1>2Prep Term 1 - Unit 1 Full Exam</h1>
             <span class="animated-name">إعداد وبرمجة / مستر إيهاب العدوي</span>
@@ -110,7 +113,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 <!-- 2. شاشة تسجيل دخول الطالب -->
 <div id="student-login-scene" class="scene">
     <div class="main-card" style="align-items: center; text-align: center;">
-        <div class="logo-container" onclick="showScene('role-scene')"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img" alt="Logo"></div>
+        <div class="logo-container" onclick="showScene('role-scene')"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" crossorigin="anonymous" class="logo-img" alt="Logo"></div>
         <h2 style="color: var(--primary); margin: 15px 0;">تسجيل دخول الطالب</h2>
         <input type="text" id="studentName" placeholder="اكتب اسمك الثلاثي أو الرباعي هنا..." autocomplete="off">
         <input type="text" id="roomPin" placeholder="أدخل كود الدخول (افتراضي 0000)..." autocomplete="off">
@@ -133,7 +136,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
-<!-- 4. شاشة الاختبار الرئيسية (شريحة واحدة متصلة) -->
+<!-- 4. شاشة الاختبار الرئيسية -->
 <div id="exam-scene" class="scene" style="padding: 0;">
     <div class="sticky-timer">
         <div id="info-display" style="font-weight: bold; font-size: 1.1rem;">الطالب: ---</div>
@@ -149,7 +152,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 <div id="teacher-leaderboard-scene" class="scene">
     <div class="main-card" style="max-width: 950px;">
         <div class="quiz-header">
-            <div class="logo-container" style="width: 50px; height: 50px;"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img" alt="Logo"></div>
+            <div class="logo-container" style="width: 50px; height: 50px;"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" crossorigin="anonymous" class="logo-img" alt="Logo"></div>
             <div class="header-text"><h1>لوحة تحكم مستر إيهاب ومتابعة التقدم</h1></div>
         </div>
         <div class="content-area" style="width: 100%; overflow-x: auto;">
@@ -164,7 +167,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 <button class="btn btn-danger" onclick="forceEndExamForAll()"><i class="fa-solid fa-stop-circle"></i> إنهاء الاختبار للجميع</button>
                 <button class="btn btn-gold" onclick="toggleTeacherAnswers()"><i class="fa-solid fa-eye"></i> إظهار/إخفاء الحلول</button>
                 <button class="btn btn-gold" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> تصدير درجات Excel</button>
-                <button class="btn btn-gold" onclick="showScene('pdf-report-scene')" style="background:var(--primary);"><i class="fa-solid fa-file-pdf"></i> تقارير PDF</button>
+                <button class="btn btn-gold" onclick="showScene('teacher-pdf-hub')" style="background:var(--primary);"><i class="fa-solid fa-file-pdf"></i> تقارير PDF</button>
                 <button class="btn btn-danger" onclick="closeTeacherSession()" style="background: #7f1d1d; border: 1px solid #f87171;"><i class="fa-solid fa-lock"></i> إغلاق لوحة المعلم</button>
             </div>
             
@@ -175,7 +178,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                         <th>الصف</th>
                         <th>الدرجة</th>
                         <th>التقدم (محلول/30)</th>
-                        <th>مخالفات الغش</th>
+                        <th>محاولات الخروج</th>
                         <th>عنوان IP</th>
                         <th>الحالة</th>
                     </tr>
@@ -192,8 +195,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
-<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF -->
-<div id="pdf-report-scene" class="scene">
+<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF من حساب المعلم -->
+<div id="teacher-pdf-hub" class="scene">
     <div class="main-card" style="max-width: 800px; text-align: center;">
         <h2 style="color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-file-pdf"></i> مركز تصدير تقارير الـ PDF للطلاب</h2>
         <div style="margin-bottom: 25px;">
@@ -212,31 +215,44 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 <div id="result-scene" class="scene" style="text-align:center;">
     <div class="main-card" style="align-items: center;">
         <h1 style="color: var(--success); margin-bottom: 10px; font-size: 2.3rem;">تم تسليم الاختبار بنجاح</h1>
-        <p id="result-score-text" style="font-size: 4rem; font-weight: 900; color: var(--gold); margin: 15px 0;">0 / 30</p>
-        <button class="btn btn-gold" onclick="downloadStudentSelfPDF()" style="font-size: 1.2rem; padding: 12px 30px; margin-bottom: 25px;"><i class="fas fa-file-pdf"></i> تحميل نتيجة الاختبار PDF</button>
+        
+        <div class="dashed-box">
+            <h3 style="color: white; margin-bottom: 10px;">نتيجتك النهائية</h3>
+            <p id="result-score-text" style="font-size: 4rem; font-weight: 900; color: var(--gold); margin: 0;">0 / 30</p>
+        </div>
+
+        <div class="dashed-box-btn">
+            <p style="color: #cbd5e1; font-weight: bold; margin-bottom: 15px;">احتفظ بنسخة من حلك ونتيجتك وإرسالها لولي الأمر</p>
+            <button class="btn btn-green" onclick="downloadStudentSelfPDF()" style="font-size: 1.2rem; padding: 12px 30px; width: 100%;"><i class="fas fa-file-pdf"></i> تحميل نتيجة الاختبار PDF</button>
+        </div>
         
         <h3 style="color: var(--primary); margin-bottom: 15px; text-align: left; width: 100%; direction: ltr;">Your Detailed Review:</h3>
         <div id="student-review-area" style="width: 100%; display: flex; flex-direction: column;"></div>
 
-        <button class="btn" onclick="location.reload()" style="font-size: 1.2rem; padding: 12px 35px; margin-top:20px;">خروج / إعادة الاختبار</button>
+        <button class="btn" onclick="location.reload()" style="font-size: 1.2rem; padding: 12px 35px; margin-top:20px;">خروج نهائي</button>
     </div>
 </div>
 
-<!-- 8. الحاوية المخفية المستخدمة لتوليد الـ PDF بالخلفية السوداء المطابقة -->
-<div style="display:none;">
-    <div id="pdf-export-template" style="background: #0f172a; color: #f8fafc; padding: 35px; border-radius: 20px; text-align: left; direction: ltr; width: 800px; margin: 0 auto;">
+<!-- 8. الحاوية المخفية المستخدمة لتوليد الـ PDF بالخلفية السوداء المطابقة تماماً لضمان عدم القص على الموبايل -->
+<div style="position: absolute; left: -9999px; top: -9999px; width: 800px; height: 10px; overflow: hidden; pointer-events: none;">
+    <div id="pdf-real-template" style="width: 800px; background: #0f172a; color: #f8fafc; padding: 40px; text-align: left; direction: ltr; box-sizing: border-box;">
         <div style="text-align: center; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 15px; margin-bottom: 20px;">
-            <img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid #10b981; object-fit: cover; margin-bottom: 10px;" alt="Logo">
-            <h2 style="color: #ffffff; margin-bottom: 5px;">مستر إيهاب العدوي - تقرير الاختبار</h2>
+            <img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" crossorigin="anonymous" style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid #10b981; object-fit: cover; margin-bottom: 10px;" alt="Logo">
+            <h2 style="color: #ffffff; margin-bottom: 5px;">مستر إيهاب العدوي - تقرير أداء الطالب</h2>
             <h4 id="pdf-tpl-name" style="color: #38bdf8;">اسم الطالب: ---</h4>
             <p style="color: #94a3b8; font-size: 0.9rem;">الصف الثاني الإعدادي | Unit 1 Full Exam</p>
+            <p style="color: #cbd5e1; font-size: 1rem; margin-top: 15px; font-weight: bold; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; direction: rtl;">
+                ( تنبيه: الإجابات الملونة باللون الأخضر هي الإجابة الصحيحة - والملونة باللون الأحمر هي إجابات الطالب الخاطئة )
+            </p>
         </div>
-        <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 25px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px;">
+
+        <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 25px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; border: 2px dashed #ffffff;">
             <div id="pdf-tpl-pie"></div>
             <div style="text-align: right; direction: rtl;">
                 <h3 id="pdf-tpl-score" style="color: #10b981; font-size: 1.8rem; margin-bottom: 5px;">الدرجة: 0 / 30</h3>
-                <p id="pdf-tpl-percentage" style="font-weight: bold; color: #cbd5e1;">النسبة المئوية: 0%</p>
-                <p id="pdf-tpl-cheat" style="color: #ef4444; font-size: 0.9rem;">مخالفات الغش: 0</p>
+                <p id="pdf-tpl-percentage" style="font-weight: bold; color: #cbd5e1; margin-bottom: 5px;">النسبة المئوية: 0%</p>
+                <p id="pdf-tpl-cheat" style="color: #ef4444; font-size: 0.9rem; margin-bottom: 5px;">محاولات الطالب الخروج من الامتحان: 0</p>
+                <p id="pdf-tpl-time" style="color: #38bdf8; font-size: 0.9rem; font-weight: bold;">الوقت الذي استغرقه الطالب: 00:00</p>
             </div>
         </div>
         <h3 style="color: #f8fafc; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">مراجعة الأسئلة والإجابات التفصيلية:</h3>
@@ -271,6 +287,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
     let currentPin = "0000"; 
     let studentIP = "Unknown";
+    let examStartTime = 0; // لحساب الوقت المستغرق
     
     fetch('https://api.ipify.org?format=json')
         .then(res => res.json())
@@ -354,7 +371,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     let utterance = new SpeechSynthesisUtterance(listeningTextStr);
     utterance.lang = 'en-US'; utterance.rate = 0.9;
     
-    // ربط أزرار الصوت بمشغل الـ SpeechSynthesis بشكل مباشر في الشاشة
     window.playAudio = function() { if(synth.paused) { synth.resume(); } else { synth.cancel(); synth.speak(utterance); } }
     window.pauseAudio = function() { synth.pause(); }
     window.stopAudio = function() { synth.cancel(); }
@@ -377,7 +393,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         let qList = [];
         let qId = 1;
         
-        // 1. Listening
         qList.push({ id: qId++, section: "Listen and choose the correct answer:", q: "1. Ali is trying to get more information about ........", o: ["Gen Z", "Gen Alpha", "old teachers", "school subjects"], a: "Gen Alpha" });
         qList.push({ id: qId++, q: "2. Gen Alpha children like watching videos, creating content, and ........ with friends.", o: ["traveling", "working", "chatting", "reading"], a: "chatting" });
         qList.push({ id: qId++, q: "3. Where does Mr. Ali work?", o: ["at a primary school", "at a hospital", "at a museum", "at a bank"], a: "at a primary school" });
@@ -386,20 +401,16 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         qList.push({ id: qId++, q: "6. What do Gen Alpha children use to show their feelings?", o: ["emojis", "letters", "drawings", "magazines"], a: "emojis" });
         qList.push({ id: qId++, q: "7. What devices do they like using?", o: ["digital devices", "old radios", "typewriters", "landline phones"], a: "digital devices" });
 
-        // 2. Choose the right answer
         qList.push({ id: qId++, section: "Choose the correct answer from a, b, c or d:", q: "8. A ........ is a group of people born around the same time.", o: ["community", "family", "generation", "team"], a: "generation" });
         qList.push({ id: qId++, q: "9. You should use your phone ........ . Too much screen time is an unhealthy habit.", o: ["rarely", "loudly", "wisely", "slowly"], a: "wisely" });
         qList.push({ id: qId++, q: "10. The words 'agree' and 'refuse' are ........ .", o: ["synonyms", "antonyms", "prefixes", "adverbs"], a: "antonyms" });
         qList.push({ id: qId++, q: "11. To get the opposite of 'healthy', we add the prefix '........'.", o: ["un-", "im-", "dis-", "in-"], a: "un-" });
 
-        // 3. Fill in the gaps (Drag and Drop mapping)
-        // IDs: 12, 13, 14, 15 will be handled specially in rendering.
         qList.push({ id: qId++, type: 'gap', section: "Read and complete the text with words from the following list:", a: "trends" });
         qList.push({ id: qId++, type: 'gap', a: "identity" });
         qList.push({ id: qId++, type: 'gap', a: "balance" });
         qList.push({ id: qId++, type: 'gap', a: "permission" });
 
-        // 4. Reading Comprehension
         qList.push({ id: qId++, section: "Read the following, then answer the questions:", q: "12. Gen Z and Gen Alpha both use ........ .", o: ["newspapers", "letters", "smartphones", "radios"], a: "smartphones" });
         qList.push({ id: qId++, q: "13. The underlined word 'connect' is the opposite of '........'.", o: ["link", "join", "disconnect", "contact"], a: "disconnect" });
         qList.push({ id: qId++, q: "14. What does the underlined pronoun 'they' refer to?", o: ["Gen Z and Gen Alpha", "smartphones", "videos", "games"], a: "Gen Z and Gen Alpha" });
@@ -407,13 +418,11 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         qList.push({ id: qId++, q: "16. How does social media help young generations?", o: ["It helps them connect", "It makes them sleep", "It stops communication", "It wastes time"], a: "It helps them connect" });
         qList.push({ id: qId++, q: "17. How can technology make the world a better place?", o: ["By sharing ideas and working together", "By breaking things", "By stopping work", "By isolating people"], a: "By sharing ideas and working together" });
 
-        // 5. Rewrite
         qList.push({ id: qId++, section: "Rewrite the following sentences correctly:", q: "18. The boys play football on Fridays in the garden. (Look!)", o: ["Look! The boys are playing football in the garden.", "Look! The boys play football.", "Look! The boys played football.", "Look! The boys will play football."], a: "Look! The boys are playing football in the garden." });
         qList.push({ id: qId++, q: "19. I have arranged to meet my friends tonight. (am)", o: ["I am meeting my friends tonight.", "I am meet my friends.", "I am met my friends.", "I am meeting friends yesterday."], a: "I am meeting my friends tonight." });
         qList.push({ id: qId++, q: "20. They usually travel by train. (At the moment)", o: ["At the moment, they are traveling by train.", "At the moment, they travel by train.", "At the moment, they traveled.", "At the moment, they will travel."], a: "At the moment, they are traveling by train." });
         qList.push({ id: qId++, q: "21. He doesn't watch TV in the afternoon. (Now)", o: ["He isn't watching TV now.", "He doesn't watch TV now.", "He isn't watch TV now.", "He didn't watch TV now."], a: "He isn't watching TV now." });
 
-        // 6. Dialogue
         qList.push({ id: qId++, section: "Complete the following dialogue:", q: "22. Rose: What are you doing now, Farah? Farah: I am reading an ........", o: ["ebook", "magazine", "newspaper", "letter"], a: "ebook" });
         qList.push({ id: qId++, q: "23. Rose: An ebook? What is ........ about?", o: ["it", "they", "he", "she"], a: "it" });
         qList.push({ id: qId++, q: "24. Farah: It's about digital devices. Rose: I ........ with you.", o: ["agree", "refuse", "disagree", "argue"], a: "agree" });
@@ -437,7 +446,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         if(student.pin !== activePin) return alert("كود الدخول غير صحيح.");
         currentPin = activePin;
 
-        set(ref(db, 'rooms/' + currentPin + '/players/' + student.name), { score: 0, cheatCount: 0, ip: studentIP, finished: false, progress: "0/30" });
+        set(ref(db, 'rooms/' + currentPin + '/players/' + student.name), { score: 0, cheatCount: 0, ip: studentIP, finished: false, progress: "0/30", timeTaken: "0:00" });
         showScene('student-waiting-scene');
         
         onValue(ref(db, 'rooms/' + currentPin), (snapshot) => {
@@ -461,6 +470,11 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     window.startExam = function() {
         let savedAns = localStorage.getItem('mrehab_ans_' + student.name);
         if(savedAns) { try { userAnswers = JSON.parse(savedAns); } catch(e){} }
+        
+        // حفظ وقت بداية الامتحان للمرة الأولى فقط
+        let stTime = localStorage.getItem('mrehab_start_time_' + student.name);
+        if(stTime) { examStartTime = parseInt(stTime); }
+        else { examStartTime = Date.now(); localStorage.setItem('mrehab_start_time_' + student.name, examStartTime.toString()); }
 
         window.examQuestionsList = getFullQuestionsList();
         // تطبيق Random على الخيارات فقط
@@ -534,33 +548,43 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
     window.confirmFinish = function() { finishExam(); }
 
+    function formatTime(seconds) {
+        let m = Math.floor(seconds / 60); let s = seconds % 60;
+        return `${m}:${s < 10 ? '0'+s : s}`;
+    }
+
     function finishExam() {
+        if(isExamFinished) return;
         isExamFinished = true; stopAudio();
         let score = 0; let allQs = getFullQuestionsList();
         
+        let timeTakenSec = Math.floor((Date.now() - examStartTime) / 1000);
+        let timeTakenStr = formatTime(timeTakenSec);
+
         allQs.forEach(q => {
             let ans = (userAnswers[q.id] || "").toString().trim();
             if(ans.toLowerCase() === q.a.toString().trim().toLowerCase()) score++;
         });
 
-        update(ref(db, 'rooms/' + currentPin + '/players/' + student.name), { score: score, cheatCount: cheatCount, progress: "30/30", finished: true, answersDetail: userAnswers });
+        update(ref(db, 'rooms/' + currentPin + '/players/' + student.name), { score: score, cheatCount: cheatCount, progress: "30/30", finished: true, answersDetail: userAnswers, timeTaken: timeTakenStr });
         
-        // تجهيز بيانات شيت الاكسيل حسب الأعمدة المحددة
+        // إرسال لشيت الإكسيل (تطابق من 1 إلى 30)
         let payload = { name: student.name, roomPin: currentPin, examName: EXAM_NAME, totalScore: `${score} / 30`, cheatCount: cheatCount, studentIP: studentIP };
-        allQs.forEach(q => { payload["Q" + q.id] = { val: userAnswers[q.id] || "لم يُجب" }; });
+        for(let i=1; i<=30; i++) { payload["Q"+i] = { val: userAnswers[i] || "لم يُجب" }; } // Assuming IDs map 1 to 30
         fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).catch(e => console.log(e));
 
         localStorage.removeItem('mrehab_ans_' + student.name);
+        localStorage.removeItem('mrehab_start_time_' + student.name);
         showScene('result-scene');
         document.getElementById('result-score-text').innerText = `${score} / 30`;
 
-        // رسم مراجعة الطالب الملونة
+        // رسم مراجعة الطالب الملونة تحت النتيجة
         let reviewHtml = "";
         allQs.forEach(q => {
             if(q.type === 'gap') return; 
             let stAns = userAnswers[q.id] || "";
             reviewHtml += `<div class="q-card" style="margin-bottom:15px; padding:15px;">
-                <div style="font-weight:bold; margin-bottom:10px;">${q.q}</div>
+                <div style="font-weight:bold; margin-bottom:10px; color:#fff;">${q.q}</div>
                 <div class="options-grid">
                     ${q.o.map(opt => {
                         let isCorrectOpt = (opt.toLowerCase() === q.a.toLowerCase());
@@ -631,7 +655,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             for(let name in players) {
                 let p = players[name];
                 let row = `"${name}","${GRADE_LEVEL}","${p.score||0}","${p.cheatCount||0}","${p.ip||'Local'}"`;
-                allQs.forEach(q => { let ans = p.answersDetail ? p.answersDetail[q.id] || '' : ''; row += `,"${ans}"`; });
+                for(let i=1; i<=30; i++) { let ans = p.answersDetail ? p.answersDetail[i] || '' : ''; row += `,"${ans}"`; }
                 csv += row + "\n";
             }
             let link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "MrEhab_Results.csv"); document.body.appendChild(link); link.click(); document.body.removeChild(link);
@@ -639,9 +663,10 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     }
 
     window.downloadStudentSelfPDF = function() {
-        buildPDFTemplate(student.name, studentIP, cheatCount, userAnswers);
-        let element = document.getElementById('pdf-export-template');
-        html2pdf().from(element).set({ margin: 10, filename: `MrEhab_MyResult_${student.name}.pdf`, html2canvas: { scale: 2 }, jsPDF: { format: 'a4', orientation: 'portrait' } }).save();
+        let pData = window.allPlayersData ? window.allPlayersData[student.name] : { score:0, cheatCount:0, ip:studentIP, timeTaken: '0:00' };
+        buildPDFTemplate(student.name, studentIP, pData.cheatCount||0, userAnswers, pData.timeTaken || '0:00');
+        let element = document.getElementById('pdf-real-template');
+        html2pdf().from(element).set({ margin: 10, filename: `MrEhab_MyResult_${student.name}.pdf`, html2canvas: { scale: 2, useCORS: true }, jsPDF: { format: 'a4', orientation: 'portrait' } }).save();
     }
 
     window.generateStudentPDF = async function() {
@@ -650,20 +675,20 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         if(val === "EXPORT_ALL_ZIP") {
             for(let name in window.allPlayersData) {
                 let p = window.allPlayersData[name];
-                buildPDFTemplate(name, p.ip, p.cheatCount, p.answersDetail || {});
-                let element = document.getElementById('pdf-export-template');
-                await html2pdf().from(element).set({ margin: 10, filename: `MrEhab_Report_${name}.pdf`, html2canvas: { scale: 2 }, jsPDF: { format: 'a4', orientation: 'portrait' } }).save();
+                buildPDFTemplate(name, p.ip, p.cheatCount, p.answersDetail || {}, p.timeTaken || '0:00');
+                let element = document.getElementById('pdf-real-template');
+                await html2pdf().from(element).set({ margin: 10, filename: `MrEhab_Report_${name}.pdf`, html2canvas: { scale: 2, useCORS: true }, jsPDF: { format: 'a4', orientation: 'portrait' } }).save();
             }
             alert("تم التصدير الشامل بنجاح!");
         } else {
             let p = window.allPlayersData[val];
-            buildPDFTemplate(val, p.ip, p.cheatCount, p.answersDetail || {});
-            let element = document.getElementById('pdf-export-template');
-            html2pdf().from(element).set({ margin: 10, filename: `MrEhab_Report_${val}.pdf`, html2canvas: { scale: 2 }, jsPDF: { format: 'a4', orientation: 'portrait' } }).save();
+            buildPDFTemplate(val, p.ip, p.cheatCount, p.answersDetail || {}, p.timeTaken || '0:00');
+            let element = document.getElementById('pdf-real-template');
+            html2pdf().from(element).set({ margin: 10, filename: `MrEhab_Report_${val}.pdf`, html2canvas: { scale: 2, useCORS: true }, jsPDF: { format: 'a4', orientation: 'portrait' } }).save();
         }
     }
 
-    function buildPDFTemplate(name, ip, cheat, ansMap) {
+    function buildPDFTemplate(name, ip, cheat, ansMap, timeTaken) {
         let score = 0; let allQs = getFullQuestionsList();
         allQs.forEach(q => { if((ansMap[q.id]||"").toString().trim().toLowerCase() === q.a.toLowerCase()) score++; });
         let percentage = Math.round((score / 30) * 100);
@@ -671,7 +696,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         document.getElementById('pdf-tpl-name').innerText = `اسم الطالب: ${name}`;
         document.getElementById('pdf-tpl-score').innerText = `الدرجة: ${score} / 30`;
         document.getElementById('pdf-tpl-percentage').innerText = `النسبة المئوية: ${percentage}%`;
-        document.getElementById('pdf-tpl-cheat').innerText = `مخالفات الغش: ${cheat}`;
+        document.getElementById('pdf-tpl-cheat').innerText = `محاولات الطالب الخروج من الامتحان: ${cheat}`;
+        document.getElementById('pdf-tpl-time').innerText = `الوقت الذي استغرقه الطالب: ${timeTaken}`;
 
         let svgPie = `<svg width="120" height="120" viewBox="0 0 36 36" style="transform: rotate(-90deg);"><path stroke="#334155" stroke-width="3.8" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /><path stroke="${percentage >= 50 ? '#10b981' : '#ef4444'}" stroke-dasharray="${percentage}, 100" stroke-width="3.8" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /><text x="18" y="20.3" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="bold" transform="rotate(90 18 18)">${percentage}%</text></svg>`;
         document.getElementById('pdf-tpl-pie').innerHTML = svgPie;
