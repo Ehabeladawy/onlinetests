@@ -8,6 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- مكتبة توليد ملفات الـ PDF للطلاب -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 :root {
@@ -31,13 +33,13 @@ body { background: var(--bg-dark); min-height: 100vh; padding: 10px; color: whit
     width: 100%; max-width: 900px; border-radius: 30px; 
     border: 2px dashed rgba(14, 165, 233, 0.4); 
     box-shadow: 0 0 35px rgba(255, 255, 255, 0.1), 0 0 50px rgba(14, 165, 233, 0.2); 
-    overflow: hidden; position: relative; margin: 0 auto; display: flex; flex-direction: column; padding: 20px;
+    overflow: hidden; position: relative; margin: 0 auto; display: flex; flex-direction: column; padding: 25px;
 }
 
 .quiz-header { padding: 15px 20px; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: space-between; border-bottom: 2px dashed rgba(255,255,255,0.1); flex-wrap: wrap; gap: 15px; border-radius: 20px; margin-bottom: 20px;}
 .logo-container, .logo-container-large { border-radius: 50%; border: 3px solid var(--primary); overflow: hidden; background: #000; box-shadow: 0 0 20px var(--primary); cursor: pointer; flex-shrink: 0; margin: 0 auto; }
 .logo-container { width: 75px; height: 75px; }
-.logo-container-large { width: 130px; height: 130px; }
+.logo-container-large { width: 140px; height: 140px; }
 .logo-img { width: 100%; height: 100%; object-fit: cover; }
 
 .header-text { text-align: center; flex: 1;}
@@ -85,7 +87,11 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
 .passage-box { background: rgba(99, 102, 241, 0.1); padding: 25px; border-radius: 15px; border: 1px solid var(--primary); line-height: 2; font-size: 1.1rem; direction: ltr; text-align: left; margin-bottom: 25px; color: #fff; }
 .target-word { color: #ff4757; text-decoration: underline; font-weight: 900; background: rgba(255, 71, 87, 0.1); padding: 0 5px; border-radius: 4px; }
-.blank-input { width: 120px; padding: 5px 10px; margin: 0 5px; border: 2px dashed var(--primary); background: rgba(0,0,0,0.5); color: var(--success); font-weight: bold; text-align: center; border-radius: 8px; outline: none; font-size: 1.1rem; }
+.blank-input { width: 130px; padding: 6px 10px; margin: 0 5px; border: 2px dashed var(--primary); background: rgba(0,0,0,0.5); color: var(--success); font-weight: bold; text-align: center; border-radius: 8px; outline: none; font-size: 1.1rem; }
+
+.word-bank { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; border: 1px dashed rgba(255,255,255,0.2); }
+.drag-word { background: var(--primary); padding: 8px 16px; border-radius: 10px; cursor: pointer; font-weight: bold; user-select: none; transition: 0.3s; border: 2px solid transparent; }
+.drag-word.active-word { border-color: var(--gold); transform: scale(1.08); background: var(--gold); color: #000; }
 
 .sticky-timer {
     position: sticky; top: 0; z-index: 100;
@@ -103,7 +109,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
 <canvas id="particles-js"></canvas>
 
-<!-- 1. شاشة الواجهة الرئيسية للألعاب والتحدي -->
+<!-- 1. واجهة التحدي والاختبار -->
 <div id="role-scene" class="scene active">
     <div class="main-card" style="align-items: center; text-align: center;">
         <div class="logo-container-large" onclick="handleLogoClick()"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" class="logo-img" alt="Logo"></div>
@@ -113,11 +119,11 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         </div>
 
         <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: 15px; border: 1px dashed rgba(14, 165, 233, 0.5); width: 100%; max-width: 500px; text-align: right; margin: 20px 0;">
-            <h3 style="text-align: center; color: var(--primary); font-weight: 900; margin-bottom: 12px;">تعليمات الاختبار والتحصين ضد الغش</h3>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>ادخل اسمك الثلاثي وكود الغرفة المقدم من مستر إيهاب</p>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>يتم تسجيل عدد مرات الخروج وتصغير الشاشة (العمود السادس للغش)</p>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>يتم رصد عنوان الـ IP لكل جهاز لمنع التلاعب</p>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>لا يمكن التسليم النهائي إلا بعد إجابة جميع الأسئلة الـ 30</p>
+            <h3 style="text-align: center; color: var(--primary); font-weight: 900; margin-bottom: 12px;">تعليمات الاختبار المعتمد</h3>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>أدخل اسمك الثلاثي وكود الدخول الثابت (<b style="color:var(--gold);">9999</b>)</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>يتم رصد مخالفات الغش وتتبع التقدم (صح/خطأ) في لوحة المعلم</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>حفظ تلقائي عند التحديث (Refresh) لضمان عدم ضياع إجاباتك</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>تصدير تقرير PDF مفصل مع رسم بياني (Pie Chart) بعد الانتهاء</p>
         </div>
 
         <button class="btn" onclick="showScene('student-login-scene')" style="font-size: 1.2rem; padding: 15px 40px;">🚀 دخول الاختبار الرسمي</button>
@@ -130,13 +136,30 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         <div class="logo-container" onclick="showScene('role-scene')"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img" alt="Logo"></div>
         <h2 style="color: var(--primary); margin: 15px 0;">تسجيل دخول الطالب</h2>
         <input type="text" id="studentName" placeholder="اكتب اسمك الثلاثي أو الرباعي هنا..." autocomplete="off">
-        <input type="text" id="roomPin" placeholder="أدخل كود الغرفة (PIN)..." autocomplete="off">
+        <input type="text" id="roomPin" placeholder="أدخل كود الدخول (مثال: 9999)..." autocomplete="off">
         <br>
-        <button class="btn btn-green" onclick="startExam()" style="font-size: 1.2rem; width: 90%; max-width: 400px;">ابدأ الامتحان الآن <i class="fas fa-play"></i></button>
+        <button class="btn btn-green" onclick="goToWaitingRoom()" style="font-size: 1.2rem; width: 90%; max-width: 400px;">دخول غرفة الانتظار <i class="fas fa-arrow-right"></i></button>
     </div>
 </div>
 
-<!-- 3. شاشة الاختبار الرئيسية (الـ 30 سؤالاً مقسمة على شرائح) -->
+<!-- 3. شاشة انتظار الطلاب (تحتوي على شخصية اللوجو المتحركة GIF) -->
+<div id="student-waiting-scene" class="scene">
+    <div class="main-card" style="align-items: center; text-align: center;">
+        <h2 style="color: var(--success); margin-bottom: 10px;">أهلاً بك يا بطل في غرفة الانتظار!</h2>
+        <p style="color: #cbd5e1; margin-bottom: 20px;">انتظر إشارة مستر إيهاب لبدء الامتحان...</p>
+        
+        <!-- شخصية اللوجو والـ GIF الشهير -->
+        <div style="width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--primary); overflow: hidden; box-shadow: 0 0 30px var(--primary); margin: 15px auto;">
+            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Waiting GIF" style="width:100%; height:100%; object-fit:cover;">
+        </div>
+
+        <div style="margin-top: 25px;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; color: var(--gold);"></i>
+        </div>
+    </div>
+</div>
+
+<!-- 4. شاشة الاختبار الرئيسية (تضم الاستماع، السحب والإدراج، والشرائح) -->
 <div id="exam-scene" class="scene" style="padding: 0;">
     <div class="sticky-timer">
         <div id="info-display" style="font-weight: bold; font-size: 1.1rem;">الطالب: ---</div>
@@ -156,16 +179,17 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
-<!-- 4. لوحة تحكم المعلم الشاملة -->
+<!-- 5. لوحة تحكم المعلم الشاملة -->
 <div id="teacher-leaderboard-scene" class="scene">
     <div class="main-card" style="max-width: 950px;">
         <div class="quiz-header">
             <div class="logo-container" style="width: 50px; height: 50px;"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img" alt="Logo"></div>
-            <div class="header-text"><h1>لوحة تحكم مستر إيهاب ومتابعة الغش</h1></div>
+            <div class="header-text"><h1>لوحة تحكم مستر إيهاب ومتابعة التقدم والغش</h1></div>
         </div>
         <div class="content-area" style="width: 100%; overflow-x: auto;">
             <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
                 <button class="btn btn-green" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> تصدير درجات وحلول Excel</button>
+                <button class="btn btn-gold" onclick="showScene('pdf-report-scene')"><i class="fa-solid fa-file-pdf"></i> نظام تقارير الـ PDF المستقل</button>
                 <button class="btn btn-danger" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> إعادة اللعبة</button>
             </div>
             <table class="leaderboard-table">
@@ -173,9 +197,10 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                     <tr>
                         <th>اسم الطالب</th>
                         <th>الصف</th>
-                        <th>الدرجة النهائية</th>
-                        <th>مخالفات الغش (الخروج)</th>
-                        <th>عنوان الـ IP</th>
+                        <th>الدرجة</th>
+                        <th>التقدم (صح / خطأ / إجمالي)</th>
+                        <th>مخالفات الغش</th>
+                        <th>عنوان IP</th>
                         <th>الحالة</th>
                     </tr>
                 </thead>
@@ -185,12 +210,51 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
-<!-- 5. شاشة النتيجة النهائية -->
+<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF لكل طالب مع الرسم البياني Pie Chart -->
+<div id="pdf-report-scene" class="scene">
+    <div class="main-card" style="max-width: 800px; text-align: center;">
+        <h2 style="color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-file-pdf"></i> مركز تصدير تقارير الـ PDF للطلاب</h2>
+        <p style="color: #cbd5e1; margin-bottom: 20px;">اختر اسم الطالب من القائمة أدناه لعرض تقريره المفصل وتصديره بنقرة واحدة:</p>
+        
+        <div style="margin-bottom: 25px;">
+            <select id="pdf-student-select" style="width: 100%; max-width: 400px; padding: 12px; border-radius: 12px; background: rgba(0,0,0,0.6); color: white; border: 2px solid var(--primary); font-size: 1.1rem; outline: none;">
+                <option value="">-- اختر الطالب --</option>
+            </select>
+            <br><br>
+            <button class="btn btn-green" onclick="generateStudentPDF()" style="font-size: 1.2rem; padding: 12px 30px;"><i class="fas fa-download"></i> تصدير نتيجة الطالب PDF</button>
+            <button class="btn btn-danger" onclick="showScene('teacher-leaderboard-scene')" style="margin-right: 10px;">رجوع لوحة التحكم</button>
+        </div>
+
+        <!-- المعاينة الحية للتقرير الذي سيتم تحويله لـ PDF -->
+        <div id="pdf-preview-container" style="background: white; color: #1e293b; padding: 30px; border-radius: 20px; text-align: left; direction: ltr; margin-top: 20px; display: none; box-shadow: 0 0 30px rgba(0,0,0,0.5);">
+            <div style="text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 style="color: #0f172a; margin-bottom: 5px;">مستر إيهاب العدوي - تقرير أداء الطالب</h2>
+                <h4 id="pdf-rep-name" style="color: #0ea5e9;">اسم الطالب: ---</h4>
+                <p id="pdf-rep-meta" style="color: #64748b; font-size: 0.9rem;">الصف الثاني الإعدادي | Unit 1 Full Exam</p>
+            </div>
+
+            <!-- الرسم البياني SVG Pie Chart -->
+            <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 25px; flex-wrap: wrap; background: #f8fafc; padding: 15px; border-radius: 15px;">
+                <div id="svg-pie-container"></div>
+                <div style="text-align: right; direction: rtl;">
+                    <h3 id="pdf-rep-score" style="color: #10b981; font-size: 1.8rem; margin-bottom: 5px;">الدرجة: 0 / 30</h3>
+                    <p id="pdf-rep-percentage" style="font-weight: bold; color: #475569;">النسبة المئوية: 0%</p>
+                    <p id="pdf-rep-cheat" style="color: #f97316; font-size: 0.9rem;">مخالفات الغش: 0</p>
+                </div>
+            </div>
+
+            <h3 style="color: #0f172a; margin-bottom: 15px; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px;">مراجعة الحلول التفصيلية:</h3>
+            <div id="pdf-rep-answers" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 7. شاشة النتيجة النهائية للطالب -->
 <div id="result-scene" class="scene" style="text-align:center;">
     <div class="main-card" style="align-items: center;">
         <h1 style="color: var(--success); margin-bottom: 10px; font-size: 2.3rem;">تم تسليم الاختبار بنجاح</h1>
         <p id="result-score-text" style="font-size: 4rem; font-weight: 900; color: var(--gold); margin: 15px 0;">0 / 30</p>
-        <p style="color: #cbd5e1; font-weight: bold;">تم إرسال نتيجتك، مخالفات الغش، ورقم الـ IP إلى شيت مستر إيهاب بنجاح.</p>
+        <p style="color: #cbd5e1; font-weight: bold;">تم حفظ إجاباتك، تتبع التقدم، ورقم الـ IP وإرساله لشيت مستر إيهاب.</p>
         <br>
         <button class="btn" onclick="location.reload()" style="font-size: 1.2rem; padding: 12px 35px;">خروج / إعادة</button>
     </div>
@@ -222,7 +286,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let currentPin = "7127";
+    let currentPin = "9999";
     let studentIP = "Unknown";
     
     fetch('https://api.ipify.org?format=json')
@@ -246,7 +310,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
     window.verifyPassword = function() {
         const pass = document.getElementById('teacher-pass-input').value;
-        if (pass === '7127') { // كلمة سر الإدارة (يمكنك تعديلها هنا)
+        if (pass === '7127') { // كود المعلم السري
             document.getElementById('password-modal').style.display = 'none';
             showScene('teacher-leaderboard-scene');
             listenToSubmissions();
@@ -262,10 +326,20 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         window.scrollTo(0,0);
     }
 
-    // بيانات الاختبار الكاملة الـ 30 سؤالاً الأصلية
+    // بيانات الاختبار الكاملة الـ 30 سؤالاً مع السحب والإدراج والاستماع
     const EXAM_NAME = "2Prep term1 - ordinary -Unit1 test1 full exam";
     const GRADE_LEVEL = "الصف الثاني الإعدادي";
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwyI_20IR90uo8GbkEHjFLfeQYPxxierHZeIJBmGERZNJw6wzRd_-pXHL8N1MOhDfc/exec';
+
+    const listeningTextStr = "Ali is a teacher. He works at a primary school. He wants to understand Gen Alpha children better, so he is trying to get more information about them. Gen Alpha children were born around 2010 and after. They like using digital devices, watching videos, creating content, and chatting with friends. They also use emojis to show their feelings.";
+
+    let synth = window.speechSynthesis;
+    let utterance = new SpeechSynthesisUtterance(listeningTextStr);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    function playAudio() { if (synth.paused) { synth.resume(); } else { synth.cancel(); synth.speak(utterance); } }
+    function pauseAudio() { synth.pause(); }
+    function stopAudio() { synth.cancel(); }
 
     let student = { name: '', pin: '' };
     let cheatCount = 0;
@@ -276,27 +350,66 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     let userAnswers = {};
     let totalQuestionsCount = 30;
     let examPages = [];
+    let activeWordToDrop = null;
+    let shuffledWords = [];
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // منع الخروج وإغلاق الصفحة أو التحديث بالغلط
+    window.addEventListener('beforeunload', (e) => {
+        if(isExamStarted && !isExamFinished) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
 
     document.addEventListener('visibilitychange', () => { 
         if(document.hidden && isExamStarted && !isExamFinished) { 
             cheatCount++; 
-            alert("تحذير قوي من مستر إيهاب! تم رصد محاولة خروج وسجلت في العمود السادس للغش."); 
+            alert("تحذير قوي من مستر إيهاب! تم رصد محاولة خروج وسجلت في نظام الغش."); 
+            syncProgressToFirebase();
         } 
     });
-    window.addEventListener('blur', () => { if(isExamStarted && !isExamFinished) cheatCount++; });
+    window.addEventListener('blur', () => { if(isExamStarted && !isExamFinished) { cheatCount++; syncProgressToFirebase(); } });
     window.addEventListener('keyup', (e) => { if ((e.key === 'PrintScreen' || e.keyCode === 44) && isExamStarted && !isExamFinished) { cheatCount++; alert("محاولة تصوير الشاشة ممنوعة ورصدت!"); } });
 
-    window.startExam = function() {
+    window.goToWaitingRoom = function() {
         student.name = document.getElementById('studentName').value.trim();
         student.pin = document.getElementById('roomPin').value.trim();
 
         if(student.name.split(' ').length < 2) return alert("يرجى إدخال اسمك الثلاثي أو الرباعي.");
-        if(student.pin.length < 3) return alert("يرجى إدخال كود الغرفة الصحيح.");
+        if(student.pin !== "9999") return alert("كود الدخول غير صحيح. الكود الثابت هو 9999");
         currentPin = student.pin;
 
-        // تجهيز الـ 30 سؤالاً الأصلية كاملة مقسمة على شرايح
+        set(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
+            score: 0, cheatCount: 0, ip: studentIP, finished: false, progress: "0/30 (0 صح - 0 خطأ)"
+        });
+
+        showScene('student-waiting-scene');
+        
+        // التحقق اللحظي متى يبدأ المعلم الاختبار
+        onValue(ref(db, 'rooms/' + currentPin + '/status'), (snapshot) => {
+            if(snapshot.val() === 'playing' && isExamStarted === false) {
+                startExam();
+            }
+        });
+    }
+
+    window.startExam = function() {
+        // استعادة البيانات من localStorage إن وجدت لمنع فقدانها عند الـ Refresh
+        let savedAns = localStorage.getItem('mrehab_ans_' + student.name);
+        if(savedAns) {
+            try { userAnswers = JSON.parse(savedAns); } catch(e){}
+        }
+
         const listeningSlide = {
-            type: 'normal',
+            type: 'listening', text: listeningTextStr,
             questions: [
                 { id: 1, q: "1. Ali is trying to get more information about ........", o: ["Gen Z", "Gen Alpha", "old teachers", "school subjects"], a: "Gen Alpha" },
                 { id: 2, q: "2. Gen Alpha children like watching videos, creating content, and ........ with friends.", o: ["traveling", "working", "chatting", "reading"], a: "chatting" },
@@ -316,6 +429,13 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 { id: 10, q: "10. The words 'agree' and 'refuse' are ........ .", o: ["synonyms", "antonyms", "prefixes", "adverbs"], a: "antonyms" },
                 { id: 11, q: "11. To get the opposite of 'healthy', we add the prefix '........'.", o: ["un-", "im-", "dis-", "in-"], a: "un-" }
             ]
+        };
+
+        const completeSlide = {
+            type: 'fill-blank',
+            words: ["balance", "identity", "trends", "permission", "Gen", "way"],
+            a: { 12: "trends", 13: "identity", 14: "balance", 15: "permission" },
+            text: "My friend Ali is interested in technology. He is always following the latest (1) <input type='text' id='12' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> online. His parents taught him that his (2) <input type='text' id='13' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> is what makes him special. They also advised him to (3) <input type='text' id='14' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> his online and offline activities. He always asks for his parents' (4) <input type='text' id='15' class='blank-input' ondrop='drop(event)' ondragover='allowDrop(event)' onclick='placeWord(this)' oninput='saveInput(this.id, this.value)' autocomplete='off'> before he downloads a new game."
         };
 
         const passageSlide = {
@@ -351,11 +471,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             ]
         };
 
-        examPages = [listeningSlide, choicesSlide, passageSlide, rewriteSlide, dialogueSlide];
-
-        set(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
-            score: 0, cheatCount: 0, ip: studentIP, finished: false
-        });
+        shuffledWords = shuffleArray([...completeSlide.words]);
+        examPages = [listeningSlide, choicesSlide, completeSlide, passageSlide, rewriteSlide, dialogueSlide];
 
         isExamStarted = true;
         showScene('exam-scene');
@@ -367,17 +484,48 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     window.renderExamPage = function() {
         const p = examPages[cur];
         const box = document.getElementById('exam-content');
-        let h = `<div style="text-align:center; color:var(--gold); font-weight:bold; margin-bottom:15px;">الشريحة ${cur+1} من ${examPages.length}</div>`;
+        let solvedCount = Object.keys(userAnswers).filter(k => userAnswers[k] && userAnswers[k].toString().trim() !== "").length;
+        let h = `<div style="text-align:center; color:var(--gold); font-weight:bold; margin-bottom:15px;">الشريحة ${cur+1} من ${examPages.length} (تم حل: ${solvedCount}/${totalQuestionsCount})</div>`;
 
-        p.questions.forEach(q => {
-            let isHighlight = (window.highlightMissing && (!userAnswers[q.id] || userAnswers[q.id] === ""));
-            h += `<div class="q-card ${isHighlight ? 'unanswered-highlight' : ''}">
-                <div style="font-size:1.1rem; font-weight:bold; margin-bottom:12px;">${q.q}</div>
-                <div class="options-grid">
-                    ${q.o.map(opt => `<div class="opt ${userAnswers[q.id] === opt ? 'selected' : ''}" onclick="selectOpt(${q.id}, \`${opt}\`)">${opt}</div>`).join('')}
-                </div>
-            </div>`;
-        });
+        if(p.type === 'listening') {
+            h += `<div class="passage-box" style="text-align:center;">
+                    <h3 style="color:var(--gold); margin-bottom:12px;"><i class="fas fa-headphones"></i> Listen carefully:</h3>
+                    <div style="margin-bottom: 12px; display:flex; gap:10px; justify-content:center;">
+                        <button type="button" class="btn btn-green" onclick="playAudio()"><i class="fas fa-play"></i> Play</button>
+                        <button type="button" class="btn btn-gold" onclick="pauseAudio()"><i class="fas fa-pause"></i> Pause</button>
+                        <button type="button" class="btn btn-danger" onclick="stopAudio()"><i class="fas fa-stop"></i> Stop</button>
+                    </div>
+                    <div style="color:#fff; font-size:1.2rem; line-height: 1.8; direction:ltr;">${p.text}</div>
+                  </div>`;
+        } else if(p.type === 'fill-blank') {
+            h += `<div class="passage-box">
+                    <h3 style="color:var(--gold); margin-bottom:10px; text-align:center; font-size:1rem;">اسحب الكلمة أو اضغط عليها ثم اضغط على الفراغ المناسب:</h3>
+                    <div class="word-bank">`;
+            shuffledWords.forEach(w => {
+                let activeClass = (activeWordToDrop === w) ? 'active-word' : '';
+                h += `<div class="drag-word ${activeClass}" draggable="true" ondragstart="dragWord(event, '${w}')" onclick="selectWord(this, '${w}')">${w}</div>`;
+            });
+            h += `</div><div style="font-size:1.2rem; line-height:2.6; direction:ltr; text-align:left;">${p.text}</div></div>`;
+
+            setTimeout(() => {
+                Object.keys(p.a).forEach(id => {
+                    let input = document.getElementById(id);
+                    if(input && userAnswers[id]) input.value = userAnswers[id];
+                });
+            }, 50);
+        }
+
+        if(p.questions) {
+            p.questions.forEach(q => {
+                let isHighlight = (window.highlightMissing && (!userAnswers[q.id] || userAnswers[q.id].toString().trim() === ""));
+                h += `<div class="q-card ${isHighlight ? 'unanswered-highlight' : ''}">
+                    <div style="font-size:1.1rem; font-weight:bold; margin-bottom:12px;">${q.q}</div>
+                    <div class="options-grid">
+                        ${q.o.map(opt => `<div class="opt ${userAnswers[q.id] === opt ? 'selected' : ''}" onclick="selectOpt(${q.id}, \`${opt}\`)">${opt}</div>`).join('')}
+                    </div>
+                </div>`;
+            });
+        }
 
         box.innerHTML = h;
         window.highlightMissing = false;
@@ -389,59 +537,158 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
     window.selectOpt = function(qId, val) {
         userAnswers[qId] = val;
+        saveAndSyncState();
         renderExamPage();
+    }
+
+    // دوال السحب والإدراج المحسنة للموبايل والشاشات
+    window.allowDrop = function(ev) { ev.preventDefault(); }
+    window.dragWord = function(ev, word) { ev.dataTransfer.setData("text", word); }
+    window.drop = function(ev) { ev.preventDefault(); let data = ev.dataTransfer.getData("text"); ev.target.value = data; saveInput(ev.target.id, data); }
+    window.selectWord = function(el, word) { activeWordToDrop = word; document.querySelectorAll('.drag-word').forEach(e => e.classList.remove('active-word')); el.classList.add('active-word'); }
+    window.placeWord = function(inputEl) { if (activeWordToDrop) { inputEl.value = activeWordToDrop; saveInput(inputEl.id, activeWordToDrop); activeWordToDrop = null; document.querySelectorAll('.drag-word').forEach(e => e.classList.remove('active-word')); } }
+    window.saveInput = function(id, val) { userAnswers[id] = val; saveAndSyncState(); }
+
+    function saveAndSyncState() {
+        localStorage.setItem('mrehab_ans_' + student.name, JSON.stringify(userAnswers));
+        syncProgressToFirebase();
+    }
+
+    function syncProgressToFirebase() {
+        let solved = 0; let correctCount = 0; let wrongCount = 0;
+        
+        // حساب مبدئي للتقدم (صح وخطأ)
+        const allQuestionsMap = getAllQuestionsFlat();
+        allQuestionsMap.forEach(q => {
+            let ans = userAnswers[q.id];
+            if(ans && ans.toString().trim() !== "") {
+                solved++;
+                if(ans.toString().trim().toLowerCase() === q.a.toString().trim().toLowerCase()) {
+                    correctCount++;
+                } else {
+                    wrongCount++;
+                }
+            }
+        });
+
+        let progressStr = `${solved}/${totalQuestionsCount} (${correctCount} صح - ${wrongCount} خطأ)`;
+
+        update(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
+            cheatCount: cheatCount,
+            progress: progressStr,
+            ip: studentIP
+        });
+    }
+
+    function getAllQuestionsFlat() {
+        let list = [];
+        examPages.forEach(p => {
+            if(p.questions) p.questions.forEach(q => list.push(q));
+            else if(p.type === 'fill-blank') {
+                Object.keys(p.a).forEach(k => list.push({ id: k, q: "Fill-in Blank", a: p.a[k] }));
+            }
+        });
+        return list;
     }
 
     window.changeQ = function(dir) {
         cur += dir;
+        stopAudio();
+        activeWordToDrop = null;
         renderExamPage();
     }
 
     window.jumpToUnanswered = function() {
-        let allQs = [];
+        let allItems = [];
         examPages.forEach((pg, idx) => {
-            pg.questions.forEach(q => { allQs.push({ id: q.id, page: idx }); });
+            if(pg.questions) pg.questions.forEach(q => allItems.push({ id: q.id, page: idx }));
+            else if(pg.type === 'fill-blank') Object.keys(pg.a).forEach(k => allItems.push({ id: k, page: idx }));
         });
-        let missing = allQs.find(item => !userAnswers[item.id] || userAnswers[item.id] === "");
+        let missing = allItems.find(item => !userAnswers[item.id] || userAnswers[item.id].toString().trim() === "");
         if(missing) {
             cur = missing.page;
             window.highlightMissing = true;
+            stopAudio();
             renderExamPage();
-            alert("تم نقلك للشريحة التي تحتوي على سؤال متروك!");
+            alert("تم نقلك للشريحة التي تحتوي على سؤال متروك أو غير مجاب!");
         } else {
-            alert("ممتاز! لقد أجبت على جميع الأسئلة الحالية.");
+            alert("ممتاز! لقد أجبت على جميع الأسئلة حتى الآن.");
         }
     }
 
     window.confirmFinish = function() {
-        let solved = Object.keys(userAnswers).filter(k => userAnswers[k] && userAnswers[k] !== "").length;
-        if(solved < 26) {
-            return alert(`عفواً يا بطل! لم تقم بإجابة كافة الأسئلة (أجبت على ${solved} من 26). استخدم زر (الأسئلة المتروكة) للوصول إليها.`);
+        let solved = Object.keys(userAnswers).filter(k => userAnswers[k] && userAnswers[k].toString().trim() !== "").length;
+        if(solved < totalQuestionsCount) {
+            let missing = totalQuestionsCount - solved;
+            return alert(`عفواً يا بطل! لديك ${missing} أسئلة لم تقم بالإجابة عليها. استخدم زر (الأسئلة المتروكة) للوصول إليها.`);
         }
         if(confirm("هل أنت متأكد من تسليم الاختبار نهائياً؟")) finishExam();
     }
 
     function finishExam() {
         isExamFinished = true;
+        stopAudio();
         let score = 0;
-        examPages.forEach(pg => {
-            pg.questions.forEach(q => {
-                if(userAnswers[q.id] && userAnswers[q.id].toLowerCase() === q.a.toLowerCase()) score++;
-            });
+        let correctCount = 0; let wrongCount = 0;
+
+        const allQs = getAllQuestionsFlat();
+        allQs.forEach(q => {
+            let ans = (userAnswers[q.id] || "").toString().trim();
+            if(ans.toLowerCase() === q.a.toString().trim().toLowerCase()) {
+                score++;
+                correctCount++;
+            } else {
+                wrongCount++;
+            }
         });
+
+        let progressStr = `${totalQuestionsCount}/${totalQuestionsCount} (${correctCount} صح - ${wrongCount} خطأ)`;
 
         update(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
-            score: score, cheatCount: cheatCount, ip: studentIP, finished: true
+            score: score,
+            cheatCount: cheatCount,
+            ip: studentIP,
+            progress: progressStr,
+            finished: true,
+            answersDetail: userAnswers
         });
 
-        let payload = { name: student.name, roomPin: currentPin, totalScore: `${score} / 26`, cheatCount: cheatCount, studentIP: studentIP };
+        let payload = { name: student.name, roomPin: currentPin, totalScore: `${score} / ${totalQuestionsCount}`, cheatCount: cheatCount, studentIP: studentIP };
         if(SCRIPT_URL !== 'YOUR_GOOGLE_SHEET_URL_HERE') {
             fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).catch(e => console.log(e));
         }
 
+        localStorage.removeItem('mrehab_ans_' + student.name);
         showScene('result-scene');
-        document.getElementById('result-score-text').innerText = `${score} / 26`;
+        document.getElementById('result-score-text').innerText = `${score} / ${totalQuestionsCount}`;
         confetti({ particleCount: 150, spread: 70 });
+    }
+
+    // دوال لوحة تحكم المعلم
+    window.listenToSubmissions = function() {
+        onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
+            const players = snapshot.val();
+            const tbody = document.getElementById('leaderboard-body');
+            const selectDropdown = document.getElementById('pdf-student-select');
+            tbody.innerHTML = '';
+            selectDropdown.innerHTML = '<option value="">-- اختر الطالب --</option>';
+
+            if(players) {
+                window.allPlayersData = players; // حفظ البيانات لصفحة الـ PDF
+                for(let name in players) {
+                    let p = players[name];
+                    tbody.innerHTML += `<tr>
+                        <td>${name}</td><td>${GRADE_LEVEL}</td>
+                        <td style="color:var(--gold); font-weight:bold;">${p.score || 0} / ${totalQuestionsCount}</td>
+                        <td style="color:var(--primary); font-weight:bold;">${p.progress || 'جاري الحل'}</td>
+                        <td style="color:var(--danger); font-weight:bold;">${p.cheatCount || 0}</td>
+                        <td>${p.ip || 'Local'}</td><td>${p.finished ? '✅ انتهى' : '⏳ يحل الآن'}</td>
+                    </tr>`;
+
+                    selectDropdown.innerHTML += `<option value="${name}">${name} (الدرجة: ${p.score || 0})</option>`;
+                }
+            }
+        });
     }
 
     window.exportToExcel = function() {
@@ -449,10 +696,10 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             if(!snapshot.exists()) return alert("لا توجد بيانات طلاب للتصدير!");
             let players = snapshot.val();
             let csv = "data:text/csv;charset=utf-8,\uFEFF";
-            csv += "اسم الطالب,الصف,الدرجة النهائية,مخالفات الغش,عنوان IP,الحالة\n";
+            csv += "اسم الطالب,الصف,الدرجة النهائية,التقدم (صح/خطأ),مخالفات الغش,عنوان IP,الحالة\n";
             for(let name in players) {
                 let p = players[name];
-                csv += `"${name}","${GRADE_LEVEL}","${p.score || 0}","${p.cheatCount || 0}","${p.ip || 'Local'}","${p.finished ? 'منتهي' : 'جاري'}"\n`;
+                csv += `"${name}","${GRADE_LEVEL}","${p.score || 0} / ${totalQuestionsCount}","${p.progress || ''}","${p.cheatCount || 0}","${p.ip || 'Local'}","${p.finished ? 'منتهي' : 'جاري'}"\n`;
             }
             let link = document.createElement("a");
             link.setAttribute("href", encodeURI(csv));
@@ -463,23 +710,75 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         });
     }
 
-    function listenToSubmissions() {
-        onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
-            const players = snapshot.val();
-            const tbody = document.getElementById('leaderboard-body');
-            tbody.innerHTML = '';
-            if(players) {
-                for(let name in players) {
-                    let p = players[name];
-                    tbody.innerHTML += `<tr>
-                        <td>${name}</td><td>${GRADE_LEVEL}</td>
-                        <td style="color:var(--gold); font-weight:bold;">${p.score || 0}</td>
-                        <td style="color:var(--danger); font-weight:bold;">${p.cheatCount || 0}</td>
-                        <td>${p.ip || 'Local'}</td><td>${p.finished ? '✅ انتهى' : '⏳ يحل الآن'}</td>
-                    </tr>`;
-                }
-            }
+    // توليد وتصدير الـ PDF المستقل للطالب مع الرسم البياني Pie Chart
+    window.document.getElementById('pdf-student-select').addEventListener('change', function() {
+        let studentName = this.value;
+        let previewBox = document.getElementById('pdf-preview-container');
+        if(!studentName || !window.allPlayersData || !window.allPlayersData[studentName]) {
+            previewBox.style.display = 'none';
+            return;
+        }
+
+        let pData = window.allPlayersData[studentName];
+        let score = pData.score || 0;
+        let percentage = Math.round((score / totalQuestionsCount) * 100);
+
+        document.getElementById('pdf-rep-name').innerText = `اسم الطالب: ${studentName}`;
+        document.getElementById('pdf-rep-score').innerText = `الدرجة: ${score} / ${totalQuestionsCount}`;
+        document.getElementById('pdf-rep-percentage').innerText = `النسبة المئوية: ${percentage}%`;
+        document.getElementById('pdf-rep-cheat').innerText = `مخالفات الغش: ${pData.cheatCount || 0}`;
+
+        // رسم دائرة SVG Pie Chart تفاعلية دقيقة
+        let strokeDash = `${percentage}, 100`;
+        let svgPie = `
+            <svg width="120" height="120" viewBox="0 0 36 36" style="transform: rotate(-90deg);">
+                <path class="circle-bg" stroke="#e2e8f0" stroke-width="3.8" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="circle" stroke="${percentage >= 50 ? '#10b981' : '#ef4444'}" stroke-dasharray="${strokeDash}" stroke-width="3.8" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <text x="18" y="20.3" text-anchor="middle" fill="#0f172a" font-size="8" font-weight="bold" transform="rotate(90 18 18)">${percentage}%</text>
+            </svg>`;
+        document.getElementById('svg-pie-container').innerHTML = svgPie;
+
+        // عرض تفاصيل الأسئلة وحلول الطالب (صح باللون الأخضر وخطأ باللون الأحمر)
+        let ansHtml = "";
+        let allQs = getAllQuestionsFlat();
+        let studentAnsMap = pData.answersDetail || {};
+
+        allQs.forEach((q, idx) => {
+            let stAns = studentAnsMap[q.id] || "لم يُجب";
+            let isCor = (stAns.toString().trim().toLowerCase() === q.a.toString().trim().toLowerCase());
+            let colorBorder = isCor ? "#10b981" : "#ef4444";
+            let badgeBg = isCor ? "#d1fae5" : "#fee2e2";
+            let badgeText = isCor ? "صحيح" : "خطأ";
+
+            ansHtml += `
+                <div style="border: 1px solid ${colorBorder}; background: #f8fafc; padding: 12px; border-radius: 10px; font-size: 0.95rem;">
+                    <div style="font-weight: bold; color: #1e293b; margin-bottom: 5px;">Q${idx+1}: ${q.q}</div>
+                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:5px;">
+                        <span style="color: #334155;">إجابة الطالب: <b>${stAns}</b></span>
+                        <span style="color: #047857;">الإجابة النموذجية: <b>${q.a}</b></span>
+                        <span style="background: ${badgeBg}; color: ${colorBorder}; padding: 2px 8px; border-radius: 6px; font-weight: bold;">${badgeText}</span>
+                    </div>
+                </div>`;
         });
+
+        document.getElementById('pdf-rep-answers').innerHTML = ansHtml;
+        previewBox.style.display = 'block';
+    });
+
+    window.generateStudentPDF = function() {
+        let studentName = document.getElementById('pdf-student-select').value;
+        if(!studentName) return alert("يرجى اختيار طالب أولاً!");
+
+        let element = document.getElementById('pdf-preview-container');
+        let opt = {
+            margin:       10,
+            filename:     `MrEhab_Report_${studentName}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().from(element).set(opt).save();
     }
 
     function startTimer() {
