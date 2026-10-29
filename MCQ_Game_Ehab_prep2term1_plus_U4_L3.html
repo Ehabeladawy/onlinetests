@@ -120,10 +120,11 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 }
 .timer-countdown { font-size: 1.6rem; font-weight: 900; color: var(--danger); display:flex; align-items:center; gap:8px;}
 
-/* ----- تصميم الأسئلة في شريحة واحدة ----- */
+/* ----- تصميم الأسئلة مع تأثير الـ Glow الأحمر لكل سؤال على حدة ----- */
 .question-row { 
     background: rgba(255, 255, 255, 0.03); padding: 25px 20px; border-radius: 20px; 
-    margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); 
+    margin-bottom: 25px; border: 2px solid rgba(239, 68, 68, 0.6); 
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.35), inset 0 0 15px rgba(239, 68, 68, 0.15);
     display: flex; flex-direction: column; align-items: flex-start; direction: ltr; width: 100%;
 }
 .question-header { display: flex; justify-content: space-between; width: 100%; align-items: flex-start; margin-bottom: 15px; gap:10px; }
@@ -173,9 +174,13 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Logo GIF" style="width: 220px; border-radius: 20px; margin-bottom: 5px; box-shadow: 0 0 20px rgba(14, 165, 233, 0.5);">
 
             <div style="background: rgba(0, 0, 0, 0.4); padding: 15px; border-radius: 15px; border: 1px dashed rgba(14, 165, 233, 0.5); width: 90%; max-width: 450px; text-align: right; margin-bottom: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.3);">
-                <h3 style="text-align: center; color: var(--primary); font-size: 1.3rem; font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 10px rgba(14, 165, 233, 0.7);">قواعد اللعبة الجماعية والفردية</h3>
-                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>للتحدي الجماعي: سجل اسمك وادخل الكود من مستر إيهاب</p>
-                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>للتحدي الفردي: العب بمفردك في أي وقت وفي أي مكان</p>
+                <h3 style="text-align: center; color: var(--primary); font-size: 1.3rem; font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 10px rgba(14, 165, 233, 0.7);">قواعد التحدي الجماعي والفردي</h3>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>سجل اسمك وادخل الكود اللى استلمته من مستر ايهاب</p>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>هتدخل غرفة انتظار المتسابقين</p>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>بعد تجمع المتسابقين يضغط مستر ايهاب على ايقونة البدء</p>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>داخل المسابقة هناك عد تنازلي أحرص على الانتهاء قبله</p>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>ترتيب الفائزين بناء على ( أعلى الدرجات - ثم من أنهى أسرع )</p>
+                <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 6px;"><i class="fa-solid fa-circle-check" style="color: var(--success); margin-left: 6px;"></i>قواعد اللعبة الفردية: العب بمفردك في أي وقت بدون كود وبوقت مفتوح</p>
                 <p style="font-size: 1rem; color: var(--gold); font-weight: bold; text-align: center; margin-top: 8px; margin-bottom: 0;">بالتوفيق .... مستر إيهاب العدوي</p>
             </div>
 
