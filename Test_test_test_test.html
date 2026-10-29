@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<!-- مكتبة توليد ملفات الـ PDF للطلاب -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
@@ -39,8 +38,14 @@ body { background: var(--bg-dark); min-height: 100vh; padding: 10px; color: whit
 .quiz-header { padding: 15px 20px; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: space-between; border-bottom: 2px dashed rgba(255,255,255,0.1); flex-wrap: wrap; gap: 15px; border-radius: 20px; margin-bottom: 20px;}
 .logo-container, .logo-container-large { border-radius: 50%; border: 3px solid var(--primary); overflow: hidden; background: #000; box-shadow: 0 0 20px var(--primary); cursor: pointer; flex-shrink: 0; margin: 0 auto; }
 .logo-container { width: 75px; height: 75px; }
-.logo-container-large { width: 140px; height: 140px; }
+.logo-container-large { width: 130px; height: 130px; }
 .logo-img { width: 100%; height: 100%; object-fit: cover; }
+
+.waiting-logo-box {
+    width: 220px; height: 150px; border-radius: 20px; border: 3px solid var(--primary);
+    overflow: hidden; background: #000; box-shadow: 0 0 25px var(--primary); margin: 15px auto;
+}
+.waiting-logo-box img { width: 100%; height: 100%; object-fit: cover; }
 
 .header-text { text-align: center; flex: 1;}
 .header-text h1 { font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 900; color: white; }
@@ -109,7 +114,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
 <canvas id="particles-js"></canvas>
 
-<!-- 1. واجهة التحدي والاختبار -->
+<!-- 1. واجهة الدخول الرئيسية -->
 <div id="role-scene" class="scene active">
     <div class="main-card" style="align-items: center; text-align: center;">
         <div class="logo-container-large" onclick="handleLogoClick()"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w300" class="logo-img" alt="Logo"></div>
@@ -120,9 +125,9 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
         <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: 15px; border: 1px dashed rgba(14, 165, 233, 0.5); width: 100%; max-width: 500px; text-align: right; margin: 20px 0;">
             <h3 style="text-align: center; color: var(--primary); font-weight: 900; margin-bottom: 12px;">تعليمات الاختبار المعتمد</h3>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>أدخل اسمك الثلاثي وكود الدخول الثابت (<b style="color:var(--gold);">9999</b>)</p>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>يتم رصد مخالفات الغش وتتبع التقدم (صح/خطأ) في لوحة المعلم</p>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>حفظ تلقائي عند التحديث (Refresh) لضمان عدم ضياع إجاباتك</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>أدخل اسمك الثلاثي وكود الدخول الذي حدده المعلم</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>يتم تتبع تقدمك ومراقبة مخالفات الغش في لوحة التحكم</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>حفظ تلقائي لإجاباتك لمنع ضياعها عند التحديث (Refresh)</p>
             <p style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 8px;"><i class="fa-solid fa-check" style="color: var(--success); margin-left: 6px;"></i>تصدير تقرير PDF مفصل مع رسم بياني (Pie Chart) بعد الانتهاء</p>
         </div>
 
@@ -136,30 +141,29 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         <div class="logo-container" onclick="showScene('role-scene')"><img src="https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200" class="logo-img" alt="Logo"></div>
         <h2 style="color: var(--primary); margin: 15px 0;">تسجيل دخول الطالب</h2>
         <input type="text" id="studentName" placeholder="اكتب اسمك الثلاثي أو الرباعي هنا..." autocomplete="off">
-        <input type="text" id="roomPin" placeholder="أدخل كود الدخول (مثال: 9999)..." autocomplete="off">
+        <input type="text" id="roomPin" placeholder="أدخل كود الدخول المقدم من المعلم..." autocomplete="off">
         <br>
         <button class="btn btn-green" onclick="goToWaitingRoom()" style="font-size: 1.2rem; width: 90%; max-width: 400px;">دخول غرفة الانتظار <i class="fas fa-arrow-right"></i></button>
     </div>
 </div>
 
-<!-- 3. شاشة انتظار الطلاب (تحتوي على شخصية اللوجو المتحركة GIF) -->
+<!-- 3. شاشة انتظار الطلاب (شكل مستطيل/مربع مع اللوجو المتحرك GIF) -->
 <div id="student-waiting-scene" class="scene">
     <div class="main-card" style="align-items: center; text-align: center;">
         <h2 style="color: var(--success); margin-bottom: 10px;">أهلاً بك يا بطل في غرفة الانتظار!</h2>
-        <p style="color: #cbd5e1; margin-bottom: 20px;">انتظر إشارة مستر إيهاب لبدء الامتحان...</p>
+        <p style="color: #cbd5e1; margin-bottom: 15px;">انتظر إشارة مستر إيهاب لبدء الامتحان...</p>
         
-        <!-- شخصية اللوجو والـ GIF الشهير -->
-        <div style="width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--primary); overflow: hidden; box-shadow: 0 0 30px var(--primary); margin: 15px auto;">
-            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Waiting GIF" style="width:100%; height:100%; object-fit:cover;">
+        <div class="waiting-logo-box">
+            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Waiting GIF">
         </div>
 
-        <div style="margin-top: 25px;">
+        <div style="margin-top: 20px;">
             <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; color: var(--gold);"></i>
         </div>
     </div>
 </div>
 
-<!-- 4. شاشة الاختبار الرئيسية (تضم الاستماع، السحب والإدراج، والشرائح) -->
+<!-- 4. شاشة الاختبار الرئيسية -->
 <div id="exam-scene" class="scene" style="padding: 0;">
     <div class="sticky-timer">
         <div id="info-display" style="font-weight: bold; font-size: 1.1rem;">الطالب: ---</div>
@@ -179,7 +183,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
-<!-- 5. لوحة تحكم المعلم الشاملة -->
+<!-- 5. لوحة تحكم المعلم الشاملة (مع خيار تعديل كود الغرفة وزر بدء الاختبار وأسئلة الامتحان في الأسفل للـ Smart Board) -->
 <div id="teacher-leaderboard-scene" class="scene">
     <div class="main-card" style="max-width: 950px;">
         <div class="quiz-header">
@@ -187,18 +191,27 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             <div class="header-text"><h1>لوحة تحكم مستر إيهاب ومتابعة التقدم والغش</h1></div>
         </div>
         <div class="content-area" style="width: 100%; overflow-x: auto;">
+            <!-- تحديد وتغيير كود الغرفة من لوحة المعلم -->
+            <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 15px; border: 1px dashed var(--primary); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <label style="color: var(--gold); font-weight: bold;">كود الغرفة الحالي للطلاب:</label>
+                <input type="text" id="custom-room-pin" value="7777" style="width: 120px; margin-bottom:0; padding: 8px; font-size: 1.2rem; font-weight: bold;">
+                <button class="btn btn-green" onclick="updateRoomPin()" style="padding: 8px 20px; font-size: 1rem;">تحديث الكود</button>
+            </div>
+
             <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
-                <button class="btn btn-green" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> تصدير درجات وحلول Excel</button>
-                <button class="btn btn-gold" onclick="showScene('pdf-report-scene')"><i class="fa-solid fa-file-pdf"></i> نظام تقارير الـ PDF المستقل</button>
+                <button class="btn btn-green" onclick="startExamForAll()"><i class="fa-solid fa-play"></i> بدء الاختبار للجميع الآن</button>
+                <button class="btn btn-gold" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> تصدير درجات وحلول Excel</button>
+                <button class="btn btn-gold" onclick="showScene('pdf-report-scene')" style="background:var(--primary);"><i class="fa-solid fa-file-pdf"></i> مركز تقارير الـ PDF المستقل</button>
                 <button class="btn btn-danger" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> إعادة اللعبة</button>
             </div>
+            
             <table class="leaderboard-table">
                 <thead>
                     <tr>
                         <th>اسم الطالب</th>
                         <th>الصف</th>
                         <th>الدرجة</th>
-                        <th>التقدم (صح / خطأ / إجمالي)</th>
+                        <th>التقدم (عدد الأسئلة المحلولة)</th>
                         <th>مخالفات الغش</th>
                         <th>عنوان IP</th>
                         <th>الحالة</th>
@@ -206,26 +219,33 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                 </thead>
                 <tbody id="leaderboard-body"></tbody>
             </table>
+
+            <!-- قسم استعراض أسئلة الامتحان أسفل اللوحة للـ Smart Board -->
+            <div style="margin-top: 40px; border-top: 2px dashed rgba(255,255,255,0.2); padding-top: 20px; text-align: left; direction: ltr;">
+                <h3 style="color: var(--gold); text-align: center; margin-bottom: 20px; direction: rtl;">بنك أسئلة الاختبار للإشراف والشرح على السبورة الذكية</h3>
+                <div id="teacher-questions-bank" style="display: flex; flex-direction: column; gap: 15px;"></div>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF لكل طالب مع الرسم البياني Pie Chart -->
+<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF لكل الطلاب أو الفردي مع الرسم البياني Pie Chart -->
 <div id="pdf-report-scene" class="scene">
     <div class="main-card" style="max-width: 800px; text-align: center;">
         <h2 style="color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-file-pdf"></i> مركز تصدير تقارير الـ PDF للطلاب</h2>
-        <p style="color: #cbd5e1; margin-bottom: 20px;">اختر اسم الطالب من القائمة أدناه لعرض تقريره المفصل وتصديره بنقرة واحدة:</p>
+        <p style="color: #cbd5e1; margin-bottom: 20px;">اختر اسم الطالب من القائمة أدناه، أو اختر خيار التصدير الشامل لجميع النتائج:</p>
         
         <div style="margin-bottom: 25px;">
             <select id="pdf-student-select" style="width: 100%; max-width: 400px; padding: 12px; border-radius: 12px; background: rgba(0,0,0,0.6); color: white; border: 2px solid var(--primary); font-size: 1.1rem; outline: none;">
                 <option value="">-- اختر الطالب --</option>
+                <option value="EXPORT_ALL_ZIP" style="color: var(--gold); font-weight: bold;">📁 تصدير نتائج جميع الطلاب (ملفات منفصلة)</option>
             </select>
             <br><br>
-            <button class="btn btn-green" onclick="generateStudentPDF()" style="font-size: 1.2rem; padding: 12px 30px;"><i class="fas fa-download"></i> تصدير نتيجة الطالب PDF</button>
+            <button class="btn btn-green" onclick="generateStudentPDF()" style="font-size: 1.2rem; padding: 12px 30px;"><i class="fas fa-download"></i> تنفيذ وتصدير النتيجة</button>
             <button class="btn btn-danger" onclick="showScene('teacher-leaderboard-scene')" style="margin-right: 10px;">رجوع لوحة التحكم</button>
         </div>
 
-        <!-- المعاينة الحية للتقرير الذي سيتم تحويله لـ PDF -->
+        <!-- المعاينة الحية للتقرير -->
         <div id="pdf-preview-container" style="background: white; color: #1e293b; padding: 30px; border-radius: 20px; text-align: left; direction: ltr; margin-top: 20px; display: none; box-shadow: 0 0 30px rgba(0,0,0,0.5);">
             <div style="text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 15px; margin-bottom: 20px;">
                 <h2 style="color: #0f172a; margin-bottom: 5px;">مستر إيهاب العدوي - تقرير أداء الطالب</h2>
@@ -271,6 +291,9 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     </div>
 </div>
 
+<!-- مؤثر صوتي حصري للنتيجة النهائية -->
+<audio id="sound-result" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
@@ -286,7 +309,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let currentPin = "9999";
+    let currentPin = "7777"; // الكود الافتراضي القابل للتعديل من لوحة المعلم
     let studentIP = "Unknown";
     
     fetch('https://api.ipify.org?format=json')
@@ -310,15 +333,24 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
     window.verifyPassword = function() {
         const pass = document.getElementById('teacher-pass-input').value;
-        if (pass === '7127') { // كود المعلم السري
+        if (pass === '7127') { // كلمة سر الإدارة
             document.getElementById('password-modal').style.display = 'none';
             showScene('teacher-leaderboard-scene');
             listenToSubmissions();
+            renderTeacherQuestionsBank();
         } else {
             alert('الرمز السري غير صحيح!');
             document.getElementById('teacher-pass-input').value = '';
         }
     };
+
+    window.updateRoomPin = function() {
+        let newPin = document.getElementById('custom-room-pin').value.trim();
+        if(newPin.length < 2) return alert("يرجى إدخال كود غرفة صالح!");
+        currentPin = newPin;
+        update(ref(db, 'rooms/' + currentPin), { roomPin: currentPin, status: 'waiting' });
+        alert(`تم تحديث كود الغرفة بنجاح إلى: ${currentPin}`);
+    }
 
     window.showScene = function(id) {
         document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
@@ -326,7 +358,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         window.scrollTo(0,0);
     }
 
-    // بيانات الاختبار الكاملة الـ 30 سؤالاً مع السحب والإدراج والاستماع
     const EXAM_NAME = "2Prep term1 - ordinary -Unit1 test1 full exam";
     const GRADE_LEVEL = "الصف الثاني الإعدادي";
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwyI_20IR90uo8GbkEHjFLfeQYPxxierHZeIJBmGERZNJw6wzRd_-pXHL8N1MOhDfc/exec';
@@ -361,7 +392,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         return array;
     }
 
-    // منع الخروج وإغلاق الصفحة أو التحديث بالغلط
     window.addEventListener('beforeunload', (e) => {
         if(isExamStarted && !isExamFinished) {
             e.preventDefault();
@@ -372,7 +402,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     document.addEventListener('visibilitychange', () => { 
         if(document.hidden && isExamStarted && !isExamFinished) { 
             cheatCount++; 
-            alert("تحذير قوي من مستر إيهاب! تم رصد محاولة خروج وسجلت في نظام الغش."); 
+            alert("تنبيه صارم من مستر إيهاب! تم رصد محاولة خروج أو تبديل شاشة وسجلت في نظام الغش."); 
             syncProgressToFirebase();
         } 
     });
@@ -384,16 +414,16 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         student.pin = document.getElementById('roomPin').value.trim();
 
         if(student.name.split(' ').length < 2) return alert("يرجى إدخال اسمك الثلاثي أو الرباعي.");
-        if(student.pin !== "9999") return alert("كود الدخول غير صحيح. الكود الثابت هو 9999");
-        currentPin = student.pin;
+        let activePin = document.getElementById('custom-room-pin') ? document.getElementById('custom-room-pin').value.trim() : currentPin;
+        if(student.pin !== activePin) return alert("كود الدخول غير صحيح. تأكد من الكود الذي حدده المعلم.");
+        currentPin = activePin;
 
         set(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
-            score: 0, cheatCount: 0, ip: studentIP, finished: false, progress: "0/30 (0 صح - 0 خطأ)"
+            score: 0, cheatCount: 0, ip: studentIP, finished: false, progress: "0/30"
         });
 
         showScene('student-waiting-scene');
         
-        // التحقق اللحظي متى يبدأ المعلم الاختبار
         onValue(ref(db, 'rooms/' + currentPin + '/status'), (snapshot) => {
             if(snapshot.val() === 'playing' && isExamStarted === false) {
                 startExam();
@@ -401,8 +431,12 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         });
     }
 
+    window.startExamForAll = function() {
+        update(ref(db, 'rooms/' + currentPin), { status: 'playing' });
+        alert("تم بدء الاختبار لجميع الطلاب في غرفة الانتظار بنجاح!");
+    }
+
     window.startExam = function() {
-        // استعادة البيانات من localStorage إن وجدت لمنع فقدانها عند الـ Refresh
         let savedAns = localStorage.getItem('mrehab_ans_' + student.name);
         if(savedAns) {
             try { userAnswers = JSON.parse(savedAns); } catch(e){}
@@ -491,9 +525,9 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             h += `<div class="passage-box" style="text-align:center;">
                     <h3 style="color:var(--gold); margin-bottom:12px;"><i class="fas fa-headphones"></i> Listen carefully:</h3>
                     <div style="margin-bottom: 12px; display:flex; gap:10px; justify-content:center;">
-                        <button type="button" class="btn btn-green" onclick="playAudio()"><i class="fas fa-play"></i> Play</button>
-                        <button type="button" class="btn btn-gold" onclick="pauseAudio()"><i class="fas fa-pause"></i> Pause</button>
-                        <button type="button" class="btn btn-danger" onclick="stopAudio()"><i class="fas fa-stop"></i> Stop</button>
+                        <button type="button" class="btn btn-green" onclick="playAudio()"><i class="fas fa-play"></i> تشغيل الصوت</button>
+                        <button type="button" class="btn btn-gold" onclick="pauseAudio()"><i class="fas fa-pause"></i> إيقاف مؤقت</button>
+                        <button type="button" class="btn btn-danger" onclick="stopAudio()"><i class="fas fa-stop"></i> إيقاف</button>
                     </div>
                     <div style="color:#fff; font-size:1.2rem; line-height: 1.8; direction:ltr;">${p.text}</div>
                   </div>`;
@@ -541,7 +575,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         renderExamPage();
     }
 
-    // دوال السحب والإدراج المحسنة للموبايل والشاشات
     window.allowDrop = function(ev) { ev.preventDefault(); }
     window.dragWord = function(ev, word) { ev.dataTransfer.setData("text", word); }
     window.drop = function(ev) { ev.preventDefault(); let data = ev.dataTransfer.getData("text"); ev.target.value = data; saveInput(ev.target.id, data); }
@@ -555,23 +588,14 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     }
 
     function syncProgressToFirebase() {
-        let solved = 0; let correctCount = 0; let wrongCount = 0;
-        
-        // حساب مبدئي للتقدم (صح وخطأ)
+        let solved = 0;
         const allQuestionsMap = getAllQuestionsFlat();
         allQuestionsMap.forEach(q => {
             let ans = userAnswers[q.id];
-            if(ans && ans.toString().trim() !== "") {
-                solved++;
-                if(ans.toString().trim().toLowerCase() === q.a.toString().trim().toLowerCase()) {
-                    correctCount++;
-                } else {
-                    wrongCount++;
-                }
-            }
+            if(ans && ans.toString().trim() !== "") solved++;
         });
 
-        let progressStr = `${solved}/${totalQuestionsCount} (${correctCount} صح - ${wrongCount} خطأ)`;
+        let progressStr = `${solved}/${totalQuestionsCount}`;
 
         update(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
             cheatCount: cheatCount,
@@ -629,20 +653,16 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         isExamFinished = true;
         stopAudio();
         let score = 0;
-        let correctCount = 0; let wrongCount = 0;
 
         const allQs = getAllQuestionsFlat();
         allQs.forEach(q => {
             let ans = (userAnswers[q.id] || "").toString().trim();
             if(ans.toLowerCase() === q.a.toString().trim().toLowerCase()) {
                 score++;
-                correctCount++;
-            } else {
-                wrongCount++;
             }
         });
 
-        let progressStr = `${totalQuestionsCount}/${totalQuestionsCount} (${correctCount} صح - ${wrongCount} خطأ)`;
+        let progressStr = `${totalQuestionsCount}/${totalQuestionsCount}`;
 
         update(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
             score: score,
@@ -661,26 +681,32 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         localStorage.removeItem('mrehab_ans_' + student.name);
         showScene('result-scene');
         document.getElementById('result-score-text').innerText = `${score} / ${totalQuestionsCount}`;
+        
+        const soundRes = document.getElementById('sound-result');
+        if(soundRes) { soundRes.currentTime = 0; soundRes.play().catch(e => {}); }
         confetti({ particleCount: 150, spread: 70 });
     }
 
-    // دوال لوحة تحكم المعلم
     window.listenToSubmissions = function() {
         onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
             const players = snapshot.val();
             const tbody = document.getElementById('leaderboard-body');
             const selectDropdown = document.getElementById('pdf-student-select');
             tbody.innerHTML = '';
-            selectDropdown.innerHTML = '<option value="">-- اختر الطالب --</option>';
+            
+            selectDropdown.innerHTML = `
+                <option value="">-- اختر الطالب --</option>
+                <option value="EXPORT_ALL_ZIP" style="color: var(--gold); font-weight: bold;">📁 تصدير نتائج جميع الطلاب (ملفات منفصلة)</option>
+            `;
 
             if(players) {
-                window.allPlayersData = players; // حفظ البيانات لصفحة الـ PDF
+                window.allPlayersData = players;
                 for(let name in players) {
                     let p = players[name];
                     tbody.innerHTML += `<tr>
                         <td>${name}</td><td>${GRADE_LEVEL}</td>
                         <td style="color:var(--gold); font-weight:bold;">${p.score || 0} / ${totalQuestionsCount}</td>
-                        <td style="color:var(--primary); font-weight:bold;">${p.progress || 'جاري الحل'}</td>
+                        <td style="color:var(--primary); font-weight:bold;">${p.progress || '0/30'}</td>
                         <td style="color:var(--danger); font-weight:bold;">${p.cheatCount || 0}</td>
                         <td>${p.ip || 'Local'}</td><td>${p.finished ? '✅ انتهى' : '⏳ يحل الآن'}</td>
                     </tr>`;
@@ -691,12 +717,25 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         });
     }
 
+    function renderTeacherQuestionsBank() {
+        const bankContainer = document.getElementById('teacher-questions-bank');
+        bankContainer.innerHTML = '';
+        let allQs = getAllQuestionsFlat();
+        allQs.forEach((q, idx) => {
+            bankContainer.innerHTML += `
+                <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-weight: bold; color: #fff; margin-bottom: 8px;">Q${idx+1}: ${q.q}</div>
+                    <div style="color: var(--success); font-weight: bold;">الإجابة الصحيحة: ${q.a}</div>
+                </div>`;
+        });
+    }
+
     window.exportToExcel = function() {
         get(ref(db, 'rooms/' + currentPin + '/players')).then((snapshot) => {
             if(!snapshot.exists()) return alert("لا توجد بيانات طلاب للتصدير!");
             let players = snapshot.val();
             let csv = "data:text/csv;charset=utf-8,\uFEFF";
-            csv += "اسم الطالب,الصف,الدرجة النهائية,التقدم (صح/خطأ),مخالفات الغش,عنوان IP,الحالة\n";
+            csv += "اسم الطالب,الصف,الدرجة النهائية,التقدم,مخالفات الغش,عنوان IP,الحالة\n";
             for(let name in players) {
                 let p = players[name];
                 csv += `"${name}","${GRADE_LEVEL}","${p.score || 0} / ${totalQuestionsCount}","${p.progress || ''}","${p.cheatCount || 0}","${p.ip || 'Local'}","${p.finished ? 'منتهي' : 'جاري'}"\n`;
@@ -710,25 +749,23 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         });
     }
 
-    // توليد وتصدير الـ PDF المستقل للطالب مع الرسم البياني Pie Chart
     window.document.getElementById('pdf-student-select').addEventListener('change', function() {
-        let studentName = this.value;
+        let val = this.value;
         let previewBox = document.getElementById('pdf-preview-container');
-        if(!studentName || !window.allPlayersData || !window.allPlayersData[studentName]) {
+        if(!val || val === "EXPORT_ALL_ZIP") {
             previewBox.style.display = 'none';
             return;
         }
 
-        let pData = window.allPlayersData[studentName];
+        let pData = window.allPlayersData[val];
         let score = pData.score || 0;
         let percentage = Math.round((score / totalQuestionsCount) * 100);
 
-        document.getElementById('pdf-rep-name').innerText = `اسم الطالب: ${studentName}`;
+        document.getElementById('pdf-rep-name').innerText = `اسم الطالب: ${val}`;
         document.getElementById('pdf-rep-score').innerText = `الدرجة: ${score} / ${totalQuestionsCount}`;
         document.getElementById('pdf-rep-percentage').innerText = `النسبة المئوية: ${percentage}%`;
         document.getElementById('pdf-rep-cheat').innerText = `مخالفات الغش: ${pData.cheatCount || 0}`;
 
-        // رسم دائرة SVG Pie Chart تفاعلية دقيقة
         let strokeDash = `${percentage}, 100`;
         let svgPie = `
             <svg width="120" height="120" viewBox="0 0 36 36" style="transform: rotate(-90deg);">
@@ -738,7 +775,6 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
             </svg>`;
         document.getElementById('svg-pie-container').innerHTML = svgPie;
 
-        // عرض تفاصيل الأسئلة وحلول الطالب (صح باللون الأخضر وخطأ باللون الأحمر)
         let ansHtml = "";
         let allQs = getAllQuestionsFlat();
         let studentAnsMap = pData.answersDetail || {};
@@ -765,14 +801,35 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         previewBox.style.display = 'block';
     });
 
-    window.generateStudentPDF = function() {
-        let studentName = document.getElementById('pdf-student-select').value;
-        if(!studentName) return alert("يرجى اختيار طالب أولاً!");
+    window.generateStudentPDF = async function() {
+        let val = document.getElementById('pdf-student-select').value;
+        if(!val) return alert("يرجى اختيار طالب أو اختيار التصدير الشامل!");
+
+        if(val === "EXPORT_ALL_ZIP") {
+            if(!window.allPlayersData) return alert("لا توجد بيانات طلاب!");
+            alert("جاري تحضير وتصدير ملفات PDF لكل الطلاب تباعاً...");
+            for(let name in window.allPlayersData) {
+                document.getElementById('pdf-student-select').value = name;
+                document.getElementById('pdf-student-select').dispatchEvent(new Event('change'));
+                await new Promise(r => setTimeout(r, 600));
+                let element = document.getElementById('pdf-preview-container');
+                let opt = {
+                    margin: 10,
+                    filename: `MrEhab_Report_${name}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                await html2pdf().from(element).set(opt).save();
+            }
+            alert("تم الانتهاء من تصدير جميع نتائج الطلاب بنجاح!");
+            return;
+        }
 
         let element = document.getElementById('pdf-preview-container');
         let opt = {
             margin:       10,
-            filename:     `MrEhab_Report_${studentName}.pdf`,
+            filename:     `MrEhab_Report_${val}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2, useCORS: true },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
