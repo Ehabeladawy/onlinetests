@@ -1,0 +1,3156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>منصة اختبارات مستر إيهاب العدوي</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;700;900&family=Poppins:wght@500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<style>
+:root {
+    --primary: #0ea5e9;
+    --indigo: #6366f1;
+    --gold: #f59e0b;
+    --success: #10b981;
+    --danger: #ef4444;
+    --purple: #8b5cf6;
+    --bg-dark: #020617;
+    --card-bg: rgba(15, 23, 42, 0.94);
+    --glass-border: rgba(56, 189, 248, 0.28);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent; }
+body { background: radial-gradient(circle at top, #0f172a 0%, #020617 100%); min-height: 100vh; padding: 10px; color: #f8fafc; overflow-x: hidden; overflow-y: auto; }
+#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+.scene { display: none; width: 100%; min-height: 95vh; flex-direction: column; align-items: center; padding: 12px 0; }
+.scene.active { display: flex; animation: fadeIn 0.35s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.main-card {
+    background: var(--card-bg); backdrop-filter: blur(22px);
+    width: 100%; max-width: 980px; border-radius: 28px;
+    border: 1.5px solid var(--glass-border);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(14, 165, 233, 0.12);
+    overflow: hidden; position: relative; margin: 0 auto; display: flex; flex-direction: column; padding: 24px;
+}
+
+.quiz-header {
+    padding: 16px 22px; background: linear-gradient(135deg, rgba(2, 6, 23, 0.85), rgba(15, 23, 42, 0.9));
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; gap: 15px; border-radius: 20px; margin-bottom: 20px;
+}
+
+.logo-container {
+    width: 78px; height: 78px; border-radius: 50%; border: 3px solid var(--success);
+    overflow: hidden; background: #020617; box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+    cursor: pointer; flex-shrink: 0; margin: 0 auto;
+}
+.logo-container-large {
+    width: 132px; height: 132px; border-radius: 50%; border: 4px solid var(--success);
+    overflow: hidden; background: #020617; box-shadow: 0 0 30px var(--success), 0 0 55px rgba(16, 185, 129, 0.45);
+    animation: glow-pulse 2.4s infinite ease-in-out; margin: 0 auto; flex-shrink: 0; cursor: pointer;
+}
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 18px var(--success); transform: scale(1); }
+    50% { box-shadow: 0 0 35px var(--success), 0 0 60px rgba(16, 185, 129, 0.7); transform: scale(1.04); }
+}
+.logo-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.waiting-logo-box {
+    width: 230px; height: 165px; border-radius: 20px; border: 3px solid var(--primary);
+    overflow: hidden; background: #020617; box-shadow: 0 0 25px var(--primary); margin: 15px auto;
+}
+.waiting-logo-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.header-text { text-align: center; flex: 1; }
+.header-text h1 { font-size: clamp(1.25rem, 3.5vw, 1.75rem); font-weight: 900; color: white; margin-bottom: 4px; }
+.animated-name {
+    background: linear-gradient(90deg, #fcd34d, #fffbeb, #f59e0b, #fffbeb, #fcd34d);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% auto; animation: shine 3s linear infinite; font-weight: 900; font-size: 1.05rem;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+input[type="text"], input[type="password"], input[type="number"], textarea, select {
+    width: 100%; max-width: 420px; padding: 12px 16px; border-radius: 14px;
+    border: 1.5px solid rgba(56, 189, 248, 0.25); background: rgba(2, 6, 23, 0.75);
+    color: #f8fafc; text-align: center; font-size: 1rem; outline: none; margin-bottom: 12px; transition: 0.25s;
+}
+select option { background: #0f172a; color: #fff; }
+input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
+
+.btn {
+    background: linear-gradient(135deg, var(--primary), #0284c7); color: white; padding: 11px 18px;
+    border: none; border-radius: 14px; font-size: 0.95rem; font-weight: 800; cursor: pointer;
+    transition: 0.25s; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+.btn:hover { transform: translateY(-2px); filter: brightness(1.12); }
+.btn-gold { background: linear-gradient(135deg, var(--gold), #d97706); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
+.btn-green { background: linear-gradient(135deg, var(--success), #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+.btn-danger { background: linear-gradient(135deg, var(--danger), #b91c1c); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+.btn-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
+.btn-teal { background: linear-gradient(135deg, #14b8a6, #0d9488); box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3); }
+.btn-dark { background: rgba(30, 41, 59, 0.9); border: 1px solid rgba(255,255,255,0.15); box-shadow: none; }
+.btn-xs { padding: 5px 9px; font-size: 0.78rem; border-radius: 9px; gap: 4px; }
+
+.instructions-list {
+    text-align: right; background: rgba(2, 6, 23, 0.65); padding: 18px 22px; border-radius: 18px;
+    margin: 15px 0; border-right: 4px solid var(--gold); border-left: 1px solid rgba(255,255,255,0.08);
+    width: 100%; max-width: 600px;
+}
+.instructions-list li { margin-bottom: 10px; font-size: 0.95rem; line-height: 1.65; list-style: none; color: #e2e8f0; }
+.instructions-list i { margin-left: 8px; }
+
+.qr-dark-badge {
+    background: linear-gradient(145deg, rgba(2, 6, 23, 0.9), rgba(15, 23, 42, 0.9));
+    padding: 14px 22px; border-radius: 22px; border: 1.5px dashed rgba(14, 165, 233, 0.5);
+    display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+#qrcode-container {
+    background: rgba(14, 165, 233, 0.08); padding: 10px; border-radius: 14px;
+    border: 1px solid rgba(56, 189, 248, 0.3); display: inline-block;
+}
+#qrcode-container img, #qrcode-container canvas { border-radius: 8px; display: block; }
+
+/* الكارت العائم الموحد للرسائل الجماعية والخاصة */
+#floating-student-toast {
+    position: fixed; top: 22px; left: 50%; transform: translateX(-50%) translateY(-160%);
+    z-index: 12500; background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
+    backdrop-filter: blur(18px); border: 2px solid var(--gold); border-radius: 20px;
+    padding: 15px 22px; width: calc(100% - 28px); max-width: 540px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(245, 158, 11, 0.45);
+    display: flex; align-items: center; gap: 14px; opacity: 0; pointer-events: none;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease; overflow: hidden;
+}
+#floating-student-toast.show-toast { transform: translateX(-50%) translateY(0); opacity: 1; }
+#floating-student-toast.private-mode {
+    border-color: #a855f7;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 32px rgba(168, 85, 247, 0.55);
+}
+.toast-icon-circle {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(245, 158, 11, 0.18); border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 1.25rem; flex-shrink: 0;
+}
+#floating-student-toast.private-mode .toast-icon-circle {
+    background: rgba(168, 85, 247, 0.2); border-color: #c084fc; color: #c084fc;
+}
+.toast-body-wrap { text-align: right; flex: 1; }
+.toast-header-title { font-size: 0.85rem; color: var(--gold); font-weight: 900; display: block; margin-bottom: 3px; }
+#floating-student-toast.private-mode .toast-header-title { color: #d8b4fe; }
+.toast-msg-content { font-size: 1.05rem; color: #ffffff; font-weight: 800; line-height: 1.5; overflow-wrap: anywhere; }
+.toast-progress-line {
+    position: absolute; bottom: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--gold)); width: 100%;
+}
+@keyframes toastBarShrink { from { width: 100%; } to { width: 0%; } }
+
+.sticky-timer {
+    position: sticky; top: 0; z-index: 150;
+    background: rgba(2, 6, 23, 0.96); backdrop-filter: blur(12px);
+    padding: 12px 20px; border-bottom: 2px dashed var(--gold);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    border-radius: 0 0 20px 20px; margin-bottom: 20px; width: 100%; max-width: 980px; box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+}
+
+.section-header-banner {
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.18), rgba(99, 102, 241, 0.18));
+    border-left: 5px solid var(--gold); border-right: 2px solid var(--primary);
+    padding: 12px 18px; border-radius: 12px; margin: 24px 0 14px 0;
+    color: var(--gold); font-size: clamp(1.05rem, 2.8vw, 1.3rem); font-weight: 900;
+    direction: ltr; text-align: left; font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.35); width: 100%; page-break-after: avoid;
+}
+
+.q-card {
+    background: rgba(2, 6, 23, 0.65); padding: 18px 20px; border-radius: 18px;
+    margin-bottom: 16px; border: 1.5px solid rgba(255, 255, 255, 0.1);
+    transition: 0.25s; width: 100%; text-align: left; direction: ltr;
+    page-break-inside: avoid; break-inside: avoid; position: relative;
+}
+.q-card:hover { border-color: rgba(14, 165, 233, 0.5); }
+.q-card.unanswered-card { border-color: var(--danger) !important; box-shadow: 0 0 25px rgba(239, 68, 68, 0.6) !important; }
+
+.q-points-badge {
+    display: inline-block; background: rgba(245, 158, 11, 0.16); border: 1px solid rgba(245, 158, 11, 0.5);
+    color: var(--gold); font-size: 0.78rem; font-weight: 900; padding: 2px 10px; border-radius: 999px;
+    margin-bottom: 8px; font-family: 'Cairo', sans-serif;
+}
+
+.q-title { font-size: clamp(1rem, 2.6vw, 1.18rem); font-weight: 700; color: #ffffff; margin-bottom: 12px; line-height: 1.6; font-family: 'Poppins', 'Cairo', sans-serif; }
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; direction: ltr; }
+@media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+
+.opt {
+    background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.14);
+    padding: 12px 15px; border-radius: 12px; cursor: pointer; font-weight: 700;
+    color: #f1f5f9; text-align: left; transition: 0.2s; font-family: 'Poppins', sans-serif;
+    display: flex; justify-content: space-between; align-items: center; font-size: 0.98rem;
+}
+.opt:hover { background: rgba(255,255,255,0.1); }
+.opt.selected { border-color: var(--primary); background: rgba(14, 165, 233, 0.25); color: #38bdf8; box-shadow: 0 0 12px rgba(14, 165, 233, 0.35); }
+
+.opt.correct-opt { border-color: #10b981 !important; background: rgba(16, 185, 129, 0.28) !important; color: #ffffff !important; font-weight: 800; }
+.opt.wrong-opt { border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.3) !important; color: #fca5a5 !important; text-decoration: line-through; }
+.opt.dimmed-opt { opacity: 0.45; }
+
+.passage-box {
+    background: rgba(99, 102, 241, 0.1); padding: 20px; border-radius: 16px;
+    border: 1.5px solid rgba(99, 102, 241, 0.45); line-height: 1.95; font-size: clamp(1rem, 2.5vw, 1.15rem);
+    direction: ltr; text-align: left; margin-bottom: 18px; color: #f8fafc; font-family: 'Poppins', sans-serif; page-break-inside: avoid;
+}
+.target-word { color: #ff4757; text-decoration: underline; font-weight: 900; background: rgba(255, 71, 87, 0.15); padding: 0 5px; border-radius: 4px; }
+
+.progress-container { width: 100%; height: 10px; background: rgba(0,0,0,0.6); border-radius: 5px; margin: 12px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+.progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--gold), var(--success)); transition: width 0.1s linear; }
+
+.sticky-word-bank-wrapper {
+    position: sticky; top: 68px; z-index: 120;
+    background: rgba(15, 23, 42, 0.96); backdrop-filter: blur(10px);
+    padding: 12px; border-radius: 15px; border: 2px dashed var(--gold);
+    margin-bottom: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+}
+.word-bank { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.drag-word {
+    background: var(--indigo); padding: 8px 18px; border-radius: 10px; cursor: pointer;
+    font-weight: 800; user-select: none; transition: 0.2s; border: 2px solid transparent; color: #fff; font-family: 'Poppins', sans-serif;
+}
+.drag-word.active-word { border-color: #fff; transform: scale(1.1); background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
+
+.blank-input {
+    width: 135px; padding: 6px 10px; margin: 4px 5px; border: 2px dashed var(--primary);
+    background: rgba(2, 6, 23, 0.85); color: var(--gold); font-weight: 900; text-align: center;
+    border-radius: 8px; outline: none; font-size: 1.05rem; cursor: pointer; font-family: 'Poppins', sans-serif;
+}
+.blank-input:focus { border-style: solid; border-color: var(--success); background: rgba(16, 185, 129, 0.15); }
+
+.stats-ribbon {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 12px; width: 100%; margin-bottom: 18px;
+}
+.stat-mini-card {
+    background: linear-gradient(145deg, rgba(2, 6, 23, 0.85), rgba(30, 41, 59, 0.55));
+    border: 1px solid rgba(255,255,255,0.1); border-bottom: 3px solid var(--primary);
+    padding: 12px 14px; border-radius: 16px; text-align: center;
+}
+.stat-mini-card .stat-val { font-size: 1.45rem; font-weight: 900; color: #fff; display: block; }
+.stat-mini-card .stat-lbl { font-size: 0.8rem; color: #94a3b8; font-weight: 700; }
+
+.control-toolbar-grid {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    background: rgba(2, 6, 23, 0.6); padding: 15px; border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.08); margin-bottom: 18px;
+}
+
+.filter-search-bar {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+    background: rgba(2, 6, 23, 0.5); padding: 10px 14px; border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px;
+}
+
+.leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+.leaderboard-table th, .leaderboard-table td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.08); text-align: center; font-size: 0.88rem; }
+.leaderboard-table th { color: var(--primary); font-weight: 900; background: rgba(2, 6, 23, 0.7); }
+.leaderboard-table tr:hover { background: rgba(14, 165, 233, 0.06); }
+
+.dashed-frame-gold { border: 2.5px dashed var(--gold); padding: 20px; border-radius: 22px; background: rgba(2, 6, 23, 0.65); width: 100%; max-width: 550px; margin: 12px auto; text-align: center; }
+.dashed-frame-blue { border: 2.5px dashed var(--primary); padding: 18px; border-radius: 22px; background: rgba(14, 165, 233, 0.08); width: 100%; max-width: 550px; margin: 12px auto; text-align: center; }
+
+.report-card-dark {
+    background: #020617; color: #f8fafc; padding: 26px; border-radius: 24px;
+    border: 2px solid rgba(14, 165, 233, 0.5); width: 100%; max-width: 820px; margin: 0 auto; box-sizing: border-box;
+}
+.exec-report-header {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.exec-badge-top {
+    background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.5);
+    color: #34d399; padding: 4px 16px; border-radius: 999px; font-size: 0.82rem; font-weight: 800; margin-bottom: 10px;
+}
+.report-stats-box {
+    border: 2px dashed #ffffff; border-radius: 20px; padding: 20px;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.6));
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; margin: 18px 0; page-break-inside: avoid;
+}
+.kpi-metrics-grid { flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 8px; direction: rtl; text-align: right; }
+.kpi-row-item {
+    background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255,255,255,0.1); border-right: 4px solid var(--primary);
+    padding: 8px 14px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;
+}
+.parent-legend-bar {
+    background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 14px;
+    padding: 12px 16px; margin-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px;
+    direction: rtl; font-size: 0.92rem; font-weight: 700; page-break-inside: avoid;
+}
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-left: 6px; vertical-align: middle; }
+
+.bottom-collapsible-box {
+    margin-top: 30px; background: rgba(2, 6, 23, 0.75); border: 1.5px dashed rgba(245, 158, 11, 0.4);
+    border-radius: 18px; overflow: hidden;
+}
+.bottom-collapsible-header {
+    padding: 14px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(245, 158, 11, 0.1); color: var(--gold); font-weight: 900; font-size: 1.05rem;
+}
+#question-upload-json {
+    width: 100%; max-width: none; min-height: 210px; resize: vertical;
+    text-align: left; direction: ltr; font-family: monospace; font-size: 0.88rem; line-height: 1.5;
+    background: #020617; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 12px;
+}
+
+.modal-backdrop-custom {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(10px); z-index: 11500;
+    justify-content: center; align-items: flex-start; overflow-y: auto; padding: 20px 10px;
+}
+.studio-modal-box {
+    background: linear-gradient(145deg, #0f172a, #020617); border: 2px solid var(--primary);
+    border-radius: 26px; padding: 24px; width: 100%; max-width: 940px;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.95); margin: auto;
+}
+.image-drop-zone {
+    border: 2.5px dashed var(--gold); border-radius: 20px; padding: 25px;
+    background: rgba(245, 158, 11, 0.05); text-align: center; cursor: pointer;
+    transition: 0.25s; margin-bottom: 16px;
+}
+.image-drop-zone:hover { background: rgba(245, 158, 11, 0.12); border-color: #fff; }
+.editor-q-item {
+    background: rgba(2, 6, 23, 0.8); border: 1.5px solid rgba(56, 189, 248, 0.3);
+    border-radius: 18px; padding: 16px; margin-bottom: 14px; text-align: right;
+}
+.editor-q-header {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    border-bottom: 1px dashed rgba(255,255,255,0.12); padding-bottom: 10px; margin-bottom: 12px;
+}
+.editor-input-ltr {
+    width: 100%; max-width: none !important; text-align: left !important; direction: ltr !important;
+    font-family: 'Poppins', 'Cairo', sans-serif; margin-bottom: 8px !important; padding: 10px 14px !important;
+}
+.editor-opt-row {
+    display: flex; align-items: center; gap: 8px; direction: ltr; margin-bottom: 6px;
+}
+
+/* صندوق مخزن الاختبارات السحابي والملفات المستقلة */
+.exam-vault-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(14, 165, 233, 0.12));
+    border: 2px solid var(--success); border-radius: 20px; padding: 18px; margin-bottom: 18px;
+}
+
+#cheat-warning-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(185, 28, 28, 0.96); z-index: 9999; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center; padding: 25px; backdrop-filter: blur(10px);
+}
+#freeze-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(2, 6, 23, 0.95); z-index: 9500; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 25px;
+}
+#message-center-modal {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(8px); z-index: 11000;
+    justify-content: center; align-items: center; padding: 15px;
+}
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+<canvas id="particles-js"></canvas>
+
+<!-- الكارت العائم الموحد للرسائل الجماعية والخاصة -->
+<div id="floating-student-toast" role="alert" aria-live="assertive">
+    <div class="toast-icon-circle"><i id="toast-icon-el" class="fas fa-bell"></i></div>
+    <div class="toast-body-wrap">
+        <span id="toast-sender-title" class="toast-header-title">تنبيه فوري من مستر إيهاب العدوي</span>
+        <div id="floating-toast-text" class="toast-msg-content"></div>
+    </div>
+    <div id="floating-toast-bar" class="toast-progress-line"></div>
+</div>
+
+<!-- شاشة التحذير الحمراء القوية عند محاولة الغش -->
+<div id="cheat-warning-overlay">
+    <i class="fas fa-exclamation-triangle" style="font-size: 5rem; color: #fef08a; margin-bottom: 20px;"></i>
+    <h1 style="font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; color: #fff; margin-bottom: 15px;">تحذير صارم من نظام مراقبة الامتحان!</h1>
+    <p id="cheat-overlay-msg" style="font-size: 1.3rem; font-weight: bold; color: #fef08a; max-width: 600px; line-height: 1.8; margin-bottom: 25px;">
+        لقد حاولت الخروج من شاشة الامتحان أو تصغيرها أو تحديث الصفحة! تم تسجيل محاولة غش فورية في لوحة تحكم مستر إيهاب.
+    </p>
+    <div style="background: rgba(0,0,0,0.5); padding: 12px 25px; border-radius: 12px; border: 2px dashed #fef08a; margin-bottom: 25px; font-size: 1.3rem; font-weight: 900;">
+        إجمالي محاولات الخروج المسجلة عليك الآن: <span id="cheat-modal-counter" style="color: #fde047; font-size: 1.6rem;">1</span>
+    </div>
+    <button class="btn btn-gold" onclick="dismissCheatWarning()" style="font-size: 1.3rem; padding: 15px 40px; color: #000;">
+        فهمت التحذير - العودة لاستكمال الاختبار فوراً
+    </button>
+</div>
+
+<!-- شاشة إيقاف/تجميد الاختبار المؤقت -->
+<div id="freeze-overlay">
+    <i class="fas fa-pause-circle" style="font-size: 5rem; color: var(--gold); margin-bottom: 20px;"></i>
+    <h1 style="font-size: 2.2rem; color: white; margin-bottom: 10px;">تم إيقاف الاختبار مؤقتاً بواسطة مستر إيهاب</h1>
+    <p style="font-size: 1.2rem; color: #cbd5e1;">يرجى الانتباه إلى المعلم، سيتم استئناف الوقت والامتحان بعد قليل...</p>
+</div>
+
+<!-- نافذة مركز الرسائل والتنبيهات الموحدة -->
+<div id="message-center-modal">
+    <div style="background: linear-gradient(145deg, #0f172a, #020617); border: 2px solid var(--primary); border-radius: 26px; padding: 26px; width: 100%; max-width: 520px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.95);">
+        <h3 style="color: var(--gold); margin-bottom: 6px; font-size: 1.35rem;"><i class="fas fa-paper-plane"></i> مركز الرسائل والتنبيهات العائمة</h3>
+        <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 16px;">تظهر الرسالة ككارت عائم أمام عين الطالب في موقعه الحالي لمدة 5 ثوانٍ مع نغمة تنبيه</p>
+
+        <div style="text-align: right; margin-bottom: 12px;">
+            <label style="font-size: 0.85rem; color: var(--primary); font-weight: bold; display: block; margin-bottom: 5px;">اختر المستلم (الجميع أو طالب محدد):</label>
+            <select id="modal-recipient-select" style="width: 100%; max-width: none; margin: 0;">
+                <option value="ALL">📢 تنبيه عام لجميع طلاب اللجنة</option>
+            </select>
+        </div>
+
+        <div style="text-align: right; margin-bottom: 12px;">
+            <label style="font-size: 0.85rem; color: var(--gold); font-weight: bold; display: block; margin-bottom: 6px;">رسائل سريعة جاهزة بنقرة واحدة:</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 7px; justify-content: center;">
+                <button type="button" class="btn btn-xs btn-dark" onclick="fillPresetMsg('⏳ تبقى 5 دقائق فقط على نهاية وقت الاختبار!')">⏳ تبقى 5 دقائق</button>
+                <button type="button" class="btn btn-xs btn-dark" onclick="fillPresetMsg('🔍 راجع جميع إجاباتك بهدوء وتأكد من عدم ترك أي سؤال!')">🔍 راجع إجاباتك</button>
+                <button type="button" class="btn btn-xs btn-dark" onclick="fillPresetMsg('👀 انتبه لورقتك ولا تلتفت حولك يا بطل!')">👀 انتبه لورقتك</button>
+                <button type="button" class="btn btn-xs btn-dark" onclick="fillPresetMsg('⚡ أسرع قليلاً في الحل يا بطل لتنهي في الوقت المحدد!')">⚡ أسرع قليلاً</button>
+                <button type="button" class="btn btn-xs btn-dark" onclick="fillPresetMsg('👏 أحسنت يا بطل، استمر بنفس التركيز والتميز!')">👏 تشجيع</button>
+            </div>
+        </div>
+
+        <textarea id="modal-message-textarea" placeholder="اكتب رسالتك أو تنبيهك هنا..." style="width: 100%; max-width: none; min-height: 85px; text-align: right; margin-bottom: 14px;"></textarea>
+
+        <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn-green" onclick="dispatchTeacherMessageNow()" style="flex: 2; font-size: 1.05rem;">
+                <i class="fas fa-bolt"></i> إرسال الكارت العائم الآن
+            </button>
+            <button type="button" class="btn btn-danger" onclick="closeMessageCenterModal()" style="flex: 1;">
+                إغلاق
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة أستوديو استخراج الاختبار من صورة (JPG/PNG) + محرر الأسئلة والدرجات التفاعلي -->
+<div id="image-exam-studio-modal" class="modal-backdrop-custom">
+    <div class="studio-modal-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-bottom:1.5px dashed rgba(255,255,255,0.15); padding-bottom:14px; margin-bottom:16px;">
+            <div>
+                <h2 style="color: var(--gold); font-size: 1.4rem;"><i class="fas fa-camera-retro"></i> أستوديو استخراج الاختبار من صورة & محرر الأسئلة والدرجات</h2>
+                <p style="color: #94a3b8; font-size: 0.88rem;">ارفع صورة اختبار (JPG / PNG / WebP) لاستخراج الأسئلة تلقائياً بالترتيب، ثم عدّل الأسئلة والإجابات والدرجات واعتمدها لهذا الاختبار المستقل</p>
+            </div>
+            <button type="button" class="btn btn-danger btn-xs" onclick="closeImageExamStudio()"><i class="fas fa-times"></i> إغلاق الأستوديو</button>
+        </div>
+
+        <div style="background: rgba(2,6,23,0.65); border: 1px solid rgba(56,189,248,0.25); border-radius: 18px; padding: 16px; margin-bottom: 18px;">
+            <div class="image-drop-zone" onclick="document.getElementById('exam-image-file-input').click()" ondragover="event.preventDefault()" ondrop="handleImageDrop(event)">
+                <input type="file" id="exam-image-file-input" accept="image/jpeg,image/png,image/webp,image/*" multiple style="display:none;" onchange="handleImageFilesSelected(this.files)">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 2.6rem; color: var(--gold); margin-bottom: 8px;"></i>
+                <h4 style="color: #fff; margin-bottom: 4px;">اضغط هنا لاختيار صورة أو عدة صور للاختبار (JPG, PNG) أو اسحبها إلى هنا</h4>
+                <p id="selected-images-label" style="color: var(--primary); font-size: 0.88rem; font-weight: bold;">لم يتم اختيار صورة بعد</p>
+            </div>
+
+            <div id="image-previews-strip" style="display:flex; gap:10px; overflow-x:auto; margin-bottom:12px;"></div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:10px; align-items:center; margin-bottom:12px;">
+                <div>
+                    <label style="display:block; font-size:0.8rem; color:#cbd5e1; margin-bottom:4px;">مفتاح Gemini AI البصري (اختياري لدقة استخراج وحل تلقائي 100%):</label>
+                    <input type="password" id="gemini-api-key-input" placeholder="اختياري: الصق Gemini API Key إن وجد..." style="width:100%; max-width:none; margin:0; padding:9px 12px; font-size:0.88rem;">
+                </div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; align-self:end;">
+                    <button type="button" class="btn btn-gold" onclick="extractQuestionsFromUploadedImages()" style="flex:1;">
+                        <i class="fas fa-magic"></i> استخراج الأسئلة من الصورة الآن
+                    </button>
+                    <button type="button" class="btn btn-dark" onclick="loadActiveQuestionsIntoVisualEditor()" style="flex:1;">
+                        <i class="fas fa-list-check"></i> جلب أسئلة الاختبار الحالي للتعديل
+                    </button>
+                </div>
+            </div>
+
+            <div id="ocr-status-box" style="display:none; background:rgba(14,165,233,0.12); border:1px solid var(--primary); padding:10px 15px; border-radius:12px; text-align:center;">
+                <div id="ocr-status-text" style="color:#38bdf8; font-weight:bold; font-size:0.92rem; margin-bottom:6px;">جاري قراءة الصورة واستخراج الأسئلة...</div>
+                <div class="progress-container" style="margin:0;"><div id="ocr-progress-bar" class="progress-bar" style="width:0%;"></div></div>
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; background:rgba(30,41,59,0.6); padding:12px 16px; border-radius:14px; margin-bottom:14px;">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <span style="color:#fff; font-weight:900;">عدد الأسئلة بالمحرر: <b id="editor-q-count" style="color:var(--primary);">0</b></span>
+                <span>|</span>
+                <span style="color:#fff; font-weight:900;">مجموع الدرجات الكلي: <b id="editor-total-points" style="color:var(--gold);">0</b> درجة</span>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <input type="number" id="bulk-points-input" value="1" min="0.5" step="0.5" style="width:75px; margin:0; padding:6px;">
+                <button type="button" class="btn btn-xs btn-purple" onclick="applyBulkPointsToAllEditorQuestions()"><i class="fas fa-balance-scale"></i> توحيد درجة كل سؤال</button>
+                <button type="button" class="btn btn-xs btn-green" onclick="addNewBlankQuestionToEditor('mcq')"><i class="fas fa-plus"></i> + سؤال اختياري</button>
+                <button type="button" class="btn btn-xs btn-teal" onclick="addNewBlankQuestionToEditor('gap')"><i class="fas fa-plus"></i> + سؤال إكمال/كتابة</button>
+            </div>
+        </div>
+
+        <div id="visual-questions-editor-list" style="max-height: 460px; overflow-y: auto; padding-right: 4px; margin-bottom: 16px;"></div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; border-top:1.5px dashed rgba(255,255,255,0.15); padding-top:16px;">
+            <button type="button" class="btn btn-green" onclick="saveAndBroadcastVisualEditorQuestions()" style="flex:2; font-size:1.05rem; padding:14px;">
+                <i class="fas fa-check-double"></i> حفظ واعتماد الأسئلة في هذا الاختبار المستقل فوراً
+            </button>
+            <button type="button" class="btn btn-gold" onclick="downloadStandaloneExamHtmlFile(true)" style="flex:1.5; font-size:1rem; padding:14px; color:#000;">
+                <i class="fas fa-file-code"></i> تنزيل كملف HTML مستقل جاهز لـ GitHub
+            </button>
+            <button type="button" class="btn btn-danger" onclick="closeImageExamStudio()" style="flex:0.8;">
+                إغلاق
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة إحصائيات الأسئلة الأصعب -->
+<div id="question-analytics-modal" class="modal-backdrop-custom">
+    <div class="studio-modal-box" style="max-width: 780px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed rgba(255,255,255,0.15); padding-bottom:12px; margin-bottom:15px;">
+            <h3 style="color:var(--gold);"><i class="fas fa-chart-bar"></i> تحليل دقة إجابات الطلاب والأسئلة الأكثر خطأً</h3>
+            <button type="button" class="btn btn-danger btn-xs" onclick="document.getElementById('question-analytics-modal').style.display='none'">إغلاق</button>
+        </div>
+        <div id="question-analytics-body" style="max-height: 500px; overflow-y: auto;"></div>
+    </div>
+</div>
+
+<!-- 1. شاشة البداية الرئيسية -->
+<div id="role-scene" class="scene active">
+    <div class="main-card" style="align-items: center; text-align: center;">
+        <div class="logo-container-large" onclick="handleLogoClick()" title="اضغط 5 مرات للدخول للوحة المعلم">
+            <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img" alt="مستر إيهاب">
+        </div>
+        <div class="header-text" style="width: 100%; margin-top: 15px;">
+            <h1 class="dyn-exam-title">2Prep term1 - ordinary -Unit1 test1 full exam</h1>
+            <h3 class="dyn-grade-title" style="color: var(--gold); margin: 5px 0;">الصف الثاني الإعدادي</h3>
+            <span class="animated-name">إعداد وبرمجة / مستر إيهاب العدوي</span>
+        </div>
+
+        <ul class="instructions-list">
+            <h3 style="text-align: center; color: var(--gold); font-weight: 900; margin-bottom: 12px;">
+                <i class="fas fa-shield-alt"></i> قواعد وتعليمات الامتحان الرسمي الصارمة
+            </h3>
+            <li><i class="fas fa-ban" style="color: var(--danger);"></i> <b>نظام مانع الغش الفعال:</b> الامتحان مزود بكود رقابي صارم يرصد أي محاولة للخروج من الشاشة أو تصغيرها أو فتح تطبيق آخر ويطلق صافرة إنذار فورية.</li>
+            <li><i class="fas fa-sync-alt" style="color: var(--danger);"></i> <b>تحذير من تحديث الصفحة (Refresh):</b> يُمنع تماماً عمل تحديث للصفحة أثناء الامتحان، ولن يخرجك النظام بل سيعيدك لنفس سؤالك مع احتساب <b>محاولة غش</b> عليك.</li>
+            <li><i class="fas fa-sign-in-alt" style="color: var(--primary);"></i> <b>المتابعة عند الانقطاع:</b> إذا خرجت من الامتحان لأي سبب قهري، يمكنك الدخول مرة أخرى بنفس اسمك وكود الغرفة للمتابعة من حيث توقفت تماماً، ولكنها <b>ستُحسب محاولة خروج/غش</b> في تقريرك.</li>
+            <li><i class="fas fa-random" style="color: var(--success);"></i> <b>الترتيب والإكمال:</b> الأسئلة مرتبة في صفحة واحدة متصلة، والاختيارات عشوائية لكل طالب، ولن يُقبل التسليم إلا بعد حل جميع الأسئلة.</li>
+        </ul>
+
+        <button class="btn btn-green" onclick="showScene('student-login-scene')" style="font-size: 1.3rem; padding: 15px 45px; width: 90%; max-width: 380px;">
+            <i class="fas fa-file-signature"></i> دخول الاختبار الرسمي
+        </button>
+
+        <div class="qr-dark-badge">
+            <span style="font-size: 0.9rem; color: var(--gold); font-weight: bold;"><i class="fa-solid fa-qrcode"></i> امسح الكود بالموبايل للدخول السريع لهذا الاختبار:</span>
+            <div id="qrcode-container"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. شاشة تسجيل دخول الطالب -->
+<div id="student-login-scene" class="scene">
+    <div class="main-card" style="align-items: center; text-align: center;">
+        <div class="logo-container" onclick="showScene('role-scene')">
+            <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img" alt="Logo">
+        </div>
+        <h2 class="dyn-exam-title" style="color: var(--primary); margin: 12px 0 4px 0; font-size: 1.35rem;">اسم الاختبار</h2>
+        <h4 class="dyn-grade-title" style="color: var(--gold); margin-bottom: 18px;">الصف الدراسي</h4>
+
+        <input type="text" id="studentName" placeholder="اكتب اسمك الثلاثي أو الرباعي بالكامل..." autocomplete="off">
+        <input type="text" id="roomPin" placeholder="أدخل كود دخول الاختبار المقدم من المعلم..." autocomplete="off">
+
+        <div style="display: flex; gap: 10px; width: 100%; max-width: 420px; justify-content: center; margin-top: 8px;">
+            <button class="btn btn-green" onclick="goToWaitingRoom()" style="flex: 2; font-size: 1.15rem;">
+                دخول الاختبار <i class="fas fa-arrow-left"></i>
+            </button>
+            <button class="btn btn-danger" onclick="showScene('role-scene')" style="flex: 1;">رجوع</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3. شاشة انتظار الطلاب -->
+<div id="student-waiting-scene" class="scene">
+    <div class="main-card" style="align-items: center; text-align: center;">
+        <div class="logo-container">
+            <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img" alt="Logo">
+        </div>
+        <h2 style="color: var(--success); margin: 12px 0 6px 0;">أنت الآن داخل قاعة انتظار الاختبار!</h2>
+        <p id="waiting-student-name" style="color: var(--gold); font-weight: bold; font-size: 1.15rem; margin-bottom: 10px;"></p>
+        <p style="color: #cbd5e1; margin-bottom: 15px;">استعد يا بطل، سيفتح الامتحان تلقائياً فور إعطاء مستر إيهاب إشارة البدء...</p>
+        
+        <div class="waiting-logo-box">
+            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr" alt="Waiting GIF">
+        </div>
+
+        <div style="margin-top: 15px;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.4rem; color: var(--primary);"></i>
+        </div>
+    </div>
+</div>
+
+<!-- 4. شاشة الاختبار المتصلة -->
+<div id="exam-scene" class="scene" style="padding: 0;">
+    <div class="sticky-timer">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--success); object-fit: cover;">
+            <div style="text-align: right;">
+                <div id="info-display" style="font-weight: 900; font-size: 1rem; color: #fff;"></div>
+                <div style="font-size: 0.85rem; color: var(--gold);">تم حل: <span id="top-solved-counter">0/30</span> | خروج: <span id="top-cheat-counter" style="color: var(--danger);">0</span></div>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="btn btn-gold" onclick="scrollToFirstUnanswered()" style="padding: 7px 12px; font-size: 0.85rem;">
+                <i class="fas fa-search"></i> سؤال متروك
+            </button>
+            <div id="totalTimer" style="font-size: 1.35rem; font-weight: 900; color: var(--gold); background: rgba(0,0,0,0.6); padding: 6px 14px; border-radius: 12px; border: 1.5px solid var(--gold);">
+                30:00
+            </div>
+        </div>
+    </div>
+
+    <div class="main-card" style="width: 100%; max-width: 980px; margin: 0 auto; padding: 16px;">
+        <div id="exam-content" style="width: 100%; display: flex; flex-direction: column;"></div>
+
+        <button id="finalSubmit" class="btn btn-green" onclick="confirmFinish()" style="width: 100%; margin-top: 25px; font-size: 1.35rem; padding: 18px;">
+            تسليم الاختبار وإرسال النتيجة لمستر إيهاب <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+
+<!-- 5. لوحة تحكم المعلم الشاملة (Dashboard) -->
+<div id="teacher-leaderboard-scene" class="scene">
+    <div class="main-card" style="max-width: 1040px;">
+        <div class="quiz-header">
+            <div class="logo-container" style="width: 65px; height: 65px;">
+                <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img" alt="Logo">
+            </div>
+            <div class="header-text">
+                <h1>لوحة تحكم مستر إيهاب العدوي الشاملة</h1>
+                <p class="dyn-exam-title" style="color: var(--gold); font-weight: bold; font-size: 0.95rem;"></p>
+                <span id="active-slot-badge" style="display:inline-block; background:rgba(16,185,129,0.2); border:1px solid var(--success); color:#34d399; padding:2px 12px; border-radius:999px; font-size:0.78rem; margin-top:4px; font-family:monospace;"></span>
+            </div>
+        </div>
+
+        <!-- =========================================================================
+             🗄️ مخزن الاختبارات السحابي وإنشاء اختبارات مستقلة بدون تعديل الكود أبداً
+             ========================================================================= -->
+        <div class="exam-vault-box">
+            <h3 style="color: #34d399; margin-bottom: 8px; text-align: center; font-size: 1.15rem;">
+                <i class="fas fa-layer-group"></i> مخزن الاختبارات المستقلة (كل اختبار له أسئلته وكوده وطلابه ورابطه المستقل تماماً)
+            </h3>
+            <p style="font-size: 0.85rem; color: #cbd5e1; text-align: center; margin-bottom: 12px;">
+                💡 ملاحظة ذكية: إذا حفظت هذا الملف بأي اسم جديد على GitHub (مثل <b>prep3.html</b>) سيستقل بذاته تلقائياً! أو يمكنك إنشاء اختبارات لا نهائية بالأسفل والتبديل بينها فوراً:
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center;">
+                <select id="vault-exams-dropdown" onchange="switchActiveExamSlot(this.value)" style="flex: 2; min-width: 240px; max-width: 420px; margin: 0; font-weight: bold; border-color: var(--success);">
+                    <option value="">-- اختر من مخزن اختباراتك المحفوظة --</option>
+                </select>
+                <button type="button" class="btn btn-green" onclick="createNewIndependentExamSlot()">
+                    <i class="fas fa-plus-circle"></i> إنشاء اختبار جديد مستقل في المخزن
+                </button>
+                <button type="button" class="btn btn-gold" onclick="copyCurrentExamStudentLink()" style="color:#000;">
+                    <i class="fas fa-link"></i> نسخ رابط هذا الاختبار للطلاب
+                </button>
+                <button type="button" class="btn btn-purple" onclick="downloadStandaloneExamHtmlFile(false)" title="ينزل لك ملف HTML جديد جاهز بالأسئلة الحالية لترفعه على GitHub باسم جديد">
+                    <i class="fas fa-download"></i> تنزيل كملف HTML مستقل لـ GitHub
+                </button>
+            </div>
+        </div>
+
+        <!-- إعدادات الاختبار الحالي المحدد -->
+        <div style="background: rgba(2, 6, 23, 0.65); padding: 18px; border-radius: 18px; border: 1.5px dashed rgba(14, 165, 233, 0.45); margin-bottom: 18px;">
+            <h3 style="color: var(--primary); margin-bottom: 12px; text-align: center; font-size: 1.1rem;"><i class="fas fa-sliders-h"></i> إعدادات هذا الاختبار المستقل وكود دخوله (لا تؤثر على أي اختبار آخر)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; align-items: end;">
+                <div>
+                    <label style="display:block; font-size:0.82rem; color:var(--gold); margin-bottom:4px;">كود دخول الطلاب (PIN):</label>
+                    <input type="text" id="custom-room-pin" value="0000" style="width:100%; margin:0; font-weight:900; font-size:1.15rem; color:var(--gold);">
+                </div>
+                <div>
+                    <label style="display:block; font-size:0.82rem; color:var(--gold); margin-bottom:4px;">اسم الاختبار:</label>
+                    <input type="text" id="custom-exam-title" value="2Prep term1 - ordinary -Unit1 test1 full exam" style="width:100%; margin:0; font-size:0.92rem;">
+                </div>
+                <div>
+                    <label style="display:block; font-size:0.82rem; color:var(--gold); margin-bottom:4px;">الصف الدراسي:</label>
+                    <input type="text" id="custom-grade-title" value="الصف الثاني الإعدادي" style="width:100%; margin:0; font-size:0.92rem;">
+                </div>
+                <div>
+                    <label style="display:block; font-size:0.82rem; color:var(--gold); margin-bottom:4px;">زمن الاختبار (دقائق):</label>
+                    <input type="number" id="custom-exam-minutes" value="30" style="width:100%; margin:0; font-size:1rem;">
+                </div>
+            </div>
+            <button class="btn btn-green" onclick="saveExamConfigToFirebase()" style="width: 100%; margin-top: 12px; padding: 10px;">
+                <i class="fas fa-save"></i> حفظ وتفعيل الإعدادات لهذا الاختبار فقط
+            </button>
+        </div>
+
+        <!-- شريط الإحصائيات الحية -->
+        <div class="stats-ribbon">
+            <div class="stat-mini-card" style="border-bottom-color: var(--primary);">
+                <span id="stat-total-students" class="stat-val">0</span>
+                <span class="stat-lbl">إجمالي الطلاب بالغرفة</span>
+            </div>
+            <div class="stat-mini-card" style="border-bottom-color: var(--gold);">
+                <span id="stat-solving-now" class="stat-val" style="color: var(--gold);">0</span>
+                <span class="stat-lbl">يحلون الآن</span>
+            </div>
+            <div class="stat-mini-card" style="border-bottom-color: var(--success);">
+                <span id="stat-finished-count" class="stat-val" style="color: var(--success);">0</span>
+                <span class="stat-lbl">سلّموا الاختبار</span>
+            </div>
+            <div class="stat-mini-card" style="border-bottom-color: var(--purple);">
+                <span id="stat-avg-score" class="stat-val" style="color: #c084fc;">0%</span>
+                <span class="stat-lbl">متوسط نسبة الفصل</span>
+            </div>
+            <div class="stat-mini-card" style="border-bottom-color: var(--danger);">
+                <span id="stat-total-cheats" class="stat-val" style="color: #f87171;">0</span>
+                <span class="stat-lbl">إجمالي محاولات الخروج</span>
+            </div>
+        </div>
+
+        <!-- شريط أيقونات التحكم الموحد والموسع للمعلم -->
+        <div class="control-toolbar-grid">
+            <button class="btn btn-green" onclick="startExamForAll()"><i class="fa-solid fa-play"></i> بدء الاختبار للجميع</button>
+            <button class="btn btn-danger" onclick="forceEndExamForAll()"><i class="fa-solid fa-stop-circle"></i> إنهاء الاختبار للجميع</button>
+            <button class="btn btn-teal" onclick="openImageExamStudio()"><i class="fa-solid fa-camera-retro"></i> إضافة اختبار من صورة (JPG/PNG)</button>
+            <button class="btn btn-purple" onclick="openImageExamStudio(true)"><i class="fa-solid fa-pen-to-square"></i> تعديل الأسئلة والدرجات</button>
+            <button class="btn btn-gold" onclick="openMessageCenterModal('ALL')"><i class="fa-solid fa-bullhorn"></i> إرسال تنبيه / رسالة خاصة</button>
+            <button class="btn btn-gold" onclick="toggleTeacherAnswers()"><i class="fa-solid fa-eye"></i> إظهار/إخفاء حلول الاختبار</button>
+            <button class="btn btn-purple" onclick="addExtraTimeForAll(5)"><i class="fa-solid fa-clock"></i> +5 دقائق</button>
+            <button class="btn btn-purple" onclick="addExtraTimeForAll(1)"><i class="fa-solid fa-plus-circle"></i> +1 دقيقة</button>
+            <button class="btn btn-teal" onclick="grantBonusPointsToAll()"><i class="fa-solid fa-gift"></i> منح درجات Bonus للجميع</button>
+            <button class="btn" id="btn-freeze-toggle" onclick="toggleFreezeExam()"><i class="fa-solid fa-pause"></i> تجميد مؤقت للشاشات</button>
+            <button class="btn btn-purple" id="btn-lock-room" onclick="toggleLockRoom()"><i class="fa-solid fa-door-closed"></i> قفل دخول متأخرين</button>
+            <button class="btn btn-gold" onclick="openQuestionAnalyticsModal()"><i class="fa-solid fa-chart-pie"></i> تحليل الأسئلة الأصعب</button>
+            <button class="btn btn-green" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> تصدير درجات Excel</button>
+            <button class="btn" onclick="showScene('teacher-pdf-hub')"><i class="fa-solid fa-file-pdf"></i> تقارير PDF للطلاب</button>
+            <button class="btn btn-danger" onclick="resetExamSession()"><i class="fa-solid fa-rotate-right"></i> إعادة الاختبار (تصفير)</button>
+            <button class="btn btn-danger" onclick="closeTeacherSessionAndExamForAll()" style="background: #7f1d1d; border: 1.5px solid #f87171;"><i class="fa-solid fa-power-off"></i> إغلاق الاختبار للجميع</button>
+        </div>
+
+        <!-- شريط الفلترة والبحث الذكي في جدول الطلاب -->
+        <div class="filter-search-bar">
+            <input type="text" id="student-search-filter" oninput="renderLeaderboardRows()" placeholder="🔍 ابحث باسم الطالب في الجدول..." style="margin: 0; max-width: 280px; padding: 8px 14px; font-size: 0.9rem; text-align: right;">
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="btn btn-xs btn-dark" onclick="setLeaderboardFilter('ALL')">الكل</button>
+                <button class="btn btn-xs btn-dark" onclick="setLeaderboardFilter('SOLVING')">⏳ يحلون الآن</button>
+                <button class="btn btn-xs btn-dark" onclick="setLeaderboardFilter('FINISHED')">✅ سلّموا</button>
+                <button class="btn btn-xs btn-dark" onclick="setLeaderboardFilter('CHEATERS')">⚠️ لديهم محاولات خروج</button>
+            </div>
+        </div>
+
+        <!-- جدول متابعة الطلاب -->
+        <div style="overflow-x: auto; width: 100%;">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>اسم الطالب</th>
+                        <th>الصف</th>
+                        <th>الدرجة</th>
+                        <th>التقدم</th>
+                        <th>محاولات الخروج/الغش</th>
+                        <th>الوقت المستغرق</th>
+                        <th>عنوان IP</th>
+                        <th>الحالة</th>
+                        <th>رسالة خاصة / تحكم</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+        </div>
+
+        <!-- قسم أسئلة الاختبار الكاملة للمعلم على الـ Smart Board -->
+        <div style="margin-top: 35px; border-top: 2px dashed rgba(255,255,255,0.18); padding-top: 20px; width: 100%;">
+            <h3 style="color: var(--gold); text-align: center; margin-bottom: 18px;">
+                <i class="fas fa-chalkboard-teacher"></i> عرض الاختبار الكامل للإشراف والشرح على السبورة الذكية
+            </h3>
+            <div id="teacher-questions-bank" style="display: flex; flex-direction: column; width: 100%;"></div>
+        </div>
+
+        <!-- قسم تحديث الأسئلة عبر JSON في الأسفل تماماً تحت الأسئلة وقابل للطي -->
+        <div class="bottom-collapsible-box">
+            <div class="bottom-collapsible-header" onclick="toggleBottomQuestionUpdater()">
+                <span><i class="fas fa-code"></i> تحديث الأسئلة مباشرة عبر كود JSON (متقدم)</span>
+                <i id="bottom-updater-chevron" class="fas fa-chevron-down"></i>
+            </div>
+            <div id="bottom-updater-body" style="display: none; padding: 18px;">
+                <p style="color:#cbd5e1; font-size:0.9rem; line-height:1.7; margin-bottom:12px; text-align:right;">
+                    الصق بنك الأسئلة بصيغة JSON ثم اضغط «تحديث وبث الأسئلة لجميع الطلاب». كل سؤال يدعم خاصية <b>points</b> لتحديد درجته.
+                </p>
+                <textarea id="question-upload-json" placeholder='[{"id":1,"points":2,"section":"1. Choose:","q":"She ____ to school.","o":["go","goes"],"a":"goes"}]'></textarea>
+                <div id="question-upload-status" style="margin:8px 0; color:#cbd5e1; text-align:center;"></div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                    <button class="btn btn-gold" onclick="publishQuestionSet()" style="flex:1;"><i class="fas fa-broadcast-tower"></i> تحديث وبث الأسئلة لهذا الاختبار فقط</button>
+                    <button class="btn btn-dark" onclick="loadCurrentQuestionSet()" style="flex:1;"><i class="fas fa-download"></i> تحميل الأسئلة الحالية للتعديل</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 6. صفحة مستقلة لتصدير تقارير الـ PDF -->
+<div id="teacher-pdf-hub" class="scene">
+    <div class="main-card" style="max-width: 900px; text-align: center;">
+        <h2 style="color: var(--primary); margin-bottom: 12px;"><i class="fa-solid fa-file-pdf"></i> مركز معاينة وتصدير تقارير الـ PDF للطلاب</h2>
+        <p style="color: #cbd5e1; margin-bottom: 18px;">اختر اسم الطالب لمعاينة تقريره وتصديره، أو اختر تصدير جميع الطلاب دفعة واحدة:</p>
+        
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px;">
+            <select id="pdf-student-select" onchange="previewSelectedStudentReport()" style="width: 100%; max-width: 420px; margin: 0;">
+                <option value="">-- اختر الطالب للمعاينة أو التصدير --</option>
+                <option value="EXPORT_ALL_ZIP" style="color: var(--gold); font-weight: bold;">📁 تصدير نتائج جميع الطلاب (ملفات PDF منفصلة)</option>
+            </select>
+            <button class="btn btn-green" onclick="generateStudentPDF()"><i class="fas fa-download"></i> تصدير النتيجة PDF</button>
+            <button class="btn btn-danger" onclick="showScene('teacher-leaderboard-scene')">رجوع للوحة المعلم</button>
+        </div>
+
+        <div id="teacher-pdf-live-preview" style="width: 100%; text-align: left; direction: ltr;"></div>
+    </div>
+</div>
+
+<!-- 7. شاشة النتيجة النهائية للطالب بعد التسليم -->
+<div id="result-scene" class="scene" style="text-align:center;">
+    <div class="main-card" style="align-items: center;">
+        <div class="logo-container-large" style="width: 115px; height: 115px; margin-bottom: 12px;">
+            <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img" alt="Logo">
+        </div>
+        <h1 style="color: var(--success); margin-bottom: 8px; font-size: clamp(1.6rem, 4vw, 2.2rem);">تم تسليم الاختبار بنجاح يا بطل!</h1>
+        <p class="dyn-exam-title" style="color: var(--primary); font-weight: bold; margin-bottom: 10px;"></p>
+
+        <div class="dashed-frame-gold">
+            <div id="student-score-line1" style="font-size: clamp(1.4rem, 4vw, 1.9rem); font-weight: 900; color: var(--success); margin-bottom: 8px;">
+                درجة الطالب: --
+            </div>
+            <div id="student-score-line2" style="font-size: clamp(1.2rem, 3.5vw, 1.6rem); font-weight: 900; color: var(--gold);">
+                درجة الامتحان الكلية: --
+            </div>
+            <div id="student-meta-lines" style="margin-top: 12px; font-size: 0.95rem; color: #cbd5e1; line-height: 1.7;"></div>
+        </div>
+
+        <div class="dashed-frame-blue">
+            <p style="color: #e2e8f0; font-weight: bold; margin-bottom: 12px; font-size: 0.95rem;">
+                يمكنك الآن تنزيل تقرير إجاباتك الرسمي المعتمد لولي الأمر بصيغة PDF:
+            </p>
+            <button class="btn btn-green" onclick="downloadStudentSelfPDF()" style="font-size: 1.15rem; padding: 14px 28px; width: 100%;">
+                <i class="fas fa-file-pdf"></i> تحميل نتيجة الاختبار PDF
+            </button>
+        </div>
+
+        <div id="student-review-area" style="width: 100%; margin-top: 20px;"></div>
+    </div>
+</div>
+
+<!-- نافذة الرقم السري المخفية للمعلم (5 ضغطات على اللوجو + 7127) -->
+<div id="password-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 6, 23, 0.9); z-index: 13000; justify-content: center; align-items: center; flex-direction: column;">
+    <div style="background: #0f172a; padding: 30px; border-radius: 24px; border: 2px dashed var(--primary); text-align: center; width: 90%; max-width: 360px; box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+        <h3 style="color: white; margin-bottom: 15px;">أدخل الرمز السري للإدارة</h3>
+        <input type="password" id="teacher-pass-input" placeholder="••••" maxlength="4" style="width: 160px; text-align: center; font-size: 2rem; letter-spacing: 10px; margin-bottom: 15px;">
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <button class="btn btn-green" onclick="verifyPassword()">دخول</button>
+            <button class="btn btn-danger" onclick="document.getElementById('password-modal').style.display='none'">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<audio id="sound-result" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, update, off } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC_ed0XfZkBt_xRf8dN3ciM37uidGZrCt8",
+        authDomain: "mrehabgames.firebaseapp.com",
+        projectId: "mrehabgames",
+        storageBucket: "mrehabgames.firebasestorage.app",
+        messagingSenderId: "379463494744",
+        appId: "1:379463494744:web:983a5677afb5b92faf2e2d"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwyI_20IR90uo8GbkEHjFLfeQYPxxierHZeIJBmGERZNJw6wzRd_-pXHL8N1MOhDfc/exec';
+    const LOGO_URL = 'https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD';
+
+    // =========================================================================
+    // نظام العزل التلقائي الذكي للاختبارات (بدون أي تدخل بالكود من المعلم!)
+    // يقرأ اسم ملف الـ HTML أو معرّف الرابط ?exam=... ليجعل كل اختبار مستقلاً بذاته 100%
+    // =========================================================================
+    /*__EMBEDDED_SLOT_START__*/
+    let EMBEDDED_DEFAULT_SLOT = "";
+    let EMBEDDED_DEFAULT_TITLE = "2Prep term1 - ordinary -Unit1 test1 full exam";
+    let EMBEDDED_DEFAULT_GRADE = "الصف الثاني الإعدادي";
+    let EMBEDDED_CUSTOM_QUESTIONS = null;
+    /*__EMBEDDED_SLOT_END__*/
+
+    function detectInitialExamSlotKey() {
+        const params = new URLSearchParams(window.location.search);
+        const urlExam = params.get('exam');
+        if(urlExam && urlExam.trim() !== "") {
+            return urlExam.trim().replace(/[.#$\[\]\/]/g, '_');
+        }
+        if(EMBEDDED_DEFAULT_SLOT && EMBEDDED_DEFAULT_SLOT.trim() !== "") {
+            return EMBEDDED_DEFAULT_SLOT.trim().replace(/[.#$\[\]\/]/g, '_');
+        }
+        let pathPart = decodeURIComponent(window.location.pathname.split('/').pop() || 'index');
+        pathPart = pathPart.replace(/\.html?$/i, '').replace(/[.#$\[\]\/]/g, '_').trim();
+        if(!pathPart || pathPart === 'index' || pathPart === '') {
+            return 'Exam_Default_Slot';
+        }
+        return 'ExamFile_' + pathPart;
+    }
+
+    let ACTIVE_EXAM_SLOT = detectInitialExamSlotKey();
+
+    function getSlotConfigPath() { return `examVault/${ACTIVE_EXAM_SLOT}/config`; }
+    function getSlotRoomPath(pin) { return `examVault/${ACTIVE_EXAM_SLOT}/rooms/${pin}`; }
+    function getSlotQuestionSetPath() { return `examVault/${ACTIVE_EXAM_SLOT}/questionSet`; }
+
+    let EXAM_NAME = EMBEDDED_DEFAULT_TITLE;
+    let GRADE_LEVEL = EMBEDDED_DEFAULT_GRADE;
+    let currentPin = "0000";
+    let configuredMinutes = 30;
+    let studentIP = "Unknown";
+
+    const listeningTextStr = "Ali is a teacher. He works at a primary school. He wants to understand Gen Alpha children better, so he is trying to get more information about them. Gen Alpha children were born around 2010 and after. They like using digital devices, watching videos, creating content, and chatting with friends. They also use emojis to show their feelings.";
+    
+    const readingPassageText = "Both Gen Z and Gen Alpha are today's young generations, growing up in a digital world. They have a lot in common, like using smartphones to watch videos and play games. Social media helps them <span class='target-word'>connect</span>, even if they live far apart. Technology helps them speak the same digital language and understand each other. It also helps <span class='target-word'>they</span> share their ideas and work together to make the world a better place.";
+
+    const dialogueContextText = "Rose is asking Farah about an ebook she is reading on her tablet.";
+    const fillBlankWords = ["balance", "identity", "trends", "permission", "Gen", "way"];
+
+    fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => { studentIP = data.ip; })
+        .catch(() => {});
+
+    // =========================================================================
+    // المؤثرات الصوتية والكارت العائم الموحد للرسائل الجماعية والخاصة
+    // =========================================================================
+    function playNotificationChime() {
+        try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            const ctx = new AudioCtx();
+            const now = ctx.currentTime;
+            [587.33, 880].forEach((freq, idx) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + idx * 0.13);
+                gain.gain.setValueAtTime(0.22, now + idx * 0.13);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.13 + 0.5);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now + idx * 0.13);
+                osc.stop(now + idx * 0.13 + 0.5);
+            });
+        } catch(e) {}
+    }
+
+    function playWarningSiren() {
+        try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            const ctx = new AudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(650, ctx.currentTime);
+            osc.frequency.linearRampToValueAtTime(320, ctx.currentTime + 0.35);
+            osc.frequency.linearRampToValueAtTime(650, ctx.currentTime + 0.7);
+            gain.gain.setValueAtTime(0.35, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.85);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.85);
+        } catch(e) {}
+    }
+
+    let toastTimeoutId = null;
+    function showFloatingStudentToast(msgText, isPrivate = false) {
+        const toast = document.getElementById('floating-student-toast');
+        const textEl = document.getElementById('floating-toast-text');
+        const barEl = document.getElementById('floating-toast-bar');
+        const senderEl = document.getElementById('toast-sender-title');
+        const iconEl = document.getElementById('toast-icon-el');
+        if(!toast || !textEl || !barEl) return;
+
+        playNotificationChime();
+        textEl.textContent = msgText;
+
+        if(isPrivate) {
+            toast.classList.add('private-mode');
+            if(senderEl) senderEl.textContent = "🔒 (رسالة خاصة لك من مستر إيهاب العدوي)";
+            if(iconEl) iconEl.className = "fas fa-user-shield";
+        } else {
+            toast.classList.remove('private-mode');
+            if(senderEl) senderEl.textContent = "📢 (تنبيه عاجل من مستر إيهاب العدوي)";
+            if(iconEl) iconEl.className = "fas fa-bullhorn";
+        }
+
+        barEl.style.animation = 'none';
+        void barEl.offsetWidth;
+        barEl.style.animation = 'toastBarShrink 5s linear forwards';
+
+        toast.classList.add('show-toast');
+        if(toastTimeoutId) clearTimeout(toastTimeoutId);
+        toastTimeoutId = setTimeout(() => {
+            toast.classList.remove('show-toast');
+        }, 5000);
+    }
+
+    // =========================================================================
+    // مشغل الصوت الطبيعي لنص الاستماع
+    // =========================================================================
+    let synth = window.speechSynthesis;
+    let utterance = new SpeechSynthesisUtterance(listeningTextStr);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+
+    function setNaturalVoice() {
+        let voices = synth.getVoices();
+        let naturalVoice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Microsoft Zira") || v.name.includes("Natural"));
+        if(naturalVoice) utterance.voice = naturalVoice;
+    }
+    if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = setNaturalVoice;
+    setNaturalVoice();
+
+    utterance.onboundary = function(event) {
+        let progress = document.getElementById('audio-progress');
+        if(progress) progress.style.width = ((event.charIndex / listeningTextStr.length) * 100) + '%';
+    };
+    utterance.onend = function() {
+        let progress = document.getElementById('audio-progress');
+        if(progress) { progress.style.width = '100%'; setTimeout(() => progress.style.width = '0%', 1000); }
+    };
+
+    window.playAudio = function() { if (synth.paused) { synth.resume(); } else { synth.cancel(); synth.speak(utterance); } };
+    window.pauseAudio = function() { synth.pause(); };
+    window.stopAudio = function() { synth.cancel(); };
+
+    // =========================================================================
+    // مصفوفة أسئلة الاختبار الافتراضية
+    // =========================================================================
+    function getMasterQuestionsList() {
+        if(EMBEDDED_CUSTOM_QUESTIONS && Array.isArray(EMBEDDED_CUSTOM_QUESTIONS) && EMBEDDED_CUSTOM_QUESTIONS.length > 0) {
+            return EMBEDDED_CUSTOM_QUESTIONS;
+        }
+        return [
+            { id: 1, points: 1, section: "1. Listen and choose the correct answer from a, b, c, or d:", sectionType: "listening", q: "1. Ali is trying to get more information about ........", o: ["Gen Z", "Gen Alpha", "old teachers", "school subjects"], a: "Gen Alpha" },
+            { id: 2, points: 1, q: "2. Gen Alpha children like watching videos, creating content, and ........ with friends.", o: ["traveling", "working", "chatting", "reading"], a: "chatting" },
+            { id: 3, points: 1, q: "3. Where does Mr. Ali work?", o: ["at a primary school", "at a hospital", "at a museum", "at a bank"], a: "at a primary school" },
+            { id: 4, points: 1, q: "4. Why is Mr. Ali trying to get more information about Gen Alpha?", o: ["to understand them better", "to sell phones", "to play games", "to write a book"], a: "to understand them better" },
+            { id: 5, points: 1, q: "5. When were Gen Alpha children born?", o: ["around 2010 and after", "in 1990", "before 2000", "in 2025"], a: "around 2010 and after" },
+            { id: 6, points: 1, q: "6. What do Gen Alpha children use to show their feelings?", o: ["emojis", "letters", "drawings", "magazines"], a: "emojis" },
+            { id: 7, points: 1, q: "7. What devices do they like using?", o: ["digital devices", "old radios", "typewriters", "landline phones"], a: "digital devices" },
+
+            { id: 8, points: 1, section: "2. Choose the correct answer from a, b, c, or d:", q: "1. A ........ is a group of people born around the same time.", o: ["community", "family", "generation", "team"], a: "generation" },
+            { id: 9, points: 1, q: "2. You should use your phone ........ . Too much screen time is an unhealthy habit.", o: ["rarely", "loudly", "wisely", "slowly"], a: "wisely" },
+            { id: 10, points: 1, q: "3. The words 'agree' and 'refuse' are ........ .", o: ["synonyms", "antonyms", "prefixes", "adverbs"], a: "antonyms" },
+            { id: 11, points: 1, q: "4. To get the opposite of 'healthy', we add the prefix '........'.", o: ["un-", "im-", "dis-", "in-"], a: "un-" },
+
+            { id: 12, points: 1, type: 'gap', section: "3. Read and complete the text with words from the following list:", sectionType: "gaps", q: "Gap (1): following the latest ........ online.", a: "trends" },
+            { id: 13, points: 1, type: 'gap', q: "Gap (2): taught him that his ........ is what makes him special.", a: "identity" },
+            { id: 14, points: 1, type: 'gap', q: "Gap (3): advised him to ........ his online and offline activities.", a: "balance" },
+            { id: 15, points: 1, type: 'gap', q: "Gap (4): asks for his parents' ........ before he downloads a new game.", a: "permission" },
+
+            { id: 16, points: 1, section: "4. Read the following passage, then answer the questions:", sectionType: "passage", q: "1. Gen Z and Gen Alpha both use ........ .", o: ["newspapers", "letters", "smartphones", "radios"], a: "smartphones" },
+            { id: 17, points: 1, q: "2. The underlined word '<span class=\"target-word\">connect</span>' is the opposite of '........'.", o: ["link", "join", "disconnect", "contact"], a: "disconnect" },
+            { id: 18, points: 1, q: "3. What does the underlined pronoun '<span class=\"target-word\">they</span>' refer to?", o: ["Gen Z and Gen Alpha", "smartphones", "videos", "games"], a: "Gen Z and Gen Alpha" },
+            { id: 19, points: 1, q: "4. What is the passage mainly about?", o: ["Young generations in a digital world", "How to play video games", "The history of radios", "How to write letters"], a: "Young generations in a digital world" },
+            { id: 20, points: 1, q: "5. How does social media help young generations?", o: ["It helps them connect", "It makes them sleep", "It stops communication", "It wastes time"], a: "It helps them connect" },
+            { id: 21, points: 1, q: "6. How can technology make the world a better place?", o: ["By sharing ideas and working together", "By breaking things", "By stopping work", "By isolating people"], a: "By sharing ideas and working together" },
+
+            { id: 22, points: 1, section: "5. Rewrite the following sentences correctly:", q: "1. The boys play football on Fridays in the garden. (Look!)", o: ["Look! The boys are playing football in the garden.", "Look! The boys play football.", "Look! The boys played football.", "Look! The boys will play football."], a: "Look! The boys are playing football in the garden." },
+            { id: 23, points: 1, q: "2. I have arranged to meet my friends tonight. (am)", o: ["I am meeting my friends tonight.", "I am meet my friends.", "I am met my friends.", "I am meeting friends yesterday."], a: "I am meeting my friends tonight." },
+            { id: 24, points: 1, q: "3. They usually travel by train. (At the moment)", o: ["At the moment, they are traveling by train.", "At the moment, they travel by train.", "At the moment, they traveled.", "At the moment, they will travel."], a: "At the moment, they are traveling by train." },
+            { id: 25, points: 1, q: "4. He doesn't watch TV in the afternoon. (Now)", o: ["He isn't watching TV now.", "He doesn't watch TV now.", "He isn't watch TV now.", "He didn't watch TV now."], a: "He isn't watching TV now." },
+
+            { id: 26, points: 1, section: "6. Complete the following dialogue:", sectionType: "dialogue", q: "Rose: What are you doing now, Farah?<br>Farah: I am reading an (1) ........", o: ["ebook", "magazine", "newspaper", "letter"], a: "ebook" },
+            { id: 27, points: 1, q: "Rose: An ebook? What is (2) ........ about?", o: ["it", "they", "he", "she"], a: "it" },
+            { id: 28, points: 1, q: "Farah: It's about digital devices.<br>Rose: That sounds interesting! I think digital devices are great.<br>Farah: I (3) ........ with you. They help us learn and have fun.", o: ["agree", "refuse", "disagree", "argue"], a: "agree" },
+            { id: 29, points: 1, q: "Rose: (4) ........ often do you read them?", o: ["How", "What", "Where", "When"], a: "How" },
+            { id: 30, points: 1, q: "Farah: I often read them before bedtime.<br>Rose: That's a good habit.", o: ["Good job", "Bad habit", "I hate reading", "No"], a: "Good job" }
+        ];
+    }
+
+    let student = { name: '', pin: '' };
+    let cheatCount = 0;
+    let studentBonusPoints = 0;
+    let isExamStarted = false;
+    let isExamFinished = false;
+    let examStartTime = 0;
+    let totalSeconds = 1800;
+    let userAnswers = {};
+    let activeQuestionSet = null;
+    let lastQuestionSetTimestamp = 0;
+    let totalQuestionsCount = getMasterQuestionsList().length;
+    let activeWordToDrop = null;
+    let shuffledWords = [];
+    let roomListenerAttached = false;
+    let studentPrivateListenerAttached = false;
+    let teacherPlayersCache = {};
+    let currentLeaderboardFilter = 'ALL';
+
+    function getActiveQuestionsList() {
+        const list = activeQuestionSet && Array.isArray(activeQuestionSet) && activeQuestionSet.length
+            ? activeQuestionSet : getMasterQuestionsList();
+        return list.map((q, idx) => ({
+            ...q,
+            id: q.id ?? idx + 1,
+            points: (q.points !== undefined && Number(q.points) > 0) ? Number(q.points) : 1,
+            o: Array.isArray(q.o) ? [...q.o] : q.o
+        }));
+    }
+
+    function getTotalExamMaxPoints(qList = null) {
+        const list = qList || getActiveQuestionsList();
+        return list.reduce((sum, q) => sum + (Number(q.points) || 1), 0);
+    }
+
+    function calculateStudentEarnedPoints(ansMap, qList = null, bonus = 0) {
+        const list = qList || getActiveQuestionsList();
+        const maxPts = getTotalExamMaxPoints(list);
+        let earned = 0;
+        list.forEach(q => {
+            let stAns = (ansMap && ansMap[q.id] ? String(ansMap[q.id]).trim() : "");
+            if(stAns && stAns.toLowerCase() === String(q.a || "").trim().toLowerCase()) {
+                earned += (Number(q.points) || 1);
+            }
+        });
+        earned = Math.min(maxPts, earned + (Number(bonus) || 0));
+        return Math.round(earned * 100) / 100;
+    }
+
+    function hasDefault4GapsStructure(list) {
+        return list.length === 30 && list.some(q => q.id === 12 && q.sectionType === 'gaps');
+    }
+
+    function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function updateDynamicTitlesOnUI() {
+        document.querySelectorAll('.dyn-exam-title').forEach(el => el.innerText = EXAM_NAME);
+        document.querySelectorAll('.dyn-grade-title').forEach(el => el.innerText = GRADE_LEVEL);
+        const badge = document.getElementById('active-slot-badge');
+        if(badge) badge.textContent = `المعرّف المستقل للاختبار: ${ACTIVE_EXAM_SLOT}`;
+        document.title = `${EXAM_NAME} - مستر إيهاب العدوي`;
+        renderQRCodeForCurrentSlot();
+    }
+
+    function getShareableStudentUrl() {
+        const url = new URL(window.location.href);
+        if(ACTIVE_EXAM_SLOT && !ACTIVE_EXAM_SLOT.startsWith('ExamFile_')) {
+            url.searchParams.set('exam', ACTIVE_EXAM_SLOT);
+        }
+        return url.toString();
+    }
+
+    function renderQRCodeForCurrentSlot() {
+        const qrContainer = document.getElementById('qrcode-container');
+        if(qrContainer && window.QRCode) {
+            qrContainer.innerHTML = "";
+            new QRCode(qrContainer, { text: getShareableStudentUrl(), width: 115, height: 115, colorDark: "#38bdf8", colorLight: "#020617" });
+        }
+    }
+
+    // =========================================================================
+    // إدارة مخزن الاختبارات السحابي (Vault) وإنشاء اختبارات مستقلة بضغطة زر
+    // =========================================================================
+    let activeConfigRef = null;
+    let activeQuestionsRef = null;
+
+    function bindActiveSlotListeners() {
+        if(activeConfigRef) off(activeConfigRef);
+        if(activeQuestionsRef) off(activeQuestionsRef);
+
+        activeConfigRef = ref(db, getSlotConfigPath());
+        onValue(activeConfigRef, (snap) => {
+            if(snap.exists()) {
+                const cfg = snap.val();
+                if(cfg.pin) currentPin = String(cfg.pin).trim();
+                if(cfg.examName) EXAM_NAME = cfg.examName;
+                if(cfg.gradeLevel) GRADE_LEVEL = cfg.gradeLevel;
+                if(cfg.minutes) configuredMinutes = parseInt(cfg.minutes) || 30;
+
+                const pinInp = document.getElementById('custom-room-pin');
+                const titleInp = document.getElementById('custom-exam-title');
+                const gradeInp = document.getElementById('custom-grade-title');
+                const minInp = document.getElementById('custom-exam-minutes');
+                if(pinInp && document.activeElement !== pinInp) pinInp.value = currentPin;
+                if(titleInp && document.activeElement !== titleInp) titleInp.value = EXAM_NAME;
+                if(gradeInp && document.activeElement !== gradeInp) gradeInp.value = GRADE_LEVEL;
+                if(minInp && document.activeElement !== minInp) minInp.value = configuredMinutes;
+                updateDynamicTitlesOnUI();
+                listenToSubmissions(true);
+            } else {
+                // أول مرة يفتح فيها هذا الملف أو الاختبار المستقل، يحفظ إعداداته الخاصة به فقط
+                set(ref(db, getSlotConfigPath()), {
+                    slotId: ACTIVE_EXAM_SLOT,
+                    pin: currentPin,
+                    examName: EXAM_NAME,
+                    gradeLevel: GRADE_LEVEL,
+                    minutes: configuredMinutes,
+                    createdAt: Date.now()
+                });
+                set(ref(db, `examVaultIndex/${ACTIVE_EXAM_SLOT}`), {
+                    slotId: ACTIVE_EXAM_SLOT,
+                    examName: EXAM_NAME,
+                    gradeLevel: GRADE_LEVEL,
+                    updatedAt: Date.now()
+                });
+                updateDynamicTitlesOnUI();
+                listenToSubmissions(true);
+            }
+        });
+
+        activeQuestionsRef = ref(db, getSlotQuestionSetPath());
+        onValue(activeQuestionsRef, (qSnap) => {
+            if(qSnap.exists() && Array.isArray(qSnap.val().questions)) {
+                activeQuestionSet = qSnap.val().questions;
+                lastQuestionSetTimestamp = Number(qSnap.val().updatedAt || 0);
+                totalQuestionsCount = activeQuestionSet.length;
+            } else {
+                activeQuestionSet = null;
+                totalQuestionsCount = getMasterQuestionsList().length;
+            }
+            renderTeacherBank();
+            renderLeaderboardRows();
+        });
+    }
+
+    function listenToVaultIndexDropdown() {
+        onValue(ref(db, 'examVaultIndex'), (snap) => {
+            const sel = document.getElementById('vault-exams-dropdown');
+            if(!sel) return;
+            const data = snap.val() || {};
+            sel.innerHTML = `<option value="${ACTIVE_EXAM_SLOT}">📂 الاختبار الحالي النشط: ${EXAM_NAME}</option>`;
+            Object.keys(data).forEach(slotKey => {
+                if(slotKey === ACTIVE_EXAM_SLOT) return;
+                const item = data[slotKey];
+                const opt = document.createElement('option');
+                opt.value = slotKey;
+                opt.textContent = `📘 ${item.examName || slotKey} (${item.gradeLevel || ''})`;
+                sel.appendChild(opt);
+            });
+        });
+    }
+
+    window.createNewIndependentExamSlot = async function() {
+        let newTitle = prompt("اكتب اسم الاختبار الجديد المستقل (مثلاً: اختبار ثالث إعدادي - الوحدة الأولى):");
+        if(!newTitle || !newTitle.trim()) return;
+        let newGrade = prompt("اكتب اسم الصف الدراسي لهذا الاختبار:", "الصف الثالث الإعدادي") || "الصف الثالث الإعدادي";
+        let newPin = prompt("حدد كود دخول الطلاب (PIN) لهذا الاختبار الجديد:", "1111") || "1111";
+
+        let newSlotKey = 'Exam_' + Date.now();
+        ACTIVE_EXAM_SLOT = newSlotKey;
+        EXAM_NAME = newTitle.trim();
+        GRADE_LEVEL = newGrade.trim();
+        currentPin = newPin.trim();
+        activeQuestionSet = null;
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('exam', ACTIVE_EXAM_SLOT);
+        window.history.pushState({}, '', url.toString());
+
+        await set(ref(db, getSlotConfigPath()), {
+            slotId: ACTIVE_EXAM_SLOT,
+            pin: currentPin,
+            examName: EXAM_NAME,
+            gradeLevel: GRADE_LEVEL,
+            minutes: configuredMinutes,
+            updatedAt: Date.now()
+        });
+
+        await set(ref(db, `examVaultIndex/${ACTIVE_EXAM_SLOT}`), {
+            slotId: ACTIVE_EXAM_SLOT,
+            examName: EXAM_NAME,
+            gradeLevel: GRADE_LEVEL,
+            updatedAt: Date.now()
+        });
+
+        bindActiveSlotListeners();
+        alert(`🎉 تم إنشاء الاختبار الجديد المستقل بنجاح وحفظه في مخزنك!\n\nاسم الاختبار: ${EXAM_NAME}\nكود الدخول: ${currentPin}\n\nيمكنك الآن رفع صورة أسئلته أو تعديلها، ولن يؤثر إطلاقاً على أي اختبار سابق!`);
+    };
+
+    window.switchActiveExamSlot = function(slotKey) {
+        if(!slotKey || slotKey === ACTIVE_EXAM_SLOT) return;
+        ACTIVE_EXAM_SLOT = slotKey;
+        const url = new URL(window.location.href);
+        url.searchParams.set('exam', ACTIVE_EXAM_SLOT);
+        window.history.pushState({}, '', url.toString());
+        bindActiveSlotListeners();
+    };
+
+    window.copyCurrentExamStudentLink = function() {
+        const link = getShareableStudentUrl();
+        navigator.clipboard.writeText(link).then(() => {
+            alert(`✅ تم نسخ رابط هذا الاختبار المستقل بنجاح!\n\nالرابط:\n${link}\n\nأرسله لطلاب هذا الصف، سيفتح لهم هذا الاختبار بأسئلته وكوده الخاص مباشرة.`);
+        }).catch(() => {
+            prompt("انسخ رابط هذا الاختبار المستقل:", link);
+        });
+    };
+
+    // تنزيل ملف HTML مستقل تماماً مدمج فيه الأسئلة الجديدة والاسم الجديد لرفعه على GitHub كأرشيف مستقل
+    window.downloadStandaloneExamHtmlFile = function(useStudioDraft = false) {
+        const questionsToEmbed = (useStudioDraft && studioDraftQuestions && studioDraftQuestions.length > 0)
+            ? studioDraftQuestions
+            : getActiveQuestionsList();
+
+        let newFileName = prompt("اكتب اسم ملف الـ HTML الجديد الذي تريد تنزيله لرفعه على GitHub (مثلاً: prep3_unit1.html):", `${ACTIVE_EXAM_SLOT}.html`);
+        if(!newFileName) return;
+        if(!newFileName.endsWith('.html')) newFileName += '.html';
+
+        let cleanSlotFromFile = 'ExamFile_' + newFileName.replace(/\.html?$/i, '').replace(/[.#$\[\]\/]/g, '_');
+
+        let fullHtml = document.documentElement.outerHTML;
+        const replacementBlock = `/*__EMBEDDED_SLOT_START__*/
+    let EMBEDDED_DEFAULT_SLOT = ${JSON.stringify(cleanSlotFromFile)};
+    let EMBEDDED_DEFAULT_TITLE = ${JSON.stringify(EXAM_NAME)};
+    let EMBEDDED_DEFAULT_GRADE = ${JSON.stringify(GRADE_LEVEL)};
+    let EMBEDDED_CUSTOM_QUESTIONS = ${JSON.stringify(questionsToEmbed)};
+    /*__EMBEDDED_SLOT_END__*/`;
+
+        fullHtml = fullHtml.replace(/\/\*__EMBEDDED_SLOT_START__\*\/[\s\S]*?\/\*__EMBEDDED_SLOT_END__\*\//, replacementBlock);
+
+        const blob = new Blob(["<!DOCTYPE html>\n" + fullHtml], { type: "text/html;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = newFileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+        bindActiveSlotListeners();
+        listenToVaultIndexDropdown();
+
+        let savedTeacherSession = localStorage.getItem('mrehab_teacher_active');
+        let sessionTime = localStorage.getItem('mrehab_teacher_time');
+        if(savedTeacherSession === 'true' && sessionTime) {
+            if(Date.now() - parseInt(sessionTime) < 24 * 60 * 60 * 1000) {
+                showScene('teacher-leaderboard-scene');
+                renderTeacherBank();
+                return;
+            } else {
+                localStorage.removeItem('mrehab_teacher_active');
+                localStorage.removeItem('mrehab_teacher_time');
+            }
+        }
+
+        let activeStudentRaw = localStorage.getItem(`mrehab_active_session_${ACTIVE_EXAM_SLOT}`);
+        if(activeStudentRaw) {
+            try {
+                let sObj = JSON.parse(activeStudentRaw);
+                if(sObj && sObj.name && !sObj.finished) {
+                    student.name = sObj.name;
+                    student.pin = sObj.pin;
+                    currentPin = sObj.pin;
+                    cheatCount = (parseInt(sObj.cheatCount) || 0) + 1;
+                    examStartTime = sObj.startTime || Date.now();
+                    totalSeconds = sObj.remainingSeconds || (configuredMinutes * 60);
+
+                    startExam(true);
+                    setTimeout(() => {
+                        triggerCheatAlarm("لقد قمت بتحديث الصفحة (Refresh) أو إعادة فتحها أثناء الامتحان! تم إرجاعك لنفس سؤالك مع تسجيل محاولة غش.");
+                    }, 500);
+                }
+            } catch(e) {}
+        }
+    });
+
+    // =========================================================================
+    // نظام الحماية الصارم ضد الغش والخروج وتصغير الشاشة
+    // =========================================================================
+    let lastCheatTrigger = 0;
+    function triggerCheatAlarm(customMsg) {
+        if(!isExamStarted || isExamFinished) return;
+        let now = Date.now();
+        if(now - lastCheatTrigger < 1500) return;
+        lastCheatTrigger = now;
+
+        playWarningSiren();
+        document.getElementById('cheat-overlay-msg').innerText = customMsg || "تنبيه صارم! لقد حاولت الخروج من شاشة الامتحان أو تصغيرها! تم رصد المخالفة وإرسالها لمستر إيهاب.";
+        document.getElementById('cheat-modal-counter').innerText = cheatCount;
+        document.getElementById('top-cheat-counter').innerText = cheatCount;
+        document.getElementById('cheat-warning-overlay').style.display = 'flex';
+        saveAndSyncState();
+    }
+
+    window.dismissCheatWarning = function() {
+        document.getElementById('cheat-warning-overlay').style.display = 'none';
+    };
+
+    window.addEventListener('beforeunload', (e) => { if(isExamStarted && !isExamFinished) { e.preventDefault(); e.returnValue = ''; } });
+    document.addEventListener('visibilitychange', () => {
+        if(document.hidden && isExamStarted && !isExamFinished) {
+            cheatCount++;
+            triggerCheatAlarm("لقد غادرت شاشة الامتحان أو قمت بتصغير المتصفح! تم احتساب محاولة خروج/غش عليك.");
+        }
+    });
+    window.addEventListener('blur', () => {
+        if(isExamStarted && !isExamFinished) {
+            cheatCount++;
+            triggerCheatAlarm("لقد فقدت التركيز على نافذة الامتحان أو فتحت نافذة جانبية! تم احتساب محاولة غش.");
+        }
+    });
+    window.addEventListener('keyup', (e) => {
+        if((e.key === 'PrintScreen' || e.keyCode === 44) && isExamStarted && !isExamFinished) {
+            cheatCount++;
+            triggerCheatAlarm("محاولة تصوير الشاشة (Screenshot) ممنوعة تماماً وتم رصدها كمحاولة غش!");
+        }
+    });
+    window.addEventListener('keydown', (e) => {
+        if(isExamStarted && !isExamFinished) {
+            if(e.key === 'F5' || ((e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R'))) {
+                e.preventDefault();
+                cheatCount++;
+                triggerCheatAlarm("محاولة تحديث الصفحة (Refresh) ممنوعة أثناء الاختبار! تم رصد المحاولة.");
+            }
+        }
+    });
+
+    // =========================================================================
+    // إدارة دخول المعلم (5 ضغطات على اللوجو + الرمز 7127 حصراً)
+    // =========================================================================
+    let logoClickCount = 0; let logoClickTimer = null;
+    window.handleLogoClick = function() {
+        logoClickCount++;
+        if (logoClickTimer) clearTimeout(logoClickTimer);
+        logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1200);
+        if (logoClickCount === 5) {
+            logoClickCount = 0;
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('teacher-pass-input').value = '';
+            document.getElementById('teacher-pass-input').focus();
+        }
+    };
+
+    window.verifyPassword = function() {
+        if (document.getElementById('teacher-pass-input').value === '7127') {
+            document.getElementById('password-modal').style.display = 'none';
+            localStorage.setItem('mrehab_teacher_active', 'true');
+            localStorage.setItem('mrehab_teacher_time', Date.now().toString());
+            showScene('teacher-leaderboard-scene');
+            listenToSubmissions(true);
+            renderTeacherBank();
+        } else {
+            alert('الرمز السري غير صحيح!');
+        }
+    };
+
+    window.saveExamConfigToFirebase = function() {
+        let newPin = document.getElementById('custom-room-pin').value.trim();
+        let newTitle = document.getElementById('custom-exam-title').value.trim();
+        let newGrade = document.getElementById('custom-grade-title').value.trim();
+        let newMins = parseInt(document.getElementById('custom-exam-minutes').value) || 30;
+
+        if(!newPin || !newTitle) return alert("يرجى كتابة كود الغرفة واسم الاختبار!");
+        currentPin = newPin;
+        EXAM_NAME = newTitle;
+        GRADE_LEVEL = newGrade;
+        configuredMinutes = newMins;
+
+        set(ref(db, getSlotConfigPath()), {
+            slotId: ACTIVE_EXAM_SLOT,
+            pin: currentPin,
+            examName: EXAM_NAME,
+            gradeLevel: GRADE_LEVEL,
+            minutes: configuredMinutes,
+            updatedAt: Date.now()
+        });
+
+        set(ref(db, `examVaultIndex/${ACTIVE_EXAM_SLOT}`), {
+            slotId: ACTIVE_EXAM_SLOT,
+            examName: EXAM_NAME,
+            gradeLevel: GRADE_LEVEL,
+            updatedAt: Date.now()
+        });
+
+        update(ref(db, getSlotRoomPath(currentPin)), {
+            roomPin: currentPin,
+            status: 'waiting',
+            frozen: false,
+            locked: false
+        });
+
+        updateDynamicTitlesOnUI();
+        listenToSubmissions(true);
+        alert(`✅ تم حفظ الإعدادات لهذا الاختبار المستقل فقط!\nالمعرّف: ${ACTIVE_EXAM_SLOT}\nكود الدخول: ${currentPin}\nالاسم: ${EXAM_NAME}`);
+    };
+
+    window.closeTeacherSessionAndExamForAll = async function() {
+        if(confirm("هل أنت متأكد من إغلاق الاختبار نهائياً عند جميع الطلاب وإغلاق لوحة التحكم؟")) {
+            await set(ref(db, getSlotRoomPath(currentPin)), {
+                status: 'closed_by_teacher',
+                closedAt: Date.now(),
+                forceStop: 0,
+                frozen: false,
+                locked: false,
+                players: {}
+            });
+            localStorage.removeItem('mrehab_teacher_active');
+            localStorage.removeItem('mrehab_teacher_time');
+            showScene('role-scene');
+        }
+    };
+
+    window.showScene = function(id) {
+        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+    };
+
+    // =========================================================================
+    // دخول الطالب، التحقق من الكود، والاستماع للرسائل العائمة والـ Bonus
+    // =========================================================================
+    window.goToWaitingRoom = async function() {
+        let nameInput = document.getElementById('studentName').value.trim();
+        let pinInput = document.getElementById('roomPin').value.trim();
+
+        if(nameInput.split(' ').length < 2) return alert("يرجى إدخال اسمك الثلاثي أو الرباعي بالكامل!");
+        if(!pinInput) return alert("يرجى إدخال كود دخول الاختبار!");
+
+        let cfgSnap = await get(ref(db, getSlotConfigPath()));
+        if(cfgSnap.exists()) {
+            let cfg = cfgSnap.val();
+            currentPin = String(cfg.pin).trim();
+            EXAM_NAME = cfg.examName || EXAM_NAME;
+            GRADE_LEVEL = cfg.gradeLevel || GRADE_LEVEL;
+            configuredMinutes = parseInt(cfg.minutes) || 30;
+            updateDynamicTitlesOnUI();
+        }
+
+        if(pinInput !== currentPin) {
+            return alert("كود الدخول غير صحيح! يرجى التأكد من الكود المعلن من مستر إيهاب.");
+        }
+
+        let roomSnap = await get(ref(db, getSlotRoomPath(currentPin)));
+        let existingPlayerSnap = await get(ref(db, `${getSlotRoomPath(currentPin)}/players/${nameInput}`));
+
+        if(roomSnap.exists() && roomSnap.val().locked && !existingPlayerSnap.exists()) {
+            return alert("عفواً! قام مستر إيهاب بقفل باب الدخول المتأخر لهذا الاختبار.");
+        }
+
+        let qSetSnap = await get(ref(db, getSlotQuestionSetPath()));
+        if(qSetSnap.exists() && Array.isArray(qSetSnap.val().questions)) {
+            activeQuestionSet = qSetSnap.val().questions;
+            lastQuestionSetTimestamp = Number(qSetSnap.val().updatedAt || 0);
+            totalQuestionsCount = activeQuestionSet.length;
+        }
+
+        student.name = nameInput;
+        student.pin = currentPin;
+
+        if(existingPlayerSnap.exists()) {
+            let pData = existingPlayerSnap.val();
+            if(pData.finished) {
+                return alert("لقد قمت بأداء وتسليم هذا الاختبار مسبقاً ولا يُسمح بإعادته!");
+            }
+            userAnswers = pData.answersDetail || {};
+            cheatCount = (parseInt(pData.cheatCount) || 0) + 1;
+            studentBonusPoints = Number(pData.bonusPoints) || 0;
+            localStorage.setItem(`mrehab_ans_${ACTIVE_EXAM_SLOT}_${student.name}`, JSON.stringify(userAnswers));
+        } else {
+            await set(ref(db, `${getSlotRoomPath(currentPin)}/players/${student.name}`), {
+                score: 0,
+                maxScore: getTotalExamMaxPoints(),
+                bonusPoints: 0,
+                cheatCount: 0,
+                ip: studentIP,
+                finished: false,
+                progress: `0/${totalQuestionsCount}`,
+                timeTaken: "0:00"
+            });
+        }
+
+        document.getElementById('waiting-student-name').innerText = `الطالب: ${student.name}`;
+        showScene('student-waiting-scene');
+        attachStudentRoomListener();
+        attachPrivateStudentMessageListener();
+    };
+
+    function attachStudentRoomListener() {
+        if(roomListenerAttached) return;
+        roomListenerAttached = true;
+
+        onValue(ref(db, getSlotRoomPath(currentPin)), (snapshot) => {
+            const roomData = snapshot.val();
+            if(!roomData) return;
+
+            if(roomData.status === 'closed_by_teacher') {
+                localStorage.removeItem(`mrehab_ans_${ACTIVE_EXAM_SLOT}_${student.name}`);
+                localStorage.removeItem(`mrehab_active_session_${ACTIVE_EXAM_SLOT}`);
+                isExamStarted = false;
+                isExamFinished = true;
+                alert("قام مستر إيهاب بإغلاق جلسة الاختبار للجميع.");
+                location.reload();
+                return;
+            }
+
+            if(roomData.status === 'playing' && !isExamStarted && !isExamFinished) {
+                startExam(false);
+            }
+
+            if((roomData.status === 'ended' || (roomData.forceStop && roomData.forceStop > 0)) && isExamStarted && !isExamFinished) {
+                finishExam(true);
+            }
+
+            if(roomData.players && roomData.players[student.name]) {
+                let myRemote = roomData.players[student.name];
+                if(myRemote.forceSubmitIndividual && isExamStarted && !isExamFinished) {
+                    finishExam(true);
+                }
+                if(myRemote.cheatCount !== undefined && myRemote.cheatCount < cheatCount) {
+                    cheatCount = myRemote.cheatCount;
+                    const topCheat = document.getElementById('top-cheat-counter');
+                    if(topCheat) topCheat.innerText = cheatCount;
+                }
+                if(myRemote.bonusPoints !== undefined && Number(myRemote.bonusPoints) !== studentBonusPoints) {
+                    let diff = Number(myRemote.bonusPoints) - studentBonusPoints;
+                    studentBonusPoints = Number(myRemote.bonusPoints);
+                    if(diff > 0 && isExamStarted) {
+                        showFloatingStudentToast(`🌟 منحك مستر إيهاب +${diff} درجة إضافية (Bonus)!`, true);
+                        saveAndSyncState();
+                    }
+                }
+            }
+
+            const freezeOverlay = document.getElementById('freeze-overlay');
+            if(freezeOverlay && isExamStarted && !isExamFinished) {
+                freezeOverlay.style.display = roomData.frozen ? 'flex' : 'none';
+            }
+
+            if(roomData.extraTimeStamp && window.lastAppliedExtraTime !== roomData.extraTimeStamp) {
+                if(window.lastAppliedExtraTime !== undefined && isExamStarted && !isExamFinished) {
+                    let addedMins = parseInt(roomData.extraTimeMinutes) || 5;
+                    totalSeconds += (addedMins * 60);
+                    showFloatingStudentToast(`🎁 أضاف مستر إيهاب +${addedMins} دقائق إضافية لوقت الاختبار!`, false);
+                }
+                window.lastAppliedExtraTime = roomData.extraTimeStamp;
+            }
+
+            if(roomData.broadcastMsg && roomData.broadcastStamp) {
+                if(window.lastBroadcastStamp === undefined) {
+                    window.lastBroadcastStamp = roomData.broadcastStamp;
+                } else if(window.lastBroadcastStamp !== roomData.broadcastStamp) {
+                    window.lastBroadcastStamp = roomData.broadcastStamp;
+                    showFloatingStudentToast(roomData.broadcastMsg, false);
+                }
+            }
+        });
+    }
+
+    function attachPrivateStudentMessageListener() {
+        if(studentPrivateListenerAttached || !student.name || !student.pin) return;
+        studentPrivateListenerAttached = true;
+        onValue(ref(db, `${getSlotRoomPath(student.pin)}/players/${student.name}/privateMessage`), snap => {
+            if(!snap.exists()) return;
+            const data = snap.val();
+            if(!data || !data.timestamp) return;
+            if(window.lastPrivateMessageTimestamp === undefined) {
+                window.lastPrivateMessageTimestamp = data.timestamp;
+                return;
+            }
+            if(data.timestamp <= window.lastPrivateMessageTimestamp) return;
+            window.lastPrivateMessageTimestamp = data.timestamp;
+            showFloatingStudentToast(data.message, true);
+        });
+    }
+
+    // =========================================================================
+    // بدء وعرض الاختبار
+    // =========================================================================
+    window.startExam = function(isResumingAfterRefresh = false) {
+        let savedAns = localStorage.getItem(`mrehab_ans_${ACTIVE_EXAM_SLOT}_${student.name}`);
+        if(savedAns) {
+            try { userAnswers = { ...userAnswers, ...JSON.parse(savedAns) }; } catch(e){}
+        }
+
+        if(!isResumingAfterRefresh) {
+            examStartTime = Date.now();
+            totalSeconds = configuredMinutes * 60;
+        }
+
+        let masterList = getActiveQuestionsList();
+        totalQuestionsCount = masterList.length;
+        masterList.forEach(q => {
+            if(q.o) q.o = shuffleArray(q.o);
+        });
+        window.examQuestionsList = masterList;
+        shuffledWords = shuffleArray(fillBlankWords);
+
+        isExamStarted = true;
+        showScene('exam-scene');
+        document.getElementById('info-display').innerText = student.name;
+        document.getElementById('top-cheat-counter').innerText = cheatCount;
+
+        attachStudentRoomListener();
+        attachPrivateStudentMessageListener();
+        renderContinuousExamPage();
+        saveAndSyncState();
+    };
+
+    window.renderContinuousExamPage = function() {
+        const box = document.getElementById('exam-content');
+        let h = ``;
+        const isDefaultGaps = hasDefault4GapsStructure(window.examQuestionsList);
+
+        window.examQuestionsList.forEach(q => {
+            let pts = Number(q.points) || 1;
+            let ptsBadge = `<span class="q-points-badge"><i class="fas fa-star"></i> ${pts} ${pts === 1 ? 'درجة' : 'درجات'}</span>`;
+
+            if(q.section) {
+                h += `<div class="section-header-banner"><i class="fas fa-edit"></i> ${q.section}</div>`;
+
+                if(q.sectionType === "listening") {
+                    h += `<div class="passage-box" style="background: linear-gradient(rgba(2,6,23,0.86), rgba(2,6,23,0.86)), url('https://drive.google.com/thumbnail?id=1t9l72xdCNTNpOfhdqiTHcWUgHZE-JIMD&sz=w1000') center/cover; border-color: var(--gold); text-align: center;">
+                            <h3 style="color: var(--gold); margin-bottom: 10px;"><i class="fas fa-headphones"></i> Listen carefully to the text:</h3>
+                            <div class="progress-container"><div id="audio-progress" class="progress-bar"></div></div>
+                            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 12px 0;">
+                                <button type="button" class="btn btn-green" onclick="playAudio()"><i class="fas fa-play"></i> Play Audio</button>
+                                <button type="button" class="btn btn-gold" onclick="pauseAudio()"><i class="fas fa-pause"></i> Pause</button>
+                                <button type="button" class="btn btn-danger" onclick="stopAudio()"><i class="fas fa-stop"></i> Stop</button>
+                            </div>
+                            <div style="background: rgba(2,6,23,0.75); padding: 15px; border-radius: 12px; border: 1px dashed rgba(255,255,255,0.2); color: #fff; font-size: 1.1rem; line-height: 1.9; text-align: left; direction: ltr; margin-top: 10px;">
+                                <span style="color: var(--gold); font-weight: bold; display: block; margin-bottom: 5px;"><i class="fas fa-file-alt"></i> النص المكتوب (للطالب في حال وجود مشكلة بصوت الجهاز):</span>
+                                ${listeningTextStr}
+                            </div>
+                          </div>`;
+                }
+
+                if(q.sectionType === "gaps" && isDefaultGaps) {
+                    h += `<div class="passage-box" id="gaps-section-box">
+                            <div class="sticky-word-bank-wrapper">
+                                <p style="color: var(--gold); font-size: 0.92rem; font-weight: bold; text-align: center; margin-bottom: 8px; direction: rtl;">
+                                    💡 للموبايل والكمبيوتر: اضغط على الكلمة لتحديدها ثم اضغط على الفراغ لتنزل فيه فوراً (أو اسحبها أو اكتبها):
+                                </p>
+                                <div class="word-bank">
+                                    ${shuffledWords.map(w => `<div class="drag-word ${activeWordToDrop === w ? 'active-word' : ''}" draggable="true" ondragstart="dragWord(event, '${w}')" onclick="selectWord(this, '${w}')">${w}</div>`).join('')}
+                                </div>
+                            </div>
+                            <div style="font-size: 1.2rem; line-height: 2.7; direction: ltr; text-align: left; margin-top: 10px;">
+                                My friend Ali is interested in technology. He is always following the latest
+                                (1) <input type="text" id="gap-input-12" class="blank-input" placeholder="(1) اضغط هنا" ondrop="drop(event, 12)" ondragover="allowDrop(event)" onclick="placeWord(12)" oninput="saveGapInput(12, this.value)" autocomplete="off">
+                                online. His parents taught him that his
+                                (2) <input type="text" id="gap-input-13" class="blank-input" placeholder="(2) اضغط هنا" ondrop="drop(event, 13)" ondragover="allowDrop(event)" onclick="placeWord(13)" oninput="saveGapInput(13, this.value)" autocomplete="off">
+                                is what makes him special. They also advised him to
+                                (3) <input type="text" id="gap-input-14" class="blank-input" placeholder="(3) اضغط هنا" ondrop="drop(event, 14)" ondragover="allowDrop(event)" onclick="placeWord(14)" oninput="saveGapInput(14, this.value)" autocomplete="off">
+                                his online and offline activities. He always asks for his parents'
+                                (4) <input type="text" id="gap-input-15" class="blank-input" placeholder="(4) اضغط هنا" ondrop="drop(event, 15)" ondragover="allowDrop(event)" onclick="placeWord(15)" oninput="saveGapInput(15, this.value)" autocomplete="off">
+                                before he downloads a new game.
+                            </div>
+                          </div>`;
+                }
+
+                if(q.sectionType === "passage") {
+                    h += `<div class="passage-box">
+                            <h3 style="color: var(--primary); margin-bottom: 12px;"><i class="fas fa-book-open"></i> Read the following passage carefully:</h3>
+                            ${q.passageText || readingPassageText}
+                          </div>`;
+                }
+
+                if(q.sectionType === "dialogue") {
+                    h += `<div class="passage-box" style="padding: 16px 22px; margin-bottom: 15px;">
+                            <h3 style="color: var(--gold); margin-bottom: 6px;"><i class="fas fa-comments"></i> Dialogue Situation:</h3>
+                            <p style="font-weight: bold; font-size: 1.15rem;">${dialogueContextText}</p>
+                          </div>`;
+                }
+            }
+
+            if(q.type === 'gap') {
+                if(!isDefaultGaps || ![12,13,14,15].includes(Number(q.id))) {
+                    let ansVal = userAnswers[q.id] || '';
+                    h += `<div class="q-card" id="q-card-${q.id}">
+                            ${ptsBadge}
+                            <div class="q-title">${q.q}</div>
+                            <input type="text" id="gap-input-${q.id}" value="${ansVal.replace(/"/g, '&quot;')}" class="blank-input" style="width:100%; max-width:340px; text-align:left; direction:ltr;" placeholder="Type your answer here..." oninput="saveGapInput(${q.id}, this.value)" autocomplete="off">
+                          </div>`;
+                }
+            } else {
+                let ansVal = userAnswers[q.id];
+                h += `<div class="q-card" id="q-card-${q.id}">
+                        ${ptsBadge}
+                        <div class="q-title">${q.q}</div>
+                        <div class="options-grid" id="opt-grid-${q.id}">
+                            ${(q.o || []).map(opt => {
+                                let isSel = (ansVal === opt);
+                                return `<div class="opt ${isSel ? 'selected' : ''}" onclick="selectOpt(${q.id}, \`${String(opt).replace(/`/g, '\\`')}\`, this)">
+                                            <span>${opt}</span>
+                                        </div>`;
+                            }).join('')}
+                        </div>
+                      </div>`;
+            }
+        });
+
+        box.innerHTML = h;
+        restoreGapInputsValues();
+        updateSolvedCounterUI();
+    };
+
+    function restoreGapInputsValues() {
+        window.examQuestionsList.forEach(q => {
+            if(q.type === 'gap') {
+                let inp = document.getElementById('gap-input-' + q.id);
+                if(inp && userAnswers[q.id]) inp.value = userAnswers[q.id];
+            }
+        });
+    }
+
+    window.selectOpt = function(qId, val, clickedEl) {
+        if(isExamFinished) return;
+        userAnswers[qId] = val;
+        const grid = document.getElementById('opt-grid-' + qId);
+        if(grid) Array.from(grid.children).forEach(c => c.classList.remove('selected'));
+        if(clickedEl) clickedEl.classList.add('selected');
+        const card = document.getElementById('q-card-' + qId);
+        if(card) card.classList.remove('unanswered-card');
+        saveAndSyncState();
+    };
+
+    window.addEventListener('dragover', (e) => {
+        if(!isExamStarted || isExamFinished) return;
+        const edge = 90;
+        if(e.clientY < edge) window.scrollBy(0, -12);
+        else if(window.innerHeight - e.clientY < edge) window.scrollBy(0, 12);
+    });
+
+    window.allowDrop = function(ev) { ev.preventDefault(); };
+    window.dragWord = function(ev, word) { ev.dataTransfer.setData("text", word); };
+    window.drop = function(ev, gapId) {
+        ev.preventDefault();
+        let data = ev.dataTransfer.getData("text");
+        let inp = document.getElementById('gap-input-' + gapId);
+        if(inp) inp.value = data;
+        saveGapInput(gapId, data);
+    };
+
+    window.selectWord = function(el, word) {
+        activeWordToDrop = word;
+        document.querySelectorAll('.drag-word').forEach(e => e.classList.remove('active-word'));
+        el.classList.add('active-word');
+    };
+
+    window.placeWord = function(gapId) {
+        if(activeWordToDrop) {
+            let inp = document.getElementById('gap-input-' + gapId);
+            if(inp) inp.value = activeWordToDrop;
+            saveGapInput(gapId, activeWordToDrop);
+            activeWordToDrop = null;
+            document.querySelectorAll('.drag-word').forEach(e => e.classList.remove('active-word'));
+        }
+    };
+
+    window.saveGapInput = function(gapId, val) {
+        userAnswers[gapId] = val.trim();
+        saveAndSyncState();
+    };
+
+    function countSolvedQuestions() {
+        let master = getActiveQuestionsList();
+        return master.filter(q => userAnswers[q.id] && String(userAnswers[q.id]).trim() !== "").length;
+    }
+
+    function updateSolvedCounterUI() {
+        let solved = countSolvedQuestions();
+        const topCounter = document.getElementById('top-solved-counter');
+        if(topCounter) topCounter.innerText = `${solved}/${totalQuestionsCount}`;
+    }
+
+    window.scrollToFirstUnanswered = function() {
+        let master = getActiveQuestionsList();
+        let missingQ = master.find(q => !userAnswers[q.id] || String(userAnswers[q.id]).trim() === "");
+        if(!missingQ) {
+            alert("أحسنت يا بطل! لقد قمت بحل جميع أسئلة الاختبار بالكامل.");
+            return;
+        }
+        let card = document.getElementById('q-card-' + missingQ.id) || document.getElementById('gaps-section-box');
+        if(card) {
+            card.classList.add('unanswered-card');
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        let inp = document.getElementById('gap-input-' + missingQ.id);
+        if(inp) inp.focus();
+    };
+
+    function saveAndSyncState() {
+        updateSolvedCounterUI();
+        localStorage.setItem(`mrehab_ans_${ACTIVE_EXAM_SLOT}_${student.name}`, JSON.stringify(userAnswers));
+        localStorage.setItem(`mrehab_active_session_${ACTIVE_EXAM_SLOT}`, JSON.stringify({
+            name: student.name,
+            pin: currentPin,
+            cheatCount: cheatCount,
+            startTime: examStartTime,
+            remainingSeconds: totalSeconds,
+            finished: isExamFinished
+        }));
+
+        let solved = countSolvedQuestions();
+        let activeList = getActiveQuestionsList();
+        let maxPts = getTotalExamMaxPoints(activeList);
+        let tempScore = calculateStudentEarnedPoints(userAnswers, activeList, studentBonusPoints);
+
+        update(ref(db, `${getSlotRoomPath(currentPin)}/players/${student.name}`), {
+            score: tempScore,
+            maxScore: maxPts,
+            cheatCount: cheatCount,
+            progress: `${solved}/${totalQuestionsCount}`,
+            ip: studentIP,
+            answersDetail: userAnswers
+        });
+    }
+
+    window.confirmFinish = function() {
+        let solved = countSolvedQuestions();
+        if(solved < totalQuestionsCount) {
+            let rem = totalQuestionsCount - solved;
+            alert(`عفواً يا بطل! لا يمكنك تسليم الاختبار قبل حل جميع الأسئلة.\nلديك (${rem}) سؤال متروك بدون إجابة، سننقلك إليه الآن.`);
+            scrollToFirstUnanswered();
+            return;
+        }
+        if(confirm("ممتاز! لقد أجبت على جميع الأسئلة.\nهل أنت متأكد من تسليم الاختبار نهائياً؟")) {
+            finishExam(false);
+        }
+    };
+
+    function formatDuration(sec) {
+        if(!sec || sec < 0) sec = 0;
+        let m = Math.floor(sec / 60);
+        let s = sec % 60;
+        return `${m} دقيقة و ${s} ثانية`;
+    }
+
+    function finishExam(forcedByTeacher = false) {
+        if(isExamFinished) return;
+        isExamFinished = true;
+        stopAudio();
+        document.getElementById('cheat-warning-overlay').style.display = 'none';
+        document.getElementById('freeze-overlay').style.display = 'none';
+
+        let allQs = getActiveQuestionsList();
+        let maxPts = getTotalExamMaxPoints(allQs);
+        let score = calculateStudentEarnedPoints(userAnswers, allQs, studentBonusPoints);
+
+        let elapsedSec = Math.floor((Date.now() - examStartTime) / 1000);
+        let timeTakenFormatted = formatDuration(elapsedSec);
+
+        update(ref(db, `${getSlotRoomPath(currentPin)}/players/${student.name}`), {
+            score: score,
+            maxScore: maxPts,
+            cheatCount: cheatCount,
+            progress: `${totalQuestionsCount}/${totalQuestionsCount}`,
+            finished: true,
+            answersDetail: userAnswers,
+            timeTaken: timeTakenFormatted,
+            finishTimestamp: Date.now()
+        });
+
+        let payload = {
+            ip: studentIP,
+            studentIP: studentIP,
+            timestamp: new Date().toLocaleString('ar-EG'),
+            name: student.name,
+            className: GRADE_LEVEL,
+            examName: EXAM_NAME,
+            totalScore: `${score} / ${maxPts}`,
+            cheat: cheatCount,
+            cheatCount: cheatCount
+        };
+        for(let i = 1; i <= 37; i++) {
+            let qObj = allQs.find(x => x.id === i);
+            if(qObj) {
+                let ans = (userAnswers[i] || "").toString().trim();
+                let isCor = (ans.toLowerCase() === String(qObj.a || "").trim().toLowerCase());
+                payload["Q" + i] = { val: ans || "لم يُجب", isCorrect: isCor };
+            } else {
+                payload["Q" + i] = { val: "لم يُجب", isCorrect: false };
+            }
+        }
+        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).catch(() => {});
+
+        localStorage.removeItem(`mrehab_ans_${ACTIVE_EXAM_SLOT}_${student.name}`);
+        localStorage.removeItem(`mrehab_active_session_${ACTIVE_EXAM_SLOT}`);
+
+        showScene('result-scene');
+        document.getElementById('student-score-line1').innerText = `درجة الطالب: ${score}`;
+        document.getElementById('student-score-line2').innerText = `درجة الامتحان الكلية: ${maxPts}`;
+        document.getElementById('student-meta-lines').innerHTML = `
+            <div>محاولات الطالب الخروج من الامتحان: <b style="color:var(--danger);">${cheatCount}</b></div>
+            <div>الوقت الذي استغرقه الطالب: <b style="color:var(--primary);">${timeTakenFormatted}</b></div>
+        `;
+
+        document.getElementById('student-review-area').innerHTML = buildFullReportHTML(
+            student.name,
+            score,
+            maxPts,
+            cheatCount,
+            timeTakenFormatted,
+            userAnswers
+        );
+
+        const soundRes = document.getElementById('sound-result');
+        if(soundRes) { soundRes.currentTime = 0; soundRes.play().catch(() => {}); }
+        if(score >= maxPts * 0.5) confetti({ particleCount: 140, spread: 70 });
+    }
+
+    // =========================================================================
+    // بناء تقرير الـ PDF المعتمد لولي الأمر
+    // =========================================================================
+    function getGradeEvaluationBadge(percentage) {
+        if(percentage >= 90) return { label: "Excellent | ممتاز 🌟", color: "#10b981", bg: "rgba(16, 185, 129, 0.15)" };
+        if(percentage >= 80) return { label: "Very Good | جيد جداً 👏", color: "#38bdf8", bg: "rgba(56, 189, 248, 0.15)" };
+        if(percentage >= 65) return { label: "Good | جيد 👍", color: "#f59e0b", bg: "rgba(245, 158, 11, 0.15)" };
+        if(percentage >= 50) return { label: "Pass | مقبول ⚠️", color: "#fb923c", bg: "rgba(251, 146, 60, 0.15)" };
+        return { label: "Needs Improvement | يحتاج متابعة ❌", color: "#ef4444", bg: "rgba(239, 68, 68, 0.15)" };
+    }
+
+    function buildFullReportHTML(stName, score, totalMaxPts, cheat, timeTaken, ansMap) {
+        let maxPts = totalMaxPts || getTotalExamMaxPoints();
+        let percentage = maxPts > 0 ? Math.round((score / maxPts) * 100) : 0;
+        let evalInfo = getGradeEvaluationBadge(percentage);
+        let allQs = getActiveQuestionsList();
+        let reportDate = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        let svgPie = `
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <svg width="135" height="135" viewBox="0 0 36 36" style="transform: rotate(-90deg);">
+                    <path stroke="#1e293b" stroke-width="3.6" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path stroke="${evalInfo.color}" stroke-dasharray="${percentage}, 100" stroke-width="3.6" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <text x="18" y="19.5" text-anchor="middle" fill="#ffffff" font-size="7" font-weight="900" transform="rotate(90 18 18)">${percentage}%</text>
+                </svg>
+                <span style="margin-top:8px; background:${evalInfo.bg}; border:1px solid ${evalInfo.color}; color:${evalInfo.color}; padding:3px 14px; border-radius:999px; font-size:0.85rem; font-weight:900;">
+                    ${evalInfo.label}
+                </span>
+            </div>`;
+
+        let questionsHtml = "";
+        allQs.forEach(q => {
+            let qPts = Number(q.points) || 1;
+            if(q.section) {
+                questionsHtml += `<div class="section-header-banner" style="margin-top:22px;">${q.section}</div>`;
+                if(q.sectionType === "listening") {
+                    questionsHtml += `<div class="passage-box" style="font-size:0.98rem;"><b>Listening Script:</b> ${listeningTextStr}</div>`;
+                }
+                if(q.sectionType === "passage") {
+                    questionsHtml += `<div class="passage-box" style="font-size:0.98rem;">${q.passageText || readingPassageText}</div>`;
+                }
+                if(q.sectionType === "dialogue") {
+                    questionsHtml += `<div class="passage-box" style="font-size:0.98rem;"><b>Dialogue Context:</b> ${dialogueContextText}</div>`;
+                }
+            }
+
+            let stAns = (ansMap && ansMap[q.id] ? String(ansMap[q.id]).trim() : "");
+            let isCorrect = (stAns.toLowerCase() === String(q.a || "").trim().toLowerCase());
+            let ptsTag = `<span class="q-points-badge">${isCorrect ? qPts : 0} / ${qPts} درجة</span>`;
+
+            if(q.type === 'gap') {
+                questionsHtml += `
+                    <div class="q-card" style="padding:15px; border-color:${isCorrect ? 'rgba(16,185,129,0.55)' : 'rgba(239,68,68,0.55)'};">
+                        ${ptsTag}
+                        <div class="q-title" style="font-size:1.02rem;">${q.q}</div>
+                        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                            <div class="opt correct-opt" style="flex:1; min-width:180px;">الإجابة الصحيحة: ${q.a} ✓</div>
+                            ${!isCorrect ? `<div class="opt wrong-opt" style="flex:1; min-width:180px;">إجابة الطالب: ${stAns || 'لم يُجب'} ✗</div>` : ''}
+                        </div>
+                    </div>`;
+            } else {
+                let optsGridHtml = (q.o || []).map(opt => {
+                    let isOptCorrect = (String(opt).trim().toLowerCase() === String(q.a || "").trim().toLowerCase());
+                    let isOptSelected = (String(opt).trim().toLowerCase() === stAns.toLowerCase());
+                    let cls = "opt dimmed-opt";
+                    let icon = "";
+                    if(isOptCorrect) {
+                        cls = "opt correct-opt";
+                        icon = "<span>✓</span>";
+                    } else if(isOptSelected && !isOptCorrect) {
+                        cls = "opt wrong-opt";
+                        icon = "<span>✗</span>";
+                    }
+                    return `<div class="${cls}"><span>${opt}</span> ${icon}</div>`;
+                }).join('');
+
+                questionsHtml += `
+                    <div class="q-card" style="padding:16px; border-color:${isCorrect ? 'rgba(16,185,129,0.45)' : 'rgba(239,68,68,0.45)'};">
+                        ${ptsTag}
+                        <div class="q-title" style="font-size:1.02rem;">${q.q}</div>
+                        <div class="options-grid">${optsGridHtml}</div>
+                    </div>`;
+            }
+        });
+
+        return `
+            <div class="report-card-dark">
+                <div class="exec-report-header">
+                    <span class="exec-badge-top"><i class="fas fa-check-circle"></i> OFFICIAL ACADEMIC REPORT | تقرير تقييم معتمد لولي الأمر</span>
+                    <img src="${LOGO_URL}" style="width: 118px; height: 118px; border-radius: 50%; border: 3.5px solid #10b981; object-fit: cover; margin-bottom: 10px; box-shadow: 0 0 22px rgba(16,185,129,0.45);" alt="مستر إيهاب">
+                    <h2 style="color: #ffffff; font-weight: 900; font-size: 1.5rem; margin-bottom: 4px;">منصة مستر إيهاب العدوي للغة الإنجليزية</h2>
+                    <h3 style="color: #f59e0b; font-size: 1.15rem; font-weight: 800; margin-bottom: 8px;">${EXAM_NAME}</h3>
+                    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:15px; font-size:0.95rem; color:#cbd5e1; background:rgba(255,255,255,0.05); padding:6px 18px; border-radius:10px;">
+                        <span><i class="fas fa-user-graduate" style="color:#38bdf8;"></i> الطالب: <b style="color:#fff;">${stName}</b></span>
+                        <span>|</span>
+                        <span><i class="fas fa-layer-group" style="color:#f59e0b;"></i> ${GRADE_LEVEL}</span>
+                        <span>|</span>
+                        <span><i class="fas fa-calendar-alt" style="color:#10b981;"></i> ${reportDate}</span>
+                    </div>
+                </div>
+
+                <div class="report-stats-box">
+                    ${svgPie}
+                    <div class="kpi-metrics-grid">
+                        <div class="kpi-row-item" style="border-right-color: #10b981;">
+                            <span style="color:#cbd5e1; font-size:0.95rem;">درجة الطالب الحاصل عليها:</span>
+                            <span style="color:#10b981; font-size:1.35rem; font-weight:900;">${score} درجة</span>
+                        </div>
+                        <div class="kpi-row-item" style="border-right-color: #f59e0b;">
+                            <span style="color:#cbd5e1; font-size:0.95rem;">درجة الامتحان الكلية:</span>
+                            <span style="color:#f59e0b; font-size:1.25rem; font-weight:900;">${maxPts} درجة</span>
+                        </div>
+                        <div class="kpi-row-item" style="border-right-color: #ef4444;">
+                            <span style="color:#cbd5e1; font-size:0.92rem;">محاولات الطالب الخروج من الامتحان:</span>
+                            <span style="color:#f87171; font-size:1.1rem; font-weight:900;">${cheat} محاولة</span>
+                        </div>
+                        <div class="kpi-row-item" style="border-right-color: #38bdf8;">
+                            <span style="color:#cbd5e1; font-size:0.92rem;">الوقت الذي استغرقه الطالب:</span>
+                            <span style="color:#38bdf8; font-size:1.05rem; font-weight:800;">${timeTaken}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="parent-legend-bar">
+                    <span style="color:#fde047;"><i class="fas fa-info-circle"></i> دليل الألوان لولي الأمر:</span>
+                    <span><span class="legend-dot" style="background:#10b981;"></span> الإجابات الملونة باللون الأخضر هي الإجابة الصحيحة</span>
+                    <span><span class="legend-dot" style="background:#ef4444;"></span> الإجابات الملونة باللون الأحمر هي إجابات الطالب الخاطئة</span>
+                </div>
+
+                <div style="direction: ltr; text-align: left;">
+                    ${questionsHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    async function exportElementAsPDF(containerElement, fileName) {
+        const opt = {
+            margin: [6, 6, 6, 6],
+            filename: fileName,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#020617', scrollY: 0 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        await html2pdf().from(containerElement).set(opt).save();
+    }
+
+    window.downloadStudentSelfPDF = async function() {
+        const area = document.getElementById('student-review-area');
+        if(!area) return;
+        await exportElementAsPDF(area, `MrEhab_ExamReport_${student.name}.pdf`);
+    };
+
+    window.previewSelectedStudentReport = function() {
+        let val = document.getElementById('pdf-student-select').value;
+        const previewContainer = document.getElementById('teacher-pdf-live-preview');
+        if(!val || val === "EXPORT_ALL_ZIP" || !window.allPlayersData || !window.allPlayersData[val]) {
+            previewContainer.innerHTML = "";
+            return;
+        }
+        let p = window.allPlayersData[val];
+        let maxPts = getTotalExamMaxPoints();
+        let calcScore = calculateStudentEarnedPoints(p.answersDetail || {}, null, p.bonusPoints || 0);
+        previewContainer.innerHTML = buildFullReportHTML(
+            val,
+            p.score !== undefined ? p.score : calcScore,
+            maxPts,
+            p.cheatCount || 0,
+            p.timeTaken || "غير مسجل",
+            p.answersDetail || {}
+        );
+    };
+
+    window.generateStudentPDF = async function() {
+        let val = document.getElementById('pdf-student-select').value;
+        if(!val) return alert("يرجى اختيار اسم الطالب أو اختيار تصدير جميع الطلاب!");
+        const previewContainer = document.getElementById('teacher-pdf-live-preview');
+        let maxPts = getTotalExamMaxPoints();
+
+        if(val === "EXPORT_ALL_ZIP") {
+            if(!window.allPlayersData) return alert("لا توجد بيانات طلاب حالياً!");
+            for(let name in window.allPlayersData) {
+                let p = window.allPlayersData[name];
+                previewContainer.innerHTML = buildFullReportHTML(name, p.score || 0, maxPts, p.cheatCount || 0, p.timeTaken || "غير مسجل", p.answersDetail || {});
+                await new Promise(r => setTimeout(r, 400));
+                await exportElementAsPDF(previewContainer, `MrEhab_Report_${name}.pdf`);
+            }
+            alert("تم تنزيل تقارير جميع الطلاب بصيغة PDF بنجاح!");
+        } else {
+            previewSelectedStudentReport();
+            await new Promise(r => setTimeout(r, 300));
+            await exportElementAsPDF(previewContainer, `MrEhab_Report_${val}.pdf`);
+        }
+    };
+
+    // =========================================================================
+    // أستوديو استخراج الاختبار من صورة (JPG / PNG) + محرر الأسئلة والدرجات التفاعلي
+    // =========================================================================
+    let uploadedImageFiles = [];
+    let studioDraftQuestions = [];
+
+    window.openImageExamStudio = function(loadCurrentDirectly = false) {
+        document.getElementById('image-exam-studio-modal').style.display = 'flex';
+        if(loadCurrentDirectly || studioDraftQuestions.length === 0) {
+            loadActiveQuestionsIntoVisualEditor();
+        }
+    };
+
+    window.closeImageExamStudio = function() {
+        document.getElementById('image-exam-studio-modal').style.display = 'none';
+    };
+
+    window.handleImageDrop = function(ev) {
+        ev.preventDefault();
+        if(ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files.length > 0) {
+            handleImageFilesSelected(ev.dataTransfer.files);
+        }
+    };
+
+    window.handleImageFilesSelected = function(fileList) {
+        uploadedImageFiles = Array.from(fileList || []).filter(f => f.type.startsWith('image/'));
+        const lbl = document.getElementById('selected-images-label');
+        const strip = document.getElementById('image-previews-strip');
+        if(!uploadedImageFiles.length) {
+            if(lbl) lbl.textContent = "لم يتم اختيار صورة صالحة";
+            if(strip) strip.innerHTML = "";
+            return;
+        }
+        if(lbl) lbl.textContent = `تم تجهيز (${uploadedImageFiles.length}) صورة للاستخراج: ${uploadedImageFiles.map(f => f.name).join(' ، ')}`;
+        if(strip) {
+            strip.innerHTML = "";
+            uploadedImageFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = "height:85px; border-radius:10px; border:1.5px solid var(--gold); object-fit:contain; background:#000;";
+                    strip.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    };
+
+    function fileToBase64Data(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64 = reader.result.split(',')[1];
+                resolve({ mimeType: file.type || 'image/jpeg', data: base64 });
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function parseRawOCRTextToQuestions(rawText) {
+        const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        let parsedQuestions = [];
+        let currentSectionTitle = "Extracted Exam Questions:";
+        let currentQ = null;
+
+        const sectionRegex = /^(choose|read|complete|rewrite|listen|answer|match|fill|السؤال|اختر|أكمل|اقرأ)/i;
+        const questionStartRegex = /^(?:Q\s*\d+|س\s*\d+|\d+[\.\)\-\:])\s*(.+)/i;
+
+        function pushCurrentQuestion() {
+            if(!currentQ) return;
+            if(!currentQ.o || currentQ.o.length < 2) {
+                if(/\.{3,}|_{3,}|\(.+\)/.test(currentQ.q) && (!currentQ.o || currentQ.o.length === 0)) {
+                    currentQ.type = 'gap';
+                    currentQ.a = currentQ.a || "Answer";
+                    delete currentQ.o;
+                } else {
+                    currentQ.o = currentQ.o && currentQ.o.length ? currentQ.o : ["Option A", "Option B", "Option C", "Option D"];
+                    while(currentQ.o.length < 4) currentQ.o.push(`Option ${currentQ.o.length + 1}`);
+                    currentQ.a = currentQ.o[0];
+                }
+            } else {
+                currentQ.a = currentQ.o[0];
+            }
+            parsedQuestions.push(currentQ);
+            currentQ = null;
+        }
+
+        for(let i = 0; i < lines.length; i++) {
+            let line = lines[i];
+
+            if(sectionRegex.test(line) && line.length < 95) {
+                pushCurrentQuestion();
+                currentSectionTitle = line;
+                continue;
+            }
+
+            let inlineOptsMatch = line.split(/(?:^|\s+)(?:[\(\[]?[a-dA-Dأ-د][\)\]\.\-])/g).map(s => s.trim()).filter(Boolean);
+            if(inlineOptsMatch.length >= 3 && currentQ) {
+                currentQ.o.push(...inlineOptsMatch.slice(0, 4));
+                continue;
+            }
+
+            let qMatch = line.match(questionStartRegex);
+            if(qMatch) {
+                pushCurrentQuestion();
+                currentQ = {
+                    id: parsedQuestions.length + 1,
+                    points: 1,
+                    q: `${parsedQuestions.length + 1}. ${qMatch[1].trim()}`,
+                    o: [],
+                    a: ""
+                };
+                if(currentSectionTitle) {
+                    currentQ.section = currentSectionTitle;
+                    currentSectionTitle = null;
+                }
+                continue;
+            }
+
+            let singleOptMatch = line.match(/^[\(\[]?[a-dA-Dأ-د][\)\]\.\-]\s*(.+)/);
+            if(singleOptMatch && currentQ) {
+                currentQ.o.push(singleOptMatch[1].trim());
+                continue;
+            }
+
+            if((line.includes('?') || /[\.]{3,}|[_]{3,}/.test(line)) && line.length > 12) {
+                pushCurrentQuestion();
+                currentQ = {
+                    id: parsedQuestions.length + 1,
+                    points: 1,
+                    q: `${parsedQuestions.length + 1}. ${line}`,
+                    o: [],
+                    a: ""
+                };
+                if(currentSectionTitle) {
+                    currentQ.section = currentSectionTitle;
+                    currentSectionTitle = null;
+                }
+            } else if(currentQ && currentQ.o.length === 0) {
+                currentQ.q += " " + line;
+            }
+        }
+        pushCurrentQuestion();
+
+        return parsedQuestions;
+    }
+
+    window.extractQuestionsFromUploadedImages = async function() {
+        if(!uploadedImageFiles || uploadedImageFiles.length === 0) {
+            return alert("يرجى اختيار صورة اختبار (JPG أو PNG) أولاً!");
+        }
+
+        const statusBox = document.getElementById('ocr-status-box');
+        const statusText = document.getElementById('ocr-status-text');
+        const progBar = document.getElementById('ocr-progress-bar');
+        const geminiKey = (document.getElementById('gemini-api-key-input')?.value || '').trim();
+
+        statusBox.style.display = 'block';
+        progBar.style.width = '15%';
+
+        try {
+            if(geminiKey) {
+                statusText.textContent = "🤖 جاري تحليل صورة الاختبار واستخراج الأسئلة والحلول عبر Gemini Vision AI...";
+                progBar.style.width = '50%';
+
+                const imageParts = [];
+                for(const file of uploadedImageFiles) {
+                    const b64 = await fileToBase64Data(file);
+                    imageParts.push({ inline_data: { mime_type: b64.mimeType, data: b64.data } });
+                }
+
+                const promptText = `You are an expert English/Arabic exam extractor. Extract ALL questions from the uploaded exam image(s) in their exact order.
+Return ONLY a valid JSON array of objects. Each object must have:
+- "id": sequential number starting from 1
+- "points": number (default 1)
+- "section": optional section header string if a new section starts
+- "type": "mcq" for multiple choice or "gap" for fill-in-the-blank/rewrite
+- "q": the question text
+- "o": array of 4 option strings (if type is not "gap").
+- "a": the exact correct answer string (must match one of "o" if mcq).`;
+
+                const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(geminiKey)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }, ...imageParts] }],
+                        generationConfig: { responseMimeType: "application/json" }
+                    })
+                });
+
+                const jsonResp = await resp.json();
+                const rawJsonText = jsonResp?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                const cleanedJson = rawJsonText.replace(/```json|```/g, '').trim();
+                const aiQuestions = JSON.parse(cleanedJson);
+
+                if(Array.isArray(aiQuestions) && aiQuestions.length > 0) {
+                    studioDraftQuestions = aiQuestions.map((q, idx) => ({
+                        id: idx + 1,
+                        points: Number(q.points) || 1,
+                        section: q.section || "",
+                        type: q.type === 'gap' ? 'gap' : undefined,
+                        q: q.q || `Question ${idx + 1}`,
+                        o: q.type === 'gap' ? undefined : (Array.isArray(q.o) && q.o.length >= 2 ? q.o : ["Option A", "Option B", "Option C", "Option D"]),
+                        a: q.a || (Array.isArray(q.o) ? q.o[0] : "")
+                    }));
+                    progBar.style.width = '100%';
+                    statusText.textContent = `✅ تم استخراج (${studioDraftQuestions.length}) سؤالاً بالترتيب مع حلولها بنجاح! راجعها بالأسفل وعدّل ما تشاء.`;
+                    renderVisualQuestionsEditor();
+                    return;
+                }
+            }
+
+            statusText.textContent = "🔍 جاري المسح الضوئي للصورة واستخراج الأسئلة بالترتيب (OCR)...";
+            let combinedText = "";
+
+            for(let i = 0; i < uploadedImageFiles.length; i++) {
+                statusText.textContent = `🔍 جاري قراءة الصورة (${i + 1} من ${uploadedImageFiles.length})...`;
+                const result = await Tesseract.recognize(uploadedImageFiles[i], 'eng+ara', {
+                    logger: m => {
+                        if(m.status === 'recognizing text') {
+                            let pct = Math.round(((i + m.progress) / uploadedImageFiles.length) * 100);
+                            progBar.style.width = `${Math.max(15, pct)}%`;
+                        }
+                    }
+                });
+                combinedText += "\n" + (result?.data?.text || "");
+            }
+
+            let extracted = parseRawOCRTextToQuestions(combinedText);
+            if(!extracted || extracted.length === 0) {
+                const fallbackLines = combinedText.split(/\r?\n/).map(s => s.trim()).filter(s => s.length > 8);
+                extracted = fallbackLines.map((line, idx) => ({
+                    id: idx + 1,
+                    points: 1,
+                    q: `${idx + 1}. ${line}`,
+                    o: ["Option A", "Option B", "Option C", "Option D"],
+                    a: "Option A"
+                }));
+            }
+
+            studioDraftQuestions = extracted;
+            progBar.style.width = '100%';
+            statusText.textContent = `✅ تم استخراج (${studioDraftQuestions.length}) سؤالاً من الصورة! يمكنك الآن مراجعتها وتحديد الإجابة الصحيحة والدرجة لكل سؤال بالأسفل.`;
+            renderVisualQuestionsEditor();
+        } catch(err) {
+            console.error(err);
+            statusText.textContent = "⚠️ حدث خطأ أثناء قراءة الصورة، يمكنك المحاولة مجدداً أو تعديل الأسئلة يدوياً بالأسفل.";
+        }
+    };
+
+    window.loadActiveQuestionsIntoVisualEditor = function() {
+        studioDraftQuestions = getActiveQuestionsList().map((q, idx) => ({
+            ...q,
+            id: idx + 1,
+            points: Number(q.points) || 1,
+            o: Array.isArray(q.o) ? [...q.o] : undefined
+        }));
+        renderVisualQuestionsEditor();
+    };
+
+    function syncEditorSummaryCounters() {
+        const countEl = document.getElementById('editor-q-count');
+        const ptsEl = document.getElementById('editor-total-points');
+        if(countEl) countEl.textContent = studioDraftQuestions.length;
+        if(ptsEl) {
+            let sum = studioDraftQuestions.reduce((acc, q) => acc + (Number(q.points) || 1), 0);
+            ptsEl.textContent = Math.round(sum * 100) / 100;
+        }
+    }
+
+    window.renderVisualQuestionsEditor = function() {
+        const container = document.getElementById('visual-questions-editor-list');
+        if(!container) return;
+        container.innerHTML = '';
+
+        studioDraftQuestions.forEach((q, idx) => {
+            q.id = idx + 1;
+            const item = document.createElement('div');
+            item.className = 'editor-q-item';
+
+            const isGap = (q.type === 'gap');
+            let optionsBlockHtml = '';
+
+            if(isGap) {
+                optionsBlockHtml = `
+                    <div style="margin-top:8px;">
+                        <label style="font-size:0.82rem; color:var(--success); font-weight:bold; display:block; margin-bottom:4px;">الإجابة الصحيحة للفراغ / السؤال:</label>
+                        <input type="text" class="editor-input-ltr" value="${(q.a || '').replace(/"/g, '&quot;')}" oninput="updateDraftQuestionAnswer(${idx}, this.value)" placeholder="اكتب الإجابة الصحيحة للتصحيح التلقائي...">
+                    </div>
+                `;
+            } else {
+                const opts = Array.isArray(q.o) && q.o.length ? q.o : ["", "", "", ""];
+                q.o = opts;
+                optionsBlockHtml = `
+                    <div style="margin-top:8px;">
+                        <label style="font-size:0.82rem; color:var(--gold); font-weight:bold; display:block; margin-bottom:6px;">الاختيارات (اضغط على الدائرة الخضراء لتحديد الإجابة الصحيحة للتصحيح التلقائي):</label>
+                        ${opts.map((optVal, optIdx) => {
+                            const isChecked = (String(optVal).trim().toLowerCase() === String(q.a || '').trim().toLowerCase() && String(optVal).trim() !== '');
+                            return `
+                                <div class="editor-opt-row">
+                                    <input type="radio" name="correct-radio-${idx}" ${isChecked ? 'checked' : ''} onchange="selectDraftCorrectOption(${idx}, ${optIdx})" style="width:20px; height:20px; accent-color:#10b981; cursor:pointer;" title="تحديد كإجابة صحيحة">
+                                    <input type="text" class="editor-input-ltr" style="margin:0 !important;" value="${String(optVal).replace(/"/g, '&quot;')}" oninput="updateDraftOptionText(${idx}, ${optIdx}, this.value)" placeholder="Option ${optIdx + 1}">
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+
+            item.innerHTML = `
+                <div class="editor-q-header">
+                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                        <span style="background:var(--primary); color:#fff; font-weight:900; padding:3px 12px; border-radius:999px; font-size:0.88rem;">سؤال #${idx + 1}</span>
+                        <select onchange="changeDraftQuestionType(${idx}, this.value)" style="width:155px; margin:0; padding:5px 10px; font-size:0.85rem;">
+                            <option value="mcq" ${!isGap ? 'selected' : ''}>اختيار من متعدد</option>
+                            <option value="gap" ${isGap ? 'selected' : ''}>إكمال / كتابة</option>
+                        </select>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <label style="font-size:0.85rem; color:var(--gold); font-weight:bold;">الدرجة:</label>
+                        <input type="number" value="${q.points || 1}" min="0.5" step="0.5" onchange="updateDraftQuestionPoints(${idx}, this.value)" style="width:75px; margin:0; padding:5px; font-weight:900; color:var(--gold);">
+                        <button type="button" class="btn btn-xs btn-dark" onclick="moveDraftQuestion(${idx}, -1)" title="تحريك لأعلى"><i class="fas fa-arrow-up"></i></button>
+                        <button type="button" class="btn btn-xs btn-dark" onclick="moveDraftQuestion(${idx}, 1)" title="تحريك لأسفل"><i class="fas fa-arrow-down"></i></button>
+                        <button type="button" class="btn btn-xs btn-danger" onclick="deleteDraftQuestion(${idx})" title="حذف السؤال"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" class="editor-input-ltr" style="border-color:rgba(245,158,11,0.35); color:var(--gold); font-size:0.88rem;" value="${(q.section || '').replace(/"/g, '&quot;')}" oninput="updateDraftQuestionSection(${idx}, this.value)" placeholder="عنوان القسم أعلى السؤال (اختياري - مثل: Choose the correct answer:)">
+                    <input type="text" class="editor-input-ltr" style="font-weight:bold;" value="${(q.q || '').replace(/"/g, '&quot;')}" oninput="updateDraftQuestionText(${idx}, this.value)" placeholder="نص السؤال...">
+                </div>
+                ${optionsBlockHtml}
+            `;
+            container.appendChild(item);
+        });
+
+        syncEditorSummaryCounters();
+    };
+
+    window.updateDraftQuestionText = function(idx, val) { if(studioDraftQuestions[idx]) studioDraftQuestions[idx].q = val; };
+    window.updateDraftQuestionSection = function(idx, val) { if(studioDraftQuestions[idx]) studioDraftQuestions[idx].section = val.trim(); };
+    window.updateDraftQuestionPoints = function(idx, val) {
+        if(studioDraftQuestions[idx]) {
+            studioDraftQuestions[idx].points = Math.max(0.5, Number(val) || 1);
+            syncEditorSummaryCounters();
+        }
+    };
+    window.updateDraftQuestionAnswer = function(idx, val) { if(studioDraftQuestions[idx]) studioDraftQuestions[idx].a = val.trim(); };
+    window.updateDraftOptionText = function(idx, optIdx, val) {
+        let q = studioDraftQuestions[idx];
+        if(!q || !Array.isArray(q.o)) return;
+        let oldVal = q.o[optIdx];
+        q.o[optIdx] = val;
+        if(String(q.a).trim() === String(oldVal).trim()) q.a = val.trim();
+    };
+    window.selectDraftCorrectOption = function(idx, optIdx) {
+        let q = studioDraftQuestions[idx];
+        if(q && Array.isArray(q.o) && q.o[optIdx] !== undefined) q.a = q.o[optIdx].trim();
+    };
+    window.changeDraftQuestionType = function(idx, newType) {
+        let q = studioDraftQuestions[idx];
+        if(!q) return;
+        if(newType === 'gap') {
+            q.type = 'gap';
+            q.a = q.a || (Array.isArray(q.o) ? q.o[0] : 'Answer');
+            delete q.o;
+        } else {
+            delete q.type;
+            q.o = Array.isArray(q.o) && q.o.length >= 2 ? q.o : [q.a || "Option 1", "Option 2", "Option 3", "Option 4"];
+            q.a = q.o[0];
+        }
+        renderVisualQuestionsEditor();
+    };
+    window.deleteDraftQuestion = function(idx) { studioDraftQuestions.splice(idx, 1); renderVisualQuestionsEditor(); };
+    window.moveDraftQuestion = function(idx, dir) {
+        let target = idx + dir;
+        if(target < 0 || target >= studioDraftQuestions.length) return;
+        let temp = studioDraftQuestions[idx];
+        studioDraftQuestions[idx] = studioDraftQuestions[target];
+        studioDraftQuestions[target] = temp;
+        renderVisualQuestionsEditor();
+    };
+    window.addNewBlankQuestionToEditor = function(type = 'mcq') {
+        let newId = studioDraftQuestions.length + 1;
+        if(type === 'gap') {
+            studioDraftQuestions.push({ id: newId, points: 1, type: 'gap', q: `${newId}. Complete the following sentence: ........`, a: "answer" });
+        } else {
+            studioDraftQuestions.push({ id: newId, points: 1, q: `${newId}. New question text here...`, o: ["Choice A", "Choice B", "Choice C", "Choice D"], a: "Choice A" });
+        }
+        renderVisualQuestionsEditor();
+        const listEl = document.getElementById('visual-questions-editor-list');
+        if(listEl) listEl.scrollTop = listEl.scrollHeight;
+    };
+    window.applyBulkPointsToAllEditorQuestions = function() {
+        let bulkVal = Math.max(0.5, Number(document.getElementById('bulk-points-input')?.value) || 1);
+        studioDraftQuestions.forEach(q => q.points = bulkVal);
+        renderVisualQuestionsEditor();
+    };
+
+    window.saveAndBroadcastVisualEditorQuestions = async function() {
+        if(!studioDraftQuestions || studioDraftQuestions.length === 0) {
+            return alert("لا توجد أسئلة في المحرر لاعتمادها!");
+        }
+
+        const cleaned = studioDraftQuestions.map((q, idx) => {
+            const item = {
+                id: idx + 1,
+                points: Number(q.points) || 1,
+                q: String(q.q || `Question ${idx + 1}`).trim(),
+                a: String(q.a || "").trim()
+            };
+            if(q.section && String(q.section).trim()) item.section = String(q.section).trim();
+            if(q.sectionType) item.sectionType = q.sectionType;
+            if(q.type === 'gap') {
+                item.type = 'gap';
+            } else {
+                item.o = (Array.isArray(q.o) ? q.o : ["Option A", "Option B", "Option C", "Option D"]).map(x => String(x).trim());
+                if(!item.o.some(x => x.toLowerCase() === item.a.toLowerCase())) {
+                    item.a = item.o[0];
+                }
+            }
+            return item;
+        });
+
+        try {
+            const payload = { questions: cleaned, updatedAt: Date.now(), updatedBy: 'مستر إيهاب العدوي' };
+            await set(ref(db, getSlotQuestionSetPath()), payload);
+            activeQuestionSet = cleaned;
+            lastQuestionSetTimestamp = payload.updatedAt;
+            totalQuestionsCount = cleaned.length;
+
+            const jsonArea = document.getElementById('question-upload-json');
+            if(jsonArea) jsonArea.value = JSON.stringify(cleaned, null, 2);
+
+            renderTeacherBank();
+            renderLeaderboardRows();
+            closeImageExamStudio();
+            alert(`✅ تم حفظ واعتماد (${cleaned.length}) سؤالاً بإجمالي (${getTotalExamMaxPoints(cleaned)}) درجة في هذا الاختبار المستقل (${EXAM_NAME}) دون المساس بأي اختبار آخر!`);
+        } catch(err) {
+            console.error(err);
+            alert("تعذر بث الأسئلة إلى قاعدة البيانات، تحقق من اتصال الإنترنت.");
+        }
+    };
+
+    // =========================================================================
+    // وظائف لوحة تحكم المعلم الإضافية
+    // =========================================================================
+    window.grantBonusPointsToAll = async function() {
+        let val = prompt("اكتب عدد الدرجات الإضافية (Bonus) التي تريد منحها لجميع الطلاب في الغرفة:", "1");
+        if(val === null) return;
+        let bonus = Number(val);
+        if(isNaN(bonus) || bonus === 0) return;
+
+        let updates = {};
+        let maxPts = getTotalExamMaxPoints();
+        Object.keys(teacherPlayersCache || {}).forEach(name => {
+            let p = teacherPlayersCache[name];
+            let newBonus = (Number(p.bonusPoints) || 0) + bonus;
+            let newScore = calculateStudentEarnedPoints(p.answersDetail || {}, null, newBonus);
+            updates[`${getSlotRoomPath(currentPin)}/players/${name}/bonusPoints`] = newBonus;
+            updates[`${getSlotRoomPath(currentPin)}/players/${name}/score`] = Math.min(maxPts, newScore);
+        });
+        await update(ref(db), updates);
+        alert(`تم منح (${bonus}) درجة إضافية لجميع الطلاب بنجاح!`);
+    };
+
+    window.grantBonusToSingleStudent = async function(stName) {
+        let p = teacherPlayersCache[stName];
+        if(!p) return;
+        let newBonus = (Number(p.bonusPoints) || 0) + 1;
+        let newScore = calculateStudentEarnedPoints(p.answersDetail || {}, null, newBonus);
+        await update(ref(db, `${getSlotRoomPath(currentPin)}/players/${stName}`), {
+            bonusPoints: newBonus,
+            score: newScore
+        });
+    };
+
+    window.openQuestionAnalyticsModal = function() {
+        const modal = document.getElementById('question-analytics-modal');
+        const body = document.getElementById('question-analytics-body');
+        if(!modal || !body) return;
+
+        const allQs = getActiveQuestionsList();
+        const playerNames = Object.keys(teacherPlayersCache || {});
+        if(playerNames.length === 0) {
+            body.innerHTML = `<p style="text-align:center; color:#cbd5e1; padding:20px;">لا توجد إجابات طلاب مسجلة بعد لتحليلها.</p>`;
+            modal.style.display = 'flex';
+            return;
+        }
+
+        let stats = allQs.map(q => {
+            let correctCount = 0, answeredCount = 0;
+            playerNames.forEach(n => {
+                let ansMap = teacherPlayersCache[n]?.answersDetail || {};
+                let stAns = ansMap[q.id] ? String(ansMap[q.id]).trim() : "";
+                if(stAns) {
+                    answeredCount++;
+                    if(stAns.toLowerCase() === String(q.a || "").trim().toLowerCase()) correctCount++;
+                }
+            });
+            let pct = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+            return { q, correctCount, answeredCount, pct };
+        });
+
+        stats.sort((a, b) => a.pct - b.pct);
+
+        body.innerHTML = stats.map(item => {
+            let color = item.pct >= 75 ? '#10b981' : (item.pct >= 50 ? '#f59e0b' : '#ef4444');
+            return `
+                <div style="background:rgba(2,6,23,0.75); border:1px solid rgba(255,255,255,0.1); border-right:4px solid ${color}; padding:12px 16px; border-radius:12px; margin-bottom:10px; direction:ltr; text-align:left;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
+                        <b style="color:#fff; font-size:0.95rem;">${item.q.q}</b>
+                        <span style="background:rgba(255,255,255,0.08); color:${color}; font-weight:900; padding:2px 10px; border-radius:999px; font-size:0.85rem; direction:rtl;">
+                            نسبة الإجابة الصحيحة: ${item.pct}% (${item.correctCount} من ${item.answeredCount})
+                        </span>
+                    </div>
+                    <div style="font-size:0.85rem; color:#10b981;">Correct Answer: <b>${item.q.a}</b></div>
+                </div>
+            `;
+        }).join('');
+
+        modal.style.display = 'flex';
+    };
+
+    window.startExamForAll = function() {
+        update(ref(db, getSlotRoomPath(currentPin)), { status: 'playing', forceStop: 0, frozen: false });
+        alert(`تم فتح الاختبار الآن لجميع الطلاب في الغرفة (${currentPin})!`);
+    };
+
+    window.forceEndExamForAll = function() {
+        if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم فوراً؟")) {
+            update(ref(db, getSlotRoomPath(currentPin)), { status: 'ended', forceStop: Date.now(), frozen: false });
+            alert("تم إرسال أمر الإنهاء الفوري وسحب أوراق جميع الطلاب!");
+        }
+    };
+
+    window.addExtraTimeForAll = function(mins = 5) {
+        update(ref(db, getSlotRoomPath(currentPin)), { extraTimeStamp: Date.now(), extraTimeMinutes: mins });
+        alert(`تمت إضافة +${mins} دقائق إضافية لعداد الوقت لدى جميع الطلاب الآن!`);
+    };
+
+    let isRoomFrozen = false;
+    window.toggleFreezeExam = function() {
+        isRoomFrozen = !isRoomFrozen;
+        update(ref(db, getSlotRoomPath(currentPin)), { frozen: isRoomFrozen });
+        const btn = document.getElementById('btn-freeze-toggle');
+        if(btn) {
+            btn.innerHTML = isRoomFrozen
+                ? `<i class="fa-solid fa-play"></i> إلغاء التجميد واستئناف الحل`
+                : `<i class="fa-solid fa-pause"></i> تجميد مؤقت للشاشات`;
+        }
+    };
+
+    let isRoomLocked = false;
+    window.toggleLockRoom = function() {
+        isRoomLocked = !isRoomLocked;
+        update(ref(db, getSlotRoomPath(currentPin)), { locked: isRoomLocked });
+        const btn = document.getElementById('btn-lock-room');
+        if(btn) {
+            btn.innerHTML = isRoomLocked
+                ? `<i class="fa-solid fa-door-open"></i> فتح دخول الطلاب`
+                : `<i class="fa-solid fa-door-closed"></i> قفل دخول متأخرين`;
+        }
+        alert(isRoomLocked ? "تم قفل باب الغرفة أمام أي طالب جديد متأخر!" : "تم إعادة فتح باب الغرفة للطلاب!");
+    };
+
+    window.openMessageCenterModal = function(preselectedTarget = 'ALL') {
+        const sel = document.getElementById('modal-recipient-select');
+        const txt = document.getElementById('modal-message-textarea');
+        if(sel) {
+            sel.innerHTML = `<option value="ALL">📢 تنبيه عام لجميع طلاب اللجنة</option>`;
+            Object.keys(teacherPlayersCache || {}).sort((a,b) => a.localeCompare(b, 'ar')).forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = `👤 رسالة خاصة للطالب: ${name}`;
+                sel.appendChild(opt);
+            });
+            sel.value = (preselectedTarget !== 'ALL' && teacherPlayersCache[preselectedTarget]) ? preselectedTarget : 'ALL';
+        }
+        if(txt) txt.value = '';
+        document.getElementById('message-center-modal').style.display = 'flex';
+        setTimeout(() => { if(txt) txt.focus(); }, 100);
+    };
+
+    window.closeMessageCenterModal = function() {
+        document.getElementById('message-center-modal').style.display = 'none';
+    };
+
+    window.fillPresetMsg = function(presetText) {
+        const txt = document.getElementById('modal-message-textarea');
+        if(txt) txt.value = presetText;
+    };
+
+    window.dispatchTeacherMessageNow = async function() {
+        const sel = document.getElementById('modal-recipient-select');
+        const txt = document.getElementById('modal-message-textarea');
+        const target = sel ? sel.value : 'ALL';
+        const msg = txt ? txt.value.trim() : '';
+
+        if(!msg) return alert("يرجى كتابة نص الرسالة أو اختيار رسالة سريعة أولاً!");
+
+        try {
+            if(target === 'ALL') {
+                await update(ref(db, getSlotRoomPath(currentPin)), {
+                    broadcastMsg: msg,
+                    broadcastStamp: Date.now()
+                });
+                alert("تم إرسال الكارت العائم لجميع طلاب اللجنة بنجاح!");
+            } else {
+                await set(ref(db, `${getSlotRoomPath(currentPin)}/players/${target}/privateMessage`), {
+                    message: msg,
+                    sender: 'مستر إيهاب العدوي',
+                    timestamp: Date.now()
+                });
+                alert(`تم إرسال الكارت العائم الخاص إلى الطالب (${target}) بنجاح!`);
+            }
+            closeMessageCenterModal();
+        } catch(err) {
+            alert("تعذر إرسال الرسالة، يرجى التحقق من اتصال الإنترنت.");
+        }
+    };
+
+    window.resetStudentCheatCount = function(stName) {
+        update(ref(db, `${getSlotRoomPath(currentPin)}/players/${stName}`), { cheatCount: 0 });
+    };
+
+    window.forceSubmitSingleStudent = function(stName) {
+        if(confirm(`هل تريد سحب ورقة الطالب (${stName}) وإنهاء اختباره فوراً؟`)) {
+            update(ref(db, `${getSlotRoomPath(currentPin)}/players/${stName}`), { forceSubmitIndividual: true });
+        }
+    };
+
+    window.resetExamSession = function() {
+        if(confirm("هل أنت متأكد من تصفير الغرفة الحالية ومسح قائمة الطلاب لبدء اختبار جديد؟")) {
+            set(ref(db, getSlotRoomPath(currentPin)), { status: 'waiting', forceStop: 0, frozen: false, locked: false, players: {} });
+            alert("تمت إعادة ضبط الغرفة وتصفير القائمة بنجاح!");
+        }
+    };
+
+    window.setLeaderboardFilter = function(filterType) {
+        currentLeaderboardFilter = filterType;
+        renderLeaderboardRows();
+    };
+
+    let activePlayersListenerRef = null;
+    window.listenToSubmissions = function(forceRebind = false) {
+        if(activePlayersListenerRef && !forceRebind) return;
+        if(activePlayersListenerRef) off(activePlayersListenerRef);
+
+        activePlayersListenerRef = ref(db, `${getSlotRoomPath(currentPin)}/players`);
+        onValue(activePlayersListenerRef, (snapshot) => {
+            const players = snapshot.val() || {};
+            window.allPlayersData = players;
+            teacherPlayersCache = players;
+            updateDashboardAnalytics(players);
+            renderLeaderboardRows();
+            updatePdfDropdownList(players);
+        });
+    };
+
+    function updateDashboardAnalytics(players) {
+        const names = Object.keys(players);
+        const total = names.length;
+        let solving = 0, finished = 0, sumScores = 0, totalCheats = 0;
+        let maxPts = getTotalExamMaxPoints();
+
+        names.forEach(n => {
+            const p = players[n];
+            if(p.finished) finished++; else solving++;
+            sumScores += (Number(p.score) || 0);
+            totalCheats += (parseInt(p.cheatCount) || 0);
+        });
+
+        const avgPct = (total > 0 && maxPts > 0) ? Math.round(((sumScores / total) / maxPts) * 100) : 0;
+
+        const elTotal = document.getElementById('stat-total-students');
+        const elSolv = document.getElementById('stat-solving-now');
+        const elFin = document.getElementById('stat-finished-count');
+        const elAvg = document.getElementById('stat-avg-score');
+        const elCheat = document.getElementById('stat-total-cheats');
+
+        if(elTotal) elTotal.innerText = total;
+        if(elSolv) elSolv.innerText = solving;
+        if(elFin) elFin.innerText = finished;
+        if(elAvg) elAvg.innerText = `${avgPct}%`;
+        if(elCheat) elCheat.innerText = totalCheats;
+    }
+
+    function updatePdfDropdownList(players) {
+        const selectDropdown = document.getElementById('pdf-student-select');
+        if(!selectDropdown) return;
+        const prev = selectDropdown.value;
+        let maxPts = getTotalExamMaxPoints();
+        selectDropdown.innerHTML = `
+            <option value="">-- اختر الطالب للمعاينة أو التصدير --</option>
+            <option value="EXPORT_ALL_ZIP" style="color: var(--gold); font-weight: bold;">📁 تصدير نتائج جميع الطلاب (ملفات PDF منفصلة)</option>
+        `;
+        Object.keys(players).forEach(name => {
+            const p = players[name];
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = `${name} (${p.score || 0}/${maxPts})`;
+            selectDropdown.appendChild(opt);
+        });
+        if(prev && (prev === 'EXPORT_ALL_ZIP' || players[prev])) selectDropdown.value = prev;
+    }
+
+    window.renderLeaderboardRows = function() {
+        const tbody = document.getElementById('leaderboard-body');
+        if(!tbody) return;
+        tbody.innerHTML = '';
+
+        let maxPts = getTotalExamMaxPoints();
+        const searchQ = (document.getElementById('student-search-filter')?.value || '').trim().toLowerCase();
+        let arr = Object.keys(teacherPlayersCache).map(name => ({ name, ...teacherPlayersCache[name] }));
+
+        arr = arr.filter(p => {
+            if(searchQ && !p.name.toLowerCase().includes(searchQ)) return false;
+            if(currentLeaderboardFilter === 'SOLVING' && p.finished) return false;
+            if(currentLeaderboardFilter === 'FINISHED' && !p.finished) return false;
+            if(currentLeaderboardFilter === 'CHEATERS' && !(parseInt(p.cheatCount) > 0)) return false;
+            return true;
+        });
+
+        arr.sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+
+        arr.forEach((p, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${idx + 1}</td>
+                <td style="font-weight:bold;"></td>
+                <td>${GRADE_LEVEL}</td>
+                <td style="color:var(--gold); font-weight:900;">${p.score || 0} / ${maxPts}</td>
+                <td style="color:var(--primary); font-weight:bold;">${p.progress || `0/${totalQuestionsCount}`}</td>
+                <td style="color:var(--danger); font-weight:900;">${p.cheatCount || 0}</td>
+                <td>${p.timeTaken || 'جاري...'}</td>
+                <td style="font-family:monospace;">${p.ip || 'Local'}</td>
+                <td>${p.finished ? '✅ سلم الاختبار' : '⏳ يحل الآن'}</td>
+                <td>
+                    <div style="display:flex; gap:4px; justify-content:center; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-xs btn-purple msg-row-btn" title="إرسال رسالة خاصة لهذا الطالب"><i class="fas fa-comment-dots"></i> رسالة</button>
+                        <button type="button" class="btn btn-xs btn-teal bonus-row-btn" title="منح +1 درجة Bonus للطالب">+1★</button>
+                        <button type="button" class="btn btn-xs btn-gold reset-cheat-btn" title="تصفير عداد الخروج/الغش"><i class="fas fa-eraser"></i></button>
+                        ${!p.finished ? `<button type="button" class="btn btn-xs btn-danger pull-paper-btn" title="سحب ورقة الطالب فوراً"><i class="fas fa-hand-paper"></i></button>` : ''}
+                    </div>
+                </td>
+            `;
+            tr.children[1].textContent = p.name;
+
+            tr.querySelector('.msg-row-btn').addEventListener('click', () => openMessageCenterModal(p.name));
+            tr.querySelector('.bonus-row-btn').addEventListener('click', () => grantBonusToSingleStudent(p.name));
+            tr.querySelector('.reset-cheat-btn').addEventListener('click', () => resetStudentCheatCount(p.name));
+            const pullBtn = tr.querySelector('.pull-paper-btn');
+            if(pullBtn) pullBtn.addEventListener('click', () => forceSubmitSingleStudent(p.name));
+
+            tbody.appendChild(tr);
+        });
+    };
+
+    window.toggleBottomQuestionUpdater = function() {
+        const body = document.getElementById('bottom-updater-body');
+        const icon = document.getElementById('bottom-updater-chevron');
+        if(!body) return;
+        const isHidden = (body.style.display === 'none');
+        body.style.display = isHidden ? 'block' : 'none';
+        if(icon) icon.className = isHidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+    };
+
+    window.publishQuestionSet = async function() {
+        const textarea = document.getElementById('question-upload-json');
+        const status = document.getElementById('question-upload-status');
+        if(!textarea || !status) return;
+        let questions;
+        try {
+            questions = JSON.parse(textarea.value.trim());
+        } catch(e) {
+            status.style.color = 'var(--danger)';
+            status.textContent = 'صيغة JSON غير صحيحة. راجع الأقواس والفواصل.';
+            return;
+        }
+        if(!Array.isArray(questions) || questions.length < 1) {
+            status.style.color = 'var(--danger)';
+            status.textContent = 'يجب إدخال مصفوفة JSON تحتوي على سؤال واحد على الأقل.';
+            return;
+        }
+        if(!confirm(`سيتم استبدال بنك الأسئلة لهذا الاختبار المستقل (${EXAM_NAME}) بـ ${questions.length} سؤالاً. هل تريد المتابعة؟`)) return;
+        try {
+            const payload = { questions, updatedAt: Date.now(), updatedBy: 'مستر إيهاب العدوي' };
+            await set(ref(db, getSlotQuestionSetPath()), payload);
+            activeQuestionSet = questions;
+            lastQuestionSetTimestamp = payload.updatedAt;
+            totalQuestionsCount = questions.length;
+            renderTeacherBank();
+            status.style.color = 'var(--success)';
+            status.textContent = `تم نشر ${questions.length} سؤالاً لهذا الاختبار المستقل بنجاح!`;
+        } catch(err) {
+            status.style.color = 'var(--danger)';
+            status.textContent = 'فشل النشر إلى Firebase.';
+        }
+    };
+
+    window.loadCurrentQuestionSet = async function() {
+        const textarea = document.getElementById('question-upload-json');
+        const status = document.getElementById('question-upload-status');
+        try {
+            const snap = await get(ref(db, getSlotQuestionSetPath()));
+            if(snap.exists() && Array.isArray(snap.val().questions)) {
+                activeQuestionSet = snap.val().questions;
+                if(textarea) textarea.value = JSON.stringify(activeQuestionSet, null, 2);
+                if(status) { status.style.color = 'var(--success)'; status.textContent = `تم تحميل ${activeQuestionSet.length} سؤالاً للتعديل.`; }
+            } else {
+                const defaults = getMasterQuestionsList();
+                if(textarea) textarea.value = JSON.stringify(defaults, null, 2);
+                if(status) { status.style.color = 'var(--gold)'; status.textContent = 'تم تحميل الأسئلة الافتراضية الحالية للتعديل.'; }
+            }
+        } catch(err) {}
+    };
+
+    let teacherAnswersVisible = false;
+    window.toggleTeacherAnswers = function() {
+        teacherAnswersVisible = !teacherAnswersVisible;
+        renderTeacherBank();
+    };
+
+    function renderTeacherBank() {
+        const bankContainer = document.getElementById('teacher-questions-bank');
+        if(!bankContainer) return;
+        let allQs = getActiveQuestionsList();
+        let h = "";
+
+        allQs.forEach(q => {
+            let pts = Number(q.points) || 1;
+            let ptsBadge = `<span class="q-points-badge"><i class="fas fa-star"></i> ${pts} ${pts === 1 ? 'درجة' : 'درجات'}</span>`;
+
+            if(q.section) {
+                h += `<div class="section-header-banner">${q.section}</div>`;
+                if(q.sectionType === "listening") {
+                    h += `<div class="passage-box">${listeningTextStr}</div>`;
+                }
+                if(q.sectionType === "passage") {
+                    h += `<div class="passage-box">${q.passageText || readingPassageText}</div>`;
+                }
+                if(q.sectionType === "dialogue") {
+                    h += `<div class="passage-box"><b>${dialogueContextText}</b></div>`;
+                }
+            }
+
+            if(q.type === 'gap') {
+                h += `<div class="q-card" style="padding:15px;">
+                        ${ptsBadge}
+                        <div class="q-title">${q.q}</div>
+                        <div class="opt ${teacherAnswersVisible ? 'correct-opt' : ''}" style="max-width:340px;">
+                            ${teacherAnswersVisible ? `الإجابة الصحيحة: ${q.a} ✓` : 'اضغط (إظهار/إخفاء حلول الاختبار) لكشف الكلمة'}
+                        </div>
+                      </div>`;
+            } else {
+                let optsHtml = (q.o || []).map(opt => {
+                    let isCorrect = (String(opt).trim().toLowerCase() === String(q.a || "").trim().toLowerCase());
+                    let cls = "opt";
+                    if(teacherAnswersVisible) {
+                        cls = isCorrect ? "opt correct-opt" : "opt dimmed-opt";
+                    }
+                    return `<div class="${cls}"><span>${opt}</span> ${teacherAnswersVisible && isCorrect ? '<span>✓</span>' : ''}</div>`;
+                }).join('');
+
+                h += `<div class="q-card">
+                        ${ptsBadge}
+                        <div class="q-title">${q.q}</div>
+                        <div class="options-grid">${optsHtml}</div>
+                      </div>`;
+            }
+        });
+
+        bankContainer.innerHTML = h;
+    }
+
+    // تصدير ملف الإكسيل
+    window.exportToExcel = async function() {
+        let snap = await get(ref(db, `${getSlotRoomPath(currentPin)}/players`));
+        if(!snap.exists()) return alert("لا توجد بيانات طلاب في الغرفة الحالية لتصديرها!");
+        let players = snap.val();
+        let maxPts = getTotalExamMaxPoints();
+
+        let headers = ["IP", "التاريخ والوقت", "الاسم", "الصف الثاني الإعدادي", "اسم الاختبار", "درجة الاختبار", "عدد محاولات الغش"];
+        for(let i = 1; i <= 37; i++) headers.push(`سؤال ${i}`);
+
+        let csvRows = [headers.join(",")];
+        let nowStr = new Date().toLocaleString('ar-EG').replace(/,/g, ' ');
+
+        for(let name in players) {
+            let p = players[name];
+            let ansMap = p.answersDetail || {};
+            let row = [
+                `"${p.ip || ''}"`,
+                `"${nowStr}"`,
+                `"${name}"`,
+                `"${GRADE_LEVEL}"`,
+                `"${EXAM_NAME}"`,
+                `"${p.score || 0} / ${maxPts}"`,
+                `"${p.cheatCount || 0}"`
+            ];
+            for(let i = 1; i <= 37; i++) {
+                let val = ansMap[i] ? String(ansMap[i]).replace(/"/g, '""') : "لم يُجب";
+                row.push(`"${val}"`);
+            }
+            csvRows.push(row.join(","));
+        }
+
+        let csvString = "\uFEFF" + csvRows.join("\n");
+        let blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+        let url = URL.createObjectURL(blob);
+        let link = document.createElement("a");
+        link.href = url;
+        link.download = `نتائج_${EXAM_NAME}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    // عداد الوقت التنازلي
+    setInterval(() => {
+        if(!isExamStarted || isExamFinished || isRoomFrozen) return;
+        totalSeconds--;
+        let m = Math.floor(totalSeconds / 60);
+        let s = totalSeconds % 60;
+        const timerEl = document.getElementById('totalTimer');
+        if(timerEl) timerEl.innerText = `${m}:${s < 10 ? '0' + s : s}`;
+        if(totalSeconds <= 0) finishExam(true);
+    }, 1000);
+
+    // خلفية الجزيئات المتحركة
+    const canvas = document.getElementById('particles-js');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let pts = Array.from({length: 45}, () => ({
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height, s: Math.random() * 2.5 + 1,
+        vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+        color: Math.random() > 0.5 ? "rgba(14, 165, 233, 0.4)" : "rgba(245, 158, 11, 0.4)"
+    }));
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pts.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            ctx.fillStyle = p.color;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2); ctx.fill();
+        });
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+</script>
+</body>
+</html>
