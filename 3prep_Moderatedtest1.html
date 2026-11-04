@@ -68,12 +68,12 @@ body { background: var(--bg-dark); min-height: 100vh; padding: 10px; color: whit
 }
 @keyframes shine { to { background-position: 200% center; } }
 
-input[type="text"], input[type="password"], input[type="number"], select, textarea {
+input[type="text"], input[type="password"], input[type="number"], select {
     width: 100%; max-width: 420px; padding: 13px 18px; border-radius: 14px;
     border: 2px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5);
     color: white; text-align: center; font-size: 1.05rem; outline: none; margin-bottom: 12px; transition: 0.3s;
 }
-input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(14, 165, 233, 0.5); }
+input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(14, 165, 233, 0.5); }
 
 .btn {
     background: linear-gradient(135deg, var(--primary), #0284c7); color: white; padding: 12px 22px;
@@ -86,8 +86,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 .btn-green { background: linear-gradient(135deg, var(--success), #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35); }
 .btn-danger { background: linear-gradient(135deg, var(--danger), #b91c1c); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35); }
 .btn-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.35); }
-.btn-teal { background: linear-gradient(135deg, #14b8a6, #0d9488); box-shadow: 0 4px 15px rgba(20, 184, 166, 0.35); }
-.btn-xs { padding: 5px 10px; font-size: 0.8rem; border-radius: 8px; }
 
 .instructions-list {
     text-align: right; background: rgba(0,0,0,0.45); padding: 18px 20px; border-radius: 16px;
@@ -96,36 +94,28 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 .instructions-list li { margin-bottom: 10px; font-size: 0.95rem; line-height: 1.6; list-style: none; color: #e2e8f0; }
 .instructions-list i { margin-left: 8px; }
 
-/* الكارت العائم الجماعي والفردي */
+/* الكارت العائم الموحد للرسائل الجماعية والخاصة */
 #floating-student-toast {
-    position: fixed; top: 22px; left: 50%; transform: translateX(-50%) translateY(-180%);
-    z-index: 12500; background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(2, 6, 23, 0.99));
-    backdrop-filter: blur(20px); border: 2.5px solid var(--gold); border-radius: 22px;
-    padding: 18px 26px; width: calc(100% - 24px); max-width: 580px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 158, 11, 0.5);
-    display: flex; align-items: center; gap: 16px; opacity: 0; pointer-events: none;
+    position: fixed; top: 22px; left: 50%; transform: translateX(-50%) translateY(-160%);
+    z-index: 12500; background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
+    backdrop-filter: blur(18px); border: 2px solid var(--gold); border-radius: 20px;
+    padding: 15px 22px; width: calc(100% - 28px); max-width: 540px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(245, 158, 11, 0.45);
+    display: flex; align-items: center; gap: 14px; opacity: 0; pointer-events: none;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease; overflow: hidden;
 }
 #floating-student-toast.show-toast { transform: translateX(-50%) translateY(0); opacity: 1; }
-#floating-student-toast.private-mode {
-    border-color: #a855f7;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 38px rgba(168, 85, 247, 0.6);
-}
 .toast-icon-circle {
-    width: 50px; height: 50px; border-radius: 50%;
-    background: rgba(245, 158, 11, 0.2); border: 2px solid var(--gold);
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(245, 158, 11, 0.18); border: 1.5px solid var(--gold);
     display: flex; align-items: center; justify-content: center;
-    color: var(--gold); font-size: 1.35rem; flex-shrink: 0;
-}
-#floating-student-toast.private-mode .toast-icon-circle {
-    background: rgba(168, 85, 247, 0.22); border-color: #c084fc; color: #c084fc;
+    color: var(--gold); font-size: 1.25rem; flex-shrink: 0;
 }
 .toast-body-wrap { text-align: right; flex: 1; }
-.toast-header-title { font-size: 0.92rem; color: var(--gold); font-weight: 900; display: block; margin-bottom: 4px; }
-#floating-student-toast.private-mode .toast-header-title { color: #d8b4fe; }
-.toast-msg-content { font-size: 1.18rem; color: #ffffff; font-weight: 800; line-height: 1.55; overflow-wrap: anywhere; }
+.toast-header-title { font-size: 0.85rem; color: var(--gold); font-weight: 900; display: block; margin-bottom: 3px; }
+.toast-msg-content { font-size: 1.05rem; color: #ffffff; font-weight: 800; line-height: 1.5; overflow-wrap: anywhere; }
 .toast-progress-line {
-    position: absolute; bottom: 0; right: 0; height: 4.5px;
+    position: absolute; bottom: 0; right: 0; height: 4px;
     background: linear-gradient(90deg, var(--primary), var(--gold)); width: 100%;
 }
 @keyframes toastBarShrink { from { width: 100%; } to { width: 0%; } }
@@ -138,6 +128,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     border-radius: 0 0 20px 20px; margin-bottom: 20px; width: 100%; max-width: 920px; box-shadow: 0 10px 25px rgba(0,0,0,0.7);
 }
 
+/* خلفية Crystal الكريستالية الجذابة لرؤوس الأسئلة */
 .section-header-banner {
     background: linear-gradient(135deg, rgba(56, 189, 248, 0.24) 0%, rgba(139, 92, 246, 0.28) 50%, rgba(14, 165, 233, 0.22) 100%);
     backdrop-filter: blur(18px);
@@ -187,6 +178,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 .progress-container { width: 100%; height: 10px; background: rgba(0,0,0,0.6); border-radius: 5px; margin: 12px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
 .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--gold), var(--success)); transition: width 0.1s linear; }
 
+/* بنك الكلمات الذكي للسحب والإدراج والتمرير التلقائي للموبايل */
 .sticky-word-bank-wrapper {
     position: sticky; top: 68px; z-index: 120;
     background: rgba(15, 23, 42, 0.96); backdrop-filter: blur(10px);
@@ -244,7 +236,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 
 <canvas id="particles-js"></canvas>
 
-<!-- الكارت العائم للرسائل الجماعية والفردية -->
+<!-- الكارت العائم الموحد للرسائل الجماعية والخاصة -->
 <div id="floating-student-toast" role="alert" aria-live="assertive">
     <div class="toast-icon-circle"><i id="toast-icon-el" class="fas fa-bell"></i></div>
     <div class="toast-body-wrap">
@@ -254,12 +246,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     <div id="floating-toast-bar" class="toast-progress-line"></div>
 </div>
 
-<!-- شاشة التحذير الحمراء للخروج وتصغير الشاشة -->
+<!-- شاشة التحذير الحمراء القوية عند محاولة الغش أو الخروج أو التحديث -->
 <div id="cheat-warning-overlay">
     <i class="fas fa-exclamation-triangle" style="font-size: 5rem; color: #fef08a; margin-bottom: 20px;"></i>
     <h1 style="font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; color: #fff; margin-bottom: 15px;">تحذير صارم من نظام مراقبة الامتحان!</h1>
     <p id="cheat-overlay-msg" style="font-size: 1.3rem; font-weight: bold; color: #fef08a; max-width: 600px; line-height: 1.8; margin-bottom: 25px;">
-        لقد حاولت الخروج من شاشة الامتحان أو تصغيرها أو فتح تطبيق آخر! تم تسجيل محاولة غش فورية في لوحة تحكم مستر إيهاب.
+        لقد حاولت الخروج من شاشة الامتحان أو تصغيرها أو تحديث الصفحة! تم تسجيل محاولة غش فورية في لوحة تحكم مستر إيهاب.
     </p>
     <div style="background: rgba(0,0,0,0.5); padding: 12px 25px; border-radius: 12px; border: 2px dashed #fef08a; margin-bottom: 25px; font-size: 1.3rem; font-weight: 900;">
         إجمالي محاولات الخروج المسجلة عليك الآن: <span id="cheat-modal-counter" style="color: #fde047; font-size: 1.6rem;">1</span>
@@ -269,7 +261,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     </button>
 </div>
 
-<!-- شاشة التجميد المؤقت من المعلم -->
+<!-- شاشة إيقاف/تجميد الاختبار المؤقت من المعلم -->
 <div id="freeze-overlay">
     <i class="fas fa-pause-circle" style="font-size: 5rem; color: var(--gold); margin-bottom: 20px;"></i>
     <h1 style="font-size: 2.2rem; color: white; margin-bottom: 10px;">تم إيقاف الاختبار مؤقتاً بواسطة مستر إيهاب</h1>
@@ -292,9 +284,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
             <h3 style="text-align: center; color: var(--gold); font-weight: 900; margin-bottom: 12px;">
                 <i class="fas fa-shield-alt"></i> قواعد وتعليمات الامتحان الرسمي الصارمة
             </h3>
-            <li><i class="fas fa-ban" style="color: var(--danger);"></i> <b>نظام مانع الغش الفعال:</b> الامتحان مزود بكود رقابي صارم يرصد أي محاولة للخروج من الشاشة أو تصغيرها ويطلق صافرة إنذار.</li>
-            <li><i class="fas fa-sync-alt" style="color: var(--primary);"></i> <b>حماية التحديث (Refresh):</b> إذا حدث تحديث بالخطأ للصفحة، سيعيدك النظام مباشرة لنفس سؤالك وإجاباتك السابقة (لا تُحسب محاولة غش).</li>
-            <li><i class="fas fa-sign-in-alt" style="color: var(--primary);"></i> <b>المتابعة عند الانقطاع:</b> إذا خرجت لأي سبب، يمكنك الدخول بنفس اسمك وكود الغرفة لاستئناف الحل من حيث توقفت.</li>
+            <li><i class="fas fa-ban" style="color: var(--danger);"></i> <b>نظام مانع الغش الفعال:</b> الامتحان مزود بكود رقابي صارم يرصد أي محاولة للخروج من الشاشة أو تصغيرها أو فتح تطبيق آخر ويطلق صافرة إنذار فورية.</li>
+            <li><i class="fas fa-sync-alt" style="color: var(--danger);"></i> <b>تحذير من تحديث الصفحة (Refresh):</b> يُمنع تماماً عمل تحديث للصفحة أثناء الامتحان، ولن يخرجك النظام بل سيعيدك لنفس سؤالك مع احتساب <b>محاولة غش</b> عليك.</li>
+            <li><i class="fas fa-sign-in-alt" style="color: var(--primary);"></i> <b>المتابعة عند الانقطاع:</b> إذا خرجت من الامتحان لأي سبب قهري، يمكنك الدخول مرة أخرى بنفس اسمك وكود الغرفة للمتابعة من حيث توقفت تماماً، ولكنها <b>ستُحسب محاولة خروج/غش</b> في تقريرك.</li>
+            <li><i class="fas fa-random" style="color: var(--success);"></i> <b>الترتيب والإكمال:</b> الأسئلة مرتبة في صفحة واحدة متصلة، والاختيارات عشوائية لكل طالب، ولن يُقبل التسليم إلا بعد حل جميع الأسئلة.</li>
         </ul>
 
         <button class="btn btn-green" onclick="showScene('student-login-scene')" style="font-size: 1.3rem; padding: 15px 45px; width: 90%; max-width: 380px;">
@@ -392,7 +385,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         </div>
 
         <div style="background: rgba(0,0,0,0.45); padding: 18px; border-radius: 18px; border: 1.5px dashed var(--primary); margin-bottom: 20px;">
-            <h3 style="color: var(--primary); margin-bottom: 12px; text-align: center;"><i class="fas fa-sliders-h"></i> إعدادات الاختبار وكود الدخول</h3>
+            <h3 style="color: var(--primary); margin-bottom: 12px; text-align: center;"><i class="fas fa-sliders-h"></i> إعدادات الاختبار وكود الدخول (تُحفظ وتُعمم على الطلاب فوراً)</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; align-items: end;">
                 <div>
                     <label style="display:block; font-size:0.85rem; color:var(--gold); margin-bottom:4px;">كود دخول الطلاب (PIN):</label>
@@ -403,36 +396,16 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
                     <input type="text" id="custom-exam-title" value="3prep term1 test ( 1 )" style="width:100%; margin:0; font-size:0.95rem;">
                 </div>
                 <div>
-                    <label style="display:block; font-size:0.85rem; color:var(--gold); margin-bottom:4px;">الصف الدراسي:</label>
+                    <label style="display:block; font-size:0.85rem; color:var(--gold); margin-bottom:4px;">العنوان الفرعي / الصف الدراسي:</label>
                     <input type="text" id="custom-grade-title" value="الصف الثالث الإعدادي" style="width:100%; margin:0; font-size:0.95rem;">
                 </div>
                 <div>
-                    <label style="display:block; font-size:0.85rem; color:var(--gold); margin-bottom:4px;">زمن الاختبار (دقائق):</label>
+                    <label style="display:block; font-size:0.85rem; color:var(--gold); margin-bottom:4px;">زمن الاختبار (بالدقائق):</label>
                     <input type="number" id="custom-exam-minutes" value="30" style="width:100%; margin:0; font-size:1.05rem;">
                 </div>
             </div>
             <button class="btn btn-green" onclick="saveExamConfigToFirebase()" style="width: 100%; margin-top: 14px; padding: 10px;">
-                <i class="fas fa-save"></i> حفظ وتفعيل الإعدادات
-            </button>
-        </div>
-
-        <!-- مركز إرسال الرسائل (جماعي أو لطالب محدد) -->
-        <div style="background: rgba(15, 23, 42, 0.85); padding: 18px; border-radius: 18px; border: 2px solid var(--gold); margin-bottom: 20px;">
-            <h3 style="color: var(--gold); margin-bottom: 10px; font-size: 1.15rem;"><i class="fas fa-paper-plane"></i> إرسال رسالة أو تنبيه فوري (جماعي أو فردي)</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 12px;">
-                <div>
-                    <label style="display:block; font-size:0.85rem; color:#38bdf8; font-weight:bold; margin-bottom:5px;">اختر المستلم:</label>
-                    <select id="message-target-select" style="width:100%; max-width:none; margin:0; font-weight:bold;">
-                        <option value="ALL">📢 رسالة جماعية لجميع الطلاب</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="display:block; font-size:0.85rem; color:var(--gold); font-weight:bold; margin-bottom:5px;">النص:</label>
-                    <input type="text" id="custom-message-input" placeholder="اكتب رسالتك هنا..." style="width:100%; max-width:none; margin:0; text-align:right;">
-                </div>
-            </div>
-            <button class="btn btn-gold" onclick="sendTargetedTeacherMessage()" style="width:100%; color:#000; font-weight:900;">
-                <i class="fas fa-bullhorn"></i> إرسال الرسالة العائمة الآن
+                <i class="fas fa-save"></i> حفظ وتفعيل الإعدادات وكود الدخول لجميع الطلاب الآن
             </button>
         </div>
 
@@ -440,8 +413,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
             <button class="btn btn-green" onclick="startExamForAll()"><i class="fa-solid fa-play"></i> بدء الاختبار للجميع</button>
             <button class="btn btn-danger" onclick="forceEndExamForAll()"><i class="fa-solid fa-stop-circle"></i> إنهاء الاختبار للجميع</button>
             <button class="btn btn-gold" onclick="toggleTeacherAnswers()"><i class="fa-solid fa-eye"></i> إظهار/إخفاء حلول الاختبار</button>
-            <button class="btn btn-purple" onclick="addExtraTimeForAll()"><i class="fa-solid fa-clock"></i> +5 دقائق إضافية (فوري)</button>
+            <button class="btn btn-purple" onclick="addExtraTimeForAll()"><i class="fa-solid fa-clock"></i> +5 دقائق إضافية</button>
             <button class="btn" id="btn-freeze-toggle" onclick="toggleFreezeExam()"><i class="fa-solid fa-pause"></i> تجميد مؤقت للشاشات</button>
+            <button class="btn btn-gold" onclick="sendBroadcastMessage()"><i class="fa-solid fa-bullhorn"></i> إرسال رسالة عائمة للطلاب</button>
             <button class="btn btn-green" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> تصدير درجات Excel</button>
             <button class="btn" onclick="showScene('teacher-pdf-hub')"><i class="fa-solid fa-file-pdf"></i> تقارير PDF للطلاب</button>
             <button class="btn btn-danger" onclick="resetExamSession()"><i class="fa-solid fa-rotate-right"></i> إعادة الاختبار (تصفير)</button>
@@ -469,7 +443,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 
         <div style="margin-top: 35px; border-top: 2px dashed rgba(255,255,255,0.2); padding-top: 20px; width: 100%;">
             <h3 style="color: var(--gold); text-align: center; margin-bottom: 18px;">
-                <i class="fas fa-chalkboard-teacher"></i> عرض الاختبار الكامل (MCQ يظهر للمعلم تماماً كما يظهر للطالب) للإشراف
+                <i class="fas fa-chalkboard-teacher"></i> عرض الاختبار الكامل للإشراف والشرح على السبورة الذكية
             </h3>
             <div id="teacher-questions-bank" style="display: flex; flex-direction: column; width: 100%;"></div>
         </div>
@@ -480,7 +454,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 <div id="teacher-pdf-hub" class="scene">
     <div class="main-card" style="max-width: 900px; text-align: center;">
         <h2 style="color: var(--primary); margin-bottom: 12px;"><i class="fa-solid fa-file-pdf"></i> مركز معاينة وتصدير تقارير الـ PDF للطلاب</h2>
-        <p style="color: #cbd5e1; margin-bottom: 18px;">اختر اسم الطالب لمعاينة تقريره وتصديره:</p>
+        <p style="color: #cbd5e1; margin-bottom: 18px;">اختر اسم الطالب لمعاينة تقريره وتصديره، أو اختر تصدير جميع الطلاب دفعة واحدة:</p>
         
         <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px;">
             <select id="pdf-student-select" onchange="previewSelectedStudentReport()" style="width: 100%; max-width: 420px; margin: 0;">
@@ -488,7 +462,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
                 <option value="EXPORT_ALL_ZIP" style="color: var(--gold); font-weight: bold;">📁 تصدير نتائج جميع الطلاب (ملفات PDF منفصلة)</option>
             </select>
             <button class="btn btn-green" onclick="generateStudentPDF()"><i class="fas fa-download"></i> تصدير النتيجة PDF</button>
-            <button class="btn btn-danger" onclick="showScene('teacher-leaderboard-scene')">رجوع لوحة المعلم</button>
+            <button class="btn btn-danger" onclick="showScene('teacher-leaderboard-scene')">رجوع للوحة المعلم</button>
         </div>
 
         <div id="teacher-pdf-live-preview" style="width: 100%; text-align: left; direction: ltr;"></div>
@@ -516,7 +490,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 
         <div class="dashed-frame-blue">
             <p style="color: #e2e8f0; font-weight: bold; margin-bottom: 12px; font-size: 0.95rem;">
-                يمكنك الآن تنزيل تقرير إجاباتك الكامل بصيغة PDF:
+                يمكنك الآن تنزيل تقرير إجاباتك الكامل بالدرجة والنسبة المئوية بصيغة PDF:
             </p>
             <button class="btn btn-green" onclick="downloadStudentSelfPDF()" style="font-size: 1.15rem; padding: 14px 28px; width: 100%;">
                 <i class="fas fa-file-pdf"></i> تحميل نتيجة الاختبار PDF
@@ -573,6 +547,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         <p>Having strong values makes life more meaningful. They help you build trust with others, create good relationships, and become a better and more responsible person.</p>
     `;
 
+    const dialogueContextText = "Hani and Amir are talking about Dr. Magdi Yacoub's successful life.";
+
     fetch('https://api.ipify.org?format=json')
         .then(res => res.json())
         .then(data => { studentIP = data.ip; })
@@ -618,26 +594,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     }
 
     let toastTimeoutId = null;
-    function showFloatingStudentToast(msgText, isPrivate = false) {
+    function showFloatingStudentToast(msgText) {
         const toast = document.getElementById('floating-student-toast');
         const textEl = document.getElementById('floating-toast-text');
         const barEl = document.getElementById('floating-toast-bar');
-        const senderEl = document.getElementById('toast-sender-title');
-        const iconEl = document.getElementById('toast-icon-el');
         if(!toast || !textEl || !barEl) return;
 
         playNotificationChime();
         textEl.textContent = msgText;
-
-        if(isPrivate) {
-            toast.classList.add('private-mode');
-            if(senderEl) senderEl.textContent = "🔒 (رسالة خاصة لك من مستر إيهاب العدوي)";
-            if(iconEl) iconEl.className = "fas fa-user-shield";
-        } else {
-            toast.classList.remove('private-mode');
-            if(senderEl) senderEl.textContent = "📢 (تنبيه عام من مستر إيهاب العدوي)";
-            if(iconEl) iconEl.className = "fas fa-bullhorn";
-        }
 
         barEl.style.animation = 'none';
         void barEl.offsetWidth;
@@ -650,25 +614,32 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         }, 5000);
     }
 
+    // =========================================================================
+    // مصفوفة أسئلة الاختبار المطابقة حرفياً لملفات الصور الثلاث (3prep term1 test 1)
+    // =========================================================================
     function getMasterQuestionsList() {
         return [
+            // 1. Choose the correct answer (Image 31.jpg)
             { id: 1, section: "1. Choose the correct answer from a, b, c or d:", q: "1. ......... means who a person is.", o: ["Identity", "Strength", "Confidence", "Challenge"], a: "Identity" },
             { id: 2, q: "2. My best friend is always ......... when I have a problem.", o: ["lazy", "careless", "silent", "supportive"], a: "supportive" },
-            { id: 3, q: "3. The antonym of 'stressed' is ......... .", o: ["relaxed", "worried", "shocked", "angry"], a: "relaxed" },
-            { id: 4, q: "4. We add the prefix '.........' to give the opposite of 'patient'.", o: ["im-", "in-", "ir-", "un-"], a: "im-" },
+            { id: 3, q: "3. The antonym of \"stressed\" is ......... .", o: ["relaxed", "worried", "shocked", "angry"], a: "relaxed" },
+            { id: 4, q: "4. We add the prefix \".........\" to give the opposite of \"patient\".", o: ["im-", "in-", "ir-", "un-"], a: "im-" },
 
+            // 2. Read and complete with words in the box (Image 31.jpg)
             { id: 5, type: 'gap', section: "2. Read and complete the text with the words in the box:", sectionType: "gaps", q: "Gap (1): life such as ........ which helps you overcome life's challenges.", a: "determination" },
             { id: 6, type: 'gap', q: "Gap (2): Self ........ is a very important quality", a: "confidence" },
             { id: 7, type: 'gap', q: "Gap (3): sure of your ........ and qualities.", a: "strengths" },
             { id: 8, type: 'gap', q: "Gap (4): You should also know your ........ and your weaknesses.", a: "abilities" },
 
-            { id: 9, section: "3. Read the following text, then answer the questions:", sectionType: "passage", q: "1. The underlined pronoun 'They' refers to .........", o: ["people", "values", "schools", "communities"], a: "values" },
-            { id: 10, q: "2. The underlined word 'common' in the first paragraph most likely means '.........'.", o: ["ordinary", "special", "private", "unusual"], a: "ordinary" },
-            { id: 11, q: "3. 'The values shape our behavior.' The word 'shape' means '.........'.", o: ["write", "win", "form", "fear"], a: "form" },
+            // 3. Read passage and answer (Image 31.jpg & 32.jpg)
+            { id: 9, section: "3. Read the following text, then answer the questions:", sectionType: "passage", q: "1. The underlined pronoun \"They\" refers to .........", o: ["people", "values", "schools", "communities"], a: "values" },
+            { id: 10, q: "2. The underlined word \"common\" in the first paragraph most likely means \".........\".", o: ["ordinary", "special", "private", "unusual"], a: "ordinary" },
+            { id: 11, q: "3. \"The values shape our behavior.\" The word \"shape\" means \".........\".", o: ["write", "win", "form", "fear"], a: "form" },
             { id: 12, q: "4. What's the main idea of the passage?", o: ["The importance of values in guiding our lives", "How to play video games", "The history of schools", "How to write a letter"], a: "The importance of values in guiding our lives" },
             { id: 13, q: "5. Which value do you think is the most important in your life?", o: ["Honesty and respect", "Being selfish", "Ignoring rules", "Wasting time"], a: "Honesty and respect" },
             { id: 14, q: "6. Where can values come from?", o: ["Family, school, friends, and community", "Only from books", "Nowhere", "From games"], a: "Family, school, friends, and community" },
 
+            // 4. Story: The School Garden Project (Image 32.jpg)
             { id: 15, section: "4. Story : The School Garden Project (Chapter One) :", q: "1. Zeina's idea was to ......... .", o: ["leave the school", "paint the school", "clean the library", "plant a garden"], a: "plant a garden" },
             { id: 16, q: "2. Zeina was a new student at a ......... school.", o: ["primary", "preparatory", "secondary", "nursery"], a: "preparatory" },
             { id: 17, q: "3. Zeina was ......... and liked to notice things around her.", o: ["curious", "sad", "bad", "noisy"], a: "curious" },
@@ -676,14 +647,17 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
             { id: 19, q: "5. How did Zeina show honesty?", o: ["By telling the truth and admitting mistakes", "By hiding things", "By lying", "By running away"], a: "By telling the truth and admitting mistakes" },
             { id: 20, q: "6. Why wasn't Zeina sure that anyone would listen to her?", o: ["Because she was a new student", "Because she was loud", "Because she was a teacher", "Because she didn't speak"], a: "Because she was a new student" },
 
+            // 5. Rewrite sentences (Image 33.jpg)
             { id: 21, section: "5. Rewrite the following sentences:", q: "1. I have already done my homework. (yet)", o: ["I haven't done my homework yet.", "I have done my homework yet.", "I did my homework yet.", "I will do my homework yet."], a: "I haven't done my homework yet." },
             { id: 22, q: "2. Yossif has traveled to Aswan. (Where ...?)", o: ["Where has Yossif traveled?", "Where Yossif has traveled?", "Where did Yossif traveled?", "Where does Yossif travel?"], a: "Where has Yossif traveled?" },
             { id: 23, q: "3. We are still doing our homework. (yet)", o: ["We haven't done our homework yet.", "We have done our homework yet.", "We are doing our homework yet.", "We didn't do homework yet."], a: "We haven't done our homework yet." },
 
+            // 6. Complete correct form (Image 33.jpg)
             { id: 24, section: "6. Complete the sentences with the correct form of the word(s) in brackets:", q: "1. Logy ......... (has) tidied her room yet.", o: ["hasn't", "has", "had", "will have"], a: "hasn't" },
             { id: 25, q: "2. The task ......... (carry) out already.", o: ["has been carried", "carry", "carried", "carrying"], a: "has been carried" },
             { id: 26, q: "3. I have known him since we ......... (be) children.", o: ["were", "are", "have been", "had been"], a: "were" },
 
+            // 7. Dialogue (Image 33.jpg)
             { id: 27, section: "7. Complete the following dialogue:<br><span style='color:#38bdf8; font-weight:900;'>Hani and Amir are talking about Dr. Magdi Yacoub's successful life.</span>", sectionType: "dialogue", q: "Hani : Hello. What are you reading?<br>Amir : (1) .........", o: ["I am reading a post about a famous person.", "I am playing a game.", "I am watching TV.", "I am eating lunch."], a: "I am reading a post about a famous person." },
             { id: 28, q: "Hani : (2) ......... ?", o: ["What is the post about", "Who are you", "Where are you", "How old are you"], a: "What is the post about" },
             { id: 29, q: "Hani : (3) ......... ?", o: ["When was he born", "Where does he live", "What is his job", "How do you do"], a: "When was he born" },
@@ -703,7 +677,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     let activeWordToDrop = null;
     let shuffledWords = [];
     let roomListenerAttached = false;
-    let privateMsgListenerAttached = false;
 
     function shuffleArray(array) {
         let arr = [...array];
@@ -720,20 +693,128 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         document.title = `${EXAM_NAME} - مستر إيهاب العدوي`;
     }
 
-    // ربط الدوال العالمية بنطاق الـ window لضمان عمل أزرار الـ onclick بالكامل
-    window.showScene = function(id) {
-        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        window.scrollTo(0,0);
+    window.addEventListener('DOMContentLoaded', () => {
+        const qrContainer = document.getElementById('qrcode-container');
+        if(qrContainer && window.QRCode) {
+            qrContainer.innerHTML = "";
+            new QRCode(qrContainer, { text: window.location.href, width: 115, height: 115, colorDark: "#020617", colorLight: "#ffffff" });
+        }
+
+        onValue(ref(db, 'examConfig'), (snap) => {
+            if(snap.exists()) {
+                const cfg = snap.val();
+                if(cfg.pin) currentPin = String(cfg.pin).trim();
+                if(cfg.examName) EXAM_NAME = cfg.examName;
+                if(cfg.gradeLevel) GRADE_LEVEL = cfg.gradeLevel;
+                if(cfg.minutes) configuredMinutes = parseInt(cfg.minutes) || 30;
+
+                const pinInp = document.getElementById('custom-room-pin');
+                const titleInp = document.getElementById('custom-exam-title');
+                const gradeInp = document.getElementById('custom-grade-title');
+                const minInp = document.getElementById('custom-exam-minutes');
+                if(pinInp && document.activeElement !== pinInp) pinInp.value = currentPin;
+                if(titleInp && document.activeElement !== titleInp) titleInp.value = EXAM_NAME;
+                if(gradeInp && document.activeElement !== gradeInp) gradeInp.value = GRADE_LEVEL;
+                if(minInp && document.activeElement !== minInp) minInp.value = configuredMinutes;
+                updateDynamicTitlesOnUI();
+                listenToSubmissions();
+            } else {
+                set(ref(db, 'examConfig'), { pin: "0000", examName: EXAM_NAME, gradeLevel: GRADE_LEVEL, minutes: 30 });
+            }
+        });
+
+        let savedTeacherSession = localStorage.getItem('mrehab_teacher_active');
+        let sessionTime = localStorage.getItem('mrehab_teacher_time');
+        if(savedTeacherSession === 'true' && sessionTime) {
+            if(Date.now() - parseInt(sessionTime) < 24 * 60 * 60 * 1000) {
+                showScene('teacher-leaderboard-scene');
+                listenToSubmissions();
+                renderTeacherBank();
+                return;
+            } else {
+                localStorage.removeItem('mrehab_teacher_active');
+                localStorage.removeItem('mrehab_teacher_time');
+            }
+        }
+
+        let activeStudentRaw = localStorage.getItem('mrehab_active_student_session');
+        if(activeStudentRaw) {
+            try {
+                let sObj = JSON.parse(activeStudentRaw);
+                if(sObj && sObj.name && !sObj.finished) {
+                    student.name = sObj.name;
+                    student.pin = sObj.pin;
+                    currentPin = sObj.pin;
+                    cheatCount = (parseInt(sObj.cheatCount) || 0) + 1;
+                    examStartTime = sObj.startTime || Date.now();
+                    totalSeconds = sObj.remainingSeconds || (configuredMinutes * 60);
+
+                    startExam(true);
+                    setTimeout(() => {
+                        triggerCheatAlarm("لقد قمت بتحديث الصفحة (Refresh) أو إعادة فتحها أثناء الامتحان! تم إرجاعك لنفس سؤالك مع تسجيل محاولة غش.");
+                    }, 500);
+                }
+            } catch(e) {}
+        }
+    });
+
+    let lastCheatTrigger = 0;
+    function triggerCheatAlarm(customMsg) {
+        if(!isExamStarted || isExamFinished) return;
+        let now = Date.now();
+        if(now - lastCheatTrigger < 1500) return;
+        lastCheatTrigger = now;
+
+        playWarningSiren();
+        document.getElementById('cheat-overlay-msg').innerText = customMsg || "تنبيه صارم! لقد حاولت الخروج من شاشة الامتحان أو تصغيرها! تم رصد المخالفة وإرسالها لمستر إيهاب.";
+        document.getElementById('cheat-modal-counter').innerText = cheatCount;
+        document.getElementById('top-cheat-counter').innerText = cheatCount;
+        document.getElementById('cheat-warning-overlay').style.display = 'flex';
+        saveAndSyncState();
+    }
+
+    window.dismissCheatWarning = function() {
+        document.getElementById('cheat-warning-overlay').style.display = 'none';
     };
 
+    document.addEventListener('visibilitychange', () => {
+        if(document.hidden && isExamStarted && !isExamFinished) {
+            cheatCount++;
+            triggerCheatAlarm("لقد غادرت شاشة الامتحان أو قمت بتصغير المتصفح! تم احتساب محاولة خروج/غش عليك.");
+        }
+    });
+
+    window.addEventListener('blur', () => {
+        if(isExamStarted && !isExamFinished) {
+            cheatCount++;
+            triggerCheatAlarm("لقد فقدت التركيز على نافذة الامتحان أو فتحت نافذة جانبية! تم احتساب محاولة غش.");
+        }
+    });
+
+    window.addEventListener('keyup', (e) => {
+        if((e.key === 'PrintScreen' || e.keyCode === 44) && isExamStarted && !isExamFinished) {
+            cheatCount++;
+            triggerCheatAlarm("محاولة تصوير الشاشة (Screenshot) ممنوعة تماماً وتم رصدها كمحاولة غش!");
+        }
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if(isExamStarted && !isExamFinished) {
+            if(e.key === 'F5' || ((e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R'))) {
+                e.preventDefault();
+                cheatCount++;
+                triggerCheatAlarm("محاولة تحديث الصفحة (Refresh) ممنوعة أثناء الاختبار! تم رصد المحاولة.");
+            }
+        }
+    });
+
+    let logoClickCount = 0; let logoClickTimer = null;
     window.handleLogoClick = function() {
-        if(!window.logoClickCount) window.logoClickCount = 0;
-        window.logoClickCount++;
-        if (window.logoClickTimer) clearTimeout(window.logoClickTimer);
-        window.logoClickTimer = setTimeout(() => { window.logoClickCount = 0; }, 1200);
-        if (window.logoClickCount === 5) {
-            window.logoClickCount = 0;
+        logoClickCount++;
+        if (logoClickTimer) clearTimeout(logoClickTimer);
+        logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1200);
+        if (logoClickCount === 5) {
+            logoClickCount = 0;
             document.getElementById('password-modal').style.display = 'flex';
             document.getElementById('teacher-pass-input').value = '';
             document.getElementById('teacher-pass-input').focus();
@@ -745,12 +826,57 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
             document.getElementById('password-modal').style.display = 'none';
             localStorage.setItem('mrehab_teacher_active', 'true');
             localStorage.setItem('mrehab_teacher_time', Date.now().toString());
-            window.showScene('teacher-leaderboard-scene');
+            showScene('teacher-leaderboard-scene');
             listenToSubmissions();
             renderTeacherBank();
         } else {
             alert('الرمز السري غير صحيح!');
         }
+    };
+
+    window.saveExamConfigToFirebase = function() {
+        let newPin = document.getElementById('custom-room-pin').value.trim();
+        let newTitle = document.getElementById('custom-exam-title').value.trim();
+        let newGrade = document.getElementById('custom-grade-title').value.trim();
+        let newMins = parseInt(document.getElementById('custom-exam-minutes').value) || 30;
+
+        if(!newPin || !newTitle) return alert("يرجى كتابة كود الغرفة واسم الاختبار!");
+        currentPin = newPin;
+        EXAM_NAME = newTitle;
+        GRADE_LEVEL = newGrade;
+        configuredMinutes = newMins;
+
+        set(ref(db, 'examConfig'), {
+            pin: currentPin,
+            examName: EXAM_NAME,
+            gradeLevel: GRADE_LEVEL,
+            minutes: configuredMinutes,
+            updatedAt: Date.now()
+        });
+
+        update(ref(db, 'rooms/' + currentPin), {
+            roomPin: currentPin,
+            status: 'waiting',
+            frozen: false
+        });
+
+        updateDynamicTitlesOnUI();
+        listenToSubmissions();
+        alert(`تم حفظ وتفعيل الإعدادات بنجاح!\nكود الدخول الحالي للطلاب: ${currentPin}\nاسم الاختبار: ${EXAM_NAME}`);
+    };
+
+    window.closeTeacherSession = function() {
+        if(confirm("هل أنت متأكد من إغلاق لوحة المعلم والعودة للشاشة الرئيسية؟")) {
+            localStorage.removeItem('mrehab_teacher_active');
+            localStorage.removeItem('mrehab_teacher_time');
+            showScene('role-scene');
+        }
+    };
+
+    window.showScene = function(id) {
+        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
     };
 
     window.goToWaitingRoom = async function() {
@@ -784,7 +910,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
                 return alert("لقد قمت بأداء وتسليم هذا الاختبار مسبقاً ولا يُسمح بإعادته!");
             }
             userAnswers = pData.answersDetail || {};
-            cheatCount = (parseInt(pData.cheatCount) || 0);
+            cheatCount = (parseInt(pData.cheatCount) || 0) + 1;
             localStorage.setItem('mrehab_ans_' + student.name, JSON.stringify(userAnswers));
         } else {
             await set(ref(db, 'rooms/' + currentPin + '/players/' + student.name), {
@@ -798,10 +924,44 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         }
 
         document.getElementById('waiting-student-name').innerText = `الطالب: ${student.name}`;
-        window.showScene('student-waiting-scene');
+        showScene('student-waiting-scene');
         attachStudentRoomListener();
-        attachStudentPrivateMessageListener();
     };
+
+    function attachStudentRoomListener() {
+        if(roomListenerAttached) return;
+        roomListenerAttached = true;
+
+        onValue(ref(db, 'rooms/' + currentPin), (snapshot) => {
+            const roomData = snapshot.val();
+            if(!roomData) return;
+
+            if(roomData.status === 'playing' && !isExamStarted && !isExamFinished) {
+                startExam(false);
+            }
+
+            if((roomData.status === 'ended' || (roomData.forceStop && roomData.forceStop > 0)) && isExamStarted && !isExamFinished) {
+                finishExam(true);
+            }
+
+            const freezeOverlay = document.getElementById('freeze-overlay');
+            if(freezeOverlay && isExamStarted && !isExamFinished) {
+                freezeOverlay.style.display = roomData.frozen ? 'flex' : 'none';
+            }
+
+            if(roomData.extraTimeStamp && window.lastAppliedExtraTime !== roomData.extraTimeStamp) {
+                if(window.lastAppliedExtraTime !== undefined && isExamStarted && !isExamFinished) {
+                    totalSeconds += 300;
+                }
+                window.lastAppliedExtraTime = roomData.extraTimeStamp;
+            }
+
+            if(roomData.broadcastMsg && window.lastBroadcastStamp !== roomData.broadcastStamp) {
+                window.lastBroadcastStamp = roomData.broadcastStamp;
+                showFloatingStudentToast(roomData.broadcastMsg);
+            }
+        });
+    }
 
     window.startExam = function(isResumingAfterRefresh = false) {
         let savedAns = localStorage.getItem('mrehab_ans_' + student.name);
@@ -823,255 +983,83 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         shuffledWords = shuffleArray(fillBlankWords);
 
         isExamStarted = true;
-        window.showScene('exam-scene');
+        showScene('exam-scene');
         document.getElementById('info-display').innerText = student.name;
         document.getElementById('top-cheat-counter').innerText = cheatCount;
 
         attachStudentRoomListener();
-        attachStudentPrivateMessageListener();
         renderContinuousExamPage();
         saveAndSyncState();
     };
 
-    window.addExtraTimeForAll = function() {
-        update(ref(db, 'rooms/' + currentPin), { extraTimeStamp: Date.now() });
-        totalSeconds += 300;
-        alert("تمت إضافة +5 دقائق إضافية لعداد الوقت لدى جميع الطلاب الآن!");
-    };
+    window.renderContinuousExamPage = function() {
+        const box = document.getElementById('exam-content');
+        let h = ``;
 
-    window.sendTargetedTeacherMessage = function() {
-        const target = document.getElementById('message-target-select').value;
-        const msg = document.getElementById('custom-message-input').value.trim();
-        if(!msg) return alert("يرجى كتابة نص الرسالة أولاً!");
+        window.examQuestionsList.forEach(q => {
+            if(q.section) {
+                h += `<div class="section-header-banner"><i class="fas fa-edit"></i> ${q.section}</div>`;
 
-        if(target === 'ALL') {
-            update(ref(db, 'rooms/' + currentPin), { broadcastMsg: msg, broadcastStamp: Date.now() });
-            alert("تم إرسال الرسالة الجماعية لجميع الطلاب بنجاح!");
-        } else {
-            set(ref(db, 'rooms/' + currentPin + '/privateMessages/' + target), {
-                msg: msg,
-                timestamp: Date.now()
-            });
-            alert(`تم إرسال الرسالة الخاصة إلى الطالب (${target}) بنجاح!`);
-        }
-        document.getElementById('custom-message-input').value = '';
-    };
+                if(q.sectionType === "gaps") {
+                    h += `<div class="passage-box" id="gaps-section-box">
+                            <div class="sticky-word-bank-wrapper">
+                                <p style="color: var(--gold); font-size: 0.92rem; font-weight: bold; text-align: center; margin-bottom: 8px; direction: rtl;">
+                                    💡 للموبايل والكمبيوتر: اضغط على الكلمة لتحديدها ثم اضغط على الفراغ لتنزل فيه فوراً (أو اسحبها):
+                                </p>
+                                <div class="word-bank">
+                                    ${shuffledWords.map(w => `<div class="drag-word ${activeWordToDrop === w ? 'active-word' : ''}" draggable="true" ondragstart="dragWord(event, '${w}')" onclick="selectWord(this, '${w}')">${w}</div>`).join('')}
+                                </div>
+                            </div>
+                            <div style="font-size: 1.15rem; line-height: 2.7; direction: ltr; text-align: left; margin-top: 10px;">
+                                You should have some important values which help you in your life such as
+                                <input type="text" id="gap-input-5" class="blank-input" placeholder="(1) اضغط هنا" ondrop="drop(event, 5)" ondragover="allowDrop(event)" onclick="placeWord(5)" oninput="saveGapInput(5, this.value)" autocomplete="off">
+                                which helps you overcome life's challenges.<br>
+                                Self
+                                <input type="text" id="gap-input-6" class="blank-input" placeholder="(2) اضغط هنا" ondrop="drop(event, 6)" ondragover="allowDrop(event)" onclick="placeWord(6)" oninput="saveGapInput(6, this.value)" autocomplete="off">
+                                is a very important quality as it makes you sure of your
+                                <input type="text" id="gap-input-7" class="blank-input" placeholder="(3) اضغط هنا" ondrop="drop(event, 7)" ondragover="allowDrop(event)" onclick="placeWord(7)" oninput="saveGapInput(7, this.value)" autocomplete="off">
+                                and qualities. You should also know your
+                                <input type="text" id="gap-input-8" class="blank-input" placeholder="(4) اضغط هنا" ondrop="drop(event, 8)" ondragover="allowDrop(event)" onclick="placeWord(8)" oninput="saveGapInput(8, this.value)" autocomplete="off">
+                                and your weaknesses.
+                            </div>
+                          </div>`;
+                }
 
-    window.saveExamConfigToFirebase = function() {
-        let newPin = document.getElementById('custom-room-pin').value.trim();
-        let newTitle = document.getElementById('custom-exam-title').value.trim();
-        let newGrade = document.getElementById('custom-grade-title').value.trim();
-        let newMins = parseInt(document.getElementById('custom-exam-minutes').value) || 30;
+                if(q.sectionType === "passage") {
+                    h += `<div class="passage-box">
+                            <h3 style="color: var(--primary); margin-bottom: 12px;"><i class="fas fa-book-open"></i> Read the following passage carefully:</h3>
+                            ${readingPassageText}
+                          </div>`;
+                }
+            }
 
-        if(!newPin || !newTitle) return alert("يرجى كتابة كود الغرفة واسم الاختبار!");
-        currentPin = newPin;
-        EXAM_NAME = newTitle;
-        GRADE_LEVEL = newGrade;
-        configuredMinutes = newMins;
-
-        set(ref(db, 'examConfig'), {
-            pin: currentPin,
-            examName: EXAM_NAME,
-            gradeLevel: GRADE_LEVEL,
-            minutes: configuredMinutes,
-            updatedAt: Date.now()
+            if(q.type !== 'gap') {
+                let ansVal = userAnswers[q.id];
+                h += `<div class="q-card" id="q-card-${q.id}">
+                        <div class="q-title">${q.q}</div>
+                        <div class="options-grid" id="opt-grid-${q.id}">
+                            ${q.o.map(opt => {
+                                let isSel = (ansVal === opt);
+                                return `<div class="opt ${isSel ? 'selected' : ''}" onclick="selectOpt(${q.id}, \`${opt}\`, this)">
+                                            <span>${opt}</span>
+                                        </div>`;
+                            }).join('')}
+                        </div>
+                      </div>`;
+            }
         });
 
-        update(ref(db, 'rooms/' + currentPin), {
-            roomPin: currentPin,
-            status: 'waiting',
-            frozen: false
+        box.innerHTML = h;
+        restoreGapInputsValues();
+        updateSolvedCounterUI();
+    };
+
+    function restoreGapInputsValues() {
+        [5, 6, 7, 8].forEach(id => {
+            let inp = document.getElementById('gap-input-' + id);
+            if(inp && userAnswers[id]) inp.value = userAnswers[id];
         });
-
-        updateDynamicTitlesOnUI();
-        listenToSubmissions();
-        alert(`تم حفظ وتفعيل الإعدادات بنجاح!`);
-    };
-
-    window.closeTeacherSession = function() {
-        if(confirm("هل أنت متأكد من إغلاق لوحة المعلم والعودة للشاشة الرئيسية؟")) {
-            localStorage.removeItem('mrehab_teacher_active');
-            localStorage.removeItem('mrehab_teacher_time');
-            window.showScene('role-scene');
-        }
-    };
-
-    window.startExamForAll = function() {
-        update(ref(db, 'rooms/' + currentPin), { status: 'playing', forceStop: 0, frozen: false });
-        alert(`تم فتح الاختبار الآن لجميع الطلاب في الغرفة (${currentPin})!`);
-    };
-
-    window.forceEndExamForAll = function() {
-        if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم فوراً؟")) {
-            update(ref(db, 'rooms/' + currentPin), { status: 'ended', forceStop: Date.now(), frozen: false });
-            alert("تم إرسال أمر الإنهاء الفوري وسحب أوراق جميع الطلاب!");
-        }
-    };
-
-    let isRoomFrozen = false;
-    window.toggleFreezeExam = function() {
-        isRoomFrozen = !isRoomFrozen;
-        update(ref(db, 'rooms/' + currentPin), { frozen: isRoomFrozen });
-        const btn = document.getElementById('btn-freeze-toggle');
-        if(btn) {
-            btn.innerHTML = isRoomFrozen
-                ? `<i class="fa-solid fa-play"></i> إلغاء التجميد واستئناف الحل`
-                : `<i class="fa-solid fa-pause"></i> تجميد مؤقت للشاشات`;
-        }
-    };
-
-    window.resetExamSession = function() {
-        if(confirm("هل أنت متأكد من تصفير الغرفة الحالية ومسح قائمة الطلاب لبدء اختبار جديد؟")) {
-            set(ref(db, 'rooms/' + currentPin), { status: 'waiting', forceStop: 0, frozen: false, players: {} });
-            alert("تمت إعادة ضبط الغرفة وتصفير القائمة بنجاح!");
-        }
-    };
-
-    window.toggleTeacherAnswers = function() {
-        teacherAnswersVisible = !teacherAnswersVisible;
-        renderTeacherBank();
-    };
-
-    window.exportToExcel = async function() {
-        let snap = await get(ref(db, 'rooms/' + currentPin + '/players'));
-        if(!snap.exists()) return alert("لا توجد بيانات طلاب في الغرفة الحالية لتصديرها!");
-        let players = snap.val();
-
-        let headers = ["IP", "التاريخ والوقت", "الاسم", "الصف الثالث الإعدادي", "اسم الاختبار", "درجة الاختبار", "عدد محاولات الغش"];
-        for(let i = 1; i <= 37; i++) headers.push(`سؤال ${i}`);
-
-        let csvRows = [headers.join(",")];
-        let nowStr = new Date().toLocaleString('ar-EG').replace(/,/g, ' ');
-
-        for(let name in players) {
-            let p = players[name];
-            let ansMap = p.answersDetail || {};
-            let row = [
-                `"${p.ip || ''}"`,
-                `"${nowStr}"`,
-                `"${name}"`,
-                `"${GRADE_LEVEL}"`,
-                `"${EXAM_NAME}"`,
-                `"${p.score || 0} / ${totalQuestionsCount}"`,
-                `"${p.cheatCount || 0}"`
-            ];
-            for(let i = 1; i <= 37; i++) {
-                let val = ansMap[i] ? String(ansMap[i]).replace(/"/g, '""') : "لم يُجب";
-                row.push(`"${val}"`);
-            }
-            csvRows.push(row.join(","));
-        }
-
-        let csvString = "\uFEFF" + csvRows.join("\n");
-        let blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
-        let url = URL.createObjectURL(blob);
-        let link = document.createElement("a");
-        link.href = url;
-        link.download = `نتائج_${EXAM_NAME}.csv`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    window.downloadStudentSelfPDF = async function() {
-        const area = document.getElementById('student-review-area');
-        if(!area) return;
-        const opt = {
-            margin: [6, 6, 6, 6],
-            filename: `MrEhab_ExamReport_${student.name}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#020617', scrollY: 0 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        await html2pdf().from(area).set(opt).save();
-    };
-
-    window.previewSelectedStudentReport = function() {
-        let val = document.getElementById('pdf-student-select').value;
-        const previewContainer = document.getElementById('teacher-pdf-live-preview');
-        if(!val || val === "EXPORT_ALL_ZIP" || !window.allPlayersData || !window.allPlayersData[val]) {
-            previewContainer.innerHTML = "";
-            return;
-        }
-        let p = window.allPlayersData[val];
-        previewContainer.innerHTML = buildFullReportHTML(
-            val,
-            p.score || 0,
-            totalQuestionsCount,
-            p.cheatCount || 0,
-            p.timeTaken || "غير مسجل",
-            p.answersDetail || {}
-        );
-    };
-
-    window.generateStudentPDF = async function() {
-        let val = document.getElementById('pdf-student-select').value;
-        if(!val) return alert("يرجى اختيار اسم الطالب أو اختيار تصدير جميع الطلاب!");
-        const previewContainer = document.getElementById('teacher-pdf-live-preview');
-
-        if(val === "EXPORT_ALL_ZIP") {
-            if(!window.allPlayersData) return alert("لا توجد بيانات طلاب حالياً!");
-            for(let name in window.allPlayersData) {
-                let p = window.allPlayersData[name];
-                previewContainer.innerHTML = buildFullReportHTML(name, p.score || 0, totalQuestionsCount, p.cheatCount || 0, p.timeTaken || "غير مسجل", p.answersDetail || {});
-                await new Promise(r => setTimeout(r, 400));
-                const opt = {
-                    margin: [6, 6, 6, 6],
-                    filename: `MrEhab_Report_${name}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#020617', scrollY: 0 },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-                await html2pdf().from(previewContainer).set(opt).save();
-            }
-            alert("تم تنزيل تقارير جميع الطلاب بصيغة PDF بنجاح!");
-        } else {
-            window.previewSelectedStudentReport();
-            await new Promise(r => setTimeout(r, 300));
-            const opt = {
-                margin: [6, 6, 6, 6],
-                filename: `MrEhab_Report_${val}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#020617', scrollY: 0 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            await html2pdf().from(previewContainer).set(opt).save();
-        }
-    };
-
-    window.scrollToFirstUnanswered = function() {
-        let master = getMasterQuestionsList();
-        let missingQ = master.find(q => !userAnswers[q.id] || String(userAnswers[q.id]).trim() === "");
-        if(!missingQ) {
-            alert("أحسنت يا بطل! لقد قمت بحل جميع أسئلة الاختبار بالكامل.");
-            return;
-        }
-        if(missingQ.type === 'gap') {
-            let gapBox = document.getElementById('gaps-section-box');
-            if(gapBox) gapBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            let inp = document.getElementById('gap-input-' + missingQ.id);
-            if(inp) inp.focus();
-        } else {
-            let card = document.getElementById('q-card-' + missingQ.id);
-            if(card) {
-                card.classList.add('unanswered-card');
-                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-    };
-
-    window.confirmFinish = function() {
-        let solved = countSolvedQuestions();
-        if(solved < totalQuestionsCount) {
-            let rem = totalQuestionsCount - solved;
-            alert(`عفواً يا بطل! لا يمكنك تسليم الاختبار قبل حل جميع الأسئلة.\nلديك (${rem}) سؤال متروك بدون إجابة.`);
-            scrollToFirstUnanswered();
-            return;
-        }
-        if(confirm("ممتاز! لقد أجبت على جميع الأسئلة. هل أنت متأكد من تسليم الاختبار نهائياً؟")) {
-            finishExam(false);
-        }
-    };
+    }
 
     window.selectOpt = function(qId, val, clickedEl) {
         if(isExamFinished) return;
@@ -1085,6 +1073,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         if(card) card.classList.remove('unanswered-card');
         saveAndSyncState();
     };
+
+    window.addEventListener('dragover', (e) => {
+        if(!isExamStarted || isExamFinished) return;
+        const edge = 90;
+        if(e.clientY < edge) window.scrollBy(0, -12);
+        else if(window.innerHeight - e.clientY < edge) window.scrollBy(0, 12);
+    });
 
     window.allowDrop = function(ev) { ev.preventDefault(); };
     window.dragWord = function(ev, word) { ev.dataTransfer.setData("text", word); };
@@ -1127,6 +1122,27 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         if(topCounter) topCounter.innerText = `${solved}/${totalQuestionsCount}`;
     }
 
+    window.scrollToFirstUnanswered = function() {
+        let master = getMasterQuestionsList();
+        let missingQ = master.find(q => !userAnswers[q.id] || String(userAnswers[q.id]).trim() === "");
+        if(!missingQ) {
+            alert("أحسنت يا بطل! لقد قمت بحل جميع أسئلة الاختبار بالكامل.");
+            return;
+        }
+        if(missingQ.type === 'gap') {
+            let gapBox = document.getElementById('gaps-section-box');
+            if(gapBox) gapBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            let inp = document.getElementById('gap-input-' + missingQ.id);
+            if(inp) inp.focus();
+        } else {
+            let card = document.getElementById('q-card-' + missingQ.id);
+            if(card) {
+                card.classList.add('unanswered-card');
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    };
+
     function saveAndSyncState() {
         updateSolvedCounterUI();
         localStorage.setItem('mrehab_ans_' + student.name, JSON.stringify(userAnswers));
@@ -1154,6 +1170,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
             answersDetail: userAnswers
         });
     }
+
+    window.confirmFinish = function() {
+        let solved = countSolvedQuestions();
+        if(solved < totalQuestionsCount) {
+            let rem = totalQuestionsCount - solved;
+            alert(`عفواً يا بطل! لا يمكنك تسليم الاختبار قبل حل جميع الأسئلة.\nلديك (${rem}) سؤال متروك بدون إجابة، سننقلك إليه الآن.`);
+            scrollToFirstUnanswered();
+            return;
+        }
+        if(confirm("ممتاز! لقد أجبت على جميع الأسئلة.\nهل أنت متأكد من تسليم الاختبار نهائياً؟")) {
+            finishExam(false);
+        }
+    };
 
     function formatDuration(sec) {
         if(!sec || sec < 0) sec = 0;
@@ -1214,7 +1243,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         localStorage.removeItem('mrehab_ans_' + student.name);
         localStorage.removeItem('mrehab_active_student_session');
 
-        window.showScene('result-scene');
+        showScene('result-scene');
         document.getElementById('student-score-line1').innerText = `درجة الطالب: ${score}`;
         document.getElementById('student-score-line2').innerText = `درجة الامتحان الكلية: ${totalQuestionsCount}`;
         document.getElementById('student-meta-lines').innerHTML = `
@@ -1294,22 +1323,24 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 
         return `
             <div class="report-card-dark">
-                <div style="text-align: center; border-bottom: 2.5px dashed rgba(255,255,255,0.2); padding-bottom: 15px; margin-bottom: 15px;">
+                <div style="text-align: center; border-bottom: 2px dashed rgba(255,255,255,0.2); padding-bottom: 15px; margin-bottom: 15px;">
                     <img src="${LOGO_URL}" style="width: 115px; height: 115px; border-radius: 50%; border: 4px solid #10b981; object-fit: cover; margin-bottom: 10px; box-shadow: 0 0 20px #10b981;" alt="مستر إيهاب">
                     <h2 style="color: #ffffff; font-weight: 900; margin-bottom: 5px;">مستر إيهاب العدوي - تقرير نتيجة الاختبار</h2>
                     <h3 style="color: #f59e0b; margin-bottom: 4px;">${EXAM_NAME}</h3>
                     <p style="color: #38bdf8; font-weight: bold; font-size: 1.1rem;">اسم الطالب: ${stName} | ${GRADE_LEVEL}</p>
                 </div>
+
                 <div class="report-stats-box">
                     <div>${svgPie}</div>
                     <div style="text-align: right; direction: rtl; line-height: 1.9;">
                         <div style="font-size: 1.45rem; font-weight: 900; color: #10b981;">درجة الطالب: ${score}</div>
                         <div style="font-size: 1.3rem; font-weight: 900; color: #f59e0b;">درجة الامتحان الكلية: ${total}</div>
                         <div style="font-size: 1.05rem; font-weight: bold; color: #e2e8f0;">النسبة المئوية: ${percentage}%</div>
-                        <div style="font-size: 1rem; font-weight: bold; color: #f87171;">محاولات الخروج: ${cheat}</div>
-                        <div style="font-size: 1rem; font-weight: bold; color: #38bdf8;">الوقت المستغرق: ${timeTaken}</div>
+                        <div style="font-size: 1rem; font-weight: bold; color: #f87171;">محاولات الطالب الخروج من الامتحان: ${cheat}</div>
+                        <div style="font-size: 1rem; font-weight: bold; color: #38bdf8;">الوقت الذي استغرقه الطالب: ${timeTaken}</div>
                     </div>
                 </div>
+
                 <div style="direction: ltr; text-align: left;">
                     ${questionsHtml}
                 </div>
@@ -1317,21 +1348,121 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         `;
     }
 
-    function listenToSubmissions() {
+    async function exportElementAsPDF(containerElement, fileName) {
+        const opt = {
+            margin: [6, 6, 6, 6],
+            filename: fileName,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#020617', scrollY: 0 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        await html2pdf().from(containerElement).set(opt).save();
+    }
+
+    window.downloadStudentSelfPDF = async function() {
+        const area = document.getElementById('student-review-area');
+        if(!area) return;
+        await exportElementAsPDF(area, `MrEhab_ExamReport_${student.name}.pdf`);
+    };
+
+    window.previewSelectedStudentReport = function() {
+        let val = document.getElementById('pdf-student-select').value;
+        const previewContainer = document.getElementById('teacher-pdf-live-preview');
+        if(!val || val === "EXPORT_ALL_ZIP" || !window.allPlayersData || !window.allPlayersData[val]) {
+            previewContainer.innerHTML = "";
+            return;
+        }
+        let p = window.allPlayersData[val];
+        previewContainer.innerHTML = buildFullReportHTML(
+            val,
+            p.score || 0,
+            totalQuestionsCount,
+            p.cheatCount || 0,
+            p.timeTaken || "غير مسجل",
+            p.answersDetail || {}
+        );
+    };
+
+    window.generateStudentPDF = async function() {
+        let val = document.getElementById('pdf-student-select').value;
+        if(!val) return alert("يرجى اختيار اسم الطالب أو اختيار تصدير جميع الطلاب!");
+        const previewContainer = document.getElementById('teacher-pdf-live-preview');
+
+        if(val === "EXPORT_ALL_ZIP") {
+            if(!window.allPlayersData) return alert("لا توجد بيانات طلاب حالياً!");
+            for(let name in window.allPlayersData) {
+                let p = window.allPlayersData[name];
+                previewContainer.innerHTML = buildFullReportHTML(name, p.score || 0, totalQuestionsCount, p.cheatCount || 0, p.timeTaken || "غير مسجل", p.answersDetail || {});
+                await new Promise(r => setTimeout(r, 400));
+                await exportElementAsPDF(previewContainer, `MrEhab_Report_${name}.pdf`);
+            }
+            alert("تم تنزيل تقارير جميع الطلاب بصيغة PDF بنجاح!");
+        } else {
+            previewSelectedStudentReport();
+            await new Promise(r => setTimeout(r, 300));
+            await exportElementAsPDF(previewContainer, `MrEhab_Report_${val}.pdf`);
+        }
+    };
+
+    window.startExamForAll = function() {
+        update(ref(db, 'rooms/' + currentPin), { status: 'playing', forceStop: 0, frozen: false });
+        alert(`تم فتح الاختبار الآن لجميع الطلاب في الغرفة (${currentPin})!`);
+    };
+
+    window.forceEndExamForAll = function() {
+        if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم فوراً؟")) {
+            update(ref(db, 'rooms/' + currentPin), { status: 'ended', forceStop: Date.now(), frozen: false });
+            alert("تم إرسال أمر الإنهاء الفوري وسحب أوراق جميع الطلاب!");
+        }
+    };
+
+    window.addExtraTimeForAll = function() {
+        update(ref(db, 'rooms/' + currentPin), { extraTimeStamp: Date.now() });
+        alert("تمت إضافة +5 دقائق إضافية لعداد الوقت لدى جميع الطلاب الآن!");
+    };
+
+    let isRoomFrozen = false;
+    window.toggleFreezeExam = function() {
+        isRoomFrozen = !isRoomFrozen;
+        update(ref(db, 'rooms/' + currentPin), { frozen: isRoomFrozen });
+        const btn = document.getElementById('btn-freeze-toggle');
+        if(btn) {
+            btn.innerHTML = isRoomFrozen
+                ? `<i class="fa-solid fa-play"></i> إلغاء التجميد واستئناف الحل`
+                : `<i class="fa-solid fa-pause"></i> تجميد مؤقت للشاشات`;
+        }
+    };
+
+    window.sendBroadcastMessage = function() {
+        let msg = prompt("اكتب رسالة التنبيه العائمة التي ستظهر فوراً أعلى شاشات جميع الطلاب:");
+        if(msg && msg.trim() !== "") {
+            update(ref(db, 'rooms/' + currentPin), { broadcastMsg: msg.trim(), broadcastStamp: Date.now() });
+            alert("تم إرسال الرسالة العائمة لجميع الطلاب!");
+        }
+    };
+
+    window.resetExamSession = function() {
+        if(confirm("هل أنت متأكد من تصفير الغرفة الحالية ومسح قائمة الطلاب لبدء اختبار جديد؟")) {
+            set(ref(db, 'rooms/' + currentPin), { status: 'waiting', forceStop: 0, frozen: false, players: {} });
+            alert("تمت إعادة ضبط الغرفة وتصفير القائمة بنجاح!");
+        }
+    };
+
+    let teacherListenerPin = null;
+    window.listenToSubmissions = function() {
+        if(teacherListenerPin === currentPin) return;
+        teacherListenerPin = currentPin;
+
         onValue(ref(db, 'rooms/' + currentPin + '/players'), (snapshot) => {
             const players = snapshot.val();
             const tbody = document.getElementById('leaderboard-body');
             const selectDropdown = document.getElementById('pdf-student-select');
-            const msgTargetDropdown = document.getElementById('message-target-select');
-            if(!tbody || !selectDropdown || !msgTargetDropdown) return;
+            if(!tbody || !selectDropdown) return;
 
             tbody.innerHTML = '';
             selectDropdown.innerHTML = `
                 <option value="">-- اختر الطالب للمعاينة أو التصدير --</option>
                 <option value="EXPORT_ALL_ZIP" style="color: var(--gold); font-weight: bold;">📁 تصدير نتائج جميع الطلاب (ملفات PDF منفصلة)</option>
-            `;
-            msgTargetDropdown.innerHTML = `
-                <option value="ALL">📢 رسالة جماعية لجميع الطلاب</option>
             `;
 
             if(players) {
@@ -1353,15 +1484,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
                             <td>${p.finished ? '✅ سلم الاختبار' : '⏳ يحل الآن'}</td>
                         </tr>`;
                     selectDropdown.innerHTML += `<option value="${p.name}">${p.name} (${p.score || 0}/${totalQuestionsCount})</option>`;
-                    msgTargetDropdown.innerHTML += `<option value="${p.name}">👤 رسالة خاصة للطالب: ${p.name}</option>`;
                 });
             } else {
                 window.allPlayersData = {};
             }
         });
-    }
+    };
 
     let teacherAnswersVisible = false;
+    window.toggleTeacherAnswers = function() {
+        teacherAnswersVisible = !teacherAnswersVisible;
+        renderTeacherBank();
+    };
+
     function renderTeacherBank() {
         const bankContainer = document.getElementById('teacher-questions-bank');
         if(!bankContainer) return;
@@ -1402,6 +1537,47 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 
         bankContainer.innerHTML = h;
     }
+
+    window.exportToExcel = async function() {
+        let snap = await get(ref(db, 'rooms/' + currentPin + '/players'));
+        if(!snap.exists()) return alert("لا توجد بيانات طلاب في الغرفة الحالية لتصديرها!");
+        let players = snap.val();
+
+        let headers = ["IP", "التاريخ والوقت", "الاسم", "الصف الثالث الإعدادي", "اسم الاختبار", "درجة الاختبار", "عدد محاولات الغش"];
+        for(let i = 1; i <= 37; i++) headers.push(`سؤال ${i}`);
+
+        let csvRows = [headers.join(",")];
+        let nowStr = new Date().toLocaleString('ar-EG').replace(/,/g, ' ');
+
+        for(let name in players) {
+            let p = players[name];
+            let ansMap = p.answersDetail || {};
+            let row = [
+                `"${p.ip || ''}"`,
+                `"${nowStr}"`,
+                `"${name}"`,
+                `"${GRADE_LEVEL}"`,
+                `"${EXAM_NAME}"`,
+                `"${p.score || 0} / ${totalQuestionsCount}"`,
+                `"${p.cheatCount || 0}"`
+            ];
+            for(let i = 1; i <= 37; i++) {
+                let val = ansMap[i] ? String(ansMap[i]).replace(/"/g, '""') : "لم يُجب";
+                row.push(`"${val}"`);
+            }
+            csvRows.push(row.join(","));
+        }
+
+        let csvString = "\uFEFF" + csvRows.join("\n");
+        let blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+        let url = URL.createObjectURL(blob);
+        let link = document.createElement("a");
+        link.href = url;
+        link.download = `نتائج_${EXAM_NAME}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     setInterval(() => {
         if(!isExamStarted || isExamFinished || isRoomFrozen) return;
