@@ -1,0 +1,2321 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>دروس مستر إيهاب التفاعلية الشاملة | Past Simple Tense</title>
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Confetti & PptxGenJS -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+
+<style>
+:root {
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --purple-glow: #a855f7;
+    --cyan-glow: #06b6d4;
+    --gold: #fbbf24;
+    --gold-dark: #d97706;
+    --success: #10b981;
+    --danger: #ef4444;
+    --pink: #ec4899;
+    --bg-dark: #020617;
+    --card-bg: rgba(15, 23, 42, 0.86);
+    --glass-border: rgba(255, 255, 255, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Cairo', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: radial-gradient(circle at top right, #1e1b4b, #020617 55%, #090d16 100%);
+    color: #f8fafc;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.en {
+    font-family: 'Fredoka', 'Cairo', sans-serif;
+    direction: ltr;
+    unicode-bidi: isolate;
+}
+
+/* Particle & Click FX Canvas */
+#particles-js, #click-fx-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+#particles-js { z-index: 0; }
+#click-fx-canvas { z-index: 9999; }
+
+/* Floating Joyful Animated Icons & Small Animated Logos in Particles Background */
+.floating-decor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    font-size: clamp(1.3rem, 2.5vw, 2.1rem);
+    opacity: 0.28;
+    animation: floatJoy 6s ease-in-out infinite;
+}
+@keyframes floatJoy {
+    0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+    50% { transform: translateY(-18px) rotate(12deg) scale(1.14); }
+}
+
+.floating-bg-logo {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    width: clamp(38px, 4.5vw, 54px);
+    height: clamp(38px, 4.5vw, 54px);
+    border-radius: 50%;
+    border: 2px solid rgba(251, 191, 36, 0.45);
+    box-shadow: 0 0 18px rgba(99, 102, 241, 0.45);
+    opacity: 0.34;
+    object-fit: cover;
+    animation: driftLogoFloat 7.5s ease-in-out infinite;
+}
+@keyframes driftLogoFloat {
+    0%, 100% { transform: translate(0px, 0px) rotate(-6deg) scale(0.96); }
+    33% { transform: translate(10px, -16px) rotate(6deg) scale(1.08); }
+    66% { transform: translate(-8px, -8px) rotate(-3deg) scale(1.02); }
+}
+
+/* Click Ripple Effect */
+.click-ripple {
+    position: fixed;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: radial-gradient(circle, rgba(251,191,36,0.75) 0%, rgba(168,85,247,0.4) 50%, transparent 75%);
+    pointer-events: none;
+    z-index: 9998;
+    animation: rippleAnim 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes rippleAnim {
+    to {
+        transform: translate(-50%, -50%) scale(3.5);
+        opacity: 0;
+    }
+}
+
+/* ==================== RESPONSIVE MAIN CONTAINER ==================== */
+.app-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(12px, 2.5vw, 24px) clamp(10px, 2.5vw, 22px) 70px;
+}
+
+/* ==================== HERO HEADER / TOPIC TITLE (ENLARGED RIGHT & LEFT LOGOS) ==================== */
+.hero-header {
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.94), rgba(15, 23, 42, 0.94));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    border-radius: clamp(22px, 3vw, 34px);
+    padding: clamp(16px, 2.8vw, 26px) clamp(18px, 3.2vw, 34px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(255,255,255,0.16);
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-right {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 2.2vw, 22px);
+    flex: 1;
+    min-width: 260px;
+}
+
+/* Enlarged Right Logo next to Topic Title */
+.topic-icon-box {
+    width: clamp(92px, 12vw, 124px);
+    height: clamp(92px, 12vw, 124px);
+    border-radius: 26px;
+    padding: 5px;
+    background: linear-gradient(135deg, #10b981, #fbbf24, #6366f1);
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.55);
+    animation: pulseRing 3s infinite ease-in-out;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+@keyframes pulseRing {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 22px rgba(16, 185, 129, 0.48); }
+    50% { transform: scale(1.06); box-shadow: 0 0 38px rgba(251, 191, 36, 0.72); }
+}
+.topic-icon-box img {
+    width: 100%;
+    height: 100%;
+    border-radius: 21px;
+    object-fit: cover;
+    background: #0f172a;
+}
+
+.brand-titles h1 {
+    font-size: clamp(1.3rem, 3vw, 1.92rem);
+    font-weight: 900;
+    line-height: 1.35;
+    background: linear-gradient(90deg, #fff, #fde68a, #34d399, #fbbf24, #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shineText 3.5s linear infinite;
+}
+@keyframes shineText {
+    to { background-position: 200% center; }
+}
+.lesson-pill {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    background: rgba(99, 102, 241, 0.25);
+    border: 1px solid rgba(129, 140, 248, 0.45);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-weight: 800;
+    color: #c7d2fe;
+    font-size: clamp(0.88rem, 1.7vw, 1.05rem);
+}
+
+.brand-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Enlarged Far-Left Animated Image (1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr) */
+.far-left-animated-badge {
+    width: clamp(92px, 12vw, 124px);
+    height: clamp(92px, 12vw, 124px);
+    border-radius: 26px;
+    border: 3px solid rgba(251, 191, 36, 0.68);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(99, 102, 241, 0.22));
+    padding: 4px;
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.48);
+    animation: bounceFloat 3s ease-in-out infinite;
+    cursor: pointer;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+@keyframes bounceFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+    50% { transform: translateY(-7px) rotate(3deg) scale(1.04); }
+}
+
+/* ==================== NON-STOP ANIMATED SHOWCASE BANNER ==================== */
+.inline-intro-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 26px;
+    background: rgba(15, 23, 42, 0.92);
+    border: 2px solid rgba(251, 191, 36, 0.48);
+    border-radius: clamp(20px, 3vw, 30px);
+    padding: clamp(12px, 2vw, 18px);
+    box-shadow: 0 18px 50px rgba(99, 102, 241, 0.35), 0 0 80px rgba(16, 185, 129, 0.12);
+    text-align: center;
+    position: relative;
+}
+
+.intro-top-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-weight: 900;
+    font-size: clamp(0.95rem, 1.9vw, 1.12rem);
+    color: #fde68a;
+}
+
+.joy-icon-spin {
+    display: inline-block;
+    animation: wiggleJoy 2.2s infinite ease-in-out;
+}
+@keyframes wiggleJoy {
+    0%, 100% { transform: rotate(-8deg) scale(1); }
+    50% { transform: rotate(8deg) scale(1.2); }
+}
+
+.video-frame-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.16);
+    background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+}
+
+.video-frame-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.nonstop-animated-banner-img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 14px;
+    animation: gentleContinuousGlow 3.2s ease-in-out infinite;
+    cursor: pointer;
+}
+@keyframes gentleContinuousGlow {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.45)); }
+    50% { transform: scale(1.03); filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.72)); }
+}
+
+.scroll-cue {
+    margin-top: 10px;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    color: #94a3b8;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.scroll-cue i {
+    color: #34d399;
+    animation: bounceDown 1.5s infinite;
+}
+@keyframes bounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+}
+
+/* ==================== INTERACTIVE ACTION DOCK ==================== */
+.action-dock {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 26px;
+}
+
+.dock-btn {
+    position: relative;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    padding: 13px 10px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-align: center;
+    transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+.dock-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.14) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+.dock-btn:hover::before { transform: translateX(100%); }
+.dock-btn:hover {
+    transform: translateY(-6px) scale(1.03);
+    border-color: var(--gold);
+    box-shadow: 0 18px 35px rgba(99, 102, 241, 0.45);
+}
+.dock-btn:active { transform: scale(0.95); }
+.dock-btn.active-tab {
+    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    border-color: #fde047;
+    box-shadow: 0 0 28px rgba(147, 51, 234, 0.65);
+}
+
+.dock-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.55rem;
+    animation: iconIdlePulse 3s infinite ease-in-out;
+    transition: transform 0.35s ease;
+}
+@keyframes iconIdlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+.dock-btn:hover .dock-icon-wrap { transform: rotate(10deg) scale(1.16); }
+.dock-icon-wrap img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    border-radius: 12px;
+}
+.dock-label {
+    font-weight: 800;
+    font-size: clamp(0.88rem, 1.5vw, 0.96rem);
+    line-height: 1.3;
+}
+.dock-sub {
+    font-size: 0.74rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+.dock-btn.active-tab .dock-sub { color: #fef08a; }
+
+/* ==================== SECTIONS / VIEWS ==================== */
+.view-panel {
+    display: none;
+    animation: panelEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.view-panel.active {
+    display: block;
+}
+@keyframes panelEnter {
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ==================== LESSON CARDS & ANIMATED TITLES ==================== */
+.grammar-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+}
+
+.lesson-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(18px);
+    border: 1px solid var(--glass-border);
+    border-radius: clamp(20px, 3vw, 28px);
+    padding: clamp(16px, 3vw, 28px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.lesson-card:hover {
+    border-color: rgba(52, 211, 153, 0.5);
+}
+
+/* Animated Section Ribbon & Title */
+.card-ribbon {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #065f46, #047857, #4f46e5);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite, titleFloat 3s ease-in-out infinite;
+    padding: 8px 20px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+    border: 2px solid rgba(52, 211, 153, 0.55);
+    box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
+    max-width: 100%;
+}
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+@keyframes titleFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-4px); }
+}
+
+.section-brand-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fbbf24;
+    background: #0f172a;
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.7);
+    flex-shrink: 0;
+}
+
+.animated-section-title {
+    font-size: clamp(1.02rem, 2.2vw, 1.28rem);
+    font-weight: 900;
+    background: linear-gradient(90deg, #ffffff, #fde047, #6ee7b7, #ffffff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shineText 3s linear infinite;
+}
+
+.rule-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
+    gap: 14px;
+}
+
+.rule-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 4px solid var(--cyan-glow);
+    border-radius: 18px;
+    padding: 15px 16px;
+    transition: all 0.28s ease;
+    cursor: pointer;
+}
+.rule-item:hover {
+    background: rgba(99, 102, 241, 0.14);
+    transform: translateY(-4px);
+    border-right-color: var(--gold);
+}
+.rule-ar {
+    font-size: clamp(0.94rem, 1.7vw, 1.03rem);
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+.rule-en {
+    background: rgba(2, 6, 23, 0.65);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: #38bdf8;
+    font-weight: 700;
+    font-size: clamp(0.92rem, 1.6vw, 1.02rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    direction: ltr;
+    word-break: break-word;
+}
+.speak-btn {
+    background: rgba(56, 189, 248, 0.18);
+    border: none;
+    color: #38bdf8;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: 0.2s;
+}
+.speak-btn:hover {
+    background: #38bdf8;
+    color: #020617;
+    transform: scale(1.15);
+}
+
+/* Verb Formula Visual Diagram */
+.formula-banner {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15));
+    border: 2px dashed rgba(52, 211, 153, 0.5);
+    border-radius: 22px;
+    padding: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    direction: ltr;
+}
+.formula-wheel {
+    background: #0f172a;
+    border: 3px solid #10b981;
+    border-radius: 20px;
+    padding: 12px 20px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+}
+.formula-wheel strong {
+    display: block;
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    color: #34d399;
+}
+
+.verbs-compare {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 16px;
+}
+.verb-box {
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 20px;
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow-x: auto;
+}
+.verb-box h3 {
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+.verb-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    direction: ltr;
+}
+.verb-table th, .verb-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    text-align: center;
+    font-weight: 700;
+}
+.verb-table th {
+    background: rgba(99, 102, 241, 0.25);
+    color: #c7d2fe;
+}
+.highlight-v2 {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+    border-radius: 8px;
+}
+
+/* Keywords Pills */
+.keywords-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 18px;
+    direction: ltr;
+}
+.kw-tag {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(236, 72, 153, 0.2));
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    color: #fde68a;
+    padding: 7px 14px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: clamp(0.86rem, 1.5vw, 0.98rem);
+    cursor: pointer;
+    transition: 0.25s;
+}
+.kw-tag:hover {
+    transform: scale(1.08);
+    background: var(--gold);
+    color: #020617;
+}
+
+/* ==================== READING PASSAGE, 4-BUTTON AUDIO PLAYER & 5 LISTENING MCQs ==================== */
+.reading-box {
+    background: rgba(2, 6, 23, 0.7);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    border-radius: 20px;
+    padding: clamp(14px, 2.5vw, 22px);
+    direction: ltr;
+    text-align: left;
+    line-height: 1.9;
+    font-size: clamp(0.98rem, 1.8vw, 1.12rem);
+    color: #e2e8f0;
+    margin-bottom: 16px;
+}
+.reading-sentence {
+    padding: 3px 6px;
+    border-radius: 8px;
+    transition: background 0.3s, color 0.3s;
+}
+.reading-sentence.active-read {
+    background: rgba(251, 191, 36, 0.25);
+    color: #fde047;
+    font-weight: 800;
+}
+
+.audio-controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(15, 23, 42, 0.95);
+    padding: 12px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 22px;
+}
+.audio-ctrl-btn {
+    border: none;
+    border-radius: 14px;
+    padding: 10px 18px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: #fff;
+}
+.audio-ctrl-btn:hover { transform: translateY(-2px) scale(1.04); }
+.btn-play { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4); }
+.btn-pause { background: linear-gradient(135deg, #f59e0b, #d97706); color: #020617; box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4); }
+.btn-stop { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 6px 18px rgba(239, 68, 68, 0.4); }
+.btn-restart { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4); }
+
+/* 5 Listening Comprehension MCQs (4 options each) */
+.listening-mcq-section {
+    background: rgba(2, 6, 23, 0.55);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 22px;
+    padding: clamp(14px, 2.5vw, 22px);
+}
+.listening-mcq-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.listening-mcq-header h3 {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 900;
+    color: #fde68a;
+}
+.listening-score-badge {
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.92rem;
+}
+.l-mcq-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+.l-mcq-card {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 15px 18px;
+    direction: ltr;
+    text-align: left;
+}
+.l-mcq-q {
+    font-family: 'Fredoka', 'Cairo', sans-serif;
+    font-size: clamp(0.98rem, 1.8vw, 1.12rem);
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 12px;
+}
+.l-mcq-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 10px;
+}
+.l-opt-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #e2e8f0;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-family: 'Fredoka', 'Cairo', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+.l-opt-btn:hover:not(.locked) {
+    background: rgba(99, 102, 241, 0.22);
+    border-color: #818cf8;
+    transform: translateY(-2px);
+}
+.l-opt-btn.opt-correct {
+    background: var(--success) !important;
+    border-color: #fff !important;
+    color: #fff !important;
+    font-weight: 800;
+}
+.l-opt-btn.opt-wrong {
+    background: var(--danger) !important;
+    border-color: #fff !important;
+    color: #fff !important;
+}
+.l-opt-btn.locked {
+    pointer-events: none;
+}
+
+/* External Games & QR Hub */
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 14px;
+}
+.game-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    padding: 16px;
+    text-align: center;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.game-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--cyan-glow);
+    box-shadow: 0 12px 30px rgba(6, 182, 212, 0.25);
+}
+.qr-box {
+    background: #fff;
+    padding: 8px;
+    border-radius: 14px;
+    width: 110px;
+    height: 110px;
+}
+.qr-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ==================== PRACTICE & DRILLS BANNER + BOTTOM QUESTIONS ==================== */
+.practice-drills-header {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.28), rgba(236, 72, 153, 0.25));
+    border: 2px solid rgba(251, 191, 36, 0.55);
+    border-radius: 28px;
+    padding: clamp(16px, 2.5vw, 24px) clamp(18px, 3vw, 32px);
+    margin: 26px auto 20px;
+    max-width: 860px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 2.5vw, 24px);
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.35);
+    text-align: center;
+}
+
+.practice-cap-avatar {
+    width: clamp(86px, 11vw, 115px);
+    height: clamp(86px, 11vw, 115px);
+    border-radius: 24px;
+    border: 3px solid #fbbf24;
+    background: #0f172a;
+    object-fit: cover;
+    box-shadow: 0 10px 28px rgba(251, 191, 36, 0.45);
+    animation: bounceFloat 3s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.practice-drills-text h2 {
+    font-family: 'Fredoka', 'Cairo', sans-serif;
+    font-size: clamp(1.55rem, 3.5vw, 2.3rem);
+    font-weight: 900;
+    background: linear-gradient(90deg, #fde047, #ffffff, #38bdf8, #fde047);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shineText 3s linear infinite;
+    direction: ltr;
+}
+.practice-drills-text p {
+    color: #e2e8f0;
+    font-weight: 800;
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+    margin-top: 4px;
+}
+
+/* ==================== 16-CARD STITCHED VOCABULARY TEMPLATE ==================== */
+.vocab-sheet-wrapper {
+    background: linear-gradient(180deg, #38bdf8 0%, #818cf8 35%, #c084fc 70%, #f472b6 100%);
+    border-radius: clamp(20px, 3vw, 34px);
+    padding: clamp(12px, 2.5vw, 24px);
+    border: 6px solid #1e3a8a;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.65);
+    position: relative;
+    max-width: 960px;
+    margin: 0 auto;
+}
+.vocab-sheet-inner {
+    background: #fffbeb;
+    border-radius: 24px;
+    padding: clamp(12px, 2.2vw, 20px);
+    border: 4px dashed #2563eb;
+    position: relative;
+}
+.vocab-top-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+.vocab-mascot {
+    width: clamp(62px, 8vw, 82px);
+    height: clamp(62px, 8vw, 82px);
+    border-radius: 50%;
+    border: 4px solid #1d4ed8;
+    background: #dbeafe;
+    object-fit: cover;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+.vocab-title-3d {
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+}
+.vocab-title-3d h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    font-weight: 900;
+    color: #f59e0b;
+    text-shadow: 2px 2px 0 #1e3a8a, -2px -2px 0 #1e3a8a, 2px -2px 0 #1e3a8a, -2px 2px 0 #1e3a8a, 0 5px 10px rgba(0,0,0,0.3);
+    letter-spacing: 1px;
+}
+.vocab-lesson-box {
+    background: #fef3c7;
+    border: 3px dashed #1e40af;
+    border-radius: 16px;
+    padding: 6px 16px;
+    margin-top: 6px;
+    display: inline-block;
+    color: #1e3a8a;
+    font-weight: 900;
+    font-size: clamp(0.88rem, 1.6vw, 1.1rem);
+}
+
+.stitched-grid-16 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+@media (max-width: 900px) {
+    .stitched-grid-16 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+    .stitched-grid-16 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+
+.stitched-card {
+    background: #ffffff;
+    border: 4px solid #1e3a8a;
+    outline: 2px dashed #93c5fd;
+    outline-offset: -4px;
+    border-radius: 20px;
+    padding: 12px 8px;
+    text-align: center;
+    box-shadow: 0 8px 18px rgba(30, 58, 138, 0.22);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+}
+.stitched-card:hover {
+    transform: translateY(-6px) scale(1.04) rotate(1deg);
+    box-shadow: 0 14px 28px rgba(30, 58, 138, 0.35);
+}
+.vocab-3d-art {
+    font-size: clamp(2.3rem, 4vw, 3.1rem);
+    line-height: 1.1;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.22));
+    transition: transform 0.3s ease;
+}
+.stitched-card:hover .vocab-3d-art { transform: scale(1.18); }
+.vocab-en-word {
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(0.95rem, 1.6vw, 1.08rem);
+    font-weight: 700;
+    color: #1e3a8a;
+    direction: ltr;
+}
+.vocab-ar-word {
+    font-size: clamp(0.84rem, 1.4vw, 0.92rem);
+    font-weight: 800;
+    color: #dc2626;
+    margin-top: 2px;
+}
+
+.vocab-footer-banner {
+    margin-top: 18px;
+    background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+    border: 3px dashed #fde047;
+    border-radius: 18px;
+    padding: 10px 24px;
+    text-align: center;
+    color: #fde047;
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-shadow: 0 3px 6px rgba(0,0,0,0.5);
+}
+
+/* ==================== INTERACTIVE QUIZ ENGINE ==================== */
+.quiz-main-card {
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(20px);
+    width: 100%;
+    max-width: 860px;
+    border-radius: clamp(22px, 3vw, 36px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 0 50px rgba(99, 102, 241, 0.25);
+    overflow: hidden;
+    margin: 0 auto;
+}
+.quiz-header {
+    padding: clamp(14px, 2.5vw, 20px) clamp(16px, 3vw, 32px);
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.quiz-logo-container {
+    width: clamp(60px, 8vw, 78px);
+    height: clamp(60px, 8vw, 78px);
+    border-radius: 50%;
+    border: 3px solid var(--danger);
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 0 18px var(--danger);
+    animation: glow-pulse 2s infinite ease-in-out;
+}
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 6px var(--danger); transform: scale(1); }
+    50% { box-shadow: 0 0 24px var(--danger); transform: scale(1.05); }
+}
+.quiz-logo-container img { width: 100%; height: 100%; object-fit: cover; }
+
+.progress-section { padding: 14px clamp(16px, 3vw, 35px); background: rgba(0,0,0,0.3); display: none; }
+.progress-info { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; color: #94a3b8; font-weight: 700; }
+.progress-container { width: 100%; height: 9px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #d946ef); transition: width 0.5s ease; }
+
+.question-row {
+    background: rgba(255, 255, 255, 0.05);
+    padding: clamp(16px, 2.5vw, 26px);
+    border-radius: 22px;
+    margin-bottom: 20px;
+    border: 1px solid var(--danger);
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    direction: ltr;
+}
+@media (max-width: 540px) {
+    .question-row { flex-direction: column-reverse; text-align: center; }
+    .question-text { text-align: center !important; }
+}
+.question-text { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 800; text-align: left; flex: 1; color: #f8fafc; line-height: 1.6; }
+
+.timer-wrapper { position: relative; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.timer-svg { transform: rotate(-90deg); width: 72px; height: 72px; }
+.timer-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 6; }
+.timer-progress {
+    fill: none; stroke: var(--success); stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 226; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+#timer-text { position: absolute; font-size: 1.4rem; font-weight: 900; }
+
+.option-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 15px 20px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    margin-bottom: 11px;
+    color: white;
+    width: 100%;
+    direction: ltr;
+    transition: 0.28s all;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.option-box:hover { background: rgba(99, 102, 241, 0.2); transform: translateX(6px); border-color: var(--primary-light); }
+.option-box.correct { background: var(--success) !important; border-color: #fff !important; }
+.option-box.wrong { background: var(--danger) !important; border-color: #fff !important; }
+.option-box.disabled { pointer-events: none; }
+
+.scene { display: none; padding: clamp(18px, 3vw, 34px); text-align: center; }
+.scene.active { display: block; animation: panelEnter 0.45s ease; }
+
+.student-input {
+    width: 92%;
+    max-width: 460px;
+    padding: 16px;
+    border-radius: 16px;
+    border: 2px solid rgba(255,255,255,0.15);
+    background: rgba(0,0,0,0.3);
+    color: white;
+    text-align: center;
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    outline: none;
+    margin-bottom: 20px;
+}
+.student-input:focus { border-color: var(--gold); }
+
+.btn-glow {
+    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    color: white;
+    padding: 13px 26px;
+    border: none;
+    border-radius: 16px;
+    font-size: clamp(0.95rem, 1.7vw, 1.1rem);
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 25px rgba(79, 70, 229, 0.45);
+    text-decoration: none;
+}
+.btn-glow:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 30px rgba(147, 51, 234, 0.65); }
+.btn-gold {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #020617;
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.45);
+}
+
+.review-area {
+    background: rgba(0,0,0,0.45);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: right;
+    display: none;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Sound Toggle Floating Button */
+.sound-toggle {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    z-index: 4000;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #6366f1);
+    border: 2px solid #fff;
+    color: #fff;
+    font-size: 1.15rem;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    transition: transform 0.3s;
+}
+.sound-toggle:hover { transform: scale(1.12); }
+
+/* Print / PDF Export Styles */
+@media print {
+    body { background: #fff !important; color: #000 !important; }
+    .inline-intro-section, .action-dock, .sound-toggle, #particles-js, #click-fx-canvas, .speak-btn, .floating-decor, .floating-bg-logo, .audio-controls-bar, #bottom-quiz-anchor { display: none !important; }
+    .hero-header { background: #1e3a8a !important; color: #fff !important; border: none !important; box-shadow: none !important; }
+    .lesson-card { background: #fff !important; color: #000 !important; border: 2px solid #1e3a8a !important; box-shadow: none !important; page-break-inside: avoid; margin-bottom: 16px; }
+    .animated-section-title { -webkit-text-fill-color: #fff !important; color: #fff !important; }
+    .rule-item { background: #f8fafc !important; border: 1px solid #cbd5e1 !important; color: #000 !important; }
+    .rule-ar { color: #0f172a !important; }
+    .rule-en { background: #eff6ff !important; color: #1e40af !important; border-color: #93c5fd !important; }
+    .l-mcq-card { background: #f8fafc !important; border: 1px solid #cbd5e1 !important; color: #000 !important; }
+    .l-mcq-q { color: #0f172a !important; }
+    .l-opt-btn { background: #fff !important; color: #1e3a8a !important; border-color: #93c5fd !important; }
+    #view-lesson { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles-js"></canvas>
+<canvas id="click-fx-canvas"></canvas>
+
+<!-- Joyful Floating Spaceship, Stars & Small Animated Brand Logos in Particles Background -->
+<div class="floating-decor" style="top: 13%; right: 2.5%; animation-delay: 0s;">🚀</div>
+<div class="floating-decor" style="top: 36%; left: 2.5%; animation-delay: 1.5s;">⭐</div>
+<div class="floating-decor" style="top: 64%; right: 2%; animation-delay: 3s;">🎓</div>
+<div class="floating-decor" style="top: 82%; left: 3%; animation-delay: 2s;">💡</div>
+
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w150';"
+     class="floating-bg-logo" style="top: 24%; left: 4%; animation-delay: 0.4s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w150';"
+     class="floating-bg-logo" style="top: 50%; right: 3.5%; animation-delay: 2.2s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w150';"
+     class="floating-bg-logo" style="top: 76%; left: 5%; animation-delay: 3.8s;" alt="لوجو مستر إيهاب">
+
+<!-- Sound Effects Toggle -->
+<button class="sound-toggle" id="soundToggleBtn" onclick="toggleAudioFX()" title="تشغيل/كتم المؤثرات الصوتية">
+    <i class="fa-solid fa-volume-high"></i>
+</button>
+
+<!-- ==================== MAIN APP CONTAINER ==================== -->
+<div class="app-container">
+
+    <!-- HERO HEADER: Enlarged Right Logo + Topic Title + Enlarged Far-Left Animated Character -->
+    <header class="hero-header">
+        <div class="brand-right">
+            <div class="topic-icon-box" onclick="triggerCelebration()">
+                <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w350';"
+                     alt="لوجو مستر إيهاب">
+            </div>
+            <div class="brand-titles">
+                <h1>دروس مستر إيهاب التفاعلية الشاملة <span class="joy-icon-spin">✨</span></h1>
+                <div class="lesson-pill">
+                    <i class="fa-solid fa-graduation-cap" style="color: #fbbf24;"></i>
+                    <span class="en">Past Simple Tense</span>
+                    <span>— زمن الماضي البسيط</span>
+                </div>
+            </div>
+        </div>
+        <div class="brand-left">
+            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr"
+                 onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr&sz=w400';"
+                 class="far-left-animated-badge" alt="شخصية مستر إيهاب المتحركة" onclick="triggerCelebration()">
+        </div>
+    </header>
+
+    <!-- ==================== NON-STOP ANIMATED LOGO BANNER ==================== -->
+    <section class="inline-intro-section" aria-label="الشعار الترحيبي المتحرك">
+        <div class="intro-top-strip">
+            <span class="joy-icon-spin">🚀</span>
+            <span>دروس مستر إيهاب التفاعلية الشاملة</span>
+            <span class="joy-icon-spin">🌟</span>
+        </div>
+
+        <div class="video-frame-wrapper">
+            <img src="https://lh3.googleusercontent.com/d/1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4"
+                 onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4&sz=w1000';"
+                 class="nonstop-animated-banner-img"
+                 alt="شعار دروس مستر إيهاب التفاعلية المتحرك"
+                 onclick="triggerCelebration()">
+        </div>
+
+        <div class="scroll-cue">
+            <i class="fa-solid fa-angles-down"></i>
+            <span>اسحب الشاشة للأسفل (Scroll) للدخول مباشرة في الشرح التفاعلي والاختبارات</span>
+            <i class="fa-solid fa-angles-down"></i>
+        </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE ACTION DOCK ==================== -->
+    <nav class="action-dock">
+        <button class="dock-btn active-tab" id="tab-lesson" onclick="switchView('lesson', this)">
+            <div class="dock-icon-wrap" style="background: rgba(16, 185, 129, 0.25);">
+                <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200';"
+                     alt="شرح الدرس">
+            </div>
+            <span class="dock-label">شرح الدرس التفاعلي 📖</span>
+            <span class="dock-sub">عناوين متحركة وأمثلة ناطقة</span>
+        </button>
+
+        <button class="dock-btn" id="tab-video" onclick="openLessonVideoDirect(this)">
+            <div class="dock-icon-wrap" style="background: rgba(236, 72, 153, 0.25); color: #f472b6;">
+                <i class="fa-solid fa-circle-play"></i>
+            </div>
+            <span class="dock-label">فيديو الدرس 🎥</span>
+            <span class="dock-sub">تشغيل مباشر في نفس النافذة</span>
+        </button>
+
+        <button class="dock-btn" id="tab-vocab" onclick="switchView('vocab', this)">
+            <div class="dock-icon-wrap" style="background: rgba(245, 158, 11, 0.25); color: #fbbf24;">
+                <i class="fa-solid fa-images"></i>
+            </div>
+            <span class="dock-label">كلمات الدرس بالصور 🖼️</span>
+            <span class="dock-sub">قالب الـ 16 بطاقة 3D</span>
+        </button>
+
+        <button class="dock-btn" id="tab-quiz" onclick="scrollToBottomQuestions(this)">
+            <div class="dock-icon-wrap" style="background: rgba(99, 102, 241, 0.25); color: #818cf8;">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <span class="dock-label">الاختبار التفاعلي 🏆</span>
+            <span class="dock-sub">Practice & Drills (28 سؤال)</span>
+        </button>
+
+        <button class="dock-btn" onclick="exportToPDF()">
+            <div class="dock-icon-wrap" style="background: rgba(239, 68, 68, 0.25); color: #f87171;">
+                <i class="fa-solid fa-file-pdf"></i>
+            </div>
+            <span class="dock-label">تخريج المحتوى PDF 📄</span>
+            <span class="dock-sub">نسخة طباعة احترافية</span>
+        </button>
+
+        <button class="dock-btn" onclick="exportToPPTX()">
+            <div class="dock-icon-wrap" style="background: rgba(249, 115, 22, 0.25); color: #fb923c;">
+                <i class="fa-solid fa-file-powerpoint"></i>
+            </div>
+            <span class="dock-label">تخريج PowerPoint 📊</span>
+            <span class="dock-sub">تحميل ملف شرائح .pptx</span>
+        </button>
+    </nav>
+
+    <!-- ==================== VIEW 1: INTERACTIVE LESSON + LISTENING MCQs + BOTTOM QUIZ ==================== -->
+    <section id="view-lesson" class="view-panel active">
+        <div class="grammar-grid">
+
+            <!-- CARD 1: USAGE -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">1. الاستخدام — <span class="en">Usage</span> ✨</h2>
+                </div>
+                <div class="rule-list">
+                    <div class="rule-item" onclick="speakText('She cooked a delicious lunch yesterday.')">
+                        <div class="rule-ar">🔹 يعبر الماضي البسيط عن حدث بدأ وانتهى في الماضي:</div>
+                        <div class="rule-en">
+                            <span>She cooked a delicious lunch yesterday.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('He got into his car and drove into town.')">
+                        <div class="rule-ar">🔹 يستخدم لسرد أحداث متتابعة تتبع بعضها في قصة:</div>
+                        <div class="rule-en">
+                            <span>He got into his car and drove into town.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('She cooked lunch every day last week.')">
+                        <div class="rule-ar">🔹 يعبر عن عادات وأفعال متكررة في الماضي:</div>
+                        <div class="rule-en">
+                            <span>She cooked lunch every day last week.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('When I was young, we lived by the sea. He used to smoke.')">
+                        <div class="rule-ar">🔹 عادة متكررة أو موقف في الماضي (وغالباً مع <span class="en" style="color:#fbbf24;">used to + inf</span>):</div>
+                        <div class="rule-en">
+                            <span>When I was young, we lived by the sea. / He used to smoke.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('He was used to smoking heavily.')">
+                        <div class="rule-ar">🔹 تركيبات الاعتياد في الماضي: <span class="en" style="color:#fbbf24;">(was/were/got) used to + v-ing</span> أو <span class="en" style="color:#fbbf24;">in the habit of + v-ing</span>:</div>
+                        <div class="rule-en">
+                            <span>He was used to smoking heavily = He used to smoke heavily.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('He wrote it in 1899.')">
+                        <div class="rule-ar">🔹 حدث اكتمل في الماضي وذكرنا وقت حدوثه (بدون ذكر الوقت نستخدم المضارع التام):</div>
+                        <div class="rule-en">
+                            <span>He wrote it in 1899.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('If I had enough money, I would buy a car. If I were you, I would buy a car.')">
+                        <div class="rule-ar">🔹 بعد حالة <span class="en" style="color:#fbbf24;">If</span> الشرطية الثانية وللنصيحة:</div>
+                        <div class="rule-en">
+                            <span>If I had enough money, I would buy a car. / If I were you, I would buy a car.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('I wish I were thinner.')">
+                        <div class="rule-ar">🔹 للتعبير عن أمنية في الحاضر بتركيب الماضي البسيط مع <span class="en" style="color:#fbbf24;">I wish / If only / It is (about - high) time</span>:</div>
+                        <div class="rule-en">
+                            <span>I wish I were thinner.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('I would rather you stayed. I would rather go.')">
+                        <div class="rule-ar">🔹 بعد <span class="en" style="color:#fbbf24;">would rather / would sooner</span>: مع فاعلين نستخدم ماضي بسيط، ومع فاعل واحد نستخدم المصدر:</div>
+                        <div class="rule-en">
+                            <span>I would rather you stayed. / I would rather go.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('I did visit him. My father left for work just now.')">
+                        <div class="rule-ar">🔹 التأكيد في الإثبات بـ <span class="en" style="color:#fbbf24;">did + inf</span>، ومع <span class="en" style="color:#fbbf24;">just now</span> في نهاية الجملة:</div>
+                        <div class="rule-en">
+                            <span>I did visit him. / My father left for work just now.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: FORM -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">2. التكوين — <span class="en">Form</span> 🚀</h2>
+                </div>
+
+                <div class="formula-banner">
+                    <div class="formula-wheel">
+                        <strong>I / He / She / It / We / You / They</strong>
+                        <span style="color:#94a3b8; font-size:0.85rem;">الفاعل (مفرد أو جمع)</span>
+                    </div>
+                    <div style="font-size: 2rem; color: #fbbf24;"><i class="fa-solid fa-arrow-right-long"></i></div>
+                    <div class="formula-wheel" style="border-color: #fbbf24;">
+                        <strong style="color: #fbbf24;">2nd Form of the Verb</strong>
+                        <span style="color:#94a3b8; font-size:0.85rem;">التصريف الثاني للفعل</span>
+                    </div>
+                </div>
+
+                <div class="verbs-compare">
+                    <div class="verb-box">
+                        <h3>✅ أفعال منتظمة (<span class="en">Regular Verbs</span>)</h3>
+                        <p style="color:#cbd5e1; font-size:0.95rem;">تتبع القاعدة بإضافة <span class="en" style="color:#34d399;">(-d / -ed / -ied)</span> لنهاية المصدر:</p>
+                        <table class="verb-table">
+                            <tr><th>1 (Inf)</th><th>2 (Past)</th><th>3 (P.P)</th></tr>
+                            <tr><td>play</td><td class="highlight-v2">played</td><td>played</td></tr>
+                            <tr><td>visit</td><td class="highlight-v2">visited</td><td>visited</td></tr>
+                            <tr><td>start</td><td class="highlight-v2">started</td><td>started</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="verb-box">
+                        <h3>⚡ أفعال غير منتظمة / شاذة (<span class="en">Irregular Verbs</span>)</h3>
+                        <p style="color:#cbd5e1; font-size:0.95rem;">لا تتبع القاعدة وتُحفظ كما هي (التصريف الثاني هو الماضي البسيط):</p>
+                        <table class="verb-table">
+                            <tr><th>1 (Inf)</th><th>2 (Past)</th><th>3 (P.P)</th></tr>
+                            <tr><td>go</td><td class="highlight-v2">went</td><td>gone</td></tr>
+                            <tr><td>write</td><td class="highlight-v2">wrote</td><td>written</td></tr>
+                            <tr><td>buy</td><td class="highlight-v2">bought</td><td>bought</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 3: NEGATION & INTERROGATIVE -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">3. النفي والاستفهام — <span class="en">Negation & Interrogative</span> 💡</h2>
+                </div>
+                <div class="rule-list">
+                    <div class="rule-item" onclick="speakText('He played football. He did not play football.')">
+                        <div class="rule-ar">❌ <strong>النفي (Negation):</strong> نستخدم <span class="en" style="color:#fbbf24;">didn't + inf (المصدر)</span>:</div>
+                        <div class="rule-en">
+                            <span>He played football ➔ He didn't play football.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('Did she go to school yesterday? Yes, she did. No, she did not.')">
+                        <div class="rule-ar">❓ <strong>السؤال بـ Did:</strong> هام جداً: بعد <span class="en" style="color:#fbbf24;">Did</span> يعود الفعل للتصريف الأول (المصدر):</div>
+                        <div class="rule-en">
+                            <span>Did she go to school yesterday? ➔ Yes, she did / No, she didn't.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('He was happy. Was he happy?')">
+                        <div class="rule-ar">💡 <strong>السؤال بـ Was / Were:</strong> إذا وجدنا صفة أو اسماً بدلاً من الفعل الأساسي:</div>
+                        <div class="rule-en">
+                            <span>He was happy. ➔ Was he happy?</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 4: KEYWORDS & SECONDARY TIPS -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">4. الكلمات الدالة وملاحظات المتفوقين — <span class="en">Keywords & Notes</span> 🌟</h2>
+                </div>
+                <div class="keywords-cloud">
+                    <span class="kw-tag" onclick="speakText('yesterday')">yesterday</span>
+                    <span class="kw-tag" onclick="speakText('last week')">last (week / month / year)</span>
+                    <span class="kw-tag" onclick="speakText('ten minutes ago')">ago</span>
+                    <span class="kw-tag" onclick="speakText('once upon a time')">once / once upon a time</span>
+                    <span class="kw-tag" onclick="speakText('one day')">one day</span>
+                    <span class="kw-tag" onclick="speakText('in 1999')">in + سنة ماضية (1999)</span>
+                    <span class="kw-tag" onclick="speakText('in the past')">in the past</span>
+                    <span class="kw-tag" onclick="speakText('in the old days')">in the old days</span>
+                    <span class="kw-tag" onclick="speakText('in ancient times')">in ancient times</span>
+                    <span class="kw-tag" onclick="speakText('the other day')">the other day</span>
+                    <span class="kw-tag" onclick="speakText('How long ago did')">How long ago did...?</span>
+                </div>
+                <div class="rule-list">
+                    <div class="rule-item" onclick="speakText('Once I met Ahmed in the street. I see Ahmed once a week.')">
+                        <div class="rule-ar">⚠️ <strong>فروق دقيقة:</strong> <span class="en" style="color:#fbbf24;">Once</span> بمفردها ماضي بسيط، أما <span class="en" style="color:#fbbf24;">Once a / per week</span> فمضارع بسيط:</div>
+                        <div class="rule-en">
+                            <span>Once I met Ahmed. (Past) | I see Ahmed once a week. (Present)</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                    <div class="rule-item" onclick="speakText('I wish I had a car. I wish I had had a car.')">
+                        <div class="rule-ar">🎓 <strong>معلومة تهمك كطالب ثانوي:</strong> التمني في المضارع (ماضي بسيط) والتمني في الماضي (ماضي تام):</div>
+                        <div class="rule-en">
+                            <span>Present wish: I wish I had a car. | Past wish: I wish I had had a car.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 5: READING & LISTENING PASSAGE + 4-BUTTON PLAYER + 5 MCQs (4 OPTIONS EACH) -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">5. قطعة القراءة والاستماع وأسئلتها — <span class="en">Listening & Reading</span> 🎧</h2>
+                </div>
+
+                <div class="reading-box" id="readingPassageContainer">
+                    <span class="reading-sentence" data-idx="0">Last Friday, Omar and his family visited Luxor in Upper Egypt.</span>
+                    <span class="reading-sentence" data-idx="1">They got up early in the morning and took the fast train.</span>
+                    <span class="reading-sentence" data-idx="2">When they arrived, they explored the ancient temples and took many amazing photos.</span>
+                    <span class="reading-sentence" data-idx="3">In the afternoon, they ate a delicious lunch by the Nile and bought souvenirs.</span>
+                    <span class="reading-sentence" data-idx="4">Everyone felt very happy and returned home safely at night.</span>
+                </div>
+
+                <div class="audio-controls-bar">
+                    <button class="audio-ctrl-btn btn-play" onclick="playReadingAudio()">
+                        <i class="fa-solid fa-play"></i> تشغيل
+                    </button>
+                    <button class="audio-ctrl-btn btn-pause" onclick="pauseReadingAudio()">
+                        <i class="fa-solid fa-pause"></i> إيقاف مؤقت
+                    </button>
+                    <button class="audio-ctrl-btn btn-stop" onclick="stopReadingAudio()">
+                        <i class="fa-solid fa-stop"></i> إيقاف
+                    </button>
+                    <button class="audio-ctrl-btn btn-restart" onclick="restartReadingAudio()">
+                        <i class="fa-solid fa-rotate-right"></i> إعادة تشغيل
+                    </button>
+                </div>
+
+                <!-- 5 Multiple-Choice Comprehension Questions (4 options each) -->
+                <div class="listening-mcq-section">
+                    <div class="listening-mcq-header">
+                        <h3>📝 أسئلة الفهم والاستماع (5 أسئلة اختيار من متعدد)</h3>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span class="listening-score-badge" id="listeningScoreBadge">النتيجة: 0 / 5</span>
+                            <button class="audio-ctrl-btn btn-restart" style="padding:6px 14px; font-size:0.85rem;" onclick="renderListeningMCQs()">
+                                <i class="fa-solid fa-rotate"></i> إعادة الأسئلة
+                            </button>
+                        </div>
+                    </div>
+                    <div class="l-mcq-list" id="listeningMcqGrid"></div>
+                </div>
+            </div>
+
+            <!-- CARD 6: GAMES & QR LINKS HUB -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">6. بوابة الألعاب وأوراق العمل التفاعلية — <span class="en">Game Time & QR</span> 🎮</h2>
+                </div>
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://forms.office.com/r/CAtuWdcidW?origin=lprLink" alt="QR"></div>
+                        <strong>اختبار Microsoft Forms</strong>
+                        <a href="https://forms.office.com/r/CAtuWdcidW?origin=lprLink" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">افتح الاختبار</a>
+                    </div>
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ehabeladawy.github.io/Mr-Ehab-s-interactive-Tests/Past%20Simple.html" alt="QR"></div>
+                        <strong>تحدي مستر إيهاب (فردي/جماعي)</strong>
+                        <a href="https://ehabeladawy.github.io/Mr-Ehab-s-interactive-Tests/Past%20Simple.html" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">ابدأ التحدي</a>
+                    </div>
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://quizizz.com/join/quiz/66e912c068d47c284104d4d4/start?studentShare=true" alt="QR"></div>
+                        <strong>مسابقة Quizizz التفاعلية</strong>
+                        <a href="https://quizizz.com/join/quiz/66e912c068d47c284104d4d4/start?studentShare=true" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">العب Quizizz</a>
+                    </div>
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wordwall.net/resource/20162978/english-file-elementary-4th-edition/past-simple" alt="QR"></div>
+                        <strong>ألعاب Wordwall التفاعلية</strong>
+                        <a href="https://wordwall.net/resource/20162978/english-file-elementary-4th-edition/past-simple" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">العب Wordwall</a>
+                    </div>
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://drive.google.com/file/d/19ligXmwMxkm2gwpRlqTf5cxEBfofwFV2/view?usp=drive_link" alt="QR"></div>
+                        <strong>ورقة عمل PDF للتحميل</strong>
+                        <a href="https://drive.google.com/file/d/19ligXmwMxkm2gwpRlqTf5cxEBfofwFV2/view?usp=drive_link" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">تحميل الورقة</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== BOTTOM PRACTICE & DRILLS BANNER + QUESTIONS ==================== -->
+        <div id="bottom-quiz-anchor">
+            <div class="practice-drills-header">
+                <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr&sz=w400';"
+                     class="practice-cap-avatar" alt="مستر إيهاب بكاب التخرج">
+                <div class="practice-drills-text">
+                    <h2>Practice &amp; Drills 🚀</h2>
+                    <p>تدريبات وأسئلة الاختبار التفاعلي الشامل — اختبر نفسك واحصل على شهادتك فوراً</p>
+                </div>
+            </div>
+
+            <div class="quiz-main-card">
+                <div class="quiz-header">
+                    <div class="quiz-logo-container">
+                        <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                             onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w200';"
+                             alt="logo">
+                    </div>
+                    <div style="text-align: left;">
+                        <h3 style="font-size: clamp(1.1rem, 2.2vw, 1.45rem); font-weight: 900; color: #fff;" class="en">Past Simple — 28 Qs Challenge</h3>
+                        <span style="color: #fbbf24; font-weight: 800; font-size: 0.95rem;">إعداد وبرمجة / مستر إيهاب العدوي</span>
+                    </div>
+                </div>
+
+                <div class="progress-section" id="progressArea">
+                    <div class="progress-info">
+                        <span id="progStep">السؤال 1</span>
+                        <span id="progPercent">0%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="pBar"></div>
+                    </div>
+                </div>
+
+                <div id="welcome-scene" class="scene active">
+                    <img src="https://lh3.googleusercontent.com/d/1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4&sz=w1000';"
+                         style="width: 320px; max-width: 88%; height: auto; margin-bottom: 18px; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                    <h3 style="font-size: clamp(1.2rem, 2.4vw, 1.65rem); margin-bottom: 16px; font-weight: 900;">اختبار الماضي البسيط الشامل (28 سؤال)</h3>
+                    <input type="text" id="studentName" class="student-input" placeholder="أدخل اسمك الثلاثي يا بطل للحصول على الشهادة">
+                    <br>
+                    <button class="btn-glow btn-gold" onclick="startTest()">
+                        <span>بدء الاختبار الآن</span>
+                        <i class="fa-solid fa-bolt"></i>
+                    </button>
+                </div>
+
+                <div id="quiz-scene" class="scene"></div>
+
+                <div id="result-scene" class="scene">
+                    <h2 id="result-title" style="font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 20px; font-weight: 900;">النتيجة النهائية</h2>
+                    <div id="result-container" style="position:relative; width:100%; max-width:580px; margin: 0 auto 24px;"></div>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+                        <button class="btn-glow" onclick="toggleReview()" style="background: rgba(255,255,255,0.14);">
+                            <i class="fa-solid fa-eye"></i> مراجعة الأخطاء
+                        </button>
+                        <button class="btn-glow btn-gold" onclick="resetQuiz()">
+                            <i class="fa-solid fa-rotate"></i> أعد الاختبار
+                        </button>
+                    </div>
+                    <div id="reviewArea" class="review-area"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== VIEW 2: LESSON EXPLANATION VIDEO IN-FRAME (ERROR 153 FIXED) ==================== -->
+    <section id="view-video" class="view-panel">
+        <div class="lesson-card" style="max-width: 950px; margin: 0 auto; text-align: center;">
+            <div class="card-ribbon">
+                <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                     class="section-brand-icon" alt="أيقونة القسم">
+                <h2 class="animated-section-title">فيديو شرح الدرس — <span class="en">Past Simple Video</span> 🎥</h2>
+            </div>
+
+            <div class="video-frame-wrapper" id="lessonVideoWrapper">
+                <iframe id="lessonOnlyIframe"
+                    src=""
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div id="localFileNotice" style="display:none; margin-top:12px; padding:10px 16px; border-radius:14px; background:rgba(245, 158, 11, 0.14); border:1px solid rgba(251, 191, 36, 0.45); color:#fde68a; font-size:0.9rem; font-weight:700;">
+                💡 ملحوظة: يوتيوب يمنع تشغيل الفيديوهات المضمنة عند فتح الملف مباشرة من جهازك (<code>file://</code>). بمجرد رفع الملف على <strong>GitHub Pages</strong> سيعمل الفيديو داخل نفس النافذة مباشرةً بدون أي خطأ!
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== VIEW 3: 16-CARD STITCHED VOCABULARY DICTIONARY ==================== -->
+    <section id="view-vocab" class="view-panel">
+        <div style="text-align: center; margin-bottom: 18px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+            <button class="btn-glow btn-gold" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> طباعة / حفظ القالب A4
+            </button>
+            <a href="https://drive.google.com/file/d/1QIsO6ko4foXLtFL8o2rfPxMQHwhBss1R/view?usp=drive_link" target="_blank" class="btn-glow">
+                <i class="fa-solid fa-image"></i> فتح القالب الأصلي على Drive
+            </a>
+        </div>
+
+        <div class="vocab-sheet-wrapper" id="vocabTemplateSheet">
+            <div class="vocab-sheet-inner">
+                <div class="vocab-top-banner">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w300';"
+                         class="vocab-mascot" alt="أيقونة مستر إيهاب">
+                    <div class="vocab-title-3d">
+                        <h2>Vocabulary Dictationary</h2>
+                        <div class="vocab-lesson-box">Past Simple — أهم كلمات وأفعال الدرس (اضغط للنطق 🔊)</div>
+                    </div>
+                    <img src="https://lh3.googleusercontent.com/d/1NmMnEz0kITULW14W1sdoXrswAogA-heT"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1NmMnEz0kITULW14W1sdoXrswAogA-heT&sz=w300';"
+                         class="vocab-mascot" alt="شعار إيهاب العدوي">
+                </div>
+
+                <div class="stitched-grid-16" id="stitchedVocabGrid"></div>
+
+                <div class="vocab-footer-banner">Mr. Ehab Eladawy</div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+// ==================== 1. SOUND & VISUAL CLICK FX ENGINE ====================
+let audioEnabled = true;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSynthTone(type = 'click') {
+    if (!audioEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+
+    if (type === 'click') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(580, now);
+        osc.frequency.exponentialRampToValueAtTime(920, now + 0.09);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+    } else if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(783.99, now + 0.2);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
+    } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.linearRampToValueAtTime(140, now + 0.28);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+    }
+}
+
+function toggleAudioFX() {
+    audioEnabled = !audioEnabled;
+    document.getElementById('soundToggleBtn').innerHTML = audioEnabled
+        ? '<i class="fa-solid fa-volume-high"></i>'
+        : '<i class="fa-solid fa-volume-xmark"></i>';
+}
+
+// Click Sparkles & Ripples
+const fxCanvas = document.getElementById('click-fx-canvas');
+const fxCtx = fxCanvas.getContext('2d');
+const bgCanvas = document.getElementById('particles-js');
+const bgCtx = bgCanvas.getContext('2d');
+let sparks = [];
+
+function resizeCanvases() {
+    fxCanvas.width = window.innerWidth;
+    fxCanvas.height = window.innerHeight;
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+}
+resizeCanvases();
+window.addEventListener('resize', resizeCanvases);
+
+document.addEventListener('click', (e) => {
+    const ripple = document.createElement('div');
+    ripple.className = 'click-ripple';
+    ripple.style.left = e.clientX + 'px';
+    ripple.style.top = e.clientY + 'px';
+    ripple.style.width = '50px';
+    ripple.style.height = '50px';
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 650);
+
+    const colors = ['#fbbf24', '#ec4899', '#38bdf8', '#a855f7', '#34d399'];
+    for (let i = 0; i < 16; i++) {
+        const angle = (Math.PI * 2 * i) / 16;
+        const speed = Math.random() * 4 + 2;
+        sparks.push({
+            x: e.clientX,
+            y: e.clientY,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            alpha: 1,
+            size: Math.random() * 4 + 2,
+            color: colors[Math.floor(Math.random() * colors.length)]
+        });
+    }
+    playSynthTone('click');
+});
+
+function animateSparks() {
+    fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+    sparks.forEach((s, idx) => {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.vy += 0.08;
+        s.alpha -= 0.028;
+        if (s.alpha <= 0) {
+            sparks.splice(idx, 1);
+        } else {
+            fxCtx.save();
+            fxCtx.globalAlpha = s.alpha;
+            fxCtx.fillStyle = s.color;
+            fxCtx.beginPath();
+            fxCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+            fxCtx.fill();
+            fxCtx.restore();
+        }
+    });
+    requestAnimationFrame(animateSparks);
+}
+animateSparks();
+
+let bgPts = [];
+for (let i = 0; i < 65; i++) {
+    bgPts.push({
+        x: Math.random() * bgCanvas.width,
+        y: Math.random() * bgCanvas.height,
+        r: Math.random() * 2.4 + 0.8,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5
+    });
+}
+function animateBg() {
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    bgPts.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > bgCanvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > bgCanvas.height) p.vy *= -1;
+        bgCtx.fillStyle = 'rgba(139, 92, 246, 0.35)';
+        bgCtx.beginPath();
+        bgCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        bgCtx.fill();
+    });
+    requestAnimationFrame(animateBg);
+}
+animateBg();
+
+// ==================== 2. NAVIGATION & DIRECT IN-FRAME VIDEO (ERROR 153 FIXED) ====================
+const LESSON_VIDEO_ID = "P2HjocnVRFw";
+
+function triggerCelebration() {
+    confetti({ particleCount: 85, spread: 65 });
+}
+
+function switchView(viewName, btnEl) {
+    document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('view-' + viewName).classList.add('active');
+    if (btnEl) {
+        document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active-tab'));
+        btnEl.classList.add('active-tab');
+    }
+    if (viewName !== 'video') {
+        const lFrame = document.getElementById('lessonOnlyIframe');
+        if (lFrame) lFrame.src = "";
+    }
+}
+
+function scrollToBottomQuestions(btnEl) {
+    switchView('lesson', btnEl);
+    const anchor = document.getElementById('bottom-quiz-anchor');
+    if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function openLessonVideoDirect(btnEl) {
+    switchView('video', btnEl);
+    const lFrame = document.getElementById('lessonOnlyIframe');
+    const localNotice = document.getElementById('localFileNotice');
+    if (LESSON_VIDEO_ID) {
+        const originParam = (window.location.protocol.startsWith('http'))
+            ? `&origin=${encodeURIComponent(window.location.origin)}`
+            : '';
+        if (window.location.protocol === 'file:' && localNotice) {
+            localNotice.style.display = 'block';
+        }
+        lFrame.src = `https://www.youtube-nocookie.com/embed/${LESSON_VIDEO_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1${originParam}`;
+    } else {
+        playReadingAudio();
+    }
+}
+
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'en-US';
+        utter.rate = 0.92;
+        window.speechSynthesis.speak(utter);
+    }
+}
+
+// ==================== 3. READING & LISTENING AUDIO PLAYER + 5 MCQs (4 OPTIONS EACH) ====================
+let readingIdx = 0;
+let isReadingPaused = false;
+let isReadingActive = false;
+
+function getReadingSentences() {
+    return Array.from(document.querySelectorAll('#readingPassageContainer .reading-sentence'));
+}
+
+function highlightReadingSentence(idx) {
+    getReadingSentences().forEach((el, i) => {
+        el.classList.toggle('active-read', i === idx);
+    });
+}
+
+function playReadingAudio() {
+    if (!('speechSynthesis' in window)) return alert('المتصفح لا يدعم النطق الصوتي.');
+    if (isReadingPaused && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        isReadingPaused = false;
+        return;
+    }
+    if (isReadingActive) return;
+    isReadingActive = true;
+    isReadingPaused = false;
+    speakNextReadingSentence();
+}
+
+function speakNextReadingSentence() {
+    const sentences = getReadingSentences();
+    if (!isReadingActive || readingIdx >= sentences.length) {
+        stopReadingAudio();
+        return;
+    }
+    highlightReadingSentence(readingIdx);
+    const utter = new SpeechSynthesisUtterance(sentences[readingIdx].innerText);
+    utter.lang = 'en-US';
+    utter.rate = 0.9;
+    utter.onend = () => {
+        if (isReadingActive && !isReadingPaused) {
+            readingIdx++;
+            speakNextReadingSentence();
+        }
+    };
+    window.speechSynthesis.speak(utter);
+}
+
+function pauseReadingAudio() {
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        isReadingPaused = true;
+    }
+}
+
+function stopReadingAudio() {
+    window.speechSynthesis.cancel();
+    isReadingActive = false;
+    isReadingPaused = false;
+    readingIdx = 0;
+    highlightReadingSentence(-1);
+}
+
+function restartReadingAudio() {
+    stopReadingAudio();
+    setTimeout(() => playReadingAudio(), 120);
+}
+
+// 5 Multiple-Choice Questions for the Listening/Reading Passage (4 options each)
+const listeningPassageMCQs = [
+    {
+        q: "1. Where did Omar and his family go last Friday?",
+        options: ["Luxor", "Alexandria", "Aswan", "Cairo"],
+        correct: "Luxor"
+    },
+    {
+        q: "2. How did they travel to Luxor?",
+        options: ["By car", "By plane", "By fast train", "By bus"],
+        correct: "By fast train"
+    },
+    {
+        q: "3. What did they explore when they arrived?",
+        options: ["Modern museums", "Ancient temples", "Big shopping malls", "High towers"],
+        correct: "Ancient temples"
+    },
+    {
+        q: "4. Where did they eat their delicious lunch?",
+        options: ["At the train station", "In a hotel room", "By the Nile", "Inside a temple"],
+        correct: "By the Nile"
+    },
+    {
+        q: "5. When did Omar and his family return home?",
+        options: ["In the morning", "At noon", "In the afternoon", "At night"],
+        correct: "At night"
+    }
+];
+
+let listeningScore = 0;
+
+function renderListeningMCQs() {
+    listeningScore = 0;
+    document.getElementById('listeningScoreBadge').innerText = `النتيجة: 0 / ${listeningPassageMCQs.length}`;
+    const grid = document.getElementById('listeningMcqGrid');
+    grid.innerHTML = listeningPassageMCQs.map((item, qIndex) => `
+        <div class="l-mcq-card" id="l-card-${qIndex}">
+            <div class="l-mcq-q">${item.q}</div>
+            <div class="l-mcq-options">
+                ${item.options.map((opt, oIndex) => {
+                    const letters = ['A', 'B', 'C', 'D'];
+                    return `<button class="l-opt-btn" onclick="checkListeningMCQ(this, ${qIndex}, '${opt.replace(/'/g, "\\'")}')">
+                        <span><strong>${letters[oIndex]})</strong> ${opt}</span>
+                        <span class="opt-icon"></span>
+                    </button>`;
+                }).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+function checkListeningMCQ(btnEl, qIndex, selectedOpt) {
+    const card = document.getElementById(`l-card-${qIndex}`);
+    const buttons = card.querySelectorAll('.l-opt-btn');
+    const correctAns = listeningPassageMCQs[qIndex].correct;
+
+    buttons.forEach(b => b.classList.add('locked'));
+
+    if (selectedOpt === correctAns) {
+        btnEl.classList.add('opt-correct');
+        btnEl.querySelector('.opt-icon').innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        playSynthTone('correct');
+        listeningScore++;
+        document.getElementById('listeningScoreBadge').innerText = `النتيجة: ${listeningScore} / ${listeningPassageMCQs.length}`;
+        if (listeningScore === listeningPassageMCQs.length) {
+            confetti({ particleCount: 110, spread: 65 });
+        }
+    } else {
+        btnEl.classList.add('opt-wrong');
+        btnEl.querySelector('.opt-icon').innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+        playSynthTone('wrong');
+        buttons.forEach(b => {
+            if (b.innerText.includes(correctAns)) {
+                b.classList.add('opt-correct');
+                b.querySelector('.opt-icon').innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            }
+        });
+    }
+}
+renderListeningMCQs();
+
+// ==================== 4. 16-CARD STITCHED VOCABULARY DICTIONARY ====================
+const lessonVocab16 = [
+    { en: "yesterday", ar: "أمس", icon: "📅" },
+    { en: "ancient times", ar: "العصور القديمة", icon: "🏛️" },
+    { en: "delicious", ar: "لذيذ", icon: "🍲" },
+    { en: "repaired", ar: "أصلحَ", icon: "🔧" },
+    { en: "concert", ar: "حفل موسيقي", icon: "🎵" },
+    { en: "accident", ar: "حادث", icon: "🚑" },
+    { en: "lawyer", ar: "محامي", icon: "⚖️" },
+    { en: "holiday", ar: "إجازة", icon: "🏖️" },
+    { en: "newspaper", ar: "جريدة", icon: "📰" },
+    { en: "cinema", ar: "سينما", icon: "🎬" },
+    { en: "shower", ar: "دُش / استحمام", icon: "🚿" },
+    { en: "oranges", ar: "برتقال", icon: "🍊" },
+    { en: "shopping", ar: "التسوق", icon: "🛍️" },
+    { en: "camera / photos", ar: "صور فوتوغرافية", icon: "📸" },
+    { en: "mountain bike", ar: "دراجة جبلية", icon: "🚵" },
+    { en: "used to", ar: "اعتاد أن", icon: "⏳" }
+];
+
+function renderVocabGrid() {
+    const grid = document.getElementById('stitchedVocabGrid');
+    grid.innerHTML = lessonVocab16.map(item => `
+        <div class="stitched-card" onclick="speakText('${item.en}')">
+            <div class="vocab-3d-art">${item.icon}</div>
+            <div class="vocab-en-word">${item.en}</div>
+            <div class="vocab-ar-word">${item.ar}</div>
+        </div>
+    `).join('');
+}
+renderVocabGrid();
+
+// ==================== 5. EXPORT TO PDF & POWERPOINT (.PPTX) ====================
+function exportToPDF() {
+    switchView('lesson', document.getElementById('tab-lesson'));
+    setTimeout(() => window.print(), 300);
+}
+
+function exportToPPTX() {
+    if (typeof PptxGenJS === 'undefined') {
+        alert('جاري تحميل مكتبة PowerPoint، حاول مرة أخرى بعد ثانية.');
+        return;
+    }
+    const pptx = new PptxGenJS();
+    pptx.layout = 'LAYOUT_16x9';
+
+    let s1 = pptx.addSlide();
+    s1.background = { color: '0F172A' };
+    s1.addText('دروس مستر إيهاب التفاعلية الشاملة', { x: 0.5, y: 1.2, w: 9, fontSize: 32, bold: true, color: 'FBBF24', align: 'center' });
+    s1.addText('Past Simple Tense — زمن الماضي البسيط', { x: 0.5, y: 2.3, w: 9, fontSize: 24, bold: true, color: '38BDF8', align: 'center' });
+    s1.addText('Prepared by: Mr. Ehab Eladawy', { x: 0.5, y: 3.5, w: 9, fontSize: 18, color: 'E2E8F0', align: 'center' });
+
+    let s2 = pptx.addSlide();
+    s2.background = { color: '1E1B4B' };
+    s2.addText('1. Usage — استخدامات الماضي البسيط', { x: 0.5, y: 0.4, w: 9, fontSize: 24, bold: true, color: 'FBBF24', align: 'right' });
+    s2.addText([
+        { text: '• حدث بدأ وانتهى في الماضي: She cooked a delicious lunch yesterday.\n', options: { fontSize: 15, color: 'FFFFFF' } },
+        { text: '• سرد أحداث قصة: He got into his car and drove into town.\n', options: { fontSize: 15, color: 'FFFFFF' } },
+        { text: '• عادة في الماضي (used to + inf): He used to smoke.\n', options: { fontSize: 15, color: '38BDF8' } },
+        { text: '• حالة If الثانية: If I were you, I would buy a car.\n', options: { fontSize: 15, color: 'FFFFFF' } },
+        { text: '• التمني في الحاضر: I wish I were thinner.', options: { fontSize: 15, color: '34D399' } }
+    ], { x: 0.6, y: 1.2, w: 8.8, h: 4, align: 'left' });
+
+    let s3 = pptx.addSlide();
+    s3.background = { color: '0F172A' };
+    s3.addText('2. Form — التكوين (التصريف الثاني للفعل)', { x: 0.5, y: 0.4, w: 9, fontSize: 24, bold: true, color: '34D399', align: 'right' });
+    s3.addText('Subject + 2nd Form of the Verb (Regular +ed / Irregular)', { x: 0.5, y: 1.4, w: 9, fontSize: 20, bold: true, color: 'FBBF24', align: 'center' });
+    s3.addText('Regular: play -> played | visit -> visited | start -> started\nIrregular: go -> went | write -> wrote | buy -> bought', { x: 0.5, y: 2.4, w: 9, fontSize: 18, color: 'E2E8F0', align: 'center' });
+
+    let s4 = pptx.addSlide();
+    s4.background = { color: '1E1B4B' };
+    s4.addText('3. Negation & Questions — النفي والسؤال', { x: 0.5, y: 0.4, w: 9, fontSize: 24, bold: true, color: 'F472B6', align: 'right' });
+    s4.addText('• Negative: Subject + didn\'t + inf (He didn\'t play football.)\n• Question: Did + Subject + inf...? (Did she go to school?)\n• With Adjective/Noun: Was he happy?', { x: 0.6, y: 1.5, w: 8.8, fontSize: 18, color: 'FFFFFF', align: 'left' });
+
+    let s5 = pptx.addSlide();
+    s5.background = { color: '0F172A' };
+    s5.addText('4. Keywords — الكلمات الدالة', { x: 0.5, y: 0.4, w: 9, fontSize: 24, bold: true, color: 'FBBF24', align: 'right' });
+    s5.addText('yesterday • last (week/month/year) • ago • once • one day • in 1999 • in the past • in ancient times • the other day • How long ago did...?', { x: 0.6, y: 1.6, w: 8.8, fontSize: 19, color: '38BDF8', align: 'center' });
+
+    pptx.writeFile({ fileName: 'Past_Simple_Mr_Ehab_Interactive.pptx' });
+    confetti({ particleCount: 100, spread: 70 });
+}
+
+// ==================== 6. INTERACTIVE QUIZ ENGINE (28 QUESTIONS) ====================
+const quizData = [
+    { q: "Yesterday evening I ............. TV.", options: ["watch", "watched", "watches", "watching"], correct: "watched" },
+    { q: "I only ............. my teeth four times last week.", options: ["clean", "cleaned", "cleans", "cleaning"], correct: "cleaned" },
+    { q: "Bruce ............. his mountain bike yesterday evening at 10 o'clock.", options: ["repair", "repaired", "repairs", "repairing"], correct: "repaired" },
+    { q: "The concert last night ............. at 7.30.", options: ["start", "started", "starts", "starting"], correct: "started" },
+    { q: "The accident ............. yesterday.", options: ["happen", "happened", "happens", "happening"], correct: "happened" },
+    { q: "When I was a child, I ............. to be a lawyer.", options: ["want", "wanted", "wants", "wanting"], correct: "wanted" },
+    { q: "Mozart ............. from 1756 to 1791.", options: ["live", "lived", "lives", "living"], correct: "lived" },
+    { q: "We ............. our holiday last week.", options: ["enjoy", "enjoyed", "enjoys", "enjoying"], correct: "enjoyed" },
+    { q: "Today the weather is nice, but yesterday it ............. .", options: ["rain", "rained", "rains", "raining"], correct: "rained" },
+    { q: "It was hot in the room, so I ............. the window.", options: ["open", "opened", "opens", "opening"], correct: "opened" },
+    { q: "The weather was good yesterday afternoon, so we ............. tennis.", options: ["play", "played", "plays", "playing"], correct: "played" },
+    { q: "William Shakespeare ............. in 1616.", options: ["die", "died", "dies", "dying"], correct: "died" },
+    { q: "He always goes to work by car. Yesterday he ............. to work by bus.", options: ["go", "goes", "went", "gone"], correct: "went" },
+    { q: "They always get up early. This morning they ............. up late.", options: ["get", "got", "gets", "getting"], correct: "got" },
+    { q: "Bill often loses his key. He ............. one last Saturday.", options: ["lose", "loses", "lost", "losing"], correct: "lost" },
+    { q: "I write a letter to Jane every week. Last week I ............. two letters.", options: ["write", "wrote", "written", "writes"], correct: "wrote" },
+    { q: "She meets her friends every evening. She ............. them yesterday evening, too.", options: ["meet", "meets", "met", "meeting"], correct: "met" },
+    { q: "I usually read two newspapers every day. I only ............. a newspaper yesterday.", options: ["read", "reads", "reading", "is reading"], correct: "read" },
+    { q: "They come to my house every Friday. Last Friday they ............. too.", options: ["come", "came", "comes", "coming"], correct: "came" },
+    { q: "We usually go to the cinema on Sunday. We ............. to the cinema last Sunday, too.", options: ["go", "went", "goes", "gone"], correct: "went" },
+    { q: "Tom always has a shower in the morning. Tom ............. a shower this morning, too.", options: ["has", "have", "had", "having"], correct: "had" },
+    { q: "They buy a new car every year. Last year they ............. a new car, too.", options: ["buy", "buys", "bought", "buying"], correct: "bought" },
+    { q: "I eat an orange every day. Yesterday I ............. two oranges.", options: ["eat", "ate", "eaten", "eats"], correct: "ate" },
+    { q: "We usually do our shopping on Monday. We ............. our shopping last Monday, too.", options: ["do", "does", "did", "done"], correct: "did" },
+    { q: "Ann often takes photos. Last weekend she ............. some photos.", options: ["take", "takes", "took", "taken"], correct: "took" },
+    { q: "We leave at 8.30 every morning. But yesterday we ............. at 8.00.", options: ["leave", "leaves", "left", "leaving"], correct: "left" },
+    { q: "Did she ............. to school yesterday?", options: ["go", "went", "gone", "going"], correct: "go" },
+    { q: "If I ............. you, I would study well.", options: ["am", "was", "were", "be"], correct: "were" }
+];
+
+let shuffled = [], currentIdx = 0, score = 0, studentName = "", timer, timeLeft = 60, wrongs = [];
+
+function startTest() {
+    studentName = document.getElementById('studentName').value.trim();
+    if (studentName.length < 3) return alert("اكتب اسمك الثلاثي يا بطل علشان نطبع الشهادة!");
+    shuffled = [...quizData].sort(() => Math.random() - 0.5);
+    currentIdx = 0; score = 0; wrongs = [];
+    document.getElementById('progressArea').style.display = "block";
+    showScene('quiz-scene');
+    loadQuestion();
+}
+
+function loadQuestion() {
+    clearInterval(timer);
+    timeLeft = 60;
+    const q = shuffled[currentIdx];
+    const p = (currentIdx / shuffled.length) * 100;
+    document.getElementById('pBar').style.width = p + "%";
+    document.getElementById('progStep').innerText = `سؤال ${currentIdx + 1} من ${shuffled.length}`;
+    document.getElementById('progPercent').innerText = Math.round(p) + "%";
+
+    document.getElementById('quiz-scene').innerHTML = `
+        <div class="question-row">
+            <div class="question-text">${q.q}</div>
+            <div class="timer-wrapper">
+                <svg class="timer-svg" viewBox="0 0 80 80">
+                    <circle class="timer-bg" cx="40" cy="40" r="36"></circle>
+                    <circle id="timerRing" class="timer-progress" cx="40" cy="40" r="36"></circle>
+                </svg>
+                <div id="timer-text">60</div>
+            </div>
+        </div>
+        <div id="optionsGrid"></div>
+    `;
+
+    let currentOptions = [...q.options].sort(() => Math.random() - 0.5);
+    currentOptions.forEach((optText) => {
+        const div = document.createElement('div');
+        div.className = "option-box";
+        div.innerHTML = `<span>${optText}</span>`;
+        div.onclick = (ev) => { ev.stopPropagation(); checkAnswer(div, optText === q.correct); };
+        document.getElementById('optionsGrid').appendChild(div);
+    });
+    startTimer();
+}
+
+function startTimer() {
+    const tText = document.getElementById('timer-text');
+    const ring = document.getElementById('timerRing');
+    timer = setInterval(() => {
+        timeLeft--;
+        if (tText) tText.innerText = timeLeft;
+        if (ring) ring.style.strokeDashoffset = 226 - (timeLeft * (226 / 60));
+        if (timeLeft <= 0) { clearInterval(timer); checkAnswer(null, false); }
+    }, 1000);
+}
+
+function checkAnswer(el, isCorrect) {
+    clearInterval(timer);
+    document.querySelectorAll('.option-box').forEach(b => b.classList.add('disabled'));
+    const q = shuffled[currentIdx];
+
+    if (el && isCorrect) {
+        el.classList.add('correct');
+        playSynthTone('correct');
+        score++;
+    } else {
+        if (el) el.classList.add('wrong');
+        playSynthTone('wrong');
+        wrongs.push({ q: q.q, a: q.correct });
+        document.querySelectorAll('.option-box').forEach(b => {
+            if (b.innerText.trim() === q.correct) {
+                b.style.borderColor = "var(--success)";
+                b.style.borderWidth = "3px";
+                b.querySelector('span').innerHTML += " <i class='fa-solid fa-check-circle'></i>";
+            }
+        });
+    }
+
+    setTimeout(() => {
+        currentIdx++;
+        if (currentIdx < shuffled.length) loadQuestion(); else finishQuiz();
+    }, 1300);
+}
+
+function finishQuiz() {
+    document.getElementById('progressArea').style.display = "none";
+    showScene('result-scene');
+    const percentage = (score / shuffled.length) * 100;
+    const resContainer = document.getElementById('result-container');
+    const rev = document.getElementById('reviewArea');
+
+    if (percentage >= 50) {
+        confetti({ particleCount: 160, spread: 70 });
+        resContainer.innerHTML = `
+            <img src="https://drive.google.com/thumbnail?id=1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM&sz=w800" style="width:100%; border-radius:26px;">
+            <div style="position:absolute; top:45%; left:50%; transform:translateX(-50%); color:#1e3a8a; font-size:clamp(1.1rem, 2.5vw, 1.6rem); font-weight:900; width:80%;">${studentName}</div>
+            <div style="position:absolute; top:60%; left:50%; transform:translateX(-50%); color:#dc2626; font-size:clamp(0.95rem, 2vw, 1.3rem); font-weight:900;">الدرجة: ${score} من ${shuffled.length}</div>
+        `;
+    } else {
+        resContainer.innerHTML = `
+            <div style="padding:36px; background: rgba(239, 68, 68, 0.12); border:2px solid var(--danger); border-radius:26px;">
+                <h3 style="font-size: 1.6rem; color: var(--danger);">حاول مرة أخرى يا بطل</h3>
+                <p style="font-size: 1.15rem; margin-top: 10px;">${studentName}، درجتك ${score} من ${shuffled.length}.</p>
+            </div>
+        `;
+    }
+
+    if (wrongs.length === 0) {
+        rev.innerHTML = `<h3 style="color:var(--success); font-size: 1.5rem; text-align:center;">ممتاز يا بطل! الدرجة النهائية بدون أي خطأ 🌟</h3>`;
+    } else {
+        rev.innerHTML = "<h3 style='margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.12); padding-bottom:8px;'>مراجعة الأخطاء:</h3>";
+        wrongs.forEach(w => rev.innerHTML += `<div style="margin:10px 0; padding:14px; background:rgba(255,255,255,0.06); border-radius:14px; direction:ltr; text-align:left;"><strong>Q:</strong> ${w.q}<br><span style="color:#34d399; font-weight:800;">✔ Correct: ${w.a}</span></div>`);
+    }
+}
+
+function toggleReview() {
+    const r = document.getElementById('reviewArea');
+    r.style.display = (r.style.display === "none" || r.style.display === "") ? "block" : "none";
+}
+
+function resetQuiz() {
+    document.getElementById('reviewArea').style.display = "none";
+    showScene('welcome-scene');
+}
+
+function showScene(id) {
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>
