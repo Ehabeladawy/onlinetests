@@ -18,7 +18,7 @@
     --success: #10b981;
     --danger: #ef4444;
     --bg-dark: #020617;
-    --card-bg: rgba(15, 23, 42, 0.92);
+    --card-bg: rgba(15, 23, 42, 0.88);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -30,17 +30,11 @@ body { background: var(--bg-dark); min-height: 100vh; padding: 10px; color: whit
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 .main-card {
-    background: var(--card-bg); backdrop-filter: blur(20px);
+    background: var(--card-bg); backdrop-filter: blur(18px);
     width: 100%; max-width: 920px; border-radius: 28px;
     border: 2px dashed rgba(14, 165, 233, 0.45);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(14, 165, 233, 0.15);
     overflow: hidden; position: relative; margin: 0 auto; display: flex; flex-direction: column; padding: 22px;
-}
-
-.quiz-header {
-    padding: 15px 20px; background: rgba(0, 0, 0, 0.55);
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 2px dashed rgba(255,255,255,0.12); flex-wrap: wrap; gap: 15px; border-radius: 20px; margin-bottom: 18px;
 }
 
 .logo-container {
@@ -51,7 +45,7 @@ body { background: var(--bg-dark); min-height: 100vh; padding: 10px; color: whit
 .logo-container-large {
     width: 135px; height: 135px; border-radius: 50%; border: 4px solid var(--success);
     overflow: hidden; background: #000; box-shadow: 0 0 30px var(--success), 0 0 55px rgba(16, 185, 129, 0.5);
-    animation: glow-pulse 2.2s infinite ease-in-out; margin: 0 auto; flex-shrink: 0; cursor: pointer;
+    animation: glow-pulse 2.2s infinite ease-in-out; margin: 0 auto; flex-shrink: 0;
 }
 @keyframes glow-pulse {
     0%, 100% { box-shadow: 0 0 18px var(--success); transform: scale(1); }
@@ -68,12 +62,11 @@ body { background: var(--bg-dark); min-height: 100vh; padding: 10px; color: whit
 }
 @keyframes shine { to { background-position: 200% center; } }
 
-input[type="text"], input[type="password"], input[type="number"], select, textarea {
+input[type="text"], select, textarea {
     width: 100%; max-width: 420px; padding: 13px 18px; border-radius: 14px;
     border: 2px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5);
     color: white; text-align: center; font-size: 1.05rem; outline: none; margin-bottom: 12px; transition: 0.3s;
 }
-select option { background: #0f172a; color: #fff; }
 input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(14, 165, 233, 0.5); }
 
 .btn {
@@ -86,46 +79,37 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 .btn-gold { background: linear-gradient(135deg, var(--gold), #d97706); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35); }
 .btn-green { background: linear-gradient(135deg, var(--success), #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35); }
 .btn-danger { background: linear-gradient(135deg, var(--danger), #b91c1c); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35); }
-.btn-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.35); }
 
 .instructions-list {
     text-align: right; background: rgba(0,0,0,0.45); padding: 18px 20px; border-radius: 16px;
-    margin: 15px 0; border-right: 4px solid var(--danger); width: 100%; max-width: 580px;
+    margin: 15px 0; border-right: 4px solid var(--success); width: 100%; max-width: 580px;
 }
 .instructions-list li { margin-bottom: 10px; font-size: 0.95rem; line-height: 1.6; list-style: none; color: #e2e8f0; }
 .instructions-list i { margin-left: 8px; }
 
-/* الكارت العائم الجماعي والفردي */
+/* إشعار استرجاع الإجابات */
 #floating-student-toast {
     position: fixed; top: 22px; left: 50%; transform: translateX(-50%) translateY(-180%);
     z-index: 12500; background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(2, 6, 23, 0.99));
-    backdrop-filter: blur(20px); border: 2.5px solid var(--gold); border-radius: 22px;
-    padding: 20px 28px; width: calc(100% - 24px); max-width: 620px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 158, 11, 0.5);
-    display: flex; align-items: center; gap: 16px; opacity: 0; pointer-events: none;
+    backdrop-filter: blur(20px); border: 2.5px solid var(--success); border-radius: 22px;
+    padding: 18px 24px; width: calc(100% - 24px); max-width: 580px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 30px rgba(16, 185, 129, 0.45);
+    display: flex; align-items: center; gap: 14px; opacity: 0; pointer-events: none;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease; overflow: hidden;
 }
 #floating-student-toast.show-toast { transform: translateX(-50%) translateY(0); opacity: 1; }
-#floating-student-toast.private-mode {
-    border-color: #a855f7;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 38px rgba(168, 85, 247, 0.6);
-}
 .toast-icon-circle {
-    width: 54px; height: 54px; border-radius: 50%;
-    background: rgba(245, 158, 11, 0.2); border: 2px solid var(--gold);
+    width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(16, 185, 129, 0.2); border: 2px solid var(--success);
     display: flex; align-items: center; justify-content: center;
-    color: var(--gold); font-size: 1.45rem; flex-shrink: 0;
-}
-#floating-student-toast.private-mode .toast-icon-circle {
-    background: rgba(168, 85, 247, 0.22); border-color: #c084fc; color: #c084fc;
+    color: var(--success); font-size: 1.35rem; flex-shrink: 0;
 }
 .toast-body-wrap { text-align: right; flex: 1; }
-.toast-header-title { font-size: 0.95rem; color: var(--gold); font-weight: 900; display: block; margin-bottom: 4px; }
-#floating-student-toast.private-mode .toast-header-title { color: #d8b4fe; }
-.toast-msg-content { font-size: 1.22rem; color: #ffffff; font-weight: 800; line-height: 1.55; overflow-wrap: anywhere; }
+.toast-header-title { font-size: 0.95rem; color: var(--gold); font-weight: 900; display: block; margin-bottom: 3px; }
+.toast-msg-content { font-size: 1.08rem; color: #ffffff; font-weight: 800; line-height: 1.5; }
 .toast-progress-line {
-    position: absolute; bottom: 0; right: 0; height: 4.5px;
-    background: linear-gradient(90deg, var(--primary), var(--gold)); width: 100%;
+    position: absolute; bottom: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--success)); width: 100%;
 }
 @keyframes toastBarShrink { from { width: 100%; } to { width: 0%; } }
 
@@ -252,10 +236,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 }
 .blank-input:focus { border-style: solid; border-color: var(--success); background: rgba(16, 185, 129, 0.15); }
 
-.leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-.leaderboard-table th, .leaderboard-table td { padding: 11px 8px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.92rem; }
-.leaderboard-table th { color: var(--primary); font-weight: 900; background: rgba(0,0,0,0.3); }
-
 .dashed-frame-gold { border: 2.5px dashed var(--gold); padding: 20px; border-radius: 22px; background: rgba(0,0,0,0.5); width: 100%; max-width: 550px; margin: 12px auto; text-align: center; }
 .dashed-frame-blue { border: 2.5px dashed var(--primary); padding: 18px; border-radius: 22px; background: rgba(14, 165, 233, 0.08); width: 100%; max-width: 550px; margin: 12px auto; text-align: center; }
 
@@ -269,93 +249,27 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     background: rgba(255,255,255,0.04); display: flex; flex-wrap: wrap;
     align-items: center; justify-content: space-around; gap: 15px; margin: 18px 0;
 }
-
-#cheat-warning-overlay {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(185, 28, 28, 0.96); z-index: 9999; flex-direction: column;
-    justify-content: center; align-items: center; text-align: center; padding: 25px;
-    backdrop-filter: blur(10px); animation: pulseRed 0.8s infinite alternate;
-}
-@keyframes pulseRed { from { background: rgba(153, 27, 27, 0.96); } to { background: rgba(220, 38, 38, 0.96); } }
-
-#freeze-overlay {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(2, 6, 23, 0.95); z-index: 9500; flex-direction: column;
-    justify-content: center; align-items: center; text-align: center; padding: 25px;
-}
-
-/* نافذة مركز الرسائل المنبثقة أعلى الشاشة */
-#message-center-modal {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(2, 6, 23, 0.78); backdrop-filter: blur(6px); z-index: 11000;
-    justify-content: center; align-items: flex-start; padding: 28px 15px;
-}
 </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
 <canvas id="particles-js"></canvas>
 <div id="touch-drag-ghost"></div>
 
-<!-- الكارت العائم الجماعي والفردي -->
-<div id="floating-student-toast" role="alert" aria-live="assertive">
-    <div class="toast-icon-circle"><i id="toast-icon-el" class="fas fa-bell"></i></div>
+<!-- إشعار استرجاع الإجابات -->
+<div id="floating-student-toast" role="status" aria-live="polite">
+    <div class="toast-icon-circle"><i class="fas fa-check-circle"></i></div>
     <div class="toast-body-wrap">
-        <span id="toast-sender-title" class="toast-header-title">تنبيه فوري من مستر إيهاب العدوي</span>
+        <span class="toast-header-title">مستر إيهاب العدوي</span>
         <div id="floating-toast-text" class="toast-msg-content"></div>
     </div>
     <div id="floating-toast-bar" class="toast-progress-line"></div>
 </div>
 
-<!-- نافذة مركز الرسائل المنبثقة في أعلى الشاشة -->
-<div id="message-center-modal">
-    <div style="background: linear-gradient(145deg, #0f172a, #020617); border: 2px solid var(--gold); border-radius: 22px; padding: 20px 22px; width: 100%; max-width: 680px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.95);">
-        <h3 style="color: var(--gold); margin-bottom: 14px; font-size: 1.25rem;"><i class="fas fa-paper-plane"></i> إرسال رسالة عائمة فورية (جماعية أو فردية)</h3>
-
-        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; margin-bottom: 14px;">
-            <select id="message-target-select" style="flex: 1; min-width: 210px; max-width: none; margin: 0; font-weight: bold; border-color: var(--primary);">
-                <option value="ALL">📢 رسالة جماعية لجميع الطلاب</option>
-            </select>
-            <input type="text" id="modal-message-textarea" placeholder="اكتب نص الرسالة هنا..." style="flex: 2; min-width: 250px; max-width: none; margin: 0; text-align: right;">
-        </div>
-
-        <div style="display: flex; gap: 10px; justify-content: center;">
-            <button type="button" class="btn btn-green" onclick="dispatchTeacherMessageNow()" style="flex: 2;">
-                <i class="fas fa-bolt"></i> إرسال الرسالة الآن
-            </button>
-            <button type="button" class="btn btn-danger" onclick="closeMessageCenterModal()" style="flex: 1;">
-                إغلاق
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- شاشة التحذير الحمراء للخروج وتصغير الشاشة -->
-<div id="cheat-warning-overlay">
-    <i class="fas fa-exclamation-triangle" style="font-size: 5rem; color: #fef08a; margin-bottom: 20px;"></i>
-    <h1 style="font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; color: #fff; margin-bottom: 15px;">تحذير صارم من نظام مراقبة الامتحان!</h1>
-    <p id="cheat-overlay-msg" style="font-size: 1.3rem; font-weight: bold; color: #fef08a; max-width: 600px; line-height: 1.8; margin-bottom: 25px;">
-        لقد حاولت الخروج من شاشة الامتحان أو تصغيرها أو فتح تطبيق آخر! تم تسجيل محاولة غش فورية في لوحة تحكم مستر إيهاب.
-    </p>
-    <div style="background: rgba(0,0,0,0.5); padding: 12px 25px; border-radius: 12px; border: 2px dashed #fef08a; margin-bottom: 25px; font-size: 1.3rem; font-weight: 900;">
-        إجمالي محاولات الخروج المسجلة عليك الآن: <span id="cheat-modal-counter" style="color: #fde047; font-size: 1.6rem;">1</span>
-    </div>
-    <button class="btn btn-gold" onclick="dismissCheatWarning()" style="font-size: 1.3rem; padding: 15px 40px; color: #000;">
-        فهمت التحذير - العودة لاستكمال الاختبار فوراً
-    </button>
-</div>
-
-<!-- شاشة التجميد المؤقت من المعلم -->
-<div id="freeze-overlay">
-    <i class="fas fa-pause-circle" style="font-size: 5rem; color: var(--gold); margin-bottom: 20px;"></i>
-    <h1 style="font-size: 2.2rem; color: white; margin-bottom: 10px;">تم إيقاف الاختبار مؤقتاً بواسطة مستر إيهاب</h1>
-    <p style="font-size: 1.2rem; color: #cbd5e1;">يرجى الانتباه إلى المعلم، سيتم استئناف الوقت والامتحان بعد قليل...</p>
-</div>
-
 <!-- 1. شاشة البداية الرئيسية -->
 <div id="role-scene" class="scene active">
     <div class="main-card" style="align-items: center; text-align: center;">
-        <div class="logo-container-large" onclick="handleLogoClick()">
+        <div class="logo-container-large">
             <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img" alt="مستر إيهاب">
         </div>
         <div class="header-text" style="width: 100%; margin-top: 15px;">
@@ -366,15 +280,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 
         <ul class="instructions-list">
             <h3 style="text-align: center; color: var(--gold); font-weight: 900; margin-bottom: 12px;">
-                <i class="fas fa-shield-alt"></i> قواعد وتعليمات الامتحان الرسمي الصارمة
+                <i class="fas fa-graduation-cap"></i> تعليمات التدريب التفاعلي
             </h3>
-            <li><i class="fas fa-ban" style="color: var(--danger);"></i> <b>نظام مانع الغش الفعال:</b> الامتحان مزود بكود رقابي صارم يرصد أي محاولة للخروج من الشاشة أو تصغيرها ويطلق صافرة إنذار.</li>
-            <li><i class="fas fa-sync-alt" style="color: var(--primary);"></i> <b>حماية التحديث (Refresh):</b> إذا حدث تحديث بالخطأ للصفحة، سيعيدك النظام مباشرة لنفس سؤالك وإجاباتك السابقة دون فقدان أي بيانات (ولا تُحسب محاولة غش).</li>
-            <li><i class="fas fa-sign-in-alt" style="color: var(--primary);"></i> <b>الدخول المباشر وإمكانية الإعادة:</b> يمكنك الدخول مباشرة بالاسم والبدء فوراً، كما يمكنك إعادة الاختبار في أي وقت تشاء بعد التسليم.</li>
+            <li><i class="fas fa-bolt" style="color: var(--success);"></i> <b>دخول مباشر بدون كود:</b> اكتب اسمك وابدأ التدريب فوراً دون أي أكواد أو غرفة انتظار.</li>
+            <li><i class="fas fa-sync-alt" style="color: var(--primary);"></i> <b>حفظ تلقائي للإجابات:</b> إذا خرجت أو أعدت تحميل الصفحة بالخطأ أثناء الحل، ستعود لنفس إجاباتك السابقة دون فقدانها.</li>
+            <li><i class="fas fa-redo-alt" style="color: var(--gold);"></i> <b>التكرار في أي وقت:</b> بعد تسليم التدريب وعرض النتيجة، يمكنك تحميل تقريرك PDF أو إعادة التدريب من البداية في أي وقت تشاء.</li>
         </ul>
 
         <button class="btn btn-green" onclick="showScene('student-login-scene')" style="font-size: 1.3rem; padding: 15px 45px; width: 90%; max-width: 380px;">
-            <i class="fas fa-file-signature"></i> دخول الاختبار الرسمي
+            <i class="fas fa-file-signature"></i> دخول التدريب التفاعلي
         </button>
 
         <div style="background: rgba(0, 0, 0, 0.55); padding: 18px 24px; border-radius: 22px; border: 2px dashed var(--primary); display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 18px;">
@@ -385,7 +299,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     </div>
 </div>
 
-<!-- 2. شاشة تسجيل دخول الطالب (دخول مباشر للامتحان بدون كود وبدون غرفة انتظار) -->
+<!-- 2. شاشة تسجيل دخول الطالب (دخول مباشر للتدريب) -->
 <div id="student-login-scene" class="scene">
     <div class="main-card" style="align-items: center; text-align: center;">
         <div class="logo-container" onclick="showScene('role-scene')">
@@ -394,30 +308,30 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         <h2 class="dyn-exam-title" style="color: var(--primary); margin: 12px 0 4px 0; font-size: 1.35rem;">3prep term1 test ( 1 )</h2>
         <h4 class="dyn-grade-title" style="color: var(--gold); margin-bottom: 18px;">الصف الثالث الإعدادي</h4>
 
-        <input type="text" id="studentName" placeholder="اكتب اسمك الثلاثي أو الرباعي بالكامل..." autocomplete="off" onkeydown="if(event.key==='Enter') enterExamDirectly()">
+        <input type="text" id="studentName" placeholder="اكتب اسمك الثلاثي أو الرباعي بالكامل..." autocomplete="off" onkeydown="if(event.key==='Enter') enterPracticeDirectly()">
 
         <div style="display: flex; gap: 10px; width: 100%; max-width: 420px; justify-content: center; margin-top: 8px;">
-            <button class="btn btn-green" onclick="enterExamDirectly()" style="flex: 2; font-size: 1.15rem;">
-                بدء الاختبار الآن <i class="fas fa-arrow-left"></i>
+            <button class="btn btn-green" onclick="enterPracticeDirectly()" style="flex: 2; font-size: 1.15rem;">
+                بدء التدريب الآن <i class="fas fa-arrow-left"></i>
             </button>
             <button class="btn btn-danger" onclick="showScene('role-scene')" style="flex: 1;">رجوع</button>
         </div>
     </div>
 </div>
 
-<!-- 3. شاشة الاختبار المتصلة -->
+<!-- 3. شاشة التدريب المتصلة -->
 <div id="exam-scene" class="scene" style="padding: 0;">
     <div class="sticky-timer">
         <div style="display: flex; align-items: center; gap: 10px;">
             <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--success); object-fit: cover;">
             <div style="text-align: right;">
                 <div id="info-display" style="font-weight: 900; font-size: 1rem; color: #fff;"></div>
-                <div style="font-size: 0.85rem; color: var(--gold);">Solved: <span id="top-solved-counter">0/31</span> | Alerts: <span id="top-cheat-counter" style="color: var(--danger);">0</span></div>
+                <div style="font-size: 0.88rem; color: var(--gold);">Solved: <span id="top-solved-counter">0/31</span></div>
             </div>
         </div>
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <button class="btn btn-danger" onclick="safeBackFromExam()" style="padding: 7px 12px; font-size: 0.85rem;">
-                <i class="fas fa-arrow-right"></i> رجوع
+            <button class="btn btn-danger" onclick="exitToHomeKeepingProgress()" style="padding: 7px 12px; font-size: 0.85rem;">
+                <i class="fas fa-arrow-right"></i> خروج مؤقت
             </button>
             <button class="btn btn-gold" onclick="scrollToFirstUnanswered()" style="padding: 7px 12px; font-size: 0.85rem;">
                 <i class="fas fa-search"></i> Unanswered
@@ -437,111 +351,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     </div>
 </div>
 
-<!-- 4. لوحة تحكم المعلم الشاملة -->
-<div id="teacher-leaderboard-scene" class="scene">
-    <div class="main-card" style="max-width: 980px;">
-        <div class="quiz-header">
-            <div class="logo-container" style="width: 65px; height: 65px;">
-                <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img" alt="Logo">
-            </div>
-            <div class="header-text">
-                <h1>لوحة تحكم مستر إيهاب العدوي الشاملة</h1>
-                <p class="dyn-exam-title" style="color: var(--gold); font-weight: bold; font-size: 0.95rem;"></p>
-                <span id="active-slot-badge" style="display:inline-block; background:rgba(16,185,129,0.2); border:1px solid var(--success); color:#34d399; padding:2px 12px; border-radius:999px; font-size:0.78rem; margin-top:4px; font-family:monospace;"></span>
-            </div>
-        </div>
-
-        <div style="background: rgba(0,0,0,0.45); padding: 18px; border-radius: 18px; border: 1.5px dashed var(--primary); margin-bottom: 20px;">
-            <h3 style="color: var(--primary); margin-bottom: 12px; text-align: center;"><i class="fas fa-sliders-h"></i> إعدادات الاختبار (دخول مباشر للطلاب بدون كود وبدون غرفة انتظار)</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: end;">
-                <div>
-                    <label style="display:block; font-size:0.85rem; color:var(--gold); margin-bottom:4px;">اسم الاختبار:</label>
-                    <input type="text" id="custom-exam-title" value="3prep term1 test ( 1 )" style="width:100%; margin:0; font-size:0.95rem;">
-                </div>
-                <div>
-                    <label style="display:block; font-size:0.85rem; color:var(--gold); margin-bottom:4px;">الصف الدراسي:</label>
-                    <input type="text" id="custom-grade-title" value="الصف الثالث الإعدادي" style="width:100%; margin:0; font-size:0.95rem;">
-                </div>
-                <div>
-                    <label style="display:block; font-size:0.85rem; color:var(--gold); margin-bottom:4px;">زمن الاختبار (دقائق):</label>
-                    <input type="number" id="custom-exam-minutes" value="30" style="width:100%; margin:0; font-size:1.05rem;">
-                </div>
-            </div>
-            <button class="btn btn-green" onclick="saveExamConfigToFirebase()" style="width: 100%; margin-top: 14px; padding: 10px;">
-                <i class="fas fa-save"></i> حفظ وتفعيل الإعدادات لهذا الاختبار
-            </button>
-        </div>
-
-        <!-- أزرار التحكم الفعالة بالكامل -->
-        <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
-            <button class="btn btn-danger" onclick="forceEndExamForAll()"><i class="fa-solid fa-stop-circle"></i> إنهاء الاختبار للجميع</button>
-            <button class="btn btn-gold" onclick="openMessageCenterModal()"><i class="fa-solid fa-bullhorn"></i> إرسال رسالة / تنبيه</button>
-            <button class="btn btn-gold" onclick="toggleTeacherAnswers()"><i class="fa-solid fa-eye"></i> إظهار/إخفاء حلول الاختبار</button>
-            <button class="btn btn-purple" onclick="addExtraTimeForAll()"><i class="fa-solid fa-clock"></i> +5 دقائق إضافية</button>
-            <button class="btn" id="btn-freeze-toggle" onclick="toggleFreezeExam()"><i class="fa-solid fa-pause"></i> تجميد مؤقت للشاشات</button>
-            <button class="btn btn-green" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> تصدير درجات Excel</button>
-            <button class="btn" onclick="showScene('teacher-pdf-hub')"><i class="fa-solid fa-file-pdf"></i> تقارير PDF للطلاب</button>
-            <button class="btn btn-danger" onclick="resetExamSession()"><i class="fa-solid fa-rotate-right"></i> إعادة الاختبار (تصفير)</button>
-            <button class="btn btn-danger" onclick="closeTeacherSession()" style="background: #7f1d1d; border: 1px solid #f87171;"><i class="fa-solid fa-lock"></i> إغلاق لوحة المعلم</button>
-        </div>
-
-        <div style="overflow-x: auto; width: 100%;">
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>اسم الطالب</th>
-                        <th>الصف</th>
-                        <th>الدرجة</th>
-                        <th>التقدم</th>
-                        <th>محاولات الخروج/الغش</th>
-                        <th>الوقت المستغرق</th>
-                        <th>عنوان IP</th>
-                        <th>الحالة</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body"></tbody>
-            </table>
-        </div>
-
-        <div style="margin-top: 35px; border-top: 2px dashed rgba(255,255,255,0.2); padding-top: 20px; width: 100%;">
-            <h3 style="color: var(--gold); text-align: center; margin-bottom: 8px;">
-                <i class="fas fa-chalkboard-teacher"></i> عرض الاختبار الكامل للإشراف والشرح على السبورة الذكية
-            </h3>
-            <p style="text-align: center; color: #38bdf8; font-size: 0.9rem; margin-bottom: 18px;">
-                💡 يمكنك الضغط على أي اختيار داخل أي سؤال بالأسفل لاعتماده كإجابة صحيحة فوراً لجميع الطلاب (مفيد لأسئلة القصة أو أي تعديل سريع)
-            </p>
-            <div id="teacher-questions-bank" style="display: flex; flex-direction: column; width: 100%;"></div>
-        </div>
-    </div>
-</div>
-
-<!-- 5. صفحة PDF Hub -->
-<div id="teacher-pdf-hub" class="scene">
-    <div class="main-card" style="max-width: 900px; text-align: center;">
-        <h2 style="color: var(--primary); margin-bottom: 12px;"><i class="fa-solid fa-file-pdf"></i> مركز معاينة وتصدير تقارير الـ PDF للطلاب</h2>
-        <p style="color: #cbd5e1; margin-bottom: 18px;">اختر اسم الطالب لمعاينة تقريره وتصديره:</p>
-        
-        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px;">
-            <select id="pdf-student-select" onchange="previewSelectedStudentReport()" style="width: 100%; max-width: 420px; margin: 0;">
-                <option value="">-- اختر الطالب للمعاينة أو التصدير --</option>
-                <option value="EXPORT_ALL_ZIP" style="color: var(--gold); font-weight: bold;">📁 تصدير نتائج جميع الطلاب (ملفات PDF منفصلة)</option>
-            </select>
-            <button class="btn btn-green" onclick="generateStudentPDF()"><i class="fas fa-download"></i> تصدير النتيجة PDF</button>
-            <button class="btn btn-danger" onclick="showScene('teacher-leaderboard-scene')">رجوع لوحة المعلم</button>
-        </div>
-
-        <div id="teacher-pdf-live-preview" style="width: 100%; text-align: left; direction: ltr;"></div>
-    </div>
-</div>
-
-<!-- 6. شاشة النتيجة النهائية للطالب -->
+<!-- 4. شاشة النتيجة النهائية للطالب -->
 <div id="result-scene" class="scene" style="text-align:center;">
     <div class="main-card" style="align-items: center;">
         <div class="logo-container-large" style="width: 115px; height: 115px; margin-bottom: 12px;">
             <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD" class="logo-img" alt="Logo">
         </div>
-        <h1 style="color: var(--success); margin-bottom: 8px; font-size: clamp(1.6rem, 4vw, 2.2rem);">تم تسليم الاختبار بنجاح يا بطل!</h1>
+        <h1 style="color: var(--success); margin-bottom: 8px; font-size: clamp(1.6rem, 4vw, 2.2rem);">تم تسليم التدريب بنجاح يا بطل!</h1>
         <p class="dyn-exam-title" style="color: var(--primary); font-weight: bold; margin-bottom: 10px;"></p>
 
         <div class="dashed-frame-gold">
@@ -556,16 +372,16 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 
         <div class="dashed-frame-blue">
             <p style="color: #e2e8f0; font-weight: bold; margin-bottom: 12px; font-size: 0.95rem;">
-                يمكنك تنزيل تقرير إجاباتك الكامل بصيغة PDF أو إعادة الاختبار مرة أخرى:
+                يمكنك الآن تنزيل تقرير إجاباتك الكامل بصيغة PDF أو بدء التدريب من جديد:
             </p>
             <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
                 <button class="btn btn-green" onclick="downloadStudentSelfPDF()" style="font-size: 1.15rem; padding: 14px 28px; width: 100%;">
-                    <i class="fas fa-file-pdf"></i> تحميل نتيجة الاختبار PDF
+                    <i class="fas fa-file-pdf"></i> تحميل نتيجة التدريب PDF
                 </button>
-                <button class="btn btn-gold" onclick="retakeExamAgain()" style="font-size: 1.15rem; padding: 14px 28px; width: 100%; color: #000;">
-                    <i class="fas fa-redo-alt"></i> أداء الاختبار مرة أخرى
+                <button class="btn btn-gold" onclick="restartFreshPractice()" style="font-size: 1.15rem; padding: 14px 28px; width: 100%; color: #000;">
+                    <i class="fas fa-redo-alt"></i> بدء التدريب من جديد
                 </button>
-                <button class="btn" onclick="showScene('role-scene')" style="font-size: 1.05rem; padding: 12px 24px; width: 100%;">
+                <button class="btn" onclick="goHomeFresh()" style="font-size: 1.05rem; padding: 12px 24px; width: 100%;">
                     <i class="fas fa-home"></i> العودة للشاشة الرئيسية
                 </button>
             </div>
@@ -575,77 +391,17 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     </div>
 </div>
 
-<!-- نافذة الرقم السري للمعلم -->
-<div id="password-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; justify-content: center; align-items: center; flex-direction: column;">
-    <div style="background: rgba(15, 23, 42, 0.98); padding: 30px; border-radius: 22px; border: 2px dashed var(--primary); text-align: center; width: 90%; max-width: 360px;">
-        <h3 style="color: white; margin-bottom: 15px;">أدخل الرمز السري للإدارة</h3>
-        <input type="password" id="teacher-pass-input" placeholder="••••" maxlength="4" style="width: 160px; text-align: center; font-size: 2rem; letter-spacing: 10px; margin-bottom: 15px;" onkeydown="if(event.key==='Enter') verifyPassword()">
-        <div style="display: flex; gap: 10px; justify-content: center;">
-            <button class="btn btn-green" onclick="verifyPassword()">دخول</button>
-            <button class="btn btn-danger" onclick="document.getElementById('password-modal').style.display='none'">إلغاء</button>
-        </div>
-    </div>
-</div>
-
 <audio id="sound-result" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getDatabase, ref, set, get, onValue, update, off } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyC_ed0XfZkBt_xRf8dN" + "3ciM37uidGZrCt8",
-        authDomain: "mrehabgames.firebaseapp.com",
-        projectId: "mrehabgames",
-        storageBucket: "mrehabgames.firebasestorage.app",
-        messagingSenderId: "379463494744",
-        appId: "1:379463494744:web:983a5677afb5b92faf2e2d"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwyI_20IR90uo8GbkEHjFLfeQYPxxierHZeIJBmGERZNJw6wzRd_-pXHL8N1MOhDfc/exec';
+<script>
     const LOGO_URL = 'https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD';
+    const PARTICLE_ICON_PRIMARY = 'https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5';
+    const PARTICLE_ICON_FALLBACK = 'https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w300';
+    const STORAGE_SESSION_KEY = 'mrehab_practice_3prep_term1_test1_v1';
 
-    // =========================================================================
-    // عزل تلقائي لكل ملف يرفعه مستر إيهاب باسم مختلف على GitHub
-    // =========================================================================
-    function detectInitialExamSlotKey() {
-        const params = new URLSearchParams(window.location.search);
-        const urlExam = params.get('exam');
-        if(urlExam && urlExam.trim() !== "") {
-            return urlExam.trim().replace(/[.#$\[\]\/]/g, '_');
-        }
-        let pathPart = decodeURIComponent(window.location.pathname.split('/').pop() || '');
-        pathPart = pathPart.replace(/\.html?$/i, '').replace(/[.#$\[\]\/]/g, '_').trim();
-        if(pathPart && pathPart !== 'index' && pathPart !== '') {
-            return 'Exam_' + pathPart;
-        }
-        return 'Exam_3prep_term1_test_1';
-    }
-
-    const ACTIVE_EXAM_SLOT = detectInitialExamSlotKey();
-    const OPEN_ROOM_KEY = "OPEN_ROOM";
-
-    function getSlotConfigPath() { return `examVault/${ACTIVE_EXAM_SLOT}/config`; }
-    function getSlotRoomPath() { return `examVault/${ACTIVE_EXAM_SLOT}/rooms/${OPEN_ROOM_KEY}`; }
-    function getSlotAnswersOverridePath() { return `examVault/${ACTIVE_EXAM_SLOT}/answerOverrides`; }
-
-    let EXAM_NAME = "3prep term1 test ( 1 )";
-    let GRADE_LEVEL = "الصف الثالث الإعدادي";
-    let configuredMinutes = 30;
-    let studentIP = "Unknown";
-    let answerOverrides = {};
-
-    // مفتاح إجابات القصة الافتراضي (ويمكن تغييره أيضاً بالضغط من لوحة المعلم مباشرة)
-    const STORY_ANSWERS = {
-        15: "curious",
-        16: "depressing",
-        17: "organized",
-        18: "soil",
-        19: "They didn't have enough money to buy tools, seeds, and soil",
-        20: "People who are honest and work hard to help others"
-    };
+    const EXAM_NAME = "3prep term1 test ( 1 )";
+    const GRADE_LEVEL = "الصف الثالث الإعدادي";
+    const EXAM_MINUTES = 30;
 
     const fillBlankWords = ["honest", "confident", "unfair", "practical", "wisely"];
 
@@ -655,88 +411,30 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 
     const dialogueContextText = "Two students are talking about design thinking.";
 
-    fetch('https://api.ipify.org?format=json')
-        .then(res => res.json())
-        .then(data => { studentIP = data.ip; })
-        .catch(() => {});
-
-    function playNotificationChime() {
-        try {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            const ctx = new AudioCtx();
-            const now = ctx.currentTime;
-            [587.33, 880].forEach((freq, idx) => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, now + idx * 0.13);
-                gain.gain.setValueAtTime(0.22, now + idx * 0.13);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.13 + 0.5);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now + idx * 0.13);
-                osc.stop(now + idx * 0.13 + 0.5);
-            });
-        } catch(e) {}
-    }
-
-    function playWarningSiren() {
-        try {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            const ctx = new AudioCtx();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(650, ctx.currentTime);
-            osc.frequency.linearRampToValueAtTime(320, ctx.currentTime + 0.35);
-            osc.frequency.linearRampToValueAtTime(650, ctx.currentTime + 0.7);
-            gain.gain.setValueAtTime(0.35, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.85);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.85);
-        } catch(e) {}
-    }
-
     let toastTimeoutId = null;
-    function showFloatingStudentToast(msgText, isPrivate = false) {
+    function showFloatingStudentToast(msgText) {
         const toast = document.getElementById('floating-student-toast');
         const textEl = document.getElementById('floating-toast-text');
         const barEl = document.getElementById('floating-toast-bar');
-        const senderEl = document.getElementById('toast-sender-title');
-        const iconEl = document.getElementById('toast-icon-el');
         if(!toast || !textEl || !barEl) return;
 
-        playNotificationChime();
         textEl.textContent = msgText;
-
-        if(isPrivate) {
-            toast.classList.add('private-mode');
-            if(senderEl) senderEl.textContent = "🔒 (رسالة خاصة لك من مستر إيهاب العدوي)";
-            if(iconEl) iconEl.className = "fas fa-user-shield";
-        } else {
-            toast.classList.remove('private-mode');
-            if(senderEl) senderEl.textContent = "📢 (تنبيه عام من مستر إيهاب العدوي)";
-            if(iconEl) iconEl.className = "fas fa-bullhorn";
-        }
-
         barEl.style.animation = 'none';
         void barEl.offsetWidth;
-        barEl.style.animation = 'toastBarShrink 5s linear forwards';
+        barEl.style.animation = 'toastBarShrink 4.5s linear forwards';
 
         toast.classList.add('show-toast');
         if(toastTimeoutId) clearTimeout(toastTimeoutId);
         toastTimeoutId = setTimeout(() => {
             toast.classList.remove('show-toast');
-        }, 5000);
+        }, 4500);
     }
 
     // =========================================================================
-    // مصفوفة الأسئلة المطابقة حرفياً للصورة المرفقة (31 سؤالاً)
+    // مصفوفة الأسئلة الكاملة (31 سؤالاً)
     // =========================================================================
     function getMasterQuestionsList() {
-        const list = [
+        return [
             // 1. Choose the correct answer from a, b, c or d:
             { id: 1, section: "1. Choose the correct answer from a, b, c or d:", q: "1. Farmers work in the field of .......... to grow food.", o: ["agriculture", "industry", "trade", "design"], a: "agriculture" },
             { id: 2, q: "2. After a long day's work, he decided to .......... the job and find another one.", o: ["join", "quit", "enjoy", "build"], a: "quit" },
@@ -758,12 +456,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
             { id: 14, q: "6. Who encourages children to use technology wisely?", o: ["Parents and teachers", "Doctors and engineers", "Friends and neighbors", "Bus drivers and farmers"], a: "Parents and teachers" },
 
             // 4. Story :
-            { id: 15, section: "4. Story", subSection: "a. Choose the correct answer from a, b, c or d :", q: "1. Zeina was a/an .......... student who noticed everything around her.", o: ["upset", "honest", "curious", "lazy"], a: STORY_ANSWERS[15] },
-            { id: 16, q: "2. Nancy described the playground as .......... .", o: ["exciting", "peaceful", "amazing", "depressing"], a: STORY_ANSWERS[16] },
-            { id: 17, q: "3. Sara was very .......... .", o: ["lazy", "quiet", "organized", "kind"], a: STORY_ANSWERS[17] },
-            { id: 18, q: "4. The team needed money to buy tools, seeds and .......... .", o: ["community", "rain", "soil", "plants"], a: STORY_ANSWERS[18] },
-            { id: 19, subSection: "b. Answer the following questions :", q: "1. What problem did the team face first?", o: ["They didn't have enough money to buy tools, seeds, and soil", "They had too many flowers in the playground", "The school had no playground at all", "Nobody wanted to go to school"], a: STORY_ANSWERS[19] },
-            { id: 20, q: "2. Who do you think people respect? Why?", o: ["People who are honest and work hard to help others", "People who are lazy and never help their team", "People who complain without doing any work", "People who ignore school rules and litter everywhere"], a: STORY_ANSWERS[20] },
+            { id: 15, section: "4. Story", subSection: "a. Choose the correct answer from a, b, c or d :", q: "1. Zeina was a/an .......... student who noticed everything around her.", o: ["upset", "honest", "curious", "lazy"], a: "curious" },
+            { id: 16, q: "2. Nancy described the playground as .......... .", o: ["exciting", "peaceful", "amazing", "depressing"], a: "depressing" },
+            { id: 17, q: "3. Sara was very .......... .", o: ["lazy", "quiet", "organized", "kind"], a: "organized" },
+            { id: 18, q: "4. The team needed money to buy tools, seeds and .......... .", o: ["community", "rain", "soil", "plants"], a: "soil" },
+            { id: 19, subSection: "b. Answer the following questions :", q: "1. What problem did the team face first?", o: ["They didn't have enough money to buy tools, seeds, and soil", "They had too many flowers in the playground", "The school had no playground at all", "Nobody wanted to go to school"], a: "They didn't have enough money to buy tools, seeds, and soil" },
+            { id: 20, q: "2. Who do you think people respect? Why?", o: ["People who are honest and work hard to help others", "People who are lazy and never help their team", "People who complain without doing any work", "People who ignore school rules and litter everywhere"], a: "People who are honest and work hard to help others" },
 
             // 5. Rewrite the following sentences using the words in brackets :
             { id: 21, section: "5. Rewrite the following sentences using the words in brackets :", q: "1. She got up late. She caught the train. (Although)", o: ["Although she got up late, she caught the train.", "Although she caught the train, she got up late.", "She got up late although she didn't catch the train.", "Although getting up late, she caught the train."], a: "Although she got up late, she caught the train." },
@@ -782,29 +480,17 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
             { id: 30, preLine: "Student A : How do we understand the problem?", q: "Student B : ........................................ .", o: ["By asking questions and listening carefully to people", "By ignoring everyone around us", "By playing video games all day", "By closing our books and sleeping"], a: "By asking questions and listening carefully to people" },
             { id: 31, q: "Student A : ........................................ ?", postLine: "Student B : Then we think of many ideas to solve the problem.", o: ["What do we do next", "Where did you find the key", "How much does this book cost", "Why were you late yesterday"], a: "What do we do next" }
         ];
-
-        return list.map(q => ({
-            ...q,
-            a: answerOverrides[q.id] ? answerOverrides[q.id] : q.a
-        }));
     }
 
     let student = { name: '' };
-    let cheatCount = 0;
     let isExamStarted = false;
     let isExamFinished = false;
-    let isRoomFrozen = false;
-    let suppressCheatDetection = false;
     let examStartTime = 0;
-    let totalSeconds = 1800;
+    let totalSeconds = EXAM_MINUTES * 60;
     let userAnswers = {};
     let totalQuestionsCount = getMasterQuestionsList().length;
     let activeWordToDrop = null;
     let shuffledWords = [];
-    let currentRoomListenerRef = null;
-    let currentPrivateListenerRef = null;
-    let teacherPlayersListenerRef = null;
-    let teacherAnswersVisible = false;
 
     function shuffleArray(array) {
         let arr = [...array];
@@ -813,14 +499,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
             [arr[i], arr[j]] = [arr[j], arr[i]];
         }
         return arr;
-    }
-
-    function updateDynamicTitlesOnUI() {
-        document.querySelectorAll('.dyn-exam-title').forEach(el => el.innerText = EXAM_NAME);
-        document.querySelectorAll('.dyn-grade-title').forEach(el => el.innerText = GRADE_LEVEL);
-        const badge = document.getElementById('active-slot-badge');
-        if(badge) badge.textContent = `معرّف الاختبار المستقل: ${ACTIVE_EXAM_SLOT} | الدخول: مباشر بدون كود`;
-        document.title = `${EXAM_NAME} - مستر إيهاب العدوي`;
     }
 
     function renderQRCode() {
@@ -846,11 +524,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         qrContainer.appendChild(fallbackImg);
     }
 
-    // =========================================================================
-    // دعم السحب باللمس للموبايل مع التمرير التلقائي للشاشة (Auto-Scroll)
-    // =========================================================================
+    // دعم السحب باللمس للموبايل مع التمرير التلقائي للشاشة
     let touchDragWord = null;
-
     function startAutoScroll(clientY) {
         const edge = 95;
         const vh = window.innerHeight;
@@ -907,159 +582,35 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         });
     };
 
-    // =========================================================================
-    // بدء التشغيل والمزامنة الحية مع Firebase
-    // =========================================================================
+    // استرجاع جلسة الطالب إذا خرج بالخطأ قبل التسليم
     window.addEventListener('DOMContentLoaded', () => {
         renderQRCode();
 
-        onValue(ref(db, getSlotAnswersOverridePath()), (snap) => {
-            answerOverrides = snap.val() || {};
-            renderTeacherBank();
-        });
-
-        onValue(ref(db, getSlotConfigPath()), (snap) => {
-            if(snap.exists()) {
-                const cfg = snap.val();
-                if(cfg.examName) EXAM_NAME = cfg.examName;
-                if(cfg.gradeLevel) GRADE_LEVEL = cfg.gradeLevel;
-                if(cfg.minutes) configuredMinutes = parseInt(cfg.minutes) || 30;
-
-                const titleInp = document.getElementById('custom-exam-title');
-                const gradeInp = document.getElementById('custom-grade-title');
-                const minInp = document.getElementById('custom-exam-minutes');
-                if(titleInp && document.activeElement !== titleInp) titleInp.value = EXAM_NAME;
-                if(gradeInp && document.activeElement !== gradeInp) gradeInp.value = GRADE_LEVEL;
-                if(minInp && document.activeElement !== minInp) minInp.value = configuredMinutes;
-                updateDynamicTitlesOnUI();
-                listenToSubmissions(false);
-            } else {
-                set(ref(db, getSlotConfigPath()), {
-                    examName: EXAM_NAME,
-                    gradeLevel: GRADE_LEVEL,
-                    minutes: 30,
-                    updatedAt: Date.now()
-                });
-                updateDynamicTitlesOnUI();
-                listenToSubmissions(true);
-            }
-        });
-
-        let savedTeacherSession = localStorage.getItem('mrehab_teacher_active_' + ACTIVE_EXAM_SLOT);
-        let sessionTime = localStorage.getItem('mrehab_teacher_time_' + ACTIVE_EXAM_SLOT);
-        if(savedTeacherSession === 'true' && sessionTime) {
-            if(Date.now() - parseInt(sessionTime) < 24 * 60 * 60 * 1000) {
-                window.showScene('teacher-leaderboard-scene');
-                listenToSubmissions(true);
-                renderTeacherBank();
-                return;
-            } else {
-                localStorage.removeItem('mrehab_teacher_active_' + ACTIVE_EXAM_SLOT);
-                localStorage.removeItem('mrehab_teacher_time_' + ACTIVE_EXAM_SLOT);
-            }
-        }
-
-        // فحص ما إذا كان الطالب عمل Refresh بالخطأ أثناء الامتحان -> إرجاعه فوراً بدون احتساب غش
-        let activeStudentRaw = localStorage.getItem('mrehab_active_student_session_' + ACTIVE_EXAM_SLOT);
-        if(activeStudentRaw) {
+        const rawSaved = localStorage.getItem(STORAGE_SESSION_KEY);
+        if(rawSaved) {
             try {
-                let sObj = JSON.parse(activeStudentRaw);
+                const sObj = JSON.parse(rawSaved);
                 if(sObj && sObj.name && !sObj.finished) {
                     student.name = sObj.name;
+                    userAnswers = sObj.answers || {};
                     examStartTime = sObj.startTime || Date.now();
-                    totalSeconds = sObj.remainingSeconds || (configuredMinutes * 60);
-                    cheatCount = parseInt(sObj.cheatCount) || 0;
+                    totalSeconds = (typeof sObj.remainingSeconds === 'number' && sObj.remainingSeconds > 0)
+                        ? sObj.remainingSeconds
+                        : (EXAM_MINUTES * 60);
 
                     window.startExam(true);
-                    setTimeout(() => {
-                        showFloatingStudentToast("⚠️ تم تحديث الصفحة بالخطأ؛ أنت ما زلت داخل الاختبار وتم استرجاع جميع إجاباتك السابقة دون احتساب محاولة غش.", false);
-                    }, 600);
+                    if(Object.keys(userAnswers).length > 0) {
+                        setTimeout(() => {
+                            showFloatingStudentToast("✅ مرحباً بعودتك! تم استرجاع جميع إجاباتك السابقة لتكمل من حيث توقفت.");
+                        }, 450);
+                    }
                 }
-            } catch(e) {}
-        }
-    });
-
-    // =========================================================================
-    // حماية الغش (الرجوع والـ Refresh لا يحسبان غشاً أبداً)
-    // =========================================================================
-    let lastCheatTrigger = 0;
-    function triggerCheatAlarm(customMsg) {
-        if(!isExamStarted || isExamFinished || suppressCheatDetection) return;
-        let now = Date.now();
-        if(now - lastCheatTrigger < 1500) return;
-        lastCheatTrigger = now;
-
-        cheatCount++;
-        playWarningSiren();
-        document.getElementById('cheat-overlay-msg').innerText = customMsg || "تنبيه صارم! لقد حاولت الخروج من شاشة الامتحان أو تصغيرها! تم رصد المخالفة وإرسالها لمستر إيهاب.";
-        document.getElementById('cheat-modal-counter').innerText = cheatCount;
-        document.getElementById('top-cheat-counter').innerText = cheatCount;
-        document.getElementById('cheat-warning-overlay').style.display = 'flex';
-        saveAndSyncState();
-    }
-
-    window.dismissCheatWarning = function() {
-        document.getElementById('cheat-warning-overlay').style.display = 'none';
-    };
-
-    // دالة الرجوع الآمن من الاختبار دون احتساب محاولة غش
-    window.safeBackFromExam = function() {
-        suppressCheatDetection = true;
-        isExamStarted = false;
-        document.getElementById('cheat-warning-overlay').style.display = 'none';
-        document.getElementById('freeze-overlay').style.display = 'none';
-        if(student.name) {
-            saveAndSyncState();
-        }
-        localStorage.removeItem('mrehab_active_student_session_' + ACTIVE_EXAM_SLOT);
-        window.showScene('role-scene');
-    };
-
-    // التقاط زر الرجوع في المتصفح أو الهاتف المحمول (popstate) دون احتساب غش
-    window.addEventListener('popstate', () => {
-        if(isExamStarted && !isExamFinished) {
-            window.safeBackFromExam();
-        }
-    });
-
-    // عدم احتساب الخروج/الرجوع عبر المتصفح كغش عند إغلاق أو رجوع الصفحة
-    window.addEventListener('beforeunload', () => {
-        suppressCheatDetection = true;
-    });
-    window.addEventListener('pagehide', () => {
-        suppressCheatDetection = true;
-    });
-
-    document.addEventListener('visibilitychange', () => {
-        if(document.hidden && isExamStarted && !isExamFinished && !suppressCheatDetection) {
-            triggerCheatAlarm("لقد غادرت شاشة الامتحان أو قمت بتصغير المتصفح! تم احتساب محاولة خروج/غش عليك.");
-        }
-    });
-
-    window.addEventListener('blur', () => {
-        if(isExamStarted && !isExamFinished && !suppressCheatDetection) {
-            triggerCheatAlarm("لقد فقدت التركيز على نافذة الامتحان أو فتحت نافذة جانبية! تم احتساب محاولة غش.");
-        }
-    });
-
-    window.addEventListener('keyup', (e) => {
-        if((e.key === 'PrintScreen' || e.keyCode === 44) && isExamStarted && !isExamFinished && !suppressCheatDetection) {
-            triggerCheatAlarm("محاولة تصوير الشاشة (Screenshot) ممنوعة تماماً وتم رصدها كمحاولة غش!");
-        }
-    });
-
-    window.addEventListener('keydown', (e) => {
-        if(isExamStarted && !isExamFinished) {
-            if(e.key === 'F5' || ((e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R'))) {
-                e.preventDefault();
-                showFloatingStudentToast("⚠️ تنبيه: لا تقم بتحديث الصفحة أو الخروج، أنت ما زلت في الاختبار وإجاباتك محفوظة (ولم تُحسب محاولة غش).", false);
+            } catch(e) {
+                localStorage.removeItem(STORAGE_SESSION_KEY);
             }
         }
     });
 
-    // =========================================================================
-    // دوال الواجهة ولوحة المعلم
-    // =========================================================================
     window.showScene = function(id) {
         document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
         const target = document.getElementById(id);
@@ -1070,349 +621,75 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         }
     };
 
-    let logoClickCount = 0; let logoClickTimer = null;
-    window.handleLogoClick = function() {
-        logoClickCount++;
-        if (logoClickTimer) clearTimeout(logoClickTimer);
-        logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1400);
-        if (logoClickCount >= 5) {
-            logoClickCount = 0;
-            document.getElementById('password-modal').style.display = 'flex';
-            document.getElementById('teacher-pass-input').value = '';
-            document.getElementById('teacher-pass-input').focus();
+    // الدخول المباشر إلى التدريب بدون كود وبدون غرفة انتظار
+    window.enterPracticeDirectly = function() {
+        let nameInput = document.getElementById('studentName').value.trim();
+        if(nameInput.split(/\s+/).length < 2) {
+            return alert("يرجى إدخال اسمك الثلاثي أو الرباعي بالكامل!");
         }
-    };
 
-    window.verifyPassword = function() {
-        if (document.getElementById('teacher-pass-input').value === '7127') {
-            document.getElementById('password-modal').style.display = 'none';
-            localStorage.setItem('mrehab_teacher_active_' + ACTIVE_EXAM_SLOT, 'true');
-            localStorage.setItem('mrehab_teacher_time_' + ACTIVE_EXAM_SLOT, Date.now().toString());
-            window.showScene('teacher-leaderboard-scene');
-            listenToSubmissions(true);
-            renderTeacherBank();
-        } else {
-            alert('الرمز السري غير صحيح!');
+        let isResuming = false;
+        const rawSaved = localStorage.getItem(STORAGE_SESSION_KEY);
+        if(rawSaved) {
+            try {
+                const sObj = JSON.parse(rawSaved);
+                if(sObj && !sObj.finished && sObj.answers && Object.keys(sObj.answers).length > 0) {
+                    isResuming = true;
+                    userAnswers = sObj.answers;
+                    examStartTime = sObj.startTime || Date.now();
+                    totalSeconds = sObj.remainingSeconds || (EXAM_MINUTES * 60);
+                }
+            } catch(e) {}
         }
-    };
 
-    window.saveExamConfigToFirebase = async function() {
-        let newTitle = document.getElementById('custom-exam-title').value.trim();
-        let newGrade = document.getElementById('custom-grade-title').value.trim();
-        let newMins = parseInt(document.getElementById('custom-exam-minutes').value) || 30;
-
-        if(!newTitle) return alert("يرجى كتابة اسم الاختبار!");
-        EXAM_NAME = newTitle;
-        GRADE_LEVEL = newGrade;
-        configuredMinutes = newMins;
-
-        await set(ref(db, getSlotConfigPath()), {
-            examName: EXAM_NAME,
-            gradeLevel: GRADE_LEVEL,
-            minutes: configuredMinutes,
-            updatedAt: Date.now()
-        });
-
-        await update(ref(db, getSlotRoomPath()), {
-            frozen: false
-        });
-
-        updateDynamicTitlesOnUI();
-        listenToSubmissions(true);
-        alert(`✅ تم حفظ وتفعيل الإعدادات بنجاح!\nالدخول متاح للطلاب مباشرة بدون كود وبدون غرفة انتظار.`);
-    };
-
-    window.forceEndExamForAll = async function() {
-        if(confirm("هل أنت متأكد من إنهاء الاختبار وإجبار جميع الطلاب على التسليم فوراً؟")) {
-            await update(ref(db, getSlotRoomPath()), {
-                status: 'ended',
-                forceStop: Date.now(),
-                frozen: false
-            });
-            alert("تم إرسال أمر الإنهاء الفوري وسحب أوراق جميع الطلاب!");
-        }
-    };
-
-    window.addExtraTimeForAll = async function() {
-        await update(ref(db, getSlotRoomPath()), {
-            extraTimeStamp: Date.now()
-        });
-        alert("⏳ تمت إضافة +5 دقائق إضافية لعداد الوقت لدى جميع الطلاب الآن!");
-    };
-
-    window.toggleFreezeExam = async function() {
-        isRoomFrozen = !isRoomFrozen;
-        await update(ref(db, getSlotRoomPath()), { frozen: isRoomFrozen });
-        const btn = document.getElementById('btn-freeze-toggle');
-        if(btn) {
-            btn.innerHTML = isRoomFrozen
-                ? `<i class="fa-solid fa-play"></i> إلغاء التجميد واستئناف الحل`
-                : `<i class="fa-solid fa-pause"></i> تجميد مؤقت للشاشات`;
-        }
-    };
-
-    window.toggleTeacherAnswers = function() {
-        teacherAnswersVisible = !teacherAnswersVisible;
-        renderTeacherBank();
-    };
-
-    window.setCorrectAnswerOverride = async function(qId, newCorrectOpt) {
-        answerOverrides[qId] = newCorrectOpt;
-        await set(ref(db, getSlotAnswersOverridePath()), answerOverrides);
-        teacherAnswersVisible = true;
-        renderTeacherBank();
-    };
-
-    window.resetExamSession = async function() {
-        if(confirm("هل أنت متأكد من تصفير الغرفة الحالية ومسح قائمة الطلاب لبدء اختبار جديد؟")) {
-            await set(ref(db, getSlotRoomPath()), {
-                status: 'playing',
-                forceStop: 0,
-                frozen: false,
-                players: {}
-            });
-            alert("تمت إعادة ضبط الغرفة وتصفير القائمة بنجاح!");
-        }
-    };
-
-    window.closeTeacherSession = function() {
-        if(confirm("هل أنت متأكد من إغلاق لوحة المعلم والعودة للشاشة الرئيسية؟")) {
-            localStorage.removeItem('mrehab_teacher_active_' + ACTIVE_EXAM_SLOT);
-            localStorage.removeItem('mrehab_teacher_time_' + ACTIVE_EXAM_SLOT);
-            window.showScene('role-scene');
-        }
-    };
-
-    // مركز الرسائل المنبثقة في أعلى الشاشة
-    window.openMessageCenterModal = function() {
-        document.getElementById('message-center-modal').style.display = 'flex';
-        const inp = document.getElementById('modal-message-textarea');
-        if(inp) {
-            inp.value = '';
-            inp.focus();
-        }
-    };
-
-    window.closeMessageCenterModal = function() {
-        document.getElementById('message-center-modal').style.display = 'none';
-    };
-
-    window.dispatchTeacherMessageNow = async function() {
-        const target = document.getElementById('message-target-select').value;
-        const msg = document.getElementById('modal-message-textarea').value.trim();
-        if(!msg) return alert("يرجى كتابة نص الرسالة أولاً!");
-
-        if(target === 'ALL') {
-            await update(ref(db, getSlotRoomPath()), {
-                broadcastMsg: msg,
-                broadcastStamp: Date.now()
-            });
-            alert("تم إرسال الرسالة الجماعية العائمة لجميع الطلاب بنجاح!");
-        } else {
-            await set(ref(db, getSlotRoomPath() + '/privateMessages/' + target), {
-                msg: msg,
-                timestamp: Date.now()
-            });
-            alert(`تم إرسال الرسالة الخاصة إلى الطالب (${target}) بنجاح!`);
-        }
-        window.closeMessageCenterModal();
-    };
-
-    // =========================================================================
-    // دخول الطالب مباشرة إلى الامتحان بدون غرفة انتظار + السماح بالإعادة دائماً
-    // =========================================================================
-    window.enterExamDirectly = async function() {
-        let nameInput = document.getElementById('studentName').value.trim().replace(/[.#$\[\]\/]/g, '');
-
-        if(nameInput.split(/\s+/).length < 2) return alert("يرجى إدخال اسمك الثلاثي أو الرباعي بالكامل!");
-
-        let cfgSnap = await get(ref(db, getSlotConfigPath()));
-        if(cfgSnap.exists()) {
-            let cfg = cfgSnap.val();
-            EXAM_NAME = cfg.examName || EXAM_NAME;
-            GRADE_LEVEL = cfg.gradeLevel || GRADE_LEVEL;
-            configuredMinutes = parseInt(cfg.minutes) || 30;
-            updateDynamicTitlesOnUI();
+        if(!isResuming) {
+            userAnswers = {};
+            examStartTime = Date.now();
+            totalSeconds = EXAM_MINUTES * 60;
         }
 
         student.name = nameInput;
         isExamFinished = false;
-        suppressCheatDetection = false;
+        window.startExam(isResuming);
 
-        let existingPlayerSnap = await get(ref(db, getSlotRoomPath() + '/players/' + student.name));
-        let isResumingUnfinished = false;
-
-        if(existingPlayerSnap.exists()) {
-            let pData = existingPlayerSnap.val();
-            if(pData.finished) {
-                // إذا كان الطالب قد سلم الاختبار من قبل -> يُسمح له بأداء الاختبار مرة أخرى من البداية
-                userAnswers = {};
-                cheatCount = 0;
-                localStorage.removeItem('mrehab_ans_' + ACTIVE_EXAM_SLOT + '_' + student.name);
-                localStorage.removeItem('mrehab_active_student_session_' + ACTIVE_EXAM_SLOT);
-                await set(ref(db, getSlotRoomPath() + '/players/' + student.name), {
-                    score: 0,
-                    cheatCount: 0,
-                    ip: studentIP,
-                    finished: false,
-                    progress: `0/${totalQuestionsCount}`,
-                    timeTaken: "0:00",
-                    answersDetail: {}
-                });
-            } else if(pData.answersDetail && Object.keys(pData.answersDetail).length > 0) {
-                // استئناف محاولة غير مكتملة سابقة
-                isResumingUnfinished = true;
-                userAnswers = pData.answersDetail || {};
-                cheatCount = (parseInt(pData.cheatCount) || 0);
-                localStorage.setItem('mrehab_ans_' + ACTIVE_EXAM_SLOT + '_' + student.name, JSON.stringify(userAnswers));
-            } else {
-                userAnswers = {};
-                cheatCount = 0;
-                await set(ref(db, getSlotRoomPath() + '/players/' + student.name), {
-                    score: 0,
-                    cheatCount: 0,
-                    ip: studentIP,
-                    finished: false,
-                    progress: `0/${totalQuestionsCount}`,
-                    timeTaken: "0:00",
-                    answersDetail: {}
-                });
-            }
-        } else {
-            userAnswers = {};
-            cheatCount = 0;
-            await set(ref(db, getSlotRoomPath() + '/players/' + student.name), {
-                score: 0,
-                cheatCount: 0,
-                ip: studentIP,
-                finished: false,
-                progress: `0/${totalQuestionsCount}`,
-                timeTaken: "0:00",
-                answersDetail: {}
-            });
-        }
-
-        // الدخول مباشرة إلى شاشة الاختبار دون غرفة انتظار
-        window.startExam(isResumingUnfinished);
-
-        if(isResumingUnfinished) {
+        if(isResuming) {
             setTimeout(() => {
-                showFloatingStudentToast("✅ مرحباً بعودتك! تم استرجاع إجاباتك السابقة لتكمل من حيث توقفت.", false);
-            }, 500);
+                showFloatingStudentToast("✅ تم استرجاع إجاباتك السابقة لتكمل التدريب من حيث توقفت.");
+            }, 450);
         }
     };
 
-    // دالة إعادة الاختبار مباشرة من شاشة النتيجة
-    window.retakeExamAgain = async function() {
-        if(!student.name) {
-            window.showScene('student-login-scene');
-            return;
-        }
+    window.exitToHomeKeepingProgress = function() {
+        saveSessionToStorage();
+        isExamStarted = false;
+        window.showScene('role-scene');
+    };
+
+    window.restartFreshPractice = function() {
+        localStorage.removeItem(STORAGE_SESSION_KEY);
         userAnswers = {};
-        cheatCount = 0;
         isExamFinished = false;
         isExamStarted = false;
-        suppressCheatDetection = false;
-
-        localStorage.removeItem('mrehab_ans_' + ACTIVE_EXAM_SLOT + '_' + student.name);
-        localStorage.removeItem('mrehab_active_student_session_' + ACTIVE_EXAM_SLOT);
-
-        await set(ref(db, getSlotRoomPath() + '/players/' + student.name), {
-            score: 0,
-            cheatCount: 0,
-            ip: studentIP,
-            finished: false,
-            progress: `0/${totalQuestionsCount}`,
-            timeTaken: "0:00",
-            answersDetail: {}
-        });
-
+        examStartTime = Date.now();
+        totalSeconds = EXAM_MINUTES * 60;
         window.startExam(false);
     };
 
-    function attachStudentRoomListener() {
-        if(currentRoomListenerRef) off(currentRoomListenerRef);
-        currentRoomListenerRef = ref(db, getSlotRoomPath());
-
-        let initialLoad = true;
-        let lastSeenExtraTime = null;
-        let lastSeenBroadcast = null;
-        let lastSeenForceStop = null;
-
-        onValue(currentRoomListenerRef, (snapshot) => {
-            const roomData = snapshot.val();
-            if(!roomData) return;
-
-            if(initialLoad) {
-                initialLoad = false;
-                lastSeenExtraTime = roomData.extraTimeStamp || null;
-                lastSeenBroadcast = roomData.broadcastStamp || null;
-                lastSeenForceStop = roomData.forceStop || null;
-            } else {
-                if(roomData.extraTimeStamp && roomData.extraTimeStamp !== lastSeenExtraTime) {
-                    lastSeenExtraTime = roomData.extraTimeStamp;
-                    if(isExamStarted && !isExamFinished) {
-                        totalSeconds += 300;
-                        showFloatingStudentToast("⏳ قام مستر إيهاب بإضافة +5 دقائق وقت إضافي للاختبار!", false);
-                    }
-                }
-
-                if(roomData.broadcastMsg && roomData.broadcastStamp && roomData.broadcastStamp !== lastSeenBroadcast) {
-                    lastSeenBroadcast = roomData.broadcastStamp;
-                    showFloatingStudentToast(roomData.broadcastMsg, false);
-                }
-
-                if(roomData.forceStop && roomData.forceStop > 0 && roomData.forceStop !== lastSeenForceStop) {
-                    lastSeenForceStop = roomData.forceStop;
-                    if(isExamStarted && !isExamFinished) {
-                        finishExam(true);
-                    }
-                }
-            }
-
-            const freezeOverlay = document.getElementById('freeze-overlay');
-            if(freezeOverlay && isExamStarted && !isExamFinished) {
-                isRoomFrozen = !!roomData.frozen;
-                freezeOverlay.style.display = roomData.frozen ? 'flex' : 'none';
-            }
-        });
-    }
-
-    function attachStudentPrivateMessageListener() {
-        if(!student.name) return;
-        if(currentPrivateListenerRef) off(currentPrivateListenerRef);
-        currentPrivateListenerRef = ref(db, getSlotRoomPath() + '/privateMessages/' + student.name);
-
-        let initialPrivateLoad = true;
-        let lastSeenPrivate = null;
-
-        onValue(currentPrivateListenerRef, (snapshot) => {
-            if(!snapshot.exists()) {
-                initialPrivateLoad = false;
-                return;
-            }
-            const data = snapshot.val();
-            if(initialPrivateLoad) {
-                initialPrivateLoad = false;
-                lastSeenPrivate = data.timestamp || null;
-                return;
-            }
-            if(data && data.msg && data.timestamp && data.timestamp !== lastSeenPrivate) {
-                lastSeenPrivate = data.timestamp;
-                showFloatingStudentToast(data.msg, true);
-            }
-        });
-    }
+    window.goHomeFresh = function() {
+        localStorage.removeItem(STORAGE_SESSION_KEY);
+        userAnswers = {};
+        isExamFinished = false;
+        isExamStarted = false;
+        const nameInp = document.getElementById('studentName');
+        if(nameInp) nameInp.value = '';
+        window.showScene('role-scene');
+    };
 
     window.startExam = function(isResuming = false) {
-        if(isResuming) {
-            let savedAns = localStorage.getItem('mrehab_ans_' + ACTIVE_EXAM_SLOT + '_' + student.name);
-            if(savedAns) {
-                try { userAnswers = { ...userAnswers, ...JSON.parse(savedAns) }; } catch(e){}
-            }
-        } else {
+        if(!isResuming) {
+            userAnswers = {};
             examStartTime = Date.now();
-            totalSeconds = configuredMinutes * 60;
+            totalSeconds = EXAM_MINUTES * 60;
         }
 
         let masterList = getMasterQuestionsList();
@@ -1423,23 +700,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         window.examQuestionsList = masterList;
         shuffledWords = shuffleArray(fillBlankWords);
 
-        suppressCheatDetection = false;
         isExamFinished = false;
         isExamStarted = true;
 
-        // إضافة حالة في سجل المتصفح لالتقاط زر الرجوع بأمان دون احتساب غش
-        try {
-            history.pushState({ inExam: true }, '', window.location.href);
-        } catch(e) {}
-
         window.showScene('exam-scene');
         document.getElementById('info-display').innerText = student.name;
-        document.getElementById('top-cheat-counter').innerText = cheatCount;
 
-        attachStudentRoomListener();
-        attachStudentPrivateMessageListener();
+        let m = Math.floor(totalSeconds / 60);
+        let s = totalSeconds % 60;
+        const timerEl = document.getElementById('totalTimer');
+        if(timerEl) timerEl.innerText = `${m}:${s < 10 ? '0' + s : s}`;
+
         window.renderContinuousExamPage();
-        saveAndSyncState();
+        saveSessionToStorage();
     };
 
     window.renderContinuousExamPage = function() {
@@ -1531,7 +804,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         if(clickedEl) clickedEl.classList.add('selected');
         const card = document.getElementById('q-card-' + qId);
         if(card) card.classList.remove('unanswered-card');
-        saveAndSyncState();
+        saveSessionToStorage();
     };
 
     window.addEventListener('dragover', (e) => {
@@ -1567,7 +840,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 
     window.saveGapInput = function(gapId, val) {
         userAnswers[gapId] = val.trim();
-        saveAndSyncState();
+        saveSessionToStorage();
     };
 
     function countSolvedQuestions() {
@@ -1584,7 +857,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         let master = getMasterQuestionsList();
         let missingQ = master.find(q => !userAnswers[q.id] || String(userAnswers[q.id]).trim() === "");
         if(!missingQ) {
-            alert("أحسنت يا بطل! لقد قمت بحل جميع أسئلة الاختبار بالكامل.");
+            alert("أحسنت يا بطل! لقد قمت بحل جميع أسئلة التدريب بالكامل.");
             return;
         }
         if(missingQ.type === 'gap') {
@@ -1601,45 +874,29 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         }
     };
 
-    function saveAndSyncState() {
+    function saveSessionToStorage() {
         updateSolvedCounterUI();
-        localStorage.setItem('mrehab_ans_' + ACTIVE_EXAM_SLOT + '_' + student.name, JSON.stringify(userAnswers));
-        if(isExamStarted && !isExamFinished) {
-            localStorage.setItem('mrehab_active_student_session_' + ACTIVE_EXAM_SLOT, JSON.stringify({
+        if(!isExamFinished && student.name) {
+            localStorage.setItem(STORAGE_SESSION_KEY, JSON.stringify({
                 name: student.name,
-                cheatCount: cheatCount,
+                answers: userAnswers,
                 startTime: examStartTime,
                 remainingSeconds: totalSeconds,
-                finished: isExamFinished
+                finished: false
             }));
         }
-
-        let solved = countSolvedQuestions();
-        let tempScore = 0;
-        getMasterQuestionsList().forEach(q => {
-            let ans = (userAnswers[q.id] || "").toString().trim();
-            if(ans.toLowerCase() === q.a.toString().trim().toLowerCase()) tempScore++;
-        });
-
-        update(ref(db, getSlotRoomPath() + '/players/' + student.name), {
-            score: tempScore,
-            cheatCount: cheatCount,
-            progress: `${solved}/${totalQuestionsCount}`,
-            ip: studentIP,
-            answersDetail: userAnswers
-        });
     }
 
     window.confirmFinish = function() {
         let solved = countSolvedQuestions();
         if(solved < totalQuestionsCount) {
             let rem = totalQuestionsCount - solved;
-            alert(`عفواً يا بطل! لا يمكنك تسليم الاختبار قبل حل جميع الأسئلة.\nلديك (${rem}) سؤال متروك بدون إجابة.`);
+            alert(`عفواً يا بطل! لا يمكنك تسليم التدريب قبل حل جميع الأسئلة.\nلديك (${rem}) سؤال متروك بدون إجابة.`);
             window.scrollToFirstUnanswered();
             return;
         }
-        if(confirm("ممتاز! لقد أجبت على جميع الأسئلة. هل أنت متأكد من تسليم الاختبار نهائياً؟")) {
-            finishExam(false);
+        if(confirm("ممتاز! لقد أجبت على جميع الأسئلة. هل أنت متأكد من تسليم التدريب وعرض النتيجة؟")) {
+            finishExam();
         }
     };
 
@@ -1650,12 +907,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         return `${m} دقيقة و ${s} ثانية`;
     }
 
-    function finishExam(forcedByTeacher = false) {
+    function finishExam() {
         if(isExamFinished) return;
         isExamFinished = true;
         isExamStarted = false;
-        document.getElementById('cheat-warning-overlay').style.display = 'none';
-        document.getElementById('freeze-overlay').style.display = 'none';
 
         let allQs = getMasterQuestionsList();
         let score = 0;
@@ -1667,65 +922,35 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
         let elapsedSec = Math.floor((Date.now() - examStartTime) / 1000);
         let timeTakenFormatted = formatDuration(elapsedSec);
 
-        update(ref(db, getSlotRoomPath() + '/players/' + student.name), {
-            score: score,
-            cheatCount: cheatCount,
-            progress: `${totalQuestionsCount}/${totalQuestionsCount}`,
-            finished: true,
-            answersDetail: userAnswers,
-            timeTaken: timeTakenFormatted,
-            finishTimestamp: Date.now()
-        });
+        // تصفير الجلسة المحفوظة عند التسليم ليبدأ التدريب من جديد عند الدخول مرة أخرى
+        localStorage.removeItem(STORAGE_SESSION_KEY);
 
-        let payload = {
-            ip: studentIP,
-            studentIP: studentIP,
-            timestamp: new Date().toLocaleString('ar-EG'),
-            name: student.name,
-            className: GRADE_LEVEL,
-            examName: EXAM_NAME,
-            totalScore: `${score} / ${totalQuestionsCount}`,
-            cheat: cheatCount,
-            cheatCount: cheatCount
-        };
-        for(let i = 1; i <= 37; i++) {
-            let qObj = allQs.find(x => x.id === i);
-            if(qObj) {
-                let ans = (userAnswers[i] || "").toString().trim();
-                let isCor = (ans.toLowerCase() === qObj.a.toLowerCase());
-                payload["Q" + i] = { val: ans || "لم يُجب", isCorrect: isCor };
-            } else {
-                payload["Q" + i] = { val: "لم يُجب", isCorrect: false };
-            }
-        }
-        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).catch(() => {});
-
-        localStorage.removeItem('mrehab_ans_' + ACTIVE_EXAM_SLOT + '_' + student.name);
-        localStorage.removeItem('mrehab_active_student_session_' + ACTIVE_EXAM_SLOT);
+        const submittedAnswersSnapshot = { ...userAnswers };
+        const submittedName = student.name;
 
         window.showScene('result-scene');
         document.getElementById('student-score-line1').innerText = `درجة الطالب: ${score}`;
         document.getElementById('student-score-line2').innerText = `درجة الامتحان الكلية: ${totalQuestionsCount}`;
         document.getElementById('student-meta-lines').innerHTML = `
-            <div>محاولات الطالب الخروج من الامتحان: <b style="color:var(--danger);">${cheatCount}</b></div>
             <div>الوقت الذي استغرقه الطالب: <b style="color:var(--primary);">${timeTakenFormatted}</b></div>
         `;
 
         document.getElementById('student-review-area').innerHTML = buildFullReportHTML(
-            student.name,
+            submittedName,
             score,
             totalQuestionsCount,
-            cheatCount,
             timeTakenFormatted,
-            userAnswers
+            submittedAnswersSnapshot
         );
+
+        userAnswers = {};
 
         const soundRes = document.getElementById('sound-result');
         if(soundRes) { soundRes.currentTime = 0; soundRes.play().catch(() => {}); }
         if(score >= totalQuestionsCount * 0.5) confetti({ particleCount: 140, spread: 70 });
     }
 
-    function buildFullReportHTML(stName, score, total, cheat, timeTaken, ansMap) {
+    function buildFullReportHTML(stName, score, total, timeTaken, ansMap) {
         let percentage = Math.round((score / total) * 100);
         let allQs = getMasterQuestionsList();
 
@@ -1798,7 +1023,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
             <div class="report-card-dark">
                 <div style="text-align: center; border-bottom: 2.5px dashed rgba(255,255,255,0.2); padding-bottom: 15px; margin-bottom: 15px;">
                     <img src="${LOGO_URL}" style="width: 115px; height: 115px; border-radius: 50%; border: 4px solid #10b981; object-fit: cover; margin-bottom: 10px; box-shadow: 0 0 20px #10b981;" alt="مستر إيهاب">
-                    <h2 style="color: #ffffff; font-weight: 900; margin-bottom: 5px;">مستر إيهاب العدوي - تقرير نتيجة الاختبار</h2>
+                    <h2 style="color: #ffffff; font-weight: 900; margin-bottom: 5px;">مستر إيهاب العدوي - تقرير نتيجة التدريب</h2>
                     <h3 style="color: #f59e0b; margin-bottom: 4px;">${EXAM_NAME}</h3>
                     <p style="color: #38bdf8; font-weight: bold; font-size: 1.1rem;">اسم الطالب: ${stName} | ${GRADE_LEVEL}</p>
                 </div>
@@ -1808,7 +1033,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
                         <div style="font-size: 1.45rem; font-weight: 900; color: #10b981;">درجة الطالب: ${score}</div>
                         <div style="font-size: 1.3rem; font-weight: 900; color: #f59e0b;">درجة الامتحان الكلية: ${total}</div>
                         <div style="font-size: 1.05rem; font-weight: bold; color: #e2e8f0;">النسبة المئوية: ${percentage}%</div>
-                        <div style="font-size: 1rem; font-weight: bold; color: #f87171;">محاولات الخروج: ${cheat}</div>
                         <div style="font-size: 1rem; font-weight: bold; color: #38bdf8;">الوقت المستغرق: ${timeTaken}</div>
                     </div>
                 </div>
@@ -1833,224 +1057,162 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
     window.downloadStudentSelfPDF = async function() {
         const area = document.getElementById('student-review-area');
         if(!area) return;
-        await exportElementAsPDF(area, `MrEhab_ExamReport_${student.name}.pdf`);
+        const safeName = (student.name || 'Student').replace(/\s+/g, '_');
+        await exportElementAsPDF(area, `MrEhab_PracticeReport_${safeName}.pdf`);
     };
 
-    window.previewSelectedStudentReport = function() {
-        let val = document.getElementById('pdf-student-select').value;
-        const previewContainer = document.getElementById('teacher-pdf-live-preview');
-        if(!val || val === "EXPORT_ALL_ZIP" || !window.allPlayersData || !window.allPlayersData[val]) {
-            previewContainer.innerHTML = "";
-            return;
-        }
-        let p = window.allPlayersData[val];
-        previewContainer.innerHTML = buildFullReportHTML(
-            val,
-            p.score || 0,
-            totalQuestionsCount,
-            p.cheatCount || 0,
-            p.timeTaken || "غير مسجل",
-            p.answersDetail || {}
-        );
-    };
-
-    window.generateStudentPDF = async function() {
-        let val = document.getElementById('pdf-student-select').value;
-        if(!val) return alert("يرجى اختيار اسم الطالب أو اختيار تصدير جميع الطلاب!");
-        const previewContainer = document.getElementById('teacher-pdf-live-preview');
-
-        if(val === "EXPORT_ALL_ZIP") {
-            if(!window.allPlayersData) return alert("لا توجد بيانات طلاب حالياً!");
-            for(let name in window.allPlayersData) {
-                let p = window.allPlayersData[name];
-                previewContainer.innerHTML = buildFullReportHTML(name, p.score || 0, totalQuestionsCount, p.cheatCount || 0, p.timeTaken || "غير مسجل", p.answersDetail || {});
-                await new Promise(r => setTimeout(r, 400));
-                await exportElementAsPDF(previewContainer, `MrEhab_Report_${name}.pdf`);
-            }
-            alert("تم تنزيل تقارير جميع الطلاب بصيغة PDF بنجاح!");
-        } else {
-            window.previewSelectedStudentReport();
-            await new Promise(r => setTimeout(r, 300));
-            await exportElementAsPDF(previewContainer, `MrEhab_Report_${val}.pdf`);
-        }
-    };
-
-    window.exportToExcel = async function() {
-        let snap = await get(ref(db, getSlotRoomPath() + '/players'));
-        if(!snap.exists()) return alert("لا توجد بيانات طلاب في الغرفة الحالية لتصديرها!");
-        let players = snap.val();
-
-        let headers = ["IP", "التاريخ والوقت", "الاسم", "الصف الدراسي", "اسم الاختبار", "درجة الاختبار", "عدد محاولات الغش"];
-        for(let i = 1; i <= 37; i++) headers.push(`سؤال ${i}`);
-
-        let csvRows = [headers.join(",")];
-        let nowStr = new Date().toLocaleString('ar-EG').replace(/,/g, ' ');
-
-        for(let name in players) {
-            let p = players[name];
-            let ansMap = p.answersDetail || {};
-            let row = [
-                `"${p.ip || ''}"`,
-                `"${nowStr}"`,
-                `"${name}"`,
-                `"${GRADE_LEVEL}"`,
-                `"${EXAM_NAME}"`,
-                `"${p.score || 0} / ${totalQuestionsCount}"`,
-                `"${p.cheatCount || 0}"`
-            ];
-            for(let i = 1; i <= 37; i++) {
-                let val = ansMap[i] ? String(ansMap[i]).replace(/"/g, '""') : "لم يُجب";
-                row.push(`"${val}"`);
-            }
-            csvRows.push(row.join(","));
-        }
-
-        let csvString = "\uFEFF" + csvRows.join("\n");
-        let blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
-        let url = URL.createObjectURL(blob);
-        let link = document.createElement("a");
-        link.href = url;
-        link.download = `نتائج_${EXAM_NAME}.csv`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    function listenToSubmissions(forceRebind = false) {
-        if(teacherPlayersListenerRef && !forceRebind) return;
-        if(teacherPlayersListenerRef) off(teacherPlayersListenerRef);
-        teacherPlayersListenerRef = ref(db, getSlotRoomPath() + '/players');
-
-        onValue(teacherPlayersListenerRef, (snapshot) => {
-            const players = snapshot.val();
-            const tbody = document.getElementById('leaderboard-body');
-            const selectDropdown = document.getElementById('pdf-student-select');
-            const msgTargetDropdown = document.getElementById('message-target-select');
-            if(!tbody || !selectDropdown || !msgTargetDropdown) return;
-
-            const currentMsgSel = msgTargetDropdown.value;
-            tbody.innerHTML = '';
-            selectDropdown.innerHTML = `
-                <option value="">-- اختر الطالب للمعاينة أو التصدير --</option>
-                <option value="EXPORT_ALL_ZIP" style="color: var(--gold); font-weight: bold;">📁 تصدير نتائج جميع الطلاب (ملفات PDF منفصلة)</option>
-            `;
-            msgTargetDropdown.innerHTML = `
-                <option value="ALL">📢 رسالة جماعية لجميع الطلاب</option>
-            `;
-
-            if(players) {
-                window.allPlayersData = players;
-                let arr = Object.keys(players).map(name => ({ name, ...players[name] }));
-                arr.sort((a, b) => (b.score || 0) - (a.score || 0));
-
-                arr.forEach((p, idx) => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${idx + 1}</td>
-                            <td style="font-weight:bold;">${p.name}</td>
-                            <td>${GRADE_LEVEL}</td>
-                            <td style="color:var(--gold); font-weight:900;">${p.score || 0} / ${totalQuestionsCount}</td>
-                            <td style="color:var(--primary); font-weight:bold;">${p.progress || `0/${totalQuestionsCount}`}</td>
-                            <td style="color:var(--danger); font-weight:900;">${p.cheatCount || 0}</td>
-                            <td>${p.timeTaken || 'جاري...'}</td>
-                            <td style="font-family:monospace;">${p.ip || 'Local'}</td>
-                            <td>${p.finished ? '✅ سلم الاختبار' : '⏳ يحل الآن'}</td>
-                        </tr>`;
-                    selectDropdown.innerHTML += `<option value="${p.name}">${p.name} (${p.score || 0}/${totalQuestionsCount})</option>`;
-                    msgTargetDropdown.innerHTML += `<option value="${p.name}">👤 رسالة خاصة للطالب: ${p.name}</option>`;
-                });
-                if(currentMsgSel && (currentMsgSel === 'ALL' || players[currentMsgSel])) {
-                    msgTargetDropdown.value = currentMsgSel;
-                }
-            } else {
-                window.allPlayersData = {};
-            }
-        });
-    }
-
-    function renderTeacherBank() {
-        const bankContainer = document.getElementById('teacher-questions-bank');
-        if(!bankContainer) return;
-        let allQs = getMasterQuestionsList();
-        let h = "";
-
-        allQs.forEach(q => {
-            if(q.section) {
-                h += `<div class="section-header-banner">${q.section}</div>`;
-                if(q.sectionType === "passage") {
-                    h += `<div class="passage-box">${readingPassageText}</div>`;
-                }
-                if(q.sectionType === "dialogue") {
-                    h += `<div class="dialogue-context-line">${dialogueContextText}</div>`;
-                }
-            }
-            if(q.subSection) {
-                h += `<div class="sub-section-banner">${q.subSection}</div>`;
-            }
-            if(q.preLine) {
-                h += `<div class="dialogue-speech-line">${q.preLine}</div>`;
-            }
-
-            if(q.type === 'gap') {
-                h += `<div class="q-card" style="padding:15px;">
-                        <div class="q-title">${q.q}</div>
-                        <div class="opt ${teacherAnswersVisible ? 'correct-opt' : ''}" style="max-width:320px;">
-                            ${teacherAnswersVisible ? `الإجابة الصحيحة: ${q.a} ✓` : 'اضغط (إظهار/إخفاء حلول الاختبار) لكشف الكلمة'}
-                        </div>
-                      </div>`;
-            } else {
-                let optsHtml = q.o.map(opt => {
-                    let isCorrect = (opt.toLowerCase() === q.a.toLowerCase());
-                    let cls = "opt";
-                    if(teacherAnswersVisible) {
-                        cls = isCorrect ? "opt correct-opt" : "opt dimmed-opt";
-                    }
-                    return `<div class="${cls}" onclick="setCorrectAnswerOverride(${q.id}, \`${opt.replace(/`/g, '\\`')}\`)" title="اضغط لاعتماد هذا الاختيار كإجابة صحيحة">
-                                <span>${opt}</span> ${teacherAnswersVisible && isCorrect ? '<span>✓</span>' : ''}
-                            </div>`;
-                }).join('');
-
-                h += `<div class="q-card">
-                        <div class="q-title">${q.q}</div>
-                        <div class="options-grid">${optsHtml}</div>
-                      </div>`;
-            }
-
-            if(q.postLine) {
-                h += `<div class="dialogue-speech-line">${q.postLine}</div>`;
-            }
-        });
-
-        bankContainer.innerHTML = h;
-    }
-
+    // مؤقت التدريب
     setInterval(() => {
-        if(!isExamStarted || isExamFinished || isRoomFrozen) return;
+        if(!isExamStarted || isExamFinished) return;
         totalSeconds--;
         let m = Math.floor(totalSeconds / 60);
         let s = totalSeconds % 60;
         const timerEl = document.getElementById('totalTimer');
         if(timerEl) timerEl.innerText = `${m}:${s < 10 ? '0' + s : s}`;
-        if(totalSeconds <= 0) finishExam(true);
+        if(totalSeconds % 5 === 0) saveSessionToStorage();
+        if(totalSeconds <= 0) finishExam();
     }, 1000);
 
+    // =========================================================================
+    // خلفية الـ Particles + اللوجو المتحرك المكبر قليلاً + نجوم ذهبية متحركة
+    // =========================================================================
     const canvas = document.getElementById('particles-js');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    let pts = Array.from({length: 45}, () => ({
-        x: Math.random() * canvas.width, y: Math.random() * canvas.height, s: Math.random() * 2.5 + 1,
-        vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
-        color: Math.random() > 0.5 ? "rgba(14, 165, 233, 0.4)" : "rgba(245, 158, 11, 0.4)"
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const floatingIconImg = new Image();
+    floatingIconImg.crossOrigin = "anonymous";
+    floatingIconImg.onerror = function() {
+        if(floatingIconImg.src !== PARTICLE_ICON_FALLBACK) {
+            floatingIconImg.src = PARTICLE_ICON_FALLBACK;
+        }
+    };
+    floatingIconImg.src = PARTICLE_ICON_PRIMARY;
+
+    // جزيئات نقطية ملونة
+    let pts = Array.from({length: 36}, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        s: Math.random() * 2.4 + 1,
+        vx: (Math.random() - 0.5) * 0.42,
+        vy: (Math.random() - 0.5) * 0.42,
+        color: Math.random() > 0.5 ? "rgba(14, 165, 233, 0.38)" : "rgba(245, 158, 11, 0.38)"
     }));
+
+    // أيقونات اللوجو المتحركة المكبرة قليلاً (حجم 44 إلى 66 بكسل)
+    let iconParticles = Array.from({length: 11}, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 22 + 44,
+        vx: (Math.random() - 0.5) * 0.34,
+        vy: (Math.random() - 0.5) * 0.34,
+        angle: Math.random() * Math.PI * 2,
+        vAngle: (Math.random() - 0.5) * 0.0045,
+        alpha: Math.random() * 0.16 + 0.24
+    }));
+
+    // نجوم ذهبية خماسية متحركة ومتلألئة
+    let goldStars = Array.from({length: 26}, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        outerRadius: Math.random() * 6 + 5,
+        vx: (Math.random() - 0.5) * 0.38,
+        vy: (Math.random() - 0.5) * 0.38,
+        angle: Math.random() * Math.PI * 2,
+        vAngle: (Math.random() - 0.5) * 0.012,
+        twinklePhase: Math.random() * Math.PI * 2,
+        twinkleSpeed: Math.random() * 0.03 + 0.015
+    }));
+
+    function drawGoldStar(cx, cy, spikes, outerR, innerR, rotation, alpha) {
+        let rot = Math.PI / 2 * 3;
+        let step = Math.PI / spikes;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(rotation);
+        ctx.beginPath();
+        ctx.moveTo(0, -outerR);
+        for (let i = 0; i < spikes; i++) {
+            ctx.lineTo(Math.cos(rot) * outerR, Math.sin(rot) * outerR);
+            rot += step;
+            ctx.lineTo(Math.cos(rot) * innerR, Math.sin(rot) * innerR);
+            rot += step;
+        }
+        ctx.lineTo(0, -outerR);
+        ctx.closePath();
+
+        ctx.shadowColor = `rgba(251, 191, 36, ${alpha})`;
+        ctx.shadowBlur = 10;
+        const grad = ctx.createRadialGradient(0, 0, innerR * 0.2, 0, 0, outerR);
+        grad.addColorStop(0, `rgba(254, 240, 138, ${alpha})`);
+        grad.addColorStop(0.6, `rgba(245, 158, 11, ${alpha})`);
+        grad.addColorStop(1, `rgba(217, 119, 6, ${alpha * 0.85})`);
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.restore();
+    }
+
     function animateParticles() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. رسم الجزيئات النقطية
         pts.forEach(p => {
-            p.x += p.vx; p.y += p.vy;
+            p.x += p.vx;
+            p.y += p.vy;
             if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
             if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
             ctx.fillStyle = p.color;
-            ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+            ctx.fill();
         });
+
+        // 2. رسم النجوم الذهبية المتحركة
+        goldStars.forEach(st => {
+            st.x += st.vx;
+            st.y += st.vy;
+            st.angle += st.vAngle;
+            st.twinklePhase += st.twinkleSpeed;
+
+            if(st.x < -20) st.x = canvas.width + 20;
+            if(st.x > canvas.width + 20) st.x = -20;
+            if(st.y < -20) st.y = canvas.height + 20;
+            if(st.y > canvas.height + 20) st.y = -20;
+
+            const dynamicAlpha = 0.45 + 0.35 * Math.sin(st.twinklePhase);
+            drawGoldStar(st.x, st.y, 5, st.outerRadius, st.outerRadius * 0.45, st.angle, dynamicAlpha);
+        });
+
+        // 3. رسم أيقونات اللوجو المكبرة قليلاً المتحركة بنعومة
+        if(floatingIconImg.complete && floatingIconImg.naturalWidth > 0) {
+            iconParticles.forEach(ip => {
+                ip.x += ip.vx;
+                ip.y += ip.vy;
+                ip.angle += ip.vAngle;
+
+                if(ip.x < -ip.size) ip.x = canvas.width + ip.size;
+                if(ip.x > canvas.width + ip.size) ip.x = -ip.size;
+                if(ip.y < -ip.size) ip.y = canvas.height + ip.size;
+                if(ip.y > canvas.height + ip.size) ip.y = -ip.size;
+
+                ctx.save();
+                ctx.globalAlpha = ip.alpha;
+                ctx.translate(ip.x, ip.y);
+                ctx.rotate(ip.angle);
+                ctx.beginPath();
+                ctx.arc(0, 0, ip.size / 2, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(floatingIconImg, -ip.size / 2, -ip.size / 2, ip.size, ip.size);
+                ctx.restore();
+            });
+        }
+
         requestAnimationFrame(animateParticles);
     }
     animateParticles();
