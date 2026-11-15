@@ -1,0 +1,4141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>دروس مستر إيهاب التفاعلية الشاملة | Present Continuous Tense</title>
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Confetti, PptxGenJS, PDF.js & Mammoth (Word) -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+<style>
+:root {
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --purple-glow: #a855f7;
+    --cyan-glow: #06b6d4;
+    --gold: #fbbf24;
+    --gold-dark: #d97706;
+    --success: #10b981;
+    --danger: #ef4444;
+    --pink: #ec4899;
+    --bg-dark: #020617;
+    --card-bg: rgba(15, 23, 42, 0.86);
+    --glass-border: rgba(255, 255, 255, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Cairo', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: radial-gradient(circle at top right, #1e1b4b, #020617 55%, #090d16 100%);
+    color: #f8fafc;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.en {
+    font-family: 'Fredoka', 'Cairo', sans-serif;
+    direction: ltr;
+    unicode-bidi: isolate;
+}
+
+/* Particle & Click FX Canvas */
+#particles-js, #click-fx-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+#particles-js { z-index: 0; }
+#click-fx-canvas { z-index: 9999; }
+
+/* Floating Joyful Animated Icons & Small Animated Logos in Particles Background */
+.floating-decor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    font-size: clamp(1.3rem, 2.5vw, 2.1rem);
+    opacity: 0.28;
+    animation: floatJoy 6s ease-in-out infinite;
+}
+@keyframes floatJoy {
+    0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+    50% { transform: translateY(-18px) rotate(12deg) scale(1.14); }
+}
+
+.floating-bg-logo {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    width: clamp(38px, 4.5vw, 54px);
+    height: clamp(38px, 4.5vw, 54px);
+    border-radius: 50%;
+    border: 2px solid rgba(251, 191, 36, 0.45);
+    box-shadow: 0 0 18px rgba(99, 102, 241, 0.45);
+    opacity: 0.34;
+    object-fit: cover;
+    animation: driftLogoFloat 7.5s ease-in-out infinite;
+}
+@keyframes driftLogoFloat {
+    0%, 100% { transform: translate(0px, 0px) rotate(-6deg) scale(0.96); }
+    33% { transform: translate(10px, -16px) rotate(6deg) scale(1.08); }
+    66% { transform: translate(-8px, -8px) rotate(-3deg) scale(1.02); }
+}
+
+/* Click Ripple Disabled for Clean Pen Writing */
+
+/* ==================== RESPONSIVE MAIN CONTAINER ==================== */
+.app-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(12px, 2.5vw, 24px) clamp(10px, 2.5vw, 22px) 70px;
+}
+
+/* ==================== HERO HEADER / TOPIC TITLE (ENLARGED RIGHT & LEFT LOGOS) ==================== */
+.hero-header {
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.94), rgba(15, 23, 42, 0.94));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    border-radius: clamp(22px, 3vw, 34px);
+    padding: clamp(16px, 2.8vw, 26px) clamp(18px, 3.2vw, 34px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(255,255,255,0.16);
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-right {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 2.2vw, 22px);
+    flex: 1;
+    min-width: 260px;
+}
+
+/* Enlarged Right Logo next to Topic Title */
+.topic-icon-box {
+    width: clamp(92px, 12vw, 124px);
+    height: clamp(92px, 12vw, 124px);
+    border-radius: 26px;
+    padding: 5px;
+    background: linear-gradient(135deg, #10b981, #fbbf24, #6366f1);
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.55);
+    animation: pulseRing 3s infinite ease-in-out;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+@keyframes pulseRing {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 22px rgba(16, 185, 129, 0.48); }
+    50% { transform: scale(1.06); box-shadow: 0 0 38px rgba(251, 191, 36, 0.72); }
+}
+.topic-icon-box img {
+    width: 100%;
+    height: 100%;
+    border-radius: 21px;
+    object-fit: cover;
+    background: #0f172a;
+}
+
+.brand-titles h1 {
+    font-size: clamp(1.3rem, 3vw, 1.92rem);
+    font-weight: 900;
+    line-height: 1.35;
+    background: linear-gradient(90deg, #fff, #fde68a, #34d399, #fbbf24, #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shineText 3.5s linear infinite;
+}
+@keyframes shineText {
+    to { background-position: 200% center; }
+}
+.lesson-pill {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    background: rgba(99, 102, 241, 0.25);
+    border: 1px solid rgba(129, 140, 248, 0.45);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-weight: 800;
+    color: #c7d2fe;
+    font-size: clamp(0.88rem, 1.7vw, 1.05rem);
+}
+
+.brand-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Enlarged Far-Left Animated Image (1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr) */
+.far-left-animated-badge {
+    width: clamp(92px, 12vw, 124px);
+    height: clamp(92px, 12vw, 124px);
+    border-radius: 26px;
+    border: 3px solid rgba(251, 191, 36, 0.68);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(99, 102, 241, 0.22));
+    padding: 4px;
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.48);
+    animation: bounceFloat 3s ease-in-out infinite;
+    cursor: pointer;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+@keyframes bounceFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+    50% { transform: translateY(-7px) rotate(3deg) scale(1.04); }
+}
+
+/* ==================== NON-STOP ANIMATED SHOWCASE BANNER ==================== */
+.inline-intro-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 26px;
+    background: rgba(15, 23, 42, 0.92);
+    border: 2px solid rgba(251, 191, 36, 0.48);
+    border-radius: clamp(20px, 3vw, 30px);
+    padding: clamp(12px, 2vw, 18px);
+    box-shadow: 0 18px 50px rgba(99, 102, 241, 0.35), 0 0 80px rgba(16, 185, 129, 0.12);
+    text-align: center;
+    position: relative;
+}
+
+.intro-top-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-weight: 900;
+    font-size: clamp(0.95rem, 1.9vw, 1.12rem);
+    color: #fde68a;
+}
+
+.joy-icon-spin {
+    display: inline-block;
+    animation: wiggleJoy 2.2s infinite ease-in-out;
+}
+@keyframes wiggleJoy {
+    0%, 100% { transform: rotate(-8deg) scale(1); }
+    50% { transform: rotate(8deg) scale(1.2); }
+}
+
+.video-frame-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.16);
+    background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+}
+
+.video-frame-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.nonstop-animated-banner-img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 14px;
+    animation: gentleContinuousGlow 3.2s ease-in-out infinite;
+    cursor: pointer;
+    image-rendering: -webkit-optimize-contrast;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* ==================== SPAHBOARD INTERACTIVE WHITEBOARD ==================== */
+.spahboard-shell {
+    background: #0f172a;
+    border: 2px solid rgba(56, 189, 248, 0.55);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.65);
+    display: flex;
+    flex-direction: column;
+    height: 78vh;
+    min-height: 540px;
+    position: relative;
+}
+.spahboard-topbar {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    z-index: 5;
+}
+.sb-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 5px 8px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.sb-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: #e2e8f0;
+    padding: 7px 11px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+.sb-btn:hover {
+    background: rgba(99, 102, 241, 0.25);
+    color: #fff;
+}
+.sb-btn.active {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    border-color: #93c5fd;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.45);
+}
+.sb-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.sb-swatch:hover, .sb-swatch.active-swatch {
+    transform: scale(1.22);
+    border-color: #fbbf24;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+}
+.sb-color-input {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+.sb-size-slider {
+    width: 75px;
+    accent-color: #38bdf8;
+    cursor: pointer;
+}
+.spahboard-stage {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    touch-action: none;
+    cursor: crosshair;
+}
+#spahBoardBgCanvas, #spahBoardMediaLayer, #spahBoardCanvas, #spahBoardTempCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+}
+#spahBoardBgCanvas { z-index: 1; pointer-events: none; }
+#spahBoardMediaLayer { z-index: 2; pointer-events: none; overflow: hidden; }
+#spahBoardCanvas { z-index: 3; }
+#spahBoardTempCanvas { z-index: 4; pointer-events: none; }
+
+/* When 'select' (تحريك/تحجيم الملفات) tool is active, allow interacting directly with media items */
+.spahboard-stage.select-mode #spahBoardCanvas { pointer-events: none; }
+.spahboard-stage.select-mode #spahBoardMediaLayer { pointer-events: auto; }
+
+/* Uploaded Image / PDF / Word Document Cards on Whiteboard */
+.sb-media-item {
+    position: absolute;
+    border: 2px solid rgba(56, 189, 248, 0.75);
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.92);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 160px;
+    min-height: 120px;
+    pointer-events: none; /* Body lets pen draw directly over it unless in select-mode */
+}
+.spahboard-stage.select-mode .sb-media-item {
+    pointer-events: auto;
+    border-color: #fbbf24;
+    box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.45), 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+.sb-media-header {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: #f8fafc;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    cursor: move;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    pointer-events: auto; /* Header is ALWAYS draggable & clickable even in pen mode! */
+    z-index: 6;
+    user-select: none;
+}
+.sb-media-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+    color: #fde68a;
+}
+.sb-media-ctrl {
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    padding: 2px 7px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.sb-media-ctrl:hover { background: #3b82f6; }
+.sb-media-ctrl.del-btn { background: rgba(239, 68, 68, 0.85); }
+.sb-media-ctrl.del-btn:hover { background: #dc2626; }
+
+.sb-media-body {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+}
+.sb-media-body img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.sb-word-content {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 16px 20px;
+    background: #ffffff;
+    color: #0f172a;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    line-height: 1.75;
+    text-align: right;
+    direction: auto;
+}
+.sb-word-content h1, .sb-word-content h2, .sb-word-content h3 {
+    color: #1e3a8a;
+    margin-bottom: 8px;
+}
+.sb-word-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+.sb-word-content td, .sb-word-content th {
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+}
+.sb-media-resize {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+    color: #fff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    cursor: nwse-resize;
+    pointer-events: auto; /* Always resizable from corner handle! */
+    z-index: 6;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* Drag & Drop Overlay on SpahBoard */
+.sb-drop-overlay {
+    position: absolute;
+    inset: 12px;
+    border: 3px dashed #fbbf24;
+    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(8px);
+    z-index: 20;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #fde68a;
+    font-size: 1.3rem;
+    font-weight: 900;
+    pointer-events: none;
+    text-align: center;
+    padding: 20px;
+}
+.sb-drop-overlay.visible { display: flex; }
+
+.sb-sticky-note {
+    position: absolute;
+    min-width: 170px;
+    min-height: 130px;
+    background: #fef08a;
+    color: #1e293b;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    padding: 26px 10px 10px;
+    z-index: 5;
+    border-top: 22px solid #f59e0b;
+    cursor: move;
+}
+.sb-sticky-note textarea {
+    width: 100%;
+    height: 90px;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: both;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #0f172a;
+}
+.sb-sticky-close {
+    position: absolute;
+    top: -19px;
+    left: 6px;
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    cursor: pointer;
+    line-height: 1;
+}
+.sb-floating-text-input {
+    position: absolute;
+    z-index: 6;
+    background: rgba(15, 23, 42, 0.88);
+    border: 2px dashed #38bdf8;
+    border-radius: 8px;
+    padding: 4px 8px;
+    color: #fff;
+    font-family: 'Cairo', 'Fredoka', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    outline: none;
+    min-width: 150px;
+}
+
+/* ==================== TRANSPARENT OVERLAY BOARD OVER LESSON ==================== */
+.overlay-board-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 4400;
+    pointer-events: none;
+}
+#overlayCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+}
+.overlay-floating-bar {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(14px);
+    border: 2px solid #fbbf24;
+    border-radius: 50px;
+    padding: 7px 16px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    z-index: 4600;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+    pointer-events: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.overlay-toggle-btn {
+    position: fixed;
+    bottom: 76px;
+    left: 18px;
+    z-index: 4600;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    border: 2px solid #fff;
+    color: #fff;
+    font-size: 1.15rem;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.overlay-toggle-btn:hover { transform: scale(1.12); }
+.overlay-toggle-btn.active {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 0 22px rgba(16, 185, 129, 0.8);
+}
+
+/* ==================== TEACHER SIDEBAR (RAISED ABOVE WINDOWS TASKBAR) ==================== */
+.teacher-toggle-btn {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 6005;
+    padding: 10px 15px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    border: 2px solid #fbbf24;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.25s;
+}
+.teacher-toggle-btn:hover { transform: scale(1.06); }
+
+.teacher-sidebar {
+    position: fixed;
+    top: 14px;
+    bottom: 84px; /* Elevated cleanly above Windows Start / Taskbar */
+    right: -350px;
+    width: 330px;
+    max-width: 90vw;
+    max-height: calc(100vh - 98px);
+    background: rgba(15, 23, 42, 0.97);
+    backdrop-filter: blur(18px);
+    border: 2px solid rgba(129, 140, 248, 0.55);
+    border-right: none;
+    border-radius: 24px 0 0 24px;
+    z-index: 6004;
+    transition: right 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    padding: 16px 16px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: -12px 10px 40px rgba(0, 0, 0, 0.65);
+    overflow-y: auto;
+}
+.teacher-sidebar.open { right: 0; }
+
+.ts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding-bottom: 10px;
+}
+.ts-panel {
+    background: rgba(30, 41, 59, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 12px;
+    text-align: center;
+}
+.ts-panel h3 {
+    font-size: 1rem;
+    color: #fde047;
+    margin-bottom: 8px;
+    font-weight: 900;
+}
+.wheel-stage {
+    position: relative;
+    width: 196px;
+    height: 196px;
+    margin: 6px auto 10px;
+}
+.wheel-pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-top: 22px solid #ffffff;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6));
+    z-index: 10;
+}
+#spinWheelCanvas {
+    width: 196px;
+    height: 196px;
+    border-radius: 50%;
+    border: 4px solid #fbbf24;
+    box-shadow: 0 0 22px rgba(251, 191, 36, 0.4);
+    transition: transform 3.4s cubic-bezier(0.17, 0.67, 0.14, 0.99);
+}
+.wheel-winner-badge {
+    display: none;
+    margin: 6px 0;
+    padding: 6px 12px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    font-weight: 900;
+    font-size: 0.98rem;
+    animation: pulseRing 1.5s infinite;
+}
+.wheel-names-box {
+    display: none;
+    margin-top: 8px;
+    text-align: right;
+}
+.wheel-names-box textarea {
+    width: 100%;
+    height: 76px;
+    border-radius: 12px;
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    background: rgba(2, 6, 23, 0.8);
+    color: #fff;
+    padding: 8px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    resize: vertical;
+    outline: none;
+}
+.ts-btn {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    border: none;
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 11px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 0.86rem;
+    margin: 3px;
+    transition: transform 0.2s;
+}
+.ts-btn:hover { transform: scale(1.05); }
+.ts-timer-val {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: #34d399;
+    margin: 4px 0;
+}
+@keyframes gentleContinuousGlow {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.45)); }
+    50% { transform: scale(1.03); filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.72)); }
+}
+
+.scroll-cue {
+    margin-top: 10px;
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    color: #94a3b8;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.scroll-cue i {
+    color: #34d399;
+    animation: bounceDown 1.5s infinite;
+}
+@keyframes bounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+}
+
+/* ==================== INTERACTIVE ACTION DOCK ==================== */
+.action-dock {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 26px;
+}
+
+.dock-btn {
+    position: relative;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    padding: 13px 10px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-align: center;
+    transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+.dock-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.14) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+.dock-btn:hover::before { transform: translateX(100%); }
+.dock-btn:hover {
+    transform: translateY(-6px) scale(1.03);
+    border-color: var(--gold);
+    box-shadow: 0 18px 35px rgba(99, 102, 241, 0.45);
+}
+.dock-btn:active { transform: scale(0.95); }
+.dock-btn.active-tab {
+    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    border-color: #fde047;
+    box-shadow: 0 0 28px rgba(147, 51, 234, 0.65);
+}
+
+.dock-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.55rem;
+    animation: iconIdlePulse 3s infinite ease-in-out;
+    transition: transform 0.35s ease;
+}
+@keyframes iconIdlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+.dock-btn:hover .dock-icon-wrap { transform: rotate(10deg) scale(1.16); }
+.dock-icon-wrap img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    border-radius: 12px;
+}
+.dock-label {
+    font-weight: 800;
+    font-size: clamp(0.88rem, 1.5vw, 0.96rem);
+    line-height: 1.3;
+}
+.dock-sub {
+    font-size: 0.74rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+.dock-btn.active-tab .dock-sub { color: #fef08a; }
+
+/* ==================== SECTIONS / VIEWS ==================== */
+.view-panel {
+    display: none;
+    animation: panelEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.view-panel.active {
+    display: block;
+}
+@keyframes panelEnter {
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ==================== LESSON CARDS & ANIMATED TITLES ==================== */
+.grammar-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+}
+
+.lesson-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(18px);
+    border: 1px solid var(--glass-border);
+    border-radius: clamp(20px, 3vw, 28px);
+    padding: clamp(16px, 3vw, 28px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.lesson-card:hover {
+    border-color: rgba(52, 211, 153, 0.5);
+}
+
+/* Animated Section Ribbon & Title */
+.card-ribbon {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #065f46, #047857, #4f46e5);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite, titleFloat 3s ease-in-out infinite;
+    padding: 8px 20px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+    border: 2px solid rgba(52, 211, 153, 0.55);
+    box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
+    max-width: 100%;
+}
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+@keyframes titleFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-4px); }
+}
+
+.section-brand-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fbbf24;
+    background: #0f172a;
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.7);
+    flex-shrink: 0;
+}
+
+.animated-section-title {
+    font-size: clamp(1.02rem, 2.2vw, 1.28rem);
+    font-weight: 900;
+    background: linear-gradient(90deg, #ffffff, #fde047, #6ee7b7, #ffffff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shineText 3s linear infinite;
+}
+
+.rule-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
+    gap: 14px;
+}
+
+.rule-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 4px solid var(--cyan-glow);
+    border-radius: 18px;
+    padding: 15px 16px;
+    transition: all 0.28s ease;
+    cursor: pointer;
+}
+.rule-item:hover {
+    background: rgba(99, 102, 241, 0.14);
+    transform: translateY(-4px);
+    border-right-color: var(--gold);
+}
+.rule-ar {
+    font-size: clamp(0.94rem, 1.7vw, 1.03rem);
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+.rule-en {
+    background: rgba(2, 6, 23, 0.65);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: #38bdf8;
+    font-weight: 700;
+    font-size: clamp(0.92rem, 1.6vw, 1.02rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    direction: ltr;
+    word-break: break-word;
+}
+.speak-btn {
+    background: rgba(56, 189, 248, 0.18);
+    border: none;
+    color: #38bdf8;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: 0.2s;
+}
+.speak-btn:hover {
+    background: #38bdf8;
+    color: #020617;
+    transform: scale(1.15);
+}
+
+/* Verb Formula Visual Diagram */
+.formula-banner {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15));
+    border: 2px dashed rgba(52, 211, 153, 0.5);
+    border-radius: 22px;
+    padding: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    direction: ltr;
+}
+.formula-wheel {
+    background: #0f172a;
+    border: 3px solid #10b981;
+    border-radius: 20px;
+    padding: 12px 20px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+}
+.formula-wheel strong {
+    display: block;
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    color: #34d399;
+}
+
+.verbs-compare {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 16px;
+}
+.verb-box {
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 20px;
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow-x: auto;
+}
+.verb-box h3 {
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+.verb-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    direction: ltr;
+}
+.verb-table th, .verb-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    text-align: center;
+    font-weight: 700;
+}
+.verb-table th {
+    background: rgba(99, 102, 241, 0.25);
+    color: #c7d2fe;
+}
+.highlight-v2 {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+    border-radius: 8px;
+}
+
+/* Keywords Pills */
+.keywords-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 18px;
+    direction: ltr;
+}
+.kw-tag {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(236, 72, 153, 0.2));
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    color: #fde68a;
+    padding: 7px 14px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: clamp(0.86rem, 1.5vw, 0.98rem);
+    cursor: pointer;
+    transition: 0.25s;
+}
+.kw-tag:hover {
+    transform: scale(1.08);
+    background: var(--gold);
+    color: #020617;
+}
+
+/* ==================== READING PASSAGE, 4-BUTTON AUDIO PLAYER & 5 LISTENING MCQs ==================== */
+.reading-box {
+    background: rgba(2, 6, 23, 0.7);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    border-radius: 20px;
+    padding: clamp(14px, 2.5vw, 22px);
+    direction: ltr;
+    text-align: left;
+    line-height: 1.9;
+    font-size: clamp(0.98rem, 1.8vw, 1.12rem);
+    color: #e2e8f0;
+    margin-bottom: 16px;
+}
+.reading-sentence {
+    padding: 3px 6px;
+    border-radius: 8px;
+    transition: background 0.3s, color 0.3s;
+}
+.reading-sentence.active-read {
+    background: rgba(251, 191, 36, 0.25);
+    color: #fde047;
+    font-weight: 800;
+}
+
+.audio-controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(15, 23, 42, 0.95);
+    padding: 12px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 22px;
+}
+.audio-ctrl-btn {
+    border: none;
+    border-radius: 14px;
+    padding: 10px 18px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: #fff;
+}
+.audio-ctrl-btn:hover { transform: translateY(-2px) scale(1.04); }
+.btn-play { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4); }
+.btn-pause { background: linear-gradient(135deg, #f59e0b, #d97706); color: #020617; box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4); }
+.btn-stop { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 6px 18px rgba(239, 68, 68, 0.4); }
+.btn-restart { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4); }
+
+/* 5 Listening Comprehension MCQs (4 options each) */
+.listening-mcq-section {
+    background: rgba(2, 6, 23, 0.55);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 22px;
+    padding: clamp(14px, 2.5vw, 22px);
+}
+.listening-mcq-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.listening-mcq-header h3 {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 900;
+    color: #fde68a;
+}
+.listening-score-badge {
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.92rem;
+}
+.l-mcq-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+.l-mcq-card {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 15px 18px;
+    direction: ltr;
+    text-align: left;
+}
+.l-mcq-q {
+    font-family: 'Fredoka', 'Cairo', sans-serif;
+    font-size: clamp(0.98rem, 1.8vw, 1.12rem);
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 12px;
+}
+.l-mcq-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 10px;
+}
+.l-opt-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #e2e8f0;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-family: 'Fredoka', 'Cairo', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+.l-opt-btn:hover:not(.locked) {
+    background: rgba(99, 102, 241, 0.22);
+    border-color: #818cf8;
+    transform: translateY(-2px);
+}
+.l-opt-btn.opt-correct {
+    background: var(--success) !important;
+    border-color: #fff !important;
+    color: #fff !important;
+    font-weight: 800;
+}
+.l-opt-btn.opt-wrong {
+    background: var(--danger) !important;
+    border-color: #fff !important;
+    color: #fff !important;
+}
+.l-opt-btn.locked {
+    pointer-events: none;
+}
+
+/* External Games & QR Hub */
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 14px;
+}
+.game-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    padding: 16px;
+    text-align: center;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.game-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--cyan-glow);
+    box-shadow: 0 12px 30px rgba(6, 182, 212, 0.25);
+}
+.qr-box {
+    background: #fff;
+    padding: 8px;
+    border-radius: 14px;
+    width: 110px;
+    height: 110px;
+}
+.qr-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ==================== PRACTICE & DRILLS BANNER + BOTTOM QUESTIONS ==================== */
+.practice-drills-header {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.28), rgba(236, 72, 153, 0.25));
+    border: 2px solid rgba(251, 191, 36, 0.55);
+    border-radius: 28px;
+    padding: clamp(16px, 2.5vw, 24px) clamp(18px, 3vw, 32px);
+    margin: 26px auto 20px;
+    max-width: 860px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 2.5vw, 24px);
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.35);
+    text-align: center;
+}
+
+.practice-cap-avatar {
+    width: clamp(86px, 11vw, 115px);
+    height: clamp(86px, 11vw, 115px);
+    border-radius: 24px;
+    border: 3px solid #fbbf24;
+    background: #0f172a;
+    object-fit: cover;
+    box-shadow: 0 10px 28px rgba(251, 191, 36, 0.45);
+    animation: bounceFloat 3s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.practice-drills-text h2 {
+    font-family: 'Fredoka', 'Cairo', sans-serif;
+    font-size: clamp(1.55rem, 3.5vw, 2.3rem);
+    font-weight: 900;
+    background: linear-gradient(90deg, #fde047, #ffffff, #38bdf8, #fde047);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shineText 3s linear infinite;
+    direction: ltr;
+}
+.practice-drills-text p {
+    color: #e2e8f0;
+    font-weight: 800;
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+    margin-top: 4px;
+}
+
+/* ==================== 16-CARD STITCHED VOCABULARY TEMPLATE ==================== */
+.vocab-sheet-wrapper {
+    background: linear-gradient(180deg, #38bdf8 0%, #818cf8 35%, #c084fc 70%, #f472b6 100%);
+    border-radius: clamp(20px, 3vw, 34px);
+    padding: clamp(12px, 2.5vw, 24px);
+    border: 6px solid #1e3a8a;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.65);
+    position: relative;
+    max-width: 960px;
+    margin: 0 auto;
+}
+.vocab-sheet-inner {
+    background: #fffbeb;
+    border-radius: 24px;
+    padding: clamp(12px, 2.2vw, 20px);
+    border: 4px dashed #2563eb;
+    position: relative;
+}
+.vocab-top-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+.vocab-mascot {
+    width: clamp(62px, 8vw, 82px);
+    height: clamp(62px, 8vw, 82px);
+    border-radius: 50%;
+    border: 4px solid #1d4ed8;
+    background: #dbeafe;
+    object-fit: cover;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+.vocab-title-3d {
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+}
+.vocab-title-3d h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    font-weight: 900;
+    color: #f59e0b;
+    text-shadow: 2px 2px 0 #1e3a8a, -2px -2px 0 #1e3a8a, 2px -2px 0 #1e3a8a, -2px 2px 0 #1e3a8a, 0 5px 10px rgba(0,0,0,0.3);
+    letter-spacing: 1px;
+}
+.vocab-lesson-box {
+    background: #fef3c7;
+    border: 3px dashed #1e40af;
+    border-radius: 16px;
+    padding: 6px 16px;
+    margin-top: 6px;
+    display: inline-block;
+    color: #1e3a8a;
+    font-weight: 900;
+    font-size: clamp(0.88rem, 1.6vw, 1.1rem);
+}
+
+.stitched-grid-16 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+@media (max-width: 900px) {
+    .stitched-grid-16 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+    .stitched-grid-16 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+
+.stitched-card {
+    background: #ffffff;
+    border: 4px solid #1e3a8a;
+    outline: 2px dashed #93c5fd;
+    outline-offset: -4px;
+    border-radius: 20px;
+    padding: 12px 8px;
+    text-align: center;
+    box-shadow: 0 8px 18px rgba(30, 58, 138, 0.22);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+}
+.stitched-card:hover {
+    transform: translateY(-6px) scale(1.04) rotate(1deg);
+    box-shadow: 0 14px 28px rgba(30, 58, 138, 0.35);
+}
+.vocab-3d-art {
+    font-size: clamp(2.3rem, 4vw, 3.1rem);
+    line-height: 1.1;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.22));
+    transition: transform 0.3s ease;
+}
+.stitched-card:hover .vocab-3d-art { transform: scale(1.18); }
+.vocab-en-word {
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(0.95rem, 1.6vw, 1.08rem);
+    font-weight: 700;
+    color: #1e3a8a;
+    direction: ltr;
+}
+.vocab-ar-word {
+    font-size: clamp(0.84rem, 1.4vw, 0.92rem);
+    font-weight: 800;
+    color: #dc2626;
+    margin-top: 2px;
+}
+
+.vocab-footer-banner {
+    margin-top: 18px;
+    background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+    border: 3px dashed #fde047;
+    border-radius: 18px;
+    padding: 10px 24px;
+    text-align: center;
+    color: #fde047;
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-shadow: 0 3px 6px rgba(0,0,0,0.5);
+}
+
+/* ==================== INTERACTIVE QUIZ ENGINE ==================== */
+.quiz-main-card {
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(20px);
+    width: 100%;
+    max-width: 860px;
+    border-radius: clamp(22px, 3vw, 36px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 0 50px rgba(99, 102, 241, 0.25);
+    overflow: hidden;
+    margin: 0 auto;
+}
+.quiz-header {
+    padding: clamp(14px, 2.5vw, 20px) clamp(16px, 3vw, 32px);
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.quiz-logo-container {
+    width: clamp(60px, 8vw, 78px);
+    height: clamp(60px, 8vw, 78px);
+    border-radius: 50%;
+    border: 3px solid var(--danger);
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 0 18px var(--danger);
+    animation: glow-pulse 2s infinite ease-in-out;
+}
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 6px var(--danger); transform: scale(1); }
+    50% { box-shadow: 0 0 24px var(--danger); transform: scale(1.05); }
+}
+.quiz-logo-container img { width: 100%; height: 100%; object-fit: cover; }
+
+.progress-section { padding: 14px clamp(16px, 3vw, 35px); background: rgba(0,0,0,0.3); display: none; }
+.progress-info { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; color: #94a3b8; font-weight: 700; }
+.progress-container { width: 100%; height: 9px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #d946ef); transition: width 0.5s ease; }
+
+.question-row {
+    background: rgba(255, 255, 255, 0.05);
+    padding: clamp(16px, 2.5vw, 26px);
+    border-radius: 22px;
+    margin-bottom: 20px;
+    border: 1px solid var(--danger);
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    direction: ltr;
+}
+@media (max-width: 540px) {
+    .question-row { flex-direction: column-reverse; text-align: center; }
+    .question-text { text-align: center !important; }
+}
+.question-text { font-size: clamp(1.05rem, 2vw, 1.25rem); font-weight: 800; text-align: left; flex: 1; color: #f8fafc; line-height: 1.6; }
+
+.timer-wrapper { position: relative; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.timer-svg { transform: rotate(-90deg); width: 72px; height: 72px; }
+.timer-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 6; }
+.timer-progress {
+    fill: none; stroke: var(--success); stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 226; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+#timer-text { position: absolute; font-size: 1.4rem; font-weight: 900; }
+
+.option-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 15px 20px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    margin-bottom: 11px;
+    color: white;
+    width: 100%;
+    direction: ltr;
+    transition: 0.28s all;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.option-box:hover { background: rgba(99, 102, 241, 0.2); transform: translateX(6px); border-color: var(--primary-light); }
+.option-box.correct { background: var(--success) !important; border-color: #fff !important; }
+.option-box.wrong { background: var(--danger) !important; border-color: #fff !important; }
+.option-box.disabled { pointer-events: none; }
+
+.scene { display: none; padding: clamp(18px, 3vw, 34px); text-align: center; }
+.scene.active { display: block; animation: panelEnter 0.45s ease; }
+
+.student-input {
+    width: 92%;
+    max-width: 460px;
+    padding: 16px;
+    border-radius: 16px;
+    border: 2px solid rgba(255,255,255,0.15);
+    background: rgba(0,0,0,0.3);
+    color: white;
+    text-align: center;
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    outline: none;
+    margin-bottom: 20px;
+}
+.student-input:focus { border-color: var(--gold); }
+
+.btn-glow {
+    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    color: white;
+    padding: 13px 26px;
+    border: none;
+    border-radius: 16px;
+    font-size: clamp(0.95rem, 1.7vw, 1.1rem);
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 25px rgba(79, 70, 229, 0.45);
+    text-decoration: none;
+}
+.btn-glow:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 30px rgba(147, 51, 234, 0.65); }
+.btn-gold {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #020617;
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.45);
+}
+
+.review-area {
+    background: rgba(0,0,0,0.45);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: right;
+    display: none;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Sound Toggle Floating Button */
+.sound-toggle {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    z-index: 4000;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #6366f1);
+    border: 2px solid #fff;
+    color: #fff;
+    font-size: 1.15rem;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    transition: transform 0.3s;
+}
+.sound-toggle:hover { transform: scale(1.12); }
+
+/* Print / PDF Export Styles */
+@media print {
+    body { background: #fff !important; color: #000 !important; }
+    .inline-intro-section, .action-dock, .sound-toggle, .overlay-toggle-btn, .overlay-floating-bar, .teacher-toggle-btn, .teacher-sidebar, #particles-js, #click-fx-canvas, .speak-btn, .floating-decor, .floating-bg-logo, .audio-controls-bar, #bottom-quiz-anchor { display: none !important; }
+    .hero-header { background: #1e3a8a !important; color: #fff !important; border: none !important; box-shadow: none !important; }
+    .lesson-card { background: #fff !important; color: #000 !important; border: 2px solid #1e3a8a !important; box-shadow: none !important; page-break-inside: avoid; margin-bottom: 16px; }
+    .animated-section-title { -webkit-text-fill-color: #fff !important; color: #fff !important; }
+    .rule-item { background: #f8fafc !important; border: 1px solid #cbd5e1 !important; color: #000 !important; }
+    .rule-ar { color: #0f172a !important; }
+    .rule-en { background: #eff6ff !important; color: #1e40af !important; border-color: #93c5fd !important; }
+    .l-mcq-card { background: #f8fafc !important; border: 1px solid #cbd5e1 !important; color: #000 !important; }
+    .l-mcq-q { color: #0f172a !important; }
+    .l-opt-btn { background: #fff !important; color: #1e3a8a !important; border-color: #93c5fd !important; }
+    #view-lesson { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles-js"></canvas>
+
+<!-- Joyful Floating Spaceship, Stars & Small Animated Brand Logos in Particles Background -->
+<div class="floating-decor" style="top: 13%; right: 2.5%; animation-delay: 0s;">🚀</div>
+<div class="floating-decor" style="top: 36%; left: 2.5%; animation-delay: 1.5s;">⭐</div>
+<div class="floating-decor" style="top: 64%; right: 2%; animation-delay: 3s;">🎓</div>
+<div class="floating-decor" style="top: 82%; left: 3%; animation-delay: 2s;">💡</div>
+
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 10%; left: 3%; animation-delay: 0.2s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 22%; right: 3.5%; animation-delay: 1.1s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 35%; left: 6%; animation-delay: 2.0s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 48%; right: 6%; animation-delay: 2.9s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 61%; left: 3.5%; animation-delay: 3.7s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 74%; right: 4%; animation-delay: 4.5s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 86%; left: 5%; animation-delay: 5.2s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 93%; right: 5.5%; animation-delay: 1.6s;" alt="لوجو مستر إيهاب">
+
+<!-- Transparent Overlay Whiteboard Above Lesson -->
+<button class="overlay-toggle-btn" id="overlayToggleBtn" onclick="toggleOverlayBoard()" title="سبورة شفافة للكتابة فوق الدرس">
+    <i class="fa-solid fa-pen-nib"></i>
+</button>
+<div class="overlay-floating-bar" id="overlayToolbar">
+    <button class="sb-btn active" id="ov-pen" onclick="setOverlayTool('pen', this)" title="قلم"><i class="fa-solid fa-pen"></i> قلم</button>
+    <button class="sb-btn" id="ov-high" onclick="setOverlayTool('high', this)" title="تظليل"><i class="fa-solid fa-highlighter"></i> فسفوري</button>
+    <button class="sb-btn" id="ov-erase" onclick="setOverlayTool('erase', this)" title="ممحاة"><i class="fa-solid fa-eraser"></i> ممحاة</button>
+    <span class="sb-swatch active-swatch" style="background:#fde047;" onclick="setOverlayColor('#fde047', this)"></span>
+    <span class="sb-swatch" style="background:#38bdf8;" onclick="setOverlayColor('#38bdf8', this)"></span>
+    <span class="sb-swatch" style="background:#34d399;" onclick="setOverlayColor('#34d399', this)"></span>
+    <span class="sb-swatch" style="background:#f87171;" onclick="setOverlayColor('#f87171', this)"></span>
+    <input type="color" id="overlayColorPicker" class="sb-color-input" value="#fde047" onchange="setOverlayColor(this.value)">
+    <button class="sb-btn" style="color:#f87171;" onclick="clearOverlayCanvas()" title="مسح"><i class="fa-solid fa-trash"></i></button>
+    <button class="sb-btn" style="background:#ef4444; color:#fff;" onclick="toggleOverlayBoard()" title="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div class="overlay-board-layer" id="overlayBoardLayer">
+    <canvas id="overlayCanvas"></canvas>
+</div>
+
+<!-- Teacher Classroom Tools Toggle & Sidebar (Elevated Above Windows Taskbar) -->
+<button class="teacher-toggle-btn" onclick="toggleTeacherSidebar()" title="أدوات المستر وعجلة الحظ">
+    <i class="fa-solid fa-toolbox"></i>
+    <span>أدوات المستر</span>
+</button>
+
+<aside class="teacher-sidebar" id="teacherSidebar">
+    <div class="ts-header">
+        <h2 style="font-size:1.15rem; font-weight:900; color:#fde047;">أدوات المستر 👨‍🏫</h2>
+        <button class="sb-btn" style="color:#f87171; padding:4px 9px;" onclick="toggleTeacherSidebar()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- Spin Wheel Panel -->
+    <div class="ts-panel">
+        <h3>🎯 عجلة الحظ (اختيار الطلاب)</h3>
+        <div class="wheel-stage">
+            <div class="wheel-pointer"></div>
+            <canvas id="spinWheelCanvas" width="196" height="196"></canvas>
+        </div>
+        <div class="wheel-winner-badge" id="wheelWinnerBadge"></div>
+        <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px;">
+            <button class="ts-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#020617;" onclick="spinTeacherWheel()">
+                <i class="fa-solid fa-rotate"></i> لف العجلة!
+            </button>
+            <button class="ts-btn" onclick="toggleWheelNamesInput()">
+                <i class="fa-solid fa-user-pen"></i> إضافة أسماء
+            </button>
+        </div>
+        <div class="wheel-names-box" id="wheelNamesBox">
+            <textarea id="wheelNamesInput" placeholder="اكتب أسماء الطلاب هنا (كل اسم في سطر أو افصل بينهم بفاصلة)&#10;مثال:&#10;أحمد&#10;محمد&#10;عمر&#10;يوسف" oninput="updateSpinWheelFromInput()"></textarea>
+            <div style="display:flex; justify-content:space-between; margin-top:5px;">
+                <button class="ts-btn" style="background:#10b981; font-size:0.8rem;" onclick="updateSpinWheelFromInput()">تحديث العجلة ✔</button>
+                <button class="ts-btn" style="background:#ef4444; font-size:0.8rem;" onclick="resetWheelDefault()">الوضع الافتراضي</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Classroom Activity Timer -->
+    <div class="ts-panel">
+        <h3>⏱️ مؤقت الأنشطة</h3>
+        <div class="ts-timer-val" id="classTimerDisplay">02:00</div>
+        <div>
+            <button class="ts-btn" onclick="startClassTimer(60)">1 د</button>
+            <button class="ts-btn" onclick="startClassTimer(120)">2 د</button>
+            <button class="ts-btn" onclick="startClassTimer(300)">5 د</button>
+            <button class="ts-btn" style="background:#ef4444;" onclick="stopClassTimer()">إيقاف</button>
+        </div>
+    </div>
+
+    <!-- Motivational Sound & Visual Effects (Clearly visible above Windows Taskbar) -->
+    <div class="ts-panel">
+        <h3>🎉 مؤثرات تشجيعية</h3>
+        <div>
+            <button class="ts-btn" style="background:linear-gradient(135deg,#10b981,#059669);" onclick="playApplauseFX()">👏 تصفيق حار</button>
+            <button class="ts-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#020617;" onclick="playBellFX()">🔔 جرس انتباه</button>
+            <button class="ts-btn" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);" onclick="triggerCelebration()">⭐ نجوم التفوق</button>
+        </div>
+    </div>
+</aside>
+
+<!-- Sound Effects Toggle -->
+<button class="sound-toggle" id="soundToggleBtn" onclick="toggleAudioFX()" title="تشغيل/كتم المؤثرات الصوتية">
+    <i class="fa-solid fa-volume-high"></i>
+</button>
+
+<!-- ==================== MAIN APP CONTAINER ==================== -->
+<div class="app-container">
+
+    <!-- ==================== NON-STOP ANIMATED LOGO BANNER (ABOVE TITLE + HD QUALITY) ==================== -->
+    <section class="inline-intro-section" aria-label="الشعار الترحيبي المتحرك">
+        <div class="intro-top-strip">
+            <span class="joy-icon-spin">🚀</span>
+            <span>دروس مستر إيهاب التفاعلية الشاملة</span>
+            <span class="joy-icon-spin">🌟</span>
+        </div>
+
+        <div class="video-frame-wrapper">
+            <img src="https://lh3.googleusercontent.com/d/1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4=s0"
+                 onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4&sz=w2000';"
+                 class="nonstop-animated-banner-img"
+                 alt="شعار دروس مستر إيهاب التفاعلية المتحرك"
+                 onclick="triggerCelebration()">
+        </div>
+
+        <div class="scroll-cue">
+            <i class="fa-solid fa-angles-down"></i>
+            <span>اسحب الشاشة للأسفل (Scroll) للدخول مباشرة في الشرح التفاعلي والاختبارات</span>
+            <i class="fa-solid fa-angles-down"></i>
+        </div>
+    </section>
+
+    <!-- HERO HEADER: Enlarged Right Logo + Topic Title + Enlarged Far-Left Animated Character -->
+    <header class="hero-header">
+        <div class="brand-right">
+            <div class="topic-icon-box" onclick="triggerCelebration()">
+                <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX=s0"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w400';"
+                     alt="لوجو مستر إيهاب">
+            </div>
+            <div class="brand-titles">
+                <h1>دروس مستر إيهاب التفاعلية الشاملة <span class="joy-icon-spin">✨</span></h1>
+                <div class="lesson-pill">
+                    <i class="fa-solid fa-graduation-cap" style="color: #fbbf24;"></i>
+                    <span class="en">Present Continuous Tense</span>
+                    <span>— زمن المضارع المستمر</span>
+                </div>
+            </div>
+        </div>
+        <div class="brand-left">
+            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr=s0"
+                 onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr&sz=w400';"
+                 class="far-left-animated-badge" alt="شخصية مستر إيهاب المتحركة" onclick="triggerCelebration()">
+        </div>
+    </header>
+
+    <!-- ==================== INTERACTIVE ACTION DOCK ==================== -->
+    <nav class="action-dock">
+        <button class="dock-btn active-tab" id="tab-lesson" onclick="switchView('lesson', this)">
+            <div class="dock-icon-wrap" style="background: rgba(16, 185, 129, 0.25);">
+                <img src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD&sz=w200';"
+                     alt="شرح الدرس">
+            </div>
+            <span class="dock-label">شرح الدرس التفاعلي 📖</span>
+            <span class="dock-sub">عناوين متحركة وأمثلة ناطقة</span>
+        </button>
+
+        <button class="dock-btn" id="tab-board" onclick="switchView('board', this)">
+            <div class="dock-icon-wrap" style="background: rgba(56, 189, 248, 0.25); color: #38bdf8;">
+                <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+            <span class="dock-label">السبورة التفاعلية 🎨</span>
+            <span class="dock-sub">كتابة بالقلم واليد (SpahBoard)</span>
+        </button>
+
+        <button class="dock-btn" id="tab-video" onclick="openLessonVideoDirect(this)">
+            <div class="dock-icon-wrap" style="background: rgba(236, 72, 153, 0.25); color: #f472b6;">
+                <i class="fa-solid fa-circle-play"></i>
+            </div>
+            <span class="dock-label">فيديو الدرس 🎥</span>
+            <span class="dock-sub">تشغيل مباشر في نفس النافذة</span>
+        </button>
+
+        <button class="dock-btn" id="tab-vocab" onclick="switchView('vocab', this)">
+            <div class="dock-icon-wrap" style="background: rgba(245, 158, 11, 0.25); color: #fbbf24;">
+                <i class="fa-solid fa-images"></i>
+            </div>
+            <span class="dock-label">كلمات الدرس بالصور 🖼️</span>
+            <span class="dock-sub">قالب الـ 16 بطاقة 3D</span>
+        </button>
+
+        <button class="dock-btn" id="tab-quiz" onclick="scrollToBottomQuestions(this)">
+            <div class="dock-icon-wrap" style="background: rgba(99, 102, 241, 0.25); color: #818cf8;">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <span class="dock-label">الاختبار التفاعلي 🏆</span>
+            <span class="dock-sub">Practice & Drills (28 سؤال)</span>
+        </button>
+
+        <button class="dock-btn" onclick="exportToPDF()">
+            <div class="dock-icon-wrap" style="background: rgba(239, 68, 68, 0.25); color: #f87171;">
+                <i class="fa-solid fa-file-pdf"></i>
+            </div>
+            <span class="dock-label">تخريج المحتوى PDF 📄</span>
+            <span class="dock-sub">نسخة طباعة احترافية</span>
+        </button>
+
+        <button class="dock-btn" onclick="exportToPPTX()">
+            <div class="dock-icon-wrap" style="background: rgba(249, 115, 22, 0.25); color: #fb923c;">
+                <i class="fa-solid fa-file-powerpoint"></i>
+            </div>
+            <span class="dock-label">تخريج PowerPoint 📊</span>
+            <span class="dock-sub">تحميل ملف شرائح .pptx</span>
+        </button>
+    </nav>
+
+    <!-- ==================== VIEW: SPAHBOARD INTERACTIVE WHITEBOARD ==================== -->
+    <section id="view-board" class="view-panel">
+        <div class="spahboard-shell" id="spahboardShell">
+            <div class="spahboard-topbar">
+                <!-- Drawing, Eraser & Move Tools -->
+                <div class="sb-group">
+                    <button class="sb-btn active" data-sbtool="pen" onclick="setSbTool('pen', this)" title="قلم حر (يد وقلم)">
+                        <i class="fa-solid fa-pen"></i> قلم
+                    </button>
+                    <button class="sb-btn" data-sbtool="highlighter" onclick="setSbTool('highlighter', this)" title="قلم تظليل فسفوري">
+                        <i class="fa-solid fa-highlighter"></i> فسفوري
+                    </button>
+                    <button class="sb-btn" data-sbtool="laser" onclick="setSbTool('laser', this)" title="مؤشر ليزر يتلاشى">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> ليزر
+                    </button>
+                    <button class="sb-btn" data-sbtool="line" onclick="setSbTool('line', this)" title="خط مستقيم">
+                        <i class="fa-solid fa-slash"></i>
+                    </button>
+                    <button class="sb-btn" data-sbtool="arrow" onclick="setSbTool('arrow', this)" title="سهم">
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                    </button>
+                    <button class="sb-btn" data-sbtool="rect" onclick="setSbTool('rect', this)" title="مستطيل">
+                        <i class="fa-regular fa-square"></i>
+                    </button>
+                    <button class="sb-btn" data-sbtool="circle" onclick="setSbTool('circle', this)" title="دائرة">
+                        <i class="fa-regular fa-circle"></i>
+                    </button>
+                    <button class="sb-btn" data-sbtool="text" onclick="setSbTool('text', this)" title="إضافة نص مكتوب">
+                        <i class="fa-solid fa-font"></i> نص
+                    </button>
+                    <button class="sb-btn" onclick="addSbStickyNote()" title="ملصق ملاحظات">
+                        <i class="fa-regular fa-note-sticky"></i> ملصق
+                    </button>
+                    <button class="sb-btn" data-sbtool="eraser" onclick="setSbTool('eraser', this)" title="ممحاة ذكية (تمسح الخط المتصل بالكامل)">
+                        <i class="fa-solid fa-eraser"></i> ممحاة القلم
+                    </button>
+                    <button class="sb-btn" data-sbtool="select" onclick="setSbTool('select', this)" title="تحريك وتصفح الصور والملفات">
+                        <i class="fa-solid fa-hand"></i> تحريك
+                    </button>
+                </div>
+
+                <!-- Upload Image & Upload PDF / Word (Plus Drag & Drop Support) -->
+                <div class="sb-group">
+                    <button class="sb-btn" style="color:#38bdf8;" onclick="document.getElementById('sbImageUploadInput').click()" title="رفع صورة أو أكثر للسبورة (أو اسحبها وأفلتها هنا)">
+                        <i class="fa-regular fa-image"></i> رفع صورة
+                    </button>
+                    <button class="sb-btn" style="color:#fbbf24;" onclick="document.getElementById('sbDocUploadInput').click()" title="رفع ملف PDF أو Word للسبورة (أو اسحبه وأفلته هنا)">
+                        <i class="fa-solid fa-file-pdf"></i> رفع PDF / Word
+                    </button>
+                    <input type="file" id="sbImageUploadInput" accept="image/*" multiple style="display:none;" onchange="handleSbFileInput(this.files)">
+                    <input type="file" id="sbDocUploadInput" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple style="display:none;" onchange="handleSbFileInput(this.files)">
+                </div>
+
+                <!-- Colors & Brush Size -->
+                <div class="sb-group">
+                    <span class="sb-swatch active-swatch" style="background:#ffffff;" onclick="setSbColor('#ffffff', this)"></span>
+                    <span class="sb-swatch" style="background:#fde047;" onclick="setSbColor('#fde047', this)"></span>
+                    <span class="sb-swatch" style="background:#38bdf8;" onclick="setSbColor('#38bdf8', this)"></span>
+                    <span class="sb-swatch" style="background:#34d399;" onclick="setSbColor('#34d399', this)"></span>
+                    <span class="sb-swatch" style="background:#f87171;" onclick="setSbColor('#f87171', this)"></span>
+                    <span class="sb-swatch" style="background:#c084fc;" onclick="setSbColor('#c084fc', this)"></span>
+                    <span class="sb-swatch" style="background:#0f172a;" onclick="setSbColor('#0f172a', this)"></span>
+                    <input type="color" id="sbColorPicker" class="sb-color-input" value="#ffffff" onchange="setSbColor(this.value)">
+                    <input type="range" id="sbSizeSlider" class="sb-size-slider" min="2" max="24" value="4" title="حجم القلم">
+                </div>
+
+                <!-- Backgrounds -->
+                <div class="sb-group">
+                    <button class="sb-btn active" id="bg-dark" onclick="setSbBackground('dark', this)" title="سبورة داكنة">داكنة</button>
+                    <button class="sb-btn" id="bg-white" onclick="setSbBackground('white', this)" title="سبورة بيضاء">بيضاء</button>
+                    <button class="sb-btn" id="bg-lines" onclick="setSbBackground('lines', this)" title="مسطرة 4 سطور إنجليزي">4 سطور</button>
+                    <button class="sb-btn" id="bg-grid" onclick="setSbBackground('grid', this)" title="شبكة مربعات">شبكة</button>
+                </div>
+
+                <!-- Pages, Undo/Redo, Separate Clear Ink & Clear Files, Save PNG, Fullscreen -->
+                <div class="sb-group">
+                    <button class="sb-btn" onclick="sbPrevPage()" title="الصفحة السابقة"><i class="fa-solid fa-chevron-right"></i></button>
+                    <span id="sbPageIndicator" style="font-weight:800; font-size:0.85rem; color:#fde68a; padding:0 4px;">1 / 1</span>
+                    <button class="sb-btn" onclick="sbNextOrAddPage()" title="الصفحة التالية / صفحة جديدة"><i class="fa-solid fa-plus"></i></button>
+                    <button class="sb-btn" onclick="sbUndo()" title="تراجع عن الكتابة"><i class="fa-solid fa-rotate-left"></i></button>
+                    <button class="sb-btn" onclick="sbRedo()" title="إعادة الكتابة"><i class="fa-solid fa-rotate-right"></i></button>
+                    <button class="sb-btn" style="color:#fb923c;" onclick="sbClearInk()" title="مسح الكتابة والرسومات فقط (مع بقاء الصور والملفات)">
+                        <i class="fa-solid fa-broom"></i> مسح المكتوب
+                    </button>
+                    <button class="sb-btn" style="color:#f87171;" onclick="sbClearMedia()" title="مسح الصور وملفات PDF و Word فقط (مع بقاء المكتوب)">
+                        <i class="fa-solid fa-folder-minus"></i> مسح الصور والملفات
+                    </button>
+                    <button class="sb-btn" style="color:#34d399;" onclick="sbExportPNG()" title="حفظ السبورة كصورة"><i class="fa-solid fa-camera"></i></button>
+                    <button class="sb-btn" onclick="sbToggleFullscreen()" title="ملء الشاشة"><i class="fa-solid fa-expand"></i></button>
+                </div>
+            </div>
+
+            <div class="spahboard-stage" id="spahboardStage">
+                <canvas id="spahBoardBgCanvas"></canvas>
+                <div id="spahBoardMediaLayer"></div>
+                <canvas id="spahBoardCanvas"></canvas>
+                <canvas id="spahBoardTempCanvas"></canvas>
+                <div class="sb-drop-overlay" id="sbDropOverlay">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:3rem; color:#38bdf8;"></i>
+                    <span>أفلت الصورة أو ملف PDF / Word هنا لإدراجه على السبورة مباشرة</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== VIEW 1: INTERACTIVE LESSON + LISTENING MCQs + BOTTOM QUIZ ==================== -->
+    <section id="view-lesson" class="view-panel active">
+        <div class="grammar-grid">
+
+            <!-- CARD 1: USAGE (EXPRESSES) -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">1. الاستخدام — <span class="en">Expresses / Usage</span> ✨</h2>
+                </div>
+                <div class="rule-list">
+                    <div class="rule-item" onclick="speakText('He is playing football now. They are writing on the board.')">
+                        <div class="rule-ar">🔹 يعبر المضارع المستمر عن حدث يحدث في هذه اللحظة الآن (<span class="en" style="color:#fbbf24;">now / at this moment</span>):</div>
+                        <div class="rule-en">
+                            <span>He is playing football now. / They are writing on the board.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('I am reading a story at present.')">
+                        <div class="rule-ar">🔹 حدث مستمر في الوقت الحاضر (<span class="en" style="color:#fbbf24;">at present / currently</span>):</div>
+                        <div class="rule-en">
+                            <span>I am reading a story at present.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('Mohamed works as a waiter. Hassan is temporarily working as a taxi driver.')">
+                        <div class="rule-ar">🔹 أحداث ووظائف مؤقتة وليست دائمة (الوظيفة الدائمة مضارع بسيط، والمؤقتة مضارع مستمر):</div>
+                        <div class="rule-en">
+                            <span>Permanent: Mohamed works as a waiter. | Temporary: Hassan is temporarily working as a taxi driver.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('What are you doing on Friday evening? I am going to the theatre.')">
+                        <div class="rule-ar">🔹 مستقبل مخطط له مسبقاً (ترتيبات مسبقة — يقترن في الامتحانات بكلمتي <span class="en" style="color:#fbbf24;">arrange / arrangement</span>):</div>
+                        <div class="rule-en">
+                            <span>What are you doing on Friday evening? — I am going to the theatre.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('Mohamed is marrying next Friday.')">
+                        <div class="rule-ar">🔹 مناسبات وأحداث مستقبلية تم الترتيب والتجهيز لها بالفعل:</div>
+                        <div class="rule-en">
+                            <span>Mohamed is marrying next Friday. (We have arranged everything)</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('My English is getting better. At first I did not like my job, but I am beginning to enjoy it now.')">
+                        <div class="rule-ar">🔹 التحدث عن التغييرات التي تحدث لنا مؤخراً مع أفعال مثل: <span class="en" style="color:#fbbf24;">get / change / become / increase / rise / fall / grow / improve / begin / start</span>:</div>
+                        <div class="rule-en">
+                            <span>My English is getting better. / I am beginning to enjoy my job now.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('I want a coffee. I love English.')">
+                        <div class="rule-ar">⚠️ <strong>ملاحظة هامة (Stative Verbs):</strong> لا تُستخدم أفعال الحالة والشعور والامتلاك والتفكير في الأزمنة المستمرة مثل: <span class="en" style="color:#fbbf24;">see, hear, smell, have, have got, own, want, possess, know, promise, belong, like, love, hate</span> ونستخدم المضارع البسيط بدلاً منه:</div>
+                        <div class="rule-en">
+                            <span>I want a coffee. (✔) — (Not: I am wanting a coffee ✖)</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: THE FORM -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">2. التكوين — <span class="en">The Form</span> 🚀</h2>
+                </div>
+
+                <div class="formula-banner">
+                    <div class="formula-wheel">
+                        <strong>I ➔ am &nbsp;|&nbsp; He / She / It ➔ is &nbsp;|&nbsp; We / You / They ➔ are</strong>
+                        <span style="color:#94a3b8; font-size:0.85rem;">الفاعل + الفعل المساعد (am / is / are)</span>
+                    </div>
+                    <div style="font-size: 2rem; color: #fbbf24;"><i class="fa-solid fa-plus"></i></div>
+                    <div class="formula-wheel" style="border-color: #fbbf24;">
+                        <strong style="color: #fbbf24;">Verb + ing</strong>
+                        <span style="color:#94a3b8; font-size:0.85rem;">مصدر الفعل مضافاً إليه ing</span>
+                    </div>
+                </div>
+
+                <div class="verbs-compare">
+                    <div class="verb-box">
+                        <h3>✅ تصريف الزمن مع الضمائر (<span class="en">Pronouns &amp; Form</span>)</h3>
+                        <p style="color:#cbd5e1; font-size:0.95rem;">يتكون المضارع المستمر من <span class="en" style="color:#34d399;">(am / is / are) + v + ing</span>:</p>
+                        <table class="verb-table">
+                            <tr><th>Subject (الفاعل)</th><th>Auxiliary</th><th>Verb + ing</th></tr>
+                            <tr><td>I</td><td class="highlight-v2">am ('m)</td><td>reading / playing</td></tr>
+                            <tr><td>He / She / It</td><td class="highlight-v2">is ('s)</td><td>playing / working</td></tr>
+                            <tr><td>We / You / They</td><td class="highlight-v2">are ('re)</td><td>writing / going</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="verb-box">
+                        <h3>⚡ قواعد إضافة <span class="en">(-ing)</span> للفعل (<span class="en">Spelling Rules</span>)</h3>
+                        <p style="color:#cbd5e1; font-size:0.95rem;">انتبه للتغييرات الإملائية عند إضافة <span class="en" style="color:#34d399;">ing</span> لنهاية الفعل:</p>
+                        <table class="verb-table">
+                            <tr><th>القاعدة</th><th>Infinitive</th><th>Verb + ing</th></tr>
+                            <tr><td>حذف <span class="en">e</span> الصامتة</td><td>write / come</td><td class="highlight-v2">writing / coming</td></tr>
+                            <tr><td>قلب <span class="en">ie</span> إلى <span class="en">y</span></td><td>lie / die</td><td class="highlight-v2">lying / dying</td></tr>
+                            <tr><td>مضاعفة الحرف الأخير</td><td>run / swim</td><td class="highlight-v2">running / swimming</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 3: NEGATION & INTERROGATIVE -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">3. النفي والاستفهام — <span class="en">Negation &amp; Interrogative</span> 💡</h2>
+                </div>
+                <div class="rule-list">
+                    <div class="rule-item" onclick="speakText('He is playing football. He is not playing football. He is not reading.')">
+                        <div class="rule-ar">❌ <strong>النفي (Negation):</strong> كالعادة نستخدم <span class="en" style="color:#fbbf24;">not</span> بعد (<span class="en" style="color:#fbbf24;">am / is / are</span>):</div>
+                        <div class="rule-en">
+                            <span>He is playing football ➔ He is not (isn't) playing football. / She isn't reading.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('He is playing football. Is he playing football? Yes, he is. No, he is not.')">
+                        <div class="rule-ar">❓ <strong>السؤال بـ هل (Yes/No Question):</strong> نقدم الفعل المساعد <span class="en" style="color:#fbbf24;">Am / Is / Are</span> على الفاعل:</div>
+                        <div class="rule-en">
+                            <span>He is playing football. ➔ Is he playing football? (Yes, he is / No, he isn't)</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="rule-item" onclick="speakText('What are you doing on Friday evening? I am going to the theatre.')">
+                        <div class="rule-ar">💡 <strong>السؤال بأداة استفهام (Wh- Question):</strong> أداة الاستفهام + <span class="en" style="color:#fbbf24;">am / is / are</span> + الفاعل + <span class="en" style="color:#fbbf24;">v-ing</span>:</div>
+                        <div class="rule-en">
+                            <span>What are you doing on Friday evening? ➔ I am going to the theatre.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 4: KEYWORDS & SECONDARY TIPS -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">4. الكلمات الدالة وملاحظات المتفوقين — <span class="en">Key Words &amp; Notes</span> 🌟</h2>
+                </div>
+                <div class="keywords-cloud">
+                    <span class="kw-tag" onclick="speakText('at this moment')">at this moment</span>
+                    <span class="kw-tag" onclick="speakText('at present')">at present</span>
+                    <span class="kw-tag" onclick="speakText('now')">now</span>
+                    <span class="kw-tag" onclick="speakText('Look!')">Look!</span>
+                    <span class="kw-tag" onclick="speakText('Listen!')">Listen!</span>
+                    <span class="kw-tag" onclick="speakText('still')">still</span>
+                    <span class="kw-tag" onclick="speakText('currently')">currently</span>
+                    <span class="kw-tag" onclick="speakText('this week')">this (week / month / year)</span>
+                    <span class="kw-tag" onclick="speakText('these days')">these (days / weeks)</span>
+                    <span class="kw-tag" onclick="speakText('today')">today</span>
+                    <span class="kw-tag" onclick="speakText('tonight')">tonight</span>
+                    <span class="kw-tag" onclick="speakText('temporarily')">temporary / temporarily</span>
+                    <span class="kw-tag" onclick="speakText('nowadays')">nowadays</span>
+                    <span class="kw-tag" onclick="speakText('arrangement')">arrange / arrangement</span>
+                </div>
+                <div class="rule-list">
+                    <div class="rule-item" onclick="speakText('He is playing football now. I am reading a story at present. They are writing on the board.')">
+                        <div class="rule-ar">🎯 <strong>أمثلة تطبيقية هامة:</strong> لاحظ استخدام الكلمات الدالة مع تركيب الزمن:</div>
+                        <div class="rule-en">
+                            <span>He is playing football now. | I am reading a story at present.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                    <div class="rule-item" onclick="speakText('We have arranged everything. We are travelling to Aswan tomorrow.')">
+                        <div class="rule-ar">🎓 <strong>معلومة تهمك في الامتحانات:</strong> وجود كلمات مثل <span class="en" style="color:#fbbf24;">arranged / booked / prepared</span> يدل على الترتيب المسبق للمستقبل فنختار المضارع المستمر:</div>
+                        <div class="rule-en">
+                            <span>We have booked the tickets. We are travelling tomorrow.</span>
+                            <button class="speak-btn"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 5: READING & LISTENING PASSAGE + 4-BUTTON PLAYER + 5 MCQs (4 OPTIONS EACH) -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">5. قطعة القراءة والاستماع وأسئلتها — <span class="en">Listening &amp; Reading</span> 🎧</h2>
+                </div>
+
+                <div class="reading-box" id="readingPassageContainer">
+                    <span class="reading-sentence" data-idx="0">Right now, Omar is sitting in his room and reading an interesting English story.</span>
+                    <span class="reading-sentence" data-idx="1">Outside, his father is washing the car while his mother is cooking lunch in the kitchen.</span>
+                    <span class="reading-sentence" data-idx="2">His older brother, Hassan, is temporarily working as a tour guide this summer.</span>
+                    <span class="reading-sentence" data-idx="3">Omar's English is getting much better because he is practicing every day nowadays.</span>
+                    <span class="reading-sentence" data-idx="4">Tomorrow evening, the whole family is travelling to Alexandria because they have already booked the tickets.</span>
+                </div>
+
+                <div class="audio-controls-bar">
+                    <button class="audio-ctrl-btn btn-play" onclick="playReadingAudio()">
+                        <i class="fa-solid fa-play"></i> تشغيل
+                    </button>
+                    <button class="audio-ctrl-btn btn-pause" onclick="pauseReadingAudio()">
+                        <i class="fa-solid fa-pause"></i> إيقاف مؤقت
+                    </button>
+                    <button class="audio-ctrl-btn btn-stop" onclick="stopReadingAudio()">
+                        <i class="fa-solid fa-stop"></i> إيقاف
+                    </button>
+                    <button class="audio-ctrl-btn btn-restart" onclick="restartReadingAudio()">
+                        <i class="fa-solid fa-rotate-right"></i> إعادة تشغيل
+                    </button>
+                </div>
+
+                <!-- 5 Multiple-Choice Comprehension Questions (4 options each) -->
+                <div class="listening-mcq-section">
+                    <div class="listening-mcq-header">
+                        <h3>📝 أسئلة الفهم والاستماع (5 أسئلة اختيار من متعدد)</h3>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span class="listening-score-badge" id="listeningScoreBadge">النتيجة: 0 / 5</span>
+                            <button class="audio-ctrl-btn btn-restart" style="padding:6px 14px; font-size:0.85rem;" onclick="renderListeningMCQs()">
+                                <i class="fa-solid fa-rotate"></i> إعادة الأسئلة
+                            </button>
+                        </div>
+                    </div>
+                    <div class="l-mcq-list" id="listeningMcqGrid"></div>
+                </div>
+            </div>
+
+            <!-- CARD 6: GAMES & QR LINKS HUB -->
+            <div class="lesson-card">
+                <div class="card-ribbon">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                         class="section-brand-icon" alt="أيقونة القسم">
+                    <h2 class="animated-section-title">6. بوابة الألعاب وأوراق العمل التفاعلية — <span class="en">Game Time &amp; QR</span> 🎮</h2>
+                </div>
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://sites.google.com/view/mrehabeladawy" alt="QR"></div>
+                        <strong>موقع مستر إيهاب التعليمي</strong>
+                        <a href="https://sites.google.com/view/mrehabeladawy" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">زيارة الموقع</a>
+                    </div>
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ehabeladawy.github.io/Mr-Ehab-s-interactive-Tests/" alt="QR"></div>
+                        <strong>منصة اختبارات مستر إيهاب التفاعلية</strong>
+                        <a href="https://ehabeladawy.github.io/Mr-Ehab-s-interactive-Tests/" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">ابدأ التحدي</a>
+                    </div>
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://quizizz.com/admin/search/present%20continuous" alt="QR"></div>
+                        <strong>مسابقات Quizizz التفاعلية</strong>
+                        <a href="https://quizizz.com/admin/search/present%20continuous" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">العب Quizizz</a>
+                    </div>
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wordwall.net/en-gb/community/present-continuous" alt="QR"></div>
+                        <strong>ألعاب Wordwall التفاعلية</strong>
+                        <a href="https://wordwall.net/en-gb/community/present-continuous" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">العب Wordwall</a>
+                    </div>
+                    <div class="game-card">
+                        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://drive.google.com/file/d/1QIsO6ko4foXLtFL8o2rfPxMQHwhBss1R/view?usp=drive_link" alt="QR"></div>
+                        <strong>قالب بطاقات الفوكاب 3D</strong>
+                        <a href="https://drive.google.com/file/d/1QIsO6ko4foXLtFL8o2rfPxMQHwhBss1R/view?usp=drive_link" target="_blank" class="btn-glow" style="padding:8px 18px; font-size:0.9rem;">عرض القالب</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== BOTTOM PRACTICE & DRILLS BANNER + QUESTIONS ==================== -->
+        <div id="bottom-quiz-anchor">
+            <div class="practice-drills-header">
+                <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr&sz=w400';"
+                     class="practice-cap-avatar" alt="مستر إيهاب بكاب التخرج">
+                <div class="practice-drills-text">
+                    <h2>Practice &amp; Drills 🚀</h2>
+                    <p>تدريبات وأسئلة الاختبار التفاعلي الشامل — اختبر نفسك واحصل على شهادتك فوراً</p>
+                </div>
+            </div>
+
+            <div class="quiz-main-card">
+                <div class="quiz-header">
+                    <div class="quiz-logo-container">
+                        <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                             onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w200';"
+                             alt="logo">
+                    </div>
+                    <div style="text-align: left;">
+                        <h3 style="font-size: clamp(1.1rem, 2.2vw, 1.45rem); font-weight: 900; color: #fff;" class="en">Present Continuous — 28 Qs Challenge</h3>
+                        <span style="color: #fbbf24; font-weight: 800; font-size: 0.95rem;">إعداد وبرمجة / مستر إيهاب العدوي</span>
+                    </div>
+                </div>
+
+                <div class="progress-section" id="progressArea">
+                    <div class="progress-info">
+                        <span id="progStep">السؤال 1</span>
+                        <span id="progPercent">0%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="pBar"></div>
+                    </div>
+                </div>
+
+                <div id="welcome-scene" class="scene active">
+                    <img src="https://lh3.googleusercontent.com/d/1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4=s0"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4&sz=w2000';"
+                         style="width: 320px; max-width: 88%; height: auto; margin-bottom: 18px; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                    <h3 style="font-size: clamp(1.2rem, 2.4vw, 1.65rem); margin-bottom: 16px; font-weight: 900;">اختبار المضارع المستمر الشامل (28 سؤال)</h3>
+                    <input type="text" id="studentName" class="student-input" placeholder="أدخل اسمك الثلاثي يا بطل للحصول على الشهادة">
+                    <br>
+                    <button class="btn-glow btn-gold" onclick="startTest()">
+                        <span>بدء الاختبار الآن</span>
+                        <i class="fa-solid fa-bolt"></i>
+                    </button>
+                </div>
+
+                <div id="quiz-scene" class="scene"></div>
+
+                <div id="result-scene" class="scene">
+                    <h2 id="result-title" style="font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 20px; font-weight: 900;">النتيجة النهائية</h2>
+                    <div id="result-container" style="position:relative; width:100%; max-width:580px; margin: 0 auto 24px;"></div>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+                        <button class="btn-glow" onclick="toggleReview()" style="background: rgba(255,255,255,0.14);">
+                            <i class="fa-solid fa-eye"></i> مراجعة الأخطاء
+                        </button>
+                        <button class="btn-glow btn-gold" onclick="resetQuiz()">
+                            <i class="fa-solid fa-rotate"></i> أعد الاختبار
+                        </button>
+                    </div>
+                    <div id="reviewArea" class="review-area"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== VIEW 2: LESSON EXPLANATION VIDEO IN-FRAME (ERROR 153 FIXED) ==================== -->
+    <section id="view-video" class="view-panel">
+        <div class="lesson-card" style="max-width: 950px; margin: 0 auto; text-align: center;">
+            <div class="card-ribbon">
+                <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w150';"
+                     class="section-brand-icon" alt="أيقونة القسم">
+                <h2 class="animated-section-title">فيديو شرح الدرس — <span class="en">Present Continuous Video</span> 🎥</h2>
+            </div>
+
+            <div class="video-frame-wrapper" id="lessonVideoWrapper">
+                <iframe id="lessonOnlyIframe"
+                    src=""
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div id="localFileNotice" style="display:none; margin-top:12px; padding:10px 16px; border-radius:14px; background:rgba(245, 158, 11, 0.14); border:1px solid rgba(251, 191, 36, 0.45); color:#fde68a; font-size:0.9rem; font-weight:700;">
+                💡 ملحوظة: يوتيوب يمنع تشغيل الفيديوهات المضمنة عند فتح الملف مباشرة من جهازك (<code>file://</code>). بمجرد رفع الملف على <strong>GitHub Pages</strong> سيعمل الفيديو داخل نفس النافذة مباشرةً بدون أي خطأ!
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== VIEW 3: 16-CARD STITCHED VOCABULARY DICTIONARY ==================== -->
+    <section id="view-vocab" class="view-panel">
+        <div style="text-align: center; margin-bottom: 18px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+            <button class="btn-glow btn-gold" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> طباعة / حفظ القالب A4
+            </button>
+            <a href="https://drive.google.com/file/d/1QIsO6ko4foXLtFL8o2rfPxMQHwhBss1R/view?usp=drive_link" target="_blank" class="btn-glow">
+                <i class="fa-solid fa-image"></i> فتح القالب الأصلي على Drive
+            </a>
+        </div>
+
+        <div class="vocab-sheet-wrapper" id="vocabTemplateSheet">
+            <div class="vocab-sheet-inner">
+                <div class="vocab-top-banner">
+                    <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w300';"
+                         class="vocab-mascot" alt="أيقونة مستر إيهاب">
+                    <div class="vocab-title-3d">
+                        <h2>Vocabulary Dictationary</h2>
+                        <div class="vocab-lesson-box">Present Continuous — أهم كلمات وأفعال الدرس (اضغط للنطق 🔊)</div>
+                    </div>
+                    <img src="https://lh3.googleusercontent.com/d/1NmMnEz0kITULW14W1sdoXrswAogA-heT"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1NmMnEz0kITULW14W1sdoXrswAogA-heT&sz=w300';"
+                         class="vocab-mascot" alt="شعار إيهاب العدوي">
+                </div>
+
+                <div class="stitched-grid-16" id="stitchedVocabGrid"></div>
+
+                <div class="vocab-footer-banner">Mr. Ehab Eladawy</div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+// ==================== 1. SOUND & VISUAL CLICK FX ENGINE ====================
+let audioEnabled = true;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSynthTone(type = 'click') {
+    if (!audioEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+
+    if (type === 'click') {
+        return; // Silent click for distraction-free pen writing
+    } else if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(783.99, now + 0.2);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
+    } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.linearRampToValueAtTime(140, now + 0.28);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+    }
+}
+
+function toggleAudioFX() {
+    audioEnabled = !audioEnabled;
+    document.getElementById('soundToggleBtn').innerHTML = audioEnabled
+        ? '<i class="fa-solid fa-volume-high"></i>'
+        : '<i class="fa-solid fa-volume-xmark"></i>';
+}
+
+// Background Particles Canvas (Click Ripple & Click Sound Removed for Distraction-Free Writing)
+const bgCanvas = document.getElementById('particles-js');
+const bgCtx = bgCanvas.getContext('2d');
+
+function resizeCanvases() {
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+}
+resizeCanvases();
+window.addEventListener('resize', resizeCanvases);
+
+let bgPts = [];
+for (let i = 0; i < 65; i++) {
+    bgPts.push({
+        x: Math.random() * bgCanvas.width,
+        y: Math.random() * bgCanvas.height,
+        r: Math.random() * 2.4 + 0.8,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5
+    });
+}
+function animateBg() {
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    bgPts.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > bgCanvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > bgCanvas.height) p.vy *= -1;
+        bgCtx.fillStyle = 'rgba(139, 92, 246, 0.35)';
+        bgCtx.beginPath();
+        bgCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        bgCtx.fill();
+    });
+    requestAnimationFrame(animateBg);
+}
+animateBg();
+
+// ==================== 2. NAVIGATION & DIRECT IN-FRAME VIDEO (ERROR 153 FIXED) ====================
+const LESSON_VIDEO_ID = "P2HjocnVRFw";
+
+function triggerCelebration() {
+    confetti({ particleCount: 85, spread: 65 });
+}
+
+function switchView(viewName, btnEl) {
+    document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('view-' + viewName).classList.add('active');
+    if (btnEl) {
+        document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active-tab'));
+        btnEl.classList.add('active-tab');
+    }
+    if (viewName === 'board') {
+        setTimeout(initOrResizeSpahBoard, 40);
+    }
+    if (viewName !== 'video') {
+        const lFrame = document.getElementById('lessonOnlyIframe');
+        if (lFrame) lFrame.src = "";
+    }
+}
+
+function scrollToBottomQuestions(btnEl) {
+    switchView('lesson', btnEl);
+    const anchor = document.getElementById('bottom-quiz-anchor');
+    if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function openLessonVideoDirect(btnEl) {
+    switchView('video', btnEl);
+    const lFrame = document.getElementById('lessonOnlyIframe');
+    const localNotice = document.getElementById('localFileNotice');
+    if (LESSON_VIDEO_ID) {
+        const originParam = (window.location.protocol.startsWith('http'))
+            ? `&origin=${encodeURIComponent(window.location.origin)}`
+            : '';
+        if (window.location.protocol === 'file:' && localNotice) {
+            localNotice.style.display = 'block';
+        }
+        lFrame.src = `https://www.youtube-nocookie.com/embed/${LESSON_VIDEO_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1${originParam}`;
+    } else {
+        playReadingAudio();
+    }
+}
+
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'en-US';
+        utter.rate = 0.92;
+        window.speechSynthesis.speak(utter);
+    }
+}
+
+// ==================== 3. READING & LISTENING AUDIO PLAYER + 5 MCQs (4 OPTIONS EACH) ====================
+let readingIdx = 0;
+let isReadingPaused = false;
+let isReadingActive = false;
+
+function getReadingSentences() {
+    return Array.from(document.querySelectorAll('#readingPassageContainer .reading-sentence'));
+}
+
+function highlightReadingSentence(idx) {
+    getReadingSentences().forEach((el, i) => {
+        el.classList.toggle('active-read', i === idx);
+    });
+}
+
+function playReadingAudio() {
+    if (!('speechSynthesis' in window)) return alert('المتصفح لا يدعم النطق الصوتي.');
+    if (isReadingPaused && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        isReadingPaused = false;
+        return;
+    }
+    if (isReadingActive) return;
+    isReadingActive = true;
+    isReadingPaused = false;
+    speakNextReadingSentence();
+}
+
+function speakNextReadingSentence() {
+    const sentences = getReadingSentences();
+    if (!isReadingActive || readingIdx >= sentences.length) {
+        stopReadingAudio();
+        return;
+    }
+    highlightReadingSentence(readingIdx);
+    const utter = new SpeechSynthesisUtterance(sentences[readingIdx].innerText);
+    utter.lang = 'en-US';
+    utter.rate = 0.9;
+    utter.onend = () => {
+        if (isReadingActive && !isReadingPaused) {
+            readingIdx++;
+            speakNextReadingSentence();
+        }
+    };
+    window.speechSynthesis.speak(utter);
+}
+
+function pauseReadingAudio() {
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        isReadingPaused = true;
+    }
+}
+
+function stopReadingAudio() {
+    window.speechSynthesis.cancel();
+    isReadingActive = false;
+    isReadingPaused = false;
+    readingIdx = 0;
+    highlightReadingSentence(-1);
+}
+
+function restartReadingAudio() {
+    stopReadingAudio();
+    setTimeout(() => playReadingAudio(), 120);
+}
+
+// 5 Multiple-Choice Questions for the Listening/Reading Passage (4 options each)
+const listeningPassageMCQs = [
+    {
+        q: "1. What is Omar doing right now?",
+        options: ["Reading an English story", "Washing the car", "Cooking lunch", "Working as a guide"],
+        correct: "Reading an English story"
+    },
+    {
+        q: "2. What is Omar's father doing outside?",
+        options: ["Playing football", "Washing the car", "Reading a newspaper", "Buying tickets"],
+        correct: "Washing the car"
+    },
+    {
+        q: "3. What is Hassan's temporary job this summer?",
+        options: ["A waiter", "A taxi driver", "A tour guide", "A teacher"],
+        correct: "A tour guide"
+    },
+    {
+        q: "4. Why is Omar's English getting much better?",
+        options: ["He is practicing every day nowadays", "He is living in London", "He is watching TV all day", "He stopped studying"],
+        correct: "He is practicing every day nowadays"
+    },
+    {
+        q: "5. Where is the family travelling tomorrow evening?",
+        options: ["To Luxor", "To Aswan", "To Alexandria", "To Cairo"],
+        correct: "To Alexandria"
+    }
+];
+
+let listeningScore = 0;
+
+function renderListeningMCQs() {
+    listeningScore = 0;
+    document.getElementById('listeningScoreBadge').innerText = `النتيجة: 0 / ${listeningPassageMCQs.length}`;
+    const grid = document.getElementById('listeningMcqGrid');
+    grid.innerHTML = listeningPassageMCQs.map((item, qIndex) => `
+        <div class="l-mcq-card" id="l-card-${qIndex}">
+            <div class="l-mcq-q">${item.q}</div>
+            <div class="l-mcq-options">
+                ${item.options.map((opt, oIndex) => {
+                    const letters = ['A', 'B', 'C', 'D'];
+                    return `<button class="l-opt-btn" onclick="checkListeningMCQ(this, ${qIndex}, '${opt.replace(/'/g, "\\'")}')">
+                        <span><strong>${letters[oIndex]})</strong> ${opt}</span>
+                        <span class="opt-icon"></span>
+                    </button>`;
+                }).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+function checkListeningMCQ(btnEl, qIndex, selectedOpt) {
+    const card = document.getElementById(`l-card-${qIndex}`);
+    const buttons = card.querySelectorAll('.l-opt-btn');
+    const correctAns = listeningPassageMCQs[qIndex].correct;
+
+    buttons.forEach(b => b.classList.add('locked'));
+
+    if (selectedOpt === correctAns) {
+        btnEl.classList.add('opt-correct');
+        btnEl.querySelector('.opt-icon').innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        playSynthTone('correct');
+        listeningScore++;
+        document.getElementById('listeningScoreBadge').innerText = `النتيجة: ${listeningScore} / ${listeningPassageMCQs.length}`;
+        if (listeningScore === listeningPassageMCQs.length) {
+            confetti({ particleCount: 110, spread: 65 });
+        }
+    } else {
+        btnEl.classList.add('opt-wrong');
+        btnEl.querySelector('.opt-icon').innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+        playSynthTone('wrong');
+        buttons.forEach(b => {
+            if (b.innerText.includes(correctAns)) {
+                b.classList.add('opt-correct');
+                b.querySelector('.opt-icon').innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            }
+        });
+    }
+}
+renderListeningMCQs();
+
+// ==================== 4. 16-CARD STITCHED VOCABULARY DICTIONARY ====================
+const lessonVocab16 = [
+    { en: "at this moment", ar: "في هذه اللحظة", icon: "⏱️" },
+    { en: "nowadays", ar: "في هذه الأيام", icon: "📆" },
+    { en: "temporarily", ar: "بشكل مؤقت", icon: "⏳" },
+    { en: "arrangement", ar: "ترتيب مسبق", icon: "📋" },
+    { en: "theatre", ar: "مسرح", icon: "🎭" },
+    { en: "marrying", ar: "يتزوج (مرتب له)", icon: "💍" },
+    { en: "improve", ar: "يتحسن / يطور", icon: "📈" },
+    { en: "increase", ar: "يزداد / يرتفع", icon: "🚀" },
+    { en: "waiter", ar: "نادل / جرسون", icon: "🍽️" },
+    { en: "taxi driver", ar: "سائق تاكسي", icon: "🚕" },
+    { en: "writing", ar: "يكتب", icon: "✍️" },
+    { en: "reading", ar: "يقرأ", icon: "📖" },
+    { en: "playing football", ar: "يلعب كرة القدم", icon: "⚽" },
+    { en: "listening", ar: "يستمع", icon: "🎧" },
+    { en: "currently", ar: "حالياً", icon: "📍" },
+    { en: "book tickets", ar: "يحجز تذاكر", icon: "🎟️" }
+];
+
+function renderVocabGrid() {
+    const grid = document.getElementById('stitchedVocabGrid');
+    grid.innerHTML = lessonVocab16.map(item => `
+        <div class="stitched-card" onclick="speakText('${item.en}')">
+            <div class="vocab-3d-art">${item.icon}</div>
+            <div class="vocab-en-word">${item.en}</div>
+            <div class="vocab-ar-word">${item.ar}</div>
+        </div>
+    `).join('');
+}
+renderVocabGrid();
+
+// ==================== 5. EXPORT TO PDF & POWERPOINT (.PPTX) ====================
+function exportToPDF() {
+    switchView('lesson', document.getElementById('tab-lesson'));
+    setTimeout(() => window.print(), 300);
+}
+
+function exportToPPTX() {
+    if (typeof PptxGenJS === 'undefined') {
+        alert('جاري تحميل مكتبة PowerPoint، حاول مرة أخرى بعد ثانية.');
+        return;
+    }
+    const pptx = new PptxGenJS();
+    pptx.layout = 'LAYOUT_16x9';
+
+    let s1 = pptx.addSlide();
+    s1.background = { color: '0F172A' };
+    s1.addText('دروس مستر إيهاب التفاعلية الشاملة', { x: 0.5, y: 1.2, w: 9, fontSize: 32, bold: true, color: 'FBBF24', align: 'center' });
+    s1.addText('Present Continuous Tense — زمن المضارع المستمر', { x: 0.5, y: 2.3, w: 9, fontSize: 24, bold: true, color: '38BDF8', align: 'center' });
+    s1.addText('Prepared by: Mr. Ehab Eladawy', { x: 0.5, y: 3.5, w: 9, fontSize: 18, color: 'E2E8F0', align: 'center' });
+
+    let s2 = pptx.addSlide();
+    s2.background = { color: '1E1B4B' };
+    s2.addText('1. Expresses / Usage — استخدامات المضارع المستمر', { x: 0.5, y: 0.4, w: 9, fontSize: 24, bold: true, color: 'FBBF24', align: 'right' });
+    s2.addText([
+        { text: '• حدث يحدث الآن: He is playing football now.\n', options: { fontSize: 15, color: 'FFFFFF' } },
+        { text: '• أحداث ووظائف مؤقتة: Hassan is temporarily working as a taxi driver.\n', options: { fontSize: 15, color: '38BDF8' } },
+        { text: '• مستقبل مخطط له (arrange/arrangement): I am going to the theatre on Friday.\n', options: { fontSize: 15, color: 'FFFFFF' } },
+        { text: '• تغييرات تحدث مؤخراً: My English is getting better.\n', options: { fontSize: 15, color: '34D399' } },
+        { text: '• أفعال الحالة (Stative Verbs) لا تأتي مستمرة: I want a coffee.', options: { fontSize: 15, color: 'FBBF24' } }
+    ], { x: 0.6, y: 1.2, w: 8.8, h: 4, align: 'left' });
+
+    let s3 = pptx.addSlide();
+    s3.background = { color: '0F172A' };
+    s3.addText('2. The Form — التكوين', { x: 0.5, y: 0.4, w: 9, fontSize: 24, bold: true, color: '34D399', align: 'right' });
+    s3.addText('Subject + (am / is / are) + Verb + ing', { x: 0.5, y: 1.4, w: 9, fontSize: 22, bold: true, color: 'FBBF24', align: 'center' });
+    s3.addText('I am reading a story at present.\nHe / She / It is playing football now.\nWe / You / They are writing on the board.', { x: 0.5, y: 2.4, w: 9, fontSize: 18, color: 'E2E8F0', align: 'center' });
+
+    let s4 = pptx.addSlide();
+    s4.background = { color: '1E1B4B' };
+    s4.addText('3. Negation & Interrogative — النفي والسؤال', { x: 0.5, y: 0.4, w: 9, fontSize: 24, bold: true, color: 'F472B6', align: 'right' });
+    s4.addText('• Negative: He is not (isn\'t) playing football. / She isn\'t reading.\n• Question: Is he playing football? (Yes, he is / No, he isn\'t)\n• Wh- Question: What are you doing on Friday evening?', { x: 0.6, y: 1.5, w: 8.8, fontSize: 18, color: 'FFFFFF', align: 'left' });
+
+    let s5 = pptx.addSlide();
+    s5.background = { color: '0F172A' };
+    s5.addText('4. Key Words — الكلمات الدالة', { x: 0.5, y: 0.4, w: 9, fontSize: 24, bold: true, color: 'FBBF24', align: 'right' });
+    s5.addText('at this moment • at present • now • Look! • Listen! • still • currently • this... • these... • today • tonight • temporary • nowadays • arrange / arrangement', { x: 0.6, y: 1.6, w: 8.8, fontSize: 18, color: '38BDF8', align: 'center' });
+
+    pptx.writeFile({ fileName: 'Present_Continuous_Mr_Ehab_Interactive.pptx' });
+    confetti({ particleCount: 100, spread: 70 });
+}
+
+// ==================== 6. INTERACTIVE QUIZ ENGINE (28 QUESTIONS) ====================
+const quizData = [
+    { q: "He ............. football now.", options: ["play", "plays", "is playing", "played"], correct: "is playing" },
+    { q: "I ............. a story at present.", options: ["read", "am reading", "reads", "was reading"], correct: "am reading" },
+    { q: "They ............. on the board at this moment.", options: ["write", "writes", "are writing", "wrote"], correct: "are writing" },
+    { q: "Look! The birds ............. high in the sky.", options: ["fly", "is flying", "are flying", "flew"], correct: "are flying" },
+    { q: "Listen! Someone ............. at the door.", options: ["knock", "knocks", "is knocking", "are knocking"], correct: "is knocking" },
+    { q: "My English ............. better nowadays.", options: ["get", "gets", "is getting", "are getting"], correct: "is getting" },
+    { q: "At first I didn't like my job, but I ............. to enjoy it now.", options: ["begin", "am beginning", "began", "begins"], correct: "am beginning" },
+    { q: "Hassan is ............. working as a taxi driver this month.", options: ["permanent", "temporarily", "yesterday", "always"], correct: "temporarily" },
+    { q: "Mohamed works as a waiter. This is his ............. job.", options: ["permanent", "temporary", "temporarily", "now"], correct: "permanent" },
+    { q: "A: What ............. on Friday evening? B: I am going to the theatre.", options: ["do you do", "did you do", "are you doing", "were you doing"], correct: "are you doing" },
+    { q: "Mohamed ............. next Friday. Everything is arranged.", options: ["marries", "is marrying", "married", "marry"], correct: "is marrying" },
+    { q: "We have booked the tickets. We ............. to London tomorrow.", options: ["travel", "are travelling", "travelled", "travels"], correct: "are travelling" },
+    { q: "I ............. a coffee right now, please.", options: ["want", "am wanting", "wanting", "is wanting"], correct: "want" },
+    { q: "She ............. the answer to this question now.", options: ["is knowing", "knows", "are knowing", "knowing"], correct: "knows" },
+    { q: "This nice car ............. to my uncle.", options: ["is belonging", "belongs", "are belonging", "belonging"], correct: "belongs" },
+    { q: "They ............. three houses in Cairo at present.", options: ["are owning", "own", "is owning", "owning"], correct: "own" },
+    { q: "I ............. you! You are my best friend.", options: ["am loving", "love", "is loving", "loving"], correct: "love" },
+    { q: "She ............. reading at the moment; she is sleeping.", options: ["isn't", "aren't", "don't", "doesn't"], correct: "isn't" },
+    { q: "............. he playing football now?", options: ["Do", "Does", "Is", "Are"], correct: "Is" },
+    { q: "............. you watching the match tonight?", options: ["Is", "Are", "Do", "Did"], correct: "Are" },
+    { q: "Be quiet! The baby ............. .", options: ["sleeps", "slept", "is sleeping", "are sleeping"], correct: "is sleeping" },
+    { q: "The population of the world ............. very fast currently.", options: ["increase", "increases", "is increasing", "increased"], correct: "is increasing" },
+    { q: "Why ............. you running so fast today?", options: ["is", "am", "are", "do"], correct: "are" },
+    { q: "She is ............. an email to her friend right now.", options: ["write", "writing", "writes", "written"], correct: "writing" },
+    { q: "The boys ............. in the swimming pool at the moment.", options: ["swim", "is swimming", "are swimming", "swam"], correct: "are swimming" },
+    { q: "He ............. still waiting for the bus.", options: ["am", "is", "are", "be"], correct: "is" },
+    { q: "We ............. having dinner tonight at a nice restaurant; we have arranged it.", options: ["is", "am", "are", "do"], correct: "are" },
+    { q: "I ............. what you mean now.", options: ["am seeing", "see", "is seeing", "seeing"], correct: "see" }
+];
+
+let shuffled = [], currentIdx = 0, score = 0, studentName = "", timer, timeLeft = 60, wrongs = [];
+
+function startTest() {
+    studentName = document.getElementById('studentName').value.trim();
+    if (studentName.length < 3) return alert("اكتب اسمك الثلاثي يا بطل علشان نطبع الشهادة!");
+    shuffled = [...quizData].sort(() => Math.random() - 0.5);
+    currentIdx = 0; score = 0; wrongs = [];
+    document.getElementById('progressArea').style.display = "block";
+    showScene('quiz-scene');
+    loadQuestion();
+}
+
+function loadQuestion() {
+    clearInterval(timer);
+    timeLeft = 60;
+    const q = shuffled[currentIdx];
+    const p = (currentIdx / shuffled.length) * 100;
+    document.getElementById('pBar').style.width = p + "%";
+    document.getElementById('progStep').innerText = `سؤال ${currentIdx + 1} من ${shuffled.length}`;
+    document.getElementById('progPercent').innerText = Math.round(p) + "%";
+
+    document.getElementById('quiz-scene').innerHTML = `
+        <div class="question-row">
+            <div class="question-text">${q.q}</div>
+            <div class="timer-wrapper">
+                <svg class="timer-svg" viewBox="0 0 80 80">
+                    <circle class="timer-bg" cx="40" cy="40" r="36"></circle>
+                    <circle id="timerRing" class="timer-progress" cx="40" cy="40" r="36"></circle>
+                </svg>
+                <div id="timer-text">60</div>
+            </div>
+        </div>
+        <div id="optionsGrid"></div>
+    `;
+
+    let currentOptions = [...q.options].sort(() => Math.random() - 0.5);
+    currentOptions.forEach((optText) => {
+        const div = document.createElement('div');
+        div.className = "option-box";
+        div.innerHTML = `<span>${optText}</span>`;
+        div.onclick = (ev) => { ev.stopPropagation(); checkAnswer(div, optText === q.correct); };
+        document.getElementById('optionsGrid').appendChild(div);
+    });
+    startTimer();
+}
+
+function startTimer() {
+    const tText = document.getElementById('timer-text');
+    const ring = document.getElementById('timerRing');
+    timer = setInterval(() => {
+        timeLeft--;
+        if (tText) tText.innerText = timeLeft;
+        if (ring) ring.style.strokeDashoffset = 226 - (timeLeft * (226 / 60));
+        if (timeLeft <= 0) { clearInterval(timer); checkAnswer(null, false); }
+    }, 1000);
+}
+
+function checkAnswer(el, isCorrect) {
+    clearInterval(timer);
+    document.querySelectorAll('.option-box').forEach(b => b.classList.add('disabled'));
+    const q = shuffled[currentIdx];
+
+    if (el && isCorrect) {
+        el.classList.add('correct');
+        playSynthTone('correct');
+        score++;
+    } else {
+        if (el) el.classList.add('wrong');
+        playSynthTone('wrong');
+        wrongs.push({ q: q.q, a: q.correct });
+        document.querySelectorAll('.option-box').forEach(b => {
+            if (b.innerText.trim() === q.correct) {
+                b.style.borderColor = "var(--success)";
+                b.style.borderWidth = "3px";
+                b.querySelector('span').innerHTML += " <i class='fa-solid fa-check-circle'></i>";
+            }
+        });
+    }
+
+    setTimeout(() => {
+        currentIdx++;
+        if (currentIdx < shuffled.length) loadQuestion(); else finishQuiz();
+    }, 1300);
+}
+
+function finishQuiz() {
+    document.getElementById('progressArea').style.display = "none";
+    showScene('result-scene');
+    const percentage = (score / shuffled.length) * 100;
+    const resContainer = document.getElementById('result-container');
+    const rev = document.getElementById('reviewArea');
+
+    if (percentage >= 50) {
+        confetti({ particleCount: 160, spread: 70 });
+        resContainer.innerHTML = `
+            <img src="https://drive.google.com/thumbnail?id=1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM&sz=w800" style="width:100%; border-radius:26px;">
+            <div style="position:absolute; top:45%; left:50%; transform:translateX(-50%); color:#1e3a8a; font-size:clamp(1.1rem, 2.5vw, 1.6rem); font-weight:900; width:80%;">${studentName}</div>
+            <div style="position:absolute; top:60%; left:50%; transform:translateX(-50%); color:#dc2626; font-size:clamp(0.95rem, 2vw, 1.3rem); font-weight:900;">الدرجة: ${score} من ${shuffled.length}</div>
+        `;
+    } else {
+        resContainer.innerHTML = `
+            <div style="padding:36px; background: rgba(239, 68, 68, 0.12); border:2px solid var(--danger); border-radius:26px;">
+                <h3 style="font-size: 1.6rem; color: var(--danger);">حاول مرة أخرى يا بطل</h3>
+                <p style="font-size: 1.15rem; margin-top: 10px;">${studentName}، درجتك ${score} من ${shuffled.length}.</p>
+            </div>
+        `;
+    }
+
+    if (wrongs.length === 0) {
+        rev.innerHTML = `<h3 style="color:var(--success); font-size: 1.5rem; text-align:center;">ممتاز يا بطل! الدرجة النهائية بدون أي خطأ 🌟</h3>`;
+    } else {
+        rev.innerHTML = "<h3 style='margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.12); padding-bottom:8px;'>مراجعة الأخطاء:</h3>";
+        wrongs.forEach(w => rev.innerHTML += `<div style="margin:10px 0; padding:14px; background:rgba(255,255,255,0.06); border-radius:14px; direction:ltr; text-align:left;"><strong>Q:</strong> ${w.q}<br><span style="color:#34d399; font-weight:800;">✔ Correct: ${w.a}</span></div>`);
+    }
+}
+
+function toggleReview() {
+    const r = document.getElementById('reviewArea');
+    r.style.display = (r.style.display === "none" || r.style.display === "") ? "block" : "none";
+}
+
+function resetQuiz() {
+    document.getElementById('reviewArea').style.display = "none";
+    showScene('welcome-scene');
+}
+
+function showScene(id) {
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+// ==================== 7. SPAHBOARD VECTOR WHITEBOARD + CONNECTED-STROKE ERASER + IMAGE / PDF / WORD + DRAG & DROP ====================
+const sbShell = document.getElementById('spahboardShell');
+const sbStage = document.getElementById('spahboardStage');
+const sbBgCanvas = document.getElementById('spahBoardBgCanvas');
+const sbBgCtx = sbBgCanvas.getContext('2d');
+const sbMediaLayer = document.getElementById('spahBoardMediaLayer');
+const sbCanvas = document.getElementById('spahBoardCanvas');
+const sbCtx = sbCanvas.getContext('2d', { willReadFrequently: true });
+const sbTempCanvas = document.getElementById('spahBoardTempCanvas');
+const sbTempCtx = sbTempCanvas.getContext('2d');
+const sbDropOverlay = document.getElementById('sbDropOverlay');
+
+if (typeof pdfjsLib !== 'undefined') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+let sbTool = 'pen';
+let sbColor = '#ffffff';
+let sbSize = 4;
+let sbBgType = 'dark';
+let sbIsDrawing = false;
+let sbStartX = 0, sbStartY = 0;
+let sbCurrentStroke = null;
+let sbLaserTrail = [];
+let sbErasedDuringSwipe = false;
+
+// Each page stores vector strokes (for connected-stroke erasing & undo/redo) + media items HTML
+let sbPages = [{ bg: 'dark', strokes: [], undoStack: ['[]'], redoStack: [], mediaNodes: [] }];
+let sbCurrentPage = 0;
+
+document.getElementById('sbSizeSlider').addEventListener('input', (e) => {
+    sbSize = parseInt(e.target.value, 10);
+});
+
+function getSbCoords(e) {
+    const rect = sbCanvas.getBoundingClientRect();
+    return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
+}
+
+function initOrResizeSpahBoard() {
+    if (!sbStage) return;
+    const rect = sbStage.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    sbBgCanvas.width = rect.width;
+    sbBgCanvas.height = rect.height;
+    sbCanvas.width = rect.width;
+    sbCanvas.height = rect.height;
+    sbTempCanvas.width = rect.width;
+    sbTempCanvas.height = rect.height;
+
+    drawSbBackground(sbBgType);
+    redrawSbInkLayer();
+}
+window.addEventListener('resize', () => {
+    if (document.getElementById('view-board').classList.contains('active')) {
+        initOrResizeSpahBoard();
+    }
+});
+
+function drawSbBackground(type) {
+    sbBgType = type;
+    sbBgCtx.save();
+    sbBgCtx.clearRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+    if (type === 'dark') {
+        sbBgCtx.fillStyle = '#0f172a';
+        sbBgCtx.fillRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+    } else if (type === 'white') {
+        sbBgCtx.fillStyle = '#ffffff';
+        sbBgCtx.fillRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+    } else if (type === 'lines') {
+        sbBgCtx.fillStyle = '#fffbeb';
+        sbBgCtx.fillRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+        for (let y = 55; y < sbBgCanvas.height - 30; y += 96) {
+            sbBgCtx.strokeStyle = '#3b82f6'; sbBgCtx.lineWidth = 1.6; sbBgCtx.setLineDash([]);
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y); sbBgCtx.lineTo(sbBgCanvas.width, y); sbBgCtx.stroke();
+            sbBgCtx.strokeStyle = '#ef4444'; sbBgCtx.lineWidth = 1.3; sbBgCtx.setLineDash([6, 6]);
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y + 24); sbBgCtx.lineTo(sbBgCanvas.width, y + 24); sbBgCtx.stroke();
+            sbBgCtx.strokeStyle = '#2563eb'; sbBgCtx.lineWidth = 1.8; sbBgCtx.setLineDash([]);
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y + 48); sbBgCtx.lineTo(sbBgCanvas.width, y + 48); sbBgCtx.stroke();
+            sbBgCtx.strokeStyle = '#93c5fd'; sbBgCtx.lineWidth = 1.2;
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y + 72); sbBgCtx.lineTo(sbBgCanvas.width, y + 72); sbBgCtx.stroke();
+        }
+    } else if (type === 'grid') {
+        sbBgCtx.fillStyle = '#0f172a';
+        sbBgCtx.fillRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+        sbBgCtx.strokeStyle = 'rgba(148, 163, 184, 0.18)';
+        sbBgCtx.lineWidth = 1;
+        for (let x = 0; x < sbBgCanvas.width; x += 32) {
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(x, 0); sbBgCtx.lineTo(x, sbBgCanvas.height); sbBgCtx.stroke();
+        }
+        for (let y = 0; y < sbBgCanvas.height; y += 32) {
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y); sbBgCtx.lineTo(sbBgCanvas.width, y); sbBgCtx.stroke();
+        }
+    }
+    sbBgCtx.restore();
+}
+
+function setSbBackground(type, btnEl) {
+    sbBgType = type;
+    sbPages[sbCurrentPage].bg = type;
+    document.querySelectorAll('#bg-dark, #bg-white, #bg-lines, #bg-grid').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    if (type === 'white' || type === 'lines') {
+        if (sbColor === '#ffffff') setSbColor('#0f172a');
+    } else {
+        if (sbColor === '#0f172a') setSbColor('#ffffff');
+    }
+    drawSbBackground(type);
+}
+
+function setSbTool(tool, btnEl) {
+    sbTool = tool;
+    document.querySelectorAll('[data-sbtool]').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+
+    if (tool === 'select') {
+        sbStage.classList.add('select-mode');
+        sbStage.style.cursor = 'grab';
+    } else {
+        sbStage.classList.remove('select-mode');
+        sbStage.style.cursor = (tool === 'text') ? 'text' : (tool === 'eraser') ? 'cell' : 'crosshair';
+    }
+}
+
+function setSbColor(hex, swatchEl) {
+    sbColor = hex;
+    document.getElementById('sbColorPicker').value = hex;
+    document.querySelectorAll('.sb-group .sb-swatch').forEach(s => s.classList.remove('active-swatch'));
+    if (swatchEl) swatchEl.classList.add('active-swatch');
+}
+
+// Render a single vector stroke onto a canvas context
+function renderSingleStroke(ctx, st) {
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    if (st.type === 'pen' || st.type === 'highlighter') {
+        const pts = st.points;
+        if (!pts || pts.length === 0) { ctx.restore(); return; }
+        ctx.strokeStyle = (st.type === 'highlighter') ? (st.color + '48') : st.color;
+        ctx.fillStyle = (st.type === 'highlighter') ? (st.color + '48') : st.color;
+        const width = (st.type === 'highlighter') ? Math.max(20, st.size * 4) : st.size;
+
+        if (pts.length === 1) {
+            ctx.beginPath();
+            ctx.arc(pts[0].x, pts[0].y, width / 2, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.lineWidth = width;
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) {
+                const prev = pts[i - 1];
+                const curr = pts[i];
+                const midX = (prev.x + curr.x) / 2;
+                const midY = (prev.y + curr.y) / 2;
+                ctx.quadraticCurveTo(prev.x, prev.y, midX, midY);
+            }
+            ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+            ctx.stroke();
+        }
+    } else if (['line', 'arrow', 'rect', 'circle'].includes(st.type)) {
+        ctx.strokeStyle = st.color;
+        ctx.lineWidth = st.size;
+        ctx.beginPath();
+        if (st.type === 'line') {
+            ctx.moveTo(st.x1, st.y1);
+            ctx.lineTo(st.x2, st.y2);
+            ctx.stroke();
+        } else if (st.type === 'arrow') {
+            const headlen = Math.max(14, st.size * 3);
+            const angle = Math.atan2(st.y2 - st.y1, st.x2 - st.x1);
+            ctx.moveTo(st.x1, st.y1);
+            ctx.lineTo(st.x2, st.y2);
+            ctx.lineTo(st.x2 - headlen * Math.cos(angle - Math.PI / 6), st.y2 - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(st.x2, st.y2);
+            ctx.lineTo(st.x2 - headlen * Math.cos(angle + Math.PI / 6), st.y2 - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+        } else if (st.type === 'rect') {
+            ctx.strokeRect(st.x1, st.y1, st.x2 - st.x1, st.y2 - st.y1);
+        } else if (st.type === 'circle') {
+            const rx = Math.abs(st.x2 - st.x1) / 2;
+            const ry = Math.abs(st.y2 - st.y1) / 2;
+            const cx = (st.x1 + st.x2) / 2;
+            const cy = (st.y1 + st.y2) / 2;
+            ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+    } else if (st.type === 'text') {
+        ctx.fillStyle = st.color;
+        ctx.font = `900 ${st.fontSize}px Cairo, Fredoka, sans-serif`;
+        ctx.textBaseline = 'top';
+        ctx.fillText(st.text, st.x, st.y);
+    }
+    ctx.restore();
+}
+
+function redrawSbInkLayer() {
+    sbCtx.clearRect(0, 0, sbCanvas.width, sbCanvas.height);
+    const strokes = sbPages[sbCurrentPage].strokes;
+    for (let i = 0; i < strokes.length; i++) {
+        renderSingleStroke(sbCtx, strokes[i]);
+    }
+}
+
+function saveSbStrokeSnapshot() {
+    const page = sbPages[sbCurrentPage];
+    const serialized = JSON.stringify(page.strokes);
+    if (page.undoStack[page.undoStack.length - 1] !== serialized) {
+        page.undoStack.push(serialized);
+        if (page.undoStack.length > 40) page.undoStack.shift();
+        page.redoStack = [];
+    }
+}
+
+function sbUndo() {
+    const page = sbPages[sbCurrentPage];
+    if (page.undoStack.length <= 1) return;
+    const current = page.undoStack.pop();
+    page.redoStack.push(current);
+    const prev = page.undoStack[page.undoStack.length - 1];
+    page.strokes = JSON.parse(prev);
+    redrawSbInkLayer();
+}
+
+function sbRedo() {
+    const page = sbPages[sbCurrentPage];
+    if (page.redoStack.length === 0) return;
+    const next = page.redoStack.pop();
+    page.undoStack.push(next);
+    page.strokes = JSON.parse(next);
+    redrawSbInkLayer();
+}
+
+// Separate Clear Buttons:
+// 1) Clear ONLY handwritten ink / shapes / text (keeps uploaded images, PDFs & Word docs)
+function sbClearInk() {
+    const page = sbPages[sbCurrentPage];
+    page.strokes = [];
+    redrawSbInkLayer();
+    saveSbStrokeSnapshot();
+}
+
+// 2) Clear ONLY uploaded images, PDFs, Word docs & sticky notes (keeps handwritten ink)
+function sbClearMedia() {
+    sbMediaLayer.innerHTML = '';
+    sbStage.querySelectorAll('.sb-sticky-note').forEach(n => n.remove());
+    sbPages[sbCurrentPage].mediaNodes = [];
+}
+
+function updateSbPageUI() {
+    document.getElementById('sbPageIndicator').innerText = `${sbCurrentPage + 1} / ${sbPages.length}`;
+}
+
+function loadSbPage(idx) {
+    // Save current page's media DOM nodes
+    sbPages[sbCurrentPage].mediaNodes = Array.from(sbMediaLayer.children);
+    sbMediaLayer.innerHTML = '';
+
+    sbCurrentPage = idx;
+    const page = sbPages[sbCurrentPage];
+    sbBgType = page.bg;
+
+    document.querySelectorAll('#bg-dark, #bg-white, #bg-lines, #bg-grid').forEach(b => b.classList.remove('active'));
+    const activeBgBtn = document.getElementById('bg-' + sbBgType);
+    if (activeBgBtn) activeBgBtn.classList.add('active');
+
+    updateSbPageUI();
+    drawSbBackground(sbBgType);
+    redrawSbInkLayer();
+
+    // Restore target page's media DOM nodes
+    if (page.mediaNodes && page.mediaNodes.length > 0) {
+        page.mediaNodes.forEach(node => sbMediaLayer.appendChild(node));
+    }
+}
+
+function sbPrevPage() {
+    if (sbCurrentPage > 0) loadSbPage(sbCurrentPage - 1);
+}
+
+function sbNextOrAddPage() {
+    if (sbCurrentPage < sbPages.length - 1) {
+        loadSbPage(sbCurrentPage + 1);
+    } else {
+        sbPages[sbCurrentPage].mediaNodes = Array.from(sbMediaLayer.children);
+        sbPages.push({ bg: sbBgType, strokes: [], undoStack: ['[]'], redoStack: [], mediaNodes: [] });
+        loadSbPage(sbPages.length - 1);
+    }
+}
+
+function sbExportPNG() {
+    const out = document.createElement('canvas');
+    out.width = sbCanvas.width;
+    out.height = sbCanvas.height;
+    const oCtx = out.getContext('2d');
+    oCtx.drawImage(sbBgCanvas, 0, 0);
+    // Draw uploaded images / rendered PDFs inside media layer
+    const stageRect = sbStage.getBoundingClientRect();
+    sbMediaLayer.querySelectorAll('.sb-media-item').forEach(item => {
+        const img = item.querySelector('.sb-media-body img');
+        if (img && img.complete && img.naturalWidth > 0) {
+            const bodyRect = item.querySelector('.sb-media-body').getBoundingClientRect();
+            const relX = bodyRect.left - stageRect.left;
+            const relY = bodyRect.top - stageRect.top;
+            oCtx.drawImage(img, relX, relY, bodyRect.width, bodyRect.height);
+        }
+    });
+    oCtx.drawImage(sbCanvas, 0, 0);
+    const link = document.createElement('a');
+    link.download = `Mr_Ehab_SpahBoard_Page_${sbCurrentPage + 1}.png`;
+    link.href = out.toDataURL('image/png');
+    link.click();
+}
+
+function sbToggleFullscreen() {
+    if (!document.fullscreenElement) {
+        sbShell.requestFullscreen().then(() => setTimeout(initOrResizeSpahBoard, 150)).catch(() => {});
+    } else {
+        document.exitFullscreen().then(() => setTimeout(initOrResizeSpahBoard, 150)).catch(() => {});
+    }
+}
+
+function spawnSbTextInput(x, y) {
+    const existing = sbStage.querySelector('.sb-floating-text-input');
+    if (existing) existing.blur();
+
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'sb-floating-text-input';
+    inp.placeholder = 'اكتب النص واضغط Enter...';
+    inp.style.left = Math.max(10, Math.min(x, sbCanvas.width - 200)) + 'px';
+    inp.style.top = Math.max(10, Math.min(y, sbCanvas.height - 55)) + 'px';
+    inp.style.color = sbColor;
+    sbStage.appendChild(inp);
+    setTimeout(() => inp.focus(), 20);
+
+    const commitText = () => {
+        const val = inp.value.trim();
+        if (val) {
+            const fontSize = Math.max(22, sbSize * 4);
+            sbCtx.save();
+            sbCtx.font = `900 ${fontSize}px Cairo, Fredoka, sans-serif`;
+            const metrics = sbCtx.measureText(val);
+            sbCtx.restore();
+
+            sbPages[sbCurrentPage].strokes.push({
+                type: 'text',
+                color: sbColor,
+                fontSize: fontSize,
+                x: x,
+                y: y,
+                text: val,
+                width: metrics.width || (val.length * fontSize * 0.6),
+                height: fontSize * 1.25
+            });
+            redrawSbInkLayer();
+            saveSbStrokeSnapshot();
+        }
+        inp.remove();
+    };
+
+    inp.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') commitText();
+        if (ev.key === 'Escape') inp.remove();
+    });
+    inp.addEventListener('blur', commitText);
+}
+
+function addSbStickyNote() {
+    const note = document.createElement('div');
+    note.className = 'sb-sticky-note';
+    note.style.left = (60 + (sbStage.querySelectorAll('.sb-sticky-note').length * 25)) + 'px';
+    note.style.top = (60 + (sbStage.querySelectorAll('.sb-sticky-note').length * 25)) + 'px';
+    note.innerHTML = `
+        <button class="sb-sticky-close" onclick="this.parentElement.remove()">×</button>
+        <textarea placeholder="اكتب ملاحظة للطلاب..."></textarea>
+    `;
+    let drag = false, dx = 0, dy = 0;
+    note.addEventListener('pointerdown', (e) => {
+        if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') return;
+        drag = true;
+        dx = e.clientX - note.offsetLeft;
+        dy = e.clientY - note.offsetTop;
+        note.setPointerCapture(e.pointerId);
+    });
+    note.addEventListener('pointermove', (e) => {
+        if (!drag) return;
+        note.style.left = (e.clientX - dx) + 'px';
+        note.style.top = (e.clientY - dy) + 'px';
+    });
+    note.addEventListener('pointerup', () => drag = false);
+    sbStage.appendChild(note);
+}
+
+// ==================== CONNECTED-STROKE ERASER GEOMETRY ====================
+function distToSegmentSquared(px, py, x1, y1, x2, y2) {
+    const l2 = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+    if (l2 === 0) return (px - x1) * (px - x1) + (py - y1) * (py - y1);
+    let t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / l2;
+    t = Math.max(0, Math.min(1, t));
+    const projX = x1 + t * (x2 - x1);
+    const projY = y1 + t * (y2 - y1);
+    return (px - projX) * (px - projX) + (py - projY) * (py - projY);
+}
+
+function isPointTouchingStroke(px, py, st, eraserRadius) {
+    const strokePad = (st.size || 4) / 2;
+    const hitDist = eraserRadius + strokePad;
+    const hitDistSq = hitDist * hitDist;
+
+    if (st.type === 'pen' || st.type === 'highlighter') {
+        const pts = st.points;
+        if (!pts || pts.length === 0) return false;
+        const extraPad = (st.type === 'highlighter') ? Math.max(10, st.size * 2) : strokePad;
+        const rSq = (eraserRadius + extraPad) * (eraserRadius + extraPad);
+        if (pts.length === 1) {
+            return ((px - pts[0].x) ** 2 + (py - pts[0].y) ** 2) <= rSq;
+        }
+        for (let i = 1; i < pts.length; i++) {
+            if (distToSegmentSquared(px, py, pts[i - 1].x, pts[i - 1].y, pts[i].x, pts[i].y) <= rSq) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    if (st.type === 'line' || st.type === 'arrow') {
+        return distToSegmentSquared(px, py, st.x1, st.y1, st.x2, st.y2) <= hitDistSq;
+    }
+
+    if (st.type === 'rect') {
+        const minX = Math.min(st.x1, st.x2), maxX = Math.max(st.x1, st.x2);
+        const minY = Math.min(st.y1, st.y2), maxY = Math.max(st.y1, st.y2);
+        return (
+            distToSegmentSquared(px, py, minX, minY, maxX, minY) <= hitDistSq ||
+            distToSegmentSquared(px, py, maxX, minY, maxX, maxY) <= hitDistSq ||
+            distToSegmentSquared(px, py, maxX, maxY, minX, maxY) <= hitDistSq ||
+            distToSegmentSquared(px, py, minX, maxY, minX, minY) <= hitDistSq
+        );
+    }
+
+    if (st.type === 'circle') {
+        const rx = Math.abs(st.x2 - st.x1) / 2;
+        const ry = Math.abs(st.y2 - st.y1) / 2;
+        const cx = (st.x1 + st.x2) / 2;
+        const cy = (st.y1 + st.y2) / 2;
+        if (rx < 2 || ry < 2) return ((px - cx) ** 2 + (py - cy) ** 2) <= hitDistSq;
+        // Sample 36 perimeter segments for accurate ellipse perimeter touch detection
+        const steps = 36;
+        let prevX = cx + rx, prevY = cy;
+        for (let s = 1; s <= steps; s++) {
+            const ang = (Math.PI * 2 * s) / steps;
+            const curX = cx + rx * Math.cos(ang);
+            const curY = cy + ry * Math.sin(ang);
+            if (distToSegmentSquared(px, py, prevX, prevY, curX, curY) <= hitDistSq) return true;
+            prevX = curX;
+            prevY = curY;
+        }
+        return false;
+    }
+
+    if (st.type === 'text') {
+        const w = st.width || 120;
+        const h = st.height || 32;
+        return (
+            px >= st.x - hitDist &&
+            px <= st.x + w + hitDist &&
+            py >= st.y - hitDist &&
+            py <= st.y + h + hitDist
+        );
+    }
+
+    return false;
+}
+
+function eraseConnectedStrokesAt(x, y) {
+    const page = sbPages[sbCurrentPage];
+    const eraserRadius = Math.max(14, sbSize * 2);
+    const beforeLen = page.strokes.length;
+    page.strokes = page.strokes.filter(st => !isPointTouchingStroke(x, y, st, eraserRadius));
+    if (page.strokes.length !== beforeLen) {
+        sbErasedDuringSwipe = true;
+        redrawSbInkLayer();
+    }
+}
+
+function drawEraserRing(x, y) {
+    const r = Math.max(14, sbSize * 2);
+    sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+    sbTempCtx.save();
+    sbTempCtx.strokeStyle = '#f87171';
+    sbTempCtx.fillStyle = 'rgba(248, 113, 113, 0.16)';
+    sbTempCtx.lineWidth = 2;
+    sbTempCtx.setLineDash([4, 3]);
+    sbTempCtx.beginPath();
+    sbTempCtx.arc(x, y, r, 0, Math.PI * 2);
+    sbTempCtx.fill();
+    sbTempCtx.stroke();
+    sbTempCtx.restore();
+}
+
+// Pointer Events for Stylus + Finger Touch + Mouse on SpahBoard
+sbCanvas.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    if (sbTool === 'select') return;
+    const { x, y } = getSbCoords(e);
+
+    if (sbTool === 'text') {
+        spawnSbTextInput(x, y);
+        return;
+    }
+
+    sbIsDrawing = true;
+    sbStartX = x;
+    sbStartY = y;
+    try { sbCanvas.setPointerCapture(e.pointerId); } catch (_) {}
+
+    if (sbTool === 'eraser') {
+        sbErasedDuringSwipe = false;
+        drawEraserRing(x, y);
+        eraseConnectedStrokesAt(x, y);
+        return;
+    }
+
+    if (sbTool === 'pen' || sbTool === 'highlighter') {
+        sbCurrentStroke = {
+            type: sbTool,
+            color: sbColor,
+            size: sbSize,
+            points: [{ x, y, p: e.pressure || 0.5 }]
+        };
+        sbPages[sbCurrentPage].strokes.push(sbCurrentStroke);
+        redrawSbInkLayer();
+    }
+});
+
+sbCanvas.addEventListener('pointermove', (e) => {
+    if (sbTool === 'select') return;
+    const { x, y } = getSbCoords(e);
+
+    if (sbTool === 'eraser') {
+        drawEraserRing(x, y);
+        if (sbIsDrawing) {
+            eraseConnectedStrokesAt(x, y);
+        }
+        return;
+    }
+
+    if (!sbIsDrawing) return;
+    e.stopPropagation();
+
+    if (sbTool === 'laser') {
+        sbLaserTrail.push({ x, y, time: Date.now() });
+        return;
+    }
+
+    if (['line', 'arrow', 'rect', 'circle'].includes(sbTool)) {
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+        renderSingleStroke(sbTempCtx, {
+            type: sbTool,
+            color: sbColor,
+            size: sbSize,
+            x1: sbStartX,
+            y1: sbStartY,
+            x2: x,
+            y2: y
+        });
+        return;
+    }
+
+    if ((sbTool === 'pen' || sbTool === 'highlighter') && sbCurrentStroke) {
+        sbCurrentStroke.points.push({ x, y, p: e.pressure || 0.5 });
+        redrawSbInkLayer();
+    }
+});
+
+sbCanvas.addEventListener('pointerup', (e) => {
+    if (!sbIsDrawing) return;
+    e.stopPropagation();
+    sbIsDrawing = false;
+    const { x, y } = getSbCoords(e);
+
+    if (sbTool === 'eraser') {
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+        if (sbErasedDuringSwipe) {
+            saveSbStrokeSnapshot();
+        }
+        return;
+    }
+
+    if (['line', 'arrow', 'rect', 'circle'].includes(sbTool)) {
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+        sbPages[sbCurrentPage].strokes.push({
+            type: sbTool,
+            color: sbColor,
+            size: sbSize,
+            x1: sbStartX,
+            y1: sbStartY,
+            x2: x,
+            y2: y
+        });
+        redrawSbInkLayer();
+        saveSbStrokeSnapshot();
+    } else if (sbTool === 'pen' || sbTool === 'highlighter') {
+        sbCurrentStroke = null;
+        saveSbStrokeSnapshot();
+    }
+});
+
+sbCanvas.addEventListener('pointerleave', () => {
+    if (sbTool === 'eraser') {
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+    }
+});
+
+function animateSbLaser() {
+    if (sbLaserTrail.length > 0 && sbTool === 'laser') {
+        const now = Date.now();
+        sbLaserTrail = sbLaserTrail.filter(pt => now - pt.time < 950);
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+        for (let i = 1; i < sbLaserTrail.length; i++) {
+            const p1 = sbLaserTrail[i - 1];
+            const p2 = sbLaserTrail[i];
+            const alpha = Math.max(0, 1 - (now - p2.time) / 950);
+            sbTempCtx.save();
+            sbTempCtx.strokeStyle = `rgba(239, 68, 68, ${alpha})`;
+            sbTempCtx.shadowColor = '#ef4444';
+            sbTempCtx.shadowBlur = 14;
+            sbTempCtx.lineWidth = 6 * alpha;
+            sbTempCtx.lineCap = 'round';
+            sbTempCtx.beginPath();
+            sbTempCtx.moveTo(p1.x, p1.y);
+            sbTempCtx.lineTo(p2.x, p2.y);
+            sbTempCtx.stroke();
+            sbTempCtx.restore();
+        }
+    }
+    requestAnimationFrame(animateSbLaser);
+}
+animateSbLaser();
+
+// ==================== 7B. IMAGE, PDF & WORD UPLOAD + DRAG & DROP ON WHITEBOARD ====================
+function makeMediaItemInteractive(card, width, height, dropX, dropY) {
+    const stageW = sbStage.clientWidth || 800;
+    const stageH = sbStage.clientHeight || 500;
+    const w = Math.min(width, stageW - 40);
+    const h = Math.min(height, stageH - 40);
+    const left = (typeof dropX === 'number') ? Math.max(10, Math.min(dropX - w / 2, stageW - w - 10)) : Math.max(20, (stageW - w) / 2);
+    const top = (typeof dropY === 'number') ? Math.max(10, Math.min(dropY - 20, stageH - h - 10)) : Math.max(20, (stageH - h) / 2);
+
+    card.style.width = w + 'px';
+    card.style.height = h + 'px';
+    card.style.left = left + 'px';
+    card.style.top = top + 'px';
+
+    // Dragging via top header (works in ANY tool mode) or whole card (when in 'select' mode)
+    const header = card.querySelector('.sb-media-header');
+    let dragging = false, startX = 0, startY = 0, origL = 0, origT = 0;
+
+    const onDragStart = (e) => {
+        if (e.target.closest('button')) return;
+        e.stopPropagation();
+        dragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        origL = card.offsetLeft;
+        origT = card.offsetTop;
+        try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {}
+    };
+    const onDragMove = (e) => {
+        if (!dragging) return;
+        e.stopPropagation();
+        card.style.left = (origL + (e.clientX - startX)) + 'px';
+        card.style.top = (origT + (e.clientY - startY)) + 'px';
+    };
+    const onDragEnd = () => { dragging = false; };
+
+    header.addEventListener('pointerdown', onDragStart);
+    header.addEventListener('pointermove', onDragMove);
+    header.addEventListener('pointerup', onDragEnd);
+
+    card.addEventListener('pointerdown', (e) => {
+        if (sbTool !== 'select') return;
+        if (e.target.closest('button') || e.target.closest('.sb-media-resize') || e.target.closest('.sb-word-content')) return;
+        onDragStart(e);
+    });
+    card.addEventListener('pointermove', (e) => { if (dragging) onDragMove(e); });
+    card.addEventListener('pointerup', onDragEnd);
+
+    // Resizing via bottom-left corner handle (works in ANY tool mode!)
+    const resizer = card.querySelector('.sb-media-resize');
+    let resizing = false, rStartX = 0, rStartY = 0, origW = 0, origH = 0, origLeft = 0;
+    resizer.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        resizing = true;
+        rStartX = e.clientX;
+        rStartY = e.clientY;
+        origW = card.offsetWidth;
+        origH = card.offsetHeight;
+        origLeft = card.offsetLeft;
+        try { resizer.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    resizer.addEventListener('pointermove', (e) => {
+        if (!resizing) return;
+        e.stopPropagation();
+        // Since handle is at bottom-left, dragging left increases width
+        const dx = rStartX - e.clientX;
+        const dy = e.clientY - rStartY;
+        const newW = Math.max(180, origW + dx);
+        const newH = Math.max(140, origH + dy);
+        card.style.width = newW + 'px';
+        card.style.height = newH + 'px';
+        card.style.left = (origLeft - (newW - origW)) + 'px';
+    });
+    resizer.addEventListener('pointerup', () => { resizing = false; });
+
+    sbMediaLayer.appendChild(card);
+}
+
+function insertImageFileToBoard(file, dropX, dropY) {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        const tempImg = new Image();
+        tempImg.onload = () => {
+            const aspect = tempImg.naturalWidth / (tempImg.naturalHeight || 1);
+            let w = Math.min(460, tempImg.naturalWidth || 380);
+            let h = Math.round(w / aspect) + 34;
+            if (h > 440) { h = 440; w = Math.round((h - 34) * aspect); }
+
+            const card = document.createElement('div');
+            card.className = 'sb-media-item';
+            card.innerHTML = `
+                <div class="sb-media-header">
+                    <span class="sb-media-title"><i class="fa-regular fa-image"></i> ${file.name}</span>
+                    <div>
+                        <button class="sb-media-ctrl del-btn" onclick="this.closest('.sb-media-item').remove()" title="حذف الصورة">×</button>
+                    </div>
+                </div>
+                <div class="sb-media-body">
+                    <img src="${ev.target.result}" alt="${file.name}">
+                </div>
+                <div class="sb-media-resize" title="اسحب لتغيير الحجم"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+            `;
+            makeMediaItemInteractive(card, Math.max(220, w), Math.max(180, h), dropX, dropY);
+        };
+        tempImg.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+async function insertPdfFileToBoard(file, dropX, dropY) {
+    const arrayBuffer = await file.arrayBuffer();
+    if (typeof pdfjsLib !== 'undefined') {
+        try {
+            const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            let currentPageNum = 1;
+            const totalPages = pdfDoc.numPages;
+
+            const card = document.createElement('div');
+            card.className = 'sb-media-item';
+            card.innerHTML = `
+                <div class="sb-media-header">
+                    <span class="sb-media-title"><i class="fa-solid fa-file-pdf" style="color:#f87171;"></i> ${file.name}</span>
+                    <div style="display:flex; align-items:center; gap:4px;">
+                        <button class="sb-media-ctrl pdf-prev-btn" title="الصفحة السابقة">◀</button>
+                        <span class="pdf-page-lbl" style="font-size:0.75rem; color:#fde68a;">1/${totalPages}</span>
+                        <button class="sb-media-ctrl pdf-next-btn" title="الصفحة التالية">▶</button>
+                        <button class="sb-media-ctrl del-btn" onclick="this.closest('.sb-media-item').remove()" title="حذف الملف">×</button>
+                    </div>
+                </div>
+                <div class="sb-media-body">
+                    <img class="pdf-rendered-img" src="" alt="PDF Page">
+                </div>
+                <div class="sb-media-resize" title="اسحب لتغيير الحجم"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+            `;
+
+            const renderPdfPageToImg = async (num) => {
+                const page = await pdfDoc.getPage(num);
+                const viewport = page.getViewport({ scale: 1.8 });
+                const tmpCanvas = document.createElement('canvas');
+                tmpCanvas.width = viewport.width;
+                tmpCanvas.height = viewport.height;
+                await page.render({ canvasContext: tmpCanvas.getContext('2d'), viewport }).promise;
+                card.querySelector('.pdf-rendered-img').src = tmpCanvas.toDataURL('image/png');
+                card.querySelector('.pdf-page-lbl').innerText = `${num}/${totalPages}`;
+            };
+
+            await renderPdfPageToImg(1);
+            card.querySelector('.pdf-prev-btn').onclick = async (e) => {
+                e.stopPropagation();
+                if (currentPageNum > 1) { currentPageNum--; await renderPdfPageToImg(currentPageNum); }
+            };
+            card.querySelector('.pdf-next-btn').onclick = async (e) => {
+                e.stopPropagation();
+                if (currentPageNum < totalPages) { currentPageNum++; await renderPdfPageToImg(currentPageNum); }
+            };
+
+            makeMediaItemInteractive(card, 480, 520, dropX, dropY);
+            return;
+        } catch (err) {
+            console.warn('PDF.js fallback:', err);
+        }
+    }
+
+    // Fallback embed if PDF.js unavailable
+    const blobUrl = URL.createObjectURL(file);
+    const card = document.createElement('div');
+    card.className = 'sb-media-item';
+    card.innerHTML = `
+        <div class="sb-media-header">
+            <span class="sb-media-title"><i class="fa-solid fa-file-pdf"></i> ${file.name}</span>
+            <button class="sb-media-ctrl del-btn" onclick="this.closest('.sb-media-item').remove()">×</button>
+        </div>
+        <div class="sb-media-body">
+            <embed src="${blobUrl}" type="application/pdf" style="width:100%; height:100%;">
+        </div>
+        <div class="sb-media-resize"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+    `;
+    makeMediaItemInteractive(card, 480, 500, dropX, dropY);
+}
+
+async function insertWordFileToBoard(file, dropX, dropY) {
+    const card = document.createElement('div');
+    card.className = 'sb-media-item';
+    let bodyHtml = `<div class="sb-word-content"><p style="color:#64748b;">جاري تحميل ملف Word...</p></div>`;
+
+    card.innerHTML = `
+        <div class="sb-media-header">
+            <span class="sb-media-title"><i class="fa-solid fa-file-word" style="color:#38bdf8;"></i> ${file.name}</span>
+            <div>
+                <button class="sb-media-ctrl" onclick="setSbTool('select', document.querySelector('[data-sbtool=select]'))" title="تفعيل التمرير والتحريك">تصفح ✋</button>
+                <button class="sb-media-ctrl del-btn" onclick="this.closest('.sb-media-item').remove()" title="حذف الملف">×</button>
+            </div>
+        </div>
+        <div class="sb-media-body">${bodyHtml}</div>
+        <div class="sb-media-resize" title="اسحب لتغيير الحجم"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+    `;
+    makeMediaItemInteractive(card, 500, 480, dropX, dropY);
+
+    const contentBox = card.querySelector('.sb-word-content');
+    if (typeof mammoth !== 'undefined' && file.name.toLowerCase().endsWith('.docx')) {
+        try {
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.convertToHtml({ arrayBuffer });
+            contentBox.innerHTML = result.value || '<p>المستند فارغ.</p>';
+            return;
+        } catch (err) {
+            console.warn('Mammoth error:', err);
+        }
+    }
+    const blobUrl = URL.createObjectURL(file);
+    contentBox.innerHTML = `
+        <div style="text-align:center; padding:30px;">
+            <i class="fa-solid fa-file-word" style="font-size:3rem; color:#2563eb; margin-bottom:10px;"></i>
+            <h3>${file.name}</h3>
+            <p style="margin:10px 0; color:#475569;">ملف Word جاهز للعرض أو التحميل</p>
+            <a href="${blobUrl}" download="${file.name}" style="display:inline-block; background:#2563eb; color:#fff; padding:8px 16px; border-radius:10px; text-decoration:none; font-weight:800;">فتح / تحميل الملف</a>
+        </div>
+    `;
+}
+
+function handleSbFileInput(files, dropX, dropY) {
+    if (!files || files.length === 0) return;
+    Array.from(files).forEach((file, i) => {
+        const offsetX = (typeof dropX === 'number') ? dropX + i * 25 : undefined;
+        const offsetY = (typeof dropY === 'number') ? dropY + i * 25 : undefined;
+        const nameLower = file.name.toLowerCase();
+
+        if (file.type.startsWith('image/') || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(nameLower)) {
+            insertImageFileToBoard(file, offsetX, offsetY);
+        } else if (file.type === 'application/pdf' || nameLower.endsWith('.pdf')) {
+            insertPdfFileToBoard(file, offsetX, offsetY);
+        } else if (nameLower.endsWith('.docx') || nameLower.endsWith('.doc') || file.type.includes('word')) {
+            insertWordFileToBoard(file, offsetX, offsetY);
+        } else {
+            alert('يرجى اختيار صورة أو ملف PDF أو Word (.docx / .doc)');
+        }
+    });
+    // Reset inputs so same file can be uploaded again if needed
+    const imgInp = document.getElementById('sbImageUploadInput');
+    const docInp = document.getElementById('sbDocUploadInput');
+    if (imgInp) imgInp.value = '';
+    if (docInp) docInp.value = '';
+}
+
+// Drag & Drop support onto the Whiteboard
+['dragenter', 'dragover'].forEach(evtName => {
+    sbShell.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        sbDropOverlay.classList.add('visible');
+    });
+});
+['dragleave', 'drop'].forEach(evtName => {
+    sbShell.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (evtName === 'dragleave' && sbShell.contains(e.relatedTarget)) return;
+        sbDropOverlay.classList.remove('visible');
+    });
+});
+sbShell.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    if (dt && dt.files && dt.files.length > 0) {
+        const rect = sbStage.getBoundingClientRect();
+        handleSbFileInput(dt.files, e.clientX - rect.left, e.clientY - rect.top);
+    }
+});
+
+// Ctrl+V Paste Image support when Whiteboard is active
+document.addEventListener('paste', (e) => {
+    if (!document.getElementById('view-board').classList.contains('active')) return;
+    if (e.clipboardData && e.clipboardData.files && e.clipboardData.files.length > 0) {
+        handleSbFileInput(e.clipboardData.files);
+    }
+});
+
+// ==================== 8. TRANSPARENT OVERLAY BOARD ABOVE LESSON (WITH CONNECTED-STROKE ERASER) ====================
+const ovLayer = document.getElementById('overlayBoardLayer');
+const ovCanvas = document.getElementById('overlayCanvas');
+const ovCtx = ovCanvas.getContext('2d');
+const ovToggleBtn = document.getElementById('overlayToggleBtn');
+const ovToolbar = document.getElementById('overlayToolbar');
+let ovActive = false, ovDrawing = false, ovTool = 'pen', ovColor = '#fde047';
+let ovStrokes = [], ovCurrentStroke = null;
+
+function toggleOverlayBoard() {
+    ovActive = !ovActive;
+    if (ovActive) {
+        ovLayer.style.pointerEvents = 'auto';
+        ovToolbar.style.display = 'flex';
+        ovToggleBtn.classList.add('active');
+        if (ovCanvas.width !== window.innerWidth || ovCanvas.height !== window.innerHeight) {
+            ovCanvas.width = window.innerWidth;
+            ovCanvas.height = window.innerHeight;
+            redrawOverlayStrokes();
+        }
+    } else {
+        ovLayer.style.pointerEvents = 'none';
+        ovToolbar.style.display = 'none';
+        ovToggleBtn.classList.remove('active');
+    }
+}
+
+function setOverlayTool(tool, btnEl) {
+    ovTool = tool;
+    document.querySelectorAll('#ov-pen, #ov-high, #ov-erase').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+}
+
+function setOverlayColor(hex, swatchEl) {
+    ovColor = hex;
+    document.getElementById('overlayColorPicker').value = hex;
+    document.querySelectorAll('#overlayToolbar .sb-swatch').forEach(s => s.classList.remove('active-swatch'));
+    if (swatchEl) swatchEl.classList.add('active-swatch');
+}
+
+function redrawOverlayStrokes() {
+    ovCtx.clearRect(0, 0, ovCanvas.width, ovCanvas.height);
+    for (let i = 0; i < ovStrokes.length; i++) {
+        renderSingleStroke(ovCtx, ovStrokes[i]);
+    }
+}
+
+function clearOverlayCanvas() {
+    ovStrokes = [];
+    ovCtx.clearRect(0, 0, ovCanvas.width, ovCanvas.height);
+}
+
+function eraseOverlayConnectedAt(x, y) {
+    const before = ovStrokes.length;
+    ovStrokes = ovStrokes.filter(st => !isPointTouchingStroke(x, y, st, 18));
+    if (ovStrokes.length !== before) redrawOverlayStrokes();
+}
+
+ovCanvas.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    ovDrawing = true;
+    if (ovTool === 'erase') {
+        eraseOverlayConnectedAt(e.clientX, e.clientY);
+        return;
+    }
+    ovCurrentStroke = {
+        type: (ovTool === 'high') ? 'highlighter' : 'pen',
+        color: ovColor,
+        size: 4,
+        points: [{ x: e.clientX, y: e.clientY }]
+    };
+    ovStrokes.push(ovCurrentStroke);
+    redrawOverlayStrokes();
+});
+
+ovCanvas.addEventListener('pointermove', (e) => {
+    if (!ovDrawing) return;
+    e.stopPropagation();
+    if (ovTool === 'erase') {
+        eraseOverlayConnectedAt(e.clientX, e.clientY);
+        return;
+    }
+    if (ovCurrentStroke) {
+        ovCurrentStroke.points.push({ x: e.clientX, y: e.clientY });
+        redrawOverlayStrokes();
+    }
+});
+
+ovCanvas.addEventListener('pointerup', (e) => {
+    e.stopPropagation();
+    ovDrawing = false;
+    ovCurrentStroke = null;
+});
+
+// ==================== 9. TEACHER SIDEBAR: CUSTOMIZABLE SPIN WHEEL, TIMER & MOTIVATIONAL FX ====================
+function toggleTeacherSidebar() {
+    document.getElementById('teacherSidebar').classList.toggle('open');
+}
+
+const wheelCanvas = document.getElementById('spinWheelCanvas');
+const wheelCtx = wheelCanvas.getContext('2d');
+const defaultWheelColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'];
+let wheelItems = [];
+let wheelRotation = 0;
+let isWheelSpinning = false;
+
+function drawSpinWheel() {
+    const cx = wheelCanvas.width / 2;
+    const cy = wheelCanvas.height / 2;
+    const r = cx - 4;
+    wheelCtx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
+
+    const hasNames = wheelItems.length > 0;
+    const count = hasNames ? wheelItems.length : 8;
+    const arc = (Math.PI * 2) / count;
+
+    for (let i = 0; i < count; i++) {
+        const startAngle = i * arc - Math.PI / 2;
+        const endAngle = startAngle + arc;
+        wheelCtx.beginPath();
+        wheelCtx.moveTo(cx, cy);
+        wheelCtx.arc(cx, cy, r, startAngle, endAngle);
+        wheelCtx.closePath();
+        wheelCtx.fillStyle = defaultWheelColors[i % defaultWheelColors.length];
+        wheelCtx.fill();
+        wheelCtx.strokeStyle = 'rgba(255,255,255,0.45)';
+        wheelCtx.lineWidth = 2;
+        wheelCtx.stroke();
+
+        if (hasNames) {
+            wheelCtx.save();
+            wheelCtx.translate(cx, cy);
+            wheelCtx.rotate(startAngle + arc / 2);
+            wheelCtx.textAlign = 'right';
+            wheelCtx.fillStyle = '#ffffff';
+            wheelCtx.font = 'bold 13px Cairo, sans-serif';
+            wheelCtx.shadowColor = 'rgba(0,0,0,0.75)';
+            wheelCtx.shadowBlur = 4;
+            const label = wheelItems[i].length > 12 ? wheelItems[i].slice(0, 11) + '..' : wheelItems[i];
+            wheelCtx.fillText(label, r - 12, 4);
+            wheelCtx.restore();
+        }
+    }
+
+    wheelCtx.beginPath();
+    wheelCtx.arc(cx, cy, 16, 0, Math.PI * 2);
+    wheelCtx.fillStyle = '#0f172a';
+    wheelCtx.fill();
+    wheelCtx.lineWidth = 3;
+    wheelCtx.strokeStyle = '#fbbf24';
+    wheelCtx.stroke();
+}
+drawSpinWheel();
+
+function toggleWheelNamesInput() {
+    const box = document.getElementById('wheelNamesBox');
+    box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+}
+
+function updateSpinWheelFromInput() {
+    const raw = document.getElementById('wheelNamesInput').value;
+    const parsed = raw.split(/\r?\n|,|،/).map(s => s.trim()).filter(Boolean);
+    wheelItems = parsed;
+    document.getElementById('wheelWinnerBadge').style.display = 'none';
+    drawSpinWheel();
+}
+
+function resetWheelDefault() {
+    document.getElementById('wheelNamesInput').value = '';
+    wheelItems = [];
+    document.getElementById('wheelWinnerBadge').style.display = 'none';
+    drawSpinWheel();
+}
+
+function spinTeacherWheel() {
+    if (isWheelSpinning) return;
+    isWheelSpinning = true;
+    const badge = document.getElementById('wheelWinnerBadge');
+    badge.style.display = 'none';
+
+    const extraDeg = Math.floor(Math.random() * 360) + 1800;
+    wheelRotation += extraDeg;
+    wheelCanvas.style.transform = `rotate(${wheelRotation}deg)`;
+    playSynthTone('click');
+
+    setTimeout(() => {
+        isWheelSpinning = false;
+        playSynthTone('correct');
+        if (wheelItems.length > 0) {
+            const count = wheelItems.length;
+            const sliceDeg = 360 / count;
+            const normalized = (360 - (wheelRotation % 360)) % 360;
+            const winnerIdx = Math.floor(normalized / sliceDeg) % count;
+            badge.innerText = `🎉 البطل المختار: ${wheelItems[winnerIdx]}`;
+            badge.style.display = 'block';
+            confetti({ particleCount: 90, spread: 65 });
+        } else {
+            confetti({ particleCount: 70, spread: 60 });
+        }
+    }, 3450);
+}
+
+let classTimerInterval = null;
+function startClassTimer(seconds) {
+    clearInterval(classTimerInterval);
+    let remaining = seconds;
+    const disp = document.getElementById('classTimerDisplay');
+    const renderTime = () => {
+        const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+        const s = (remaining % 60).toString().padStart(2, '0');
+        disp.innerText = `${m}:${s}`;
+    };
+    renderTime();
+    classTimerInterval = setInterval(() => {
+        remaining--;
+        renderTime();
+        if (remaining <= 0) {
+            clearInterval(classTimerInterval);
+            playBellFX();
+            confetti({ particleCount: 90, spread: 70 });
+        }
+    }, 1000);
+}
+
+function stopClassTimer() {
+    clearInterval(classTimerInterval);
+    document.getElementById('classTimerDisplay').innerText = '00:00';
+}
+
+function playApplauseFX() {
+    playSynthTone('correct');
+    confetti({ particleCount: 120, spread: 80 });
+    if (!audioEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const duration = 1.4;
+    const bufferSize = audioCtx.sampleRate * duration;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.65));
+    }
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 1100;
+    const gain = audioCtx.createGain();
+    gain.gain.value = 0.25;
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    noise.start();
+}
+
+function playBellFX() {
+    if (!audioEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    [880, 1318.5, 1760].forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+        gain.gain.setValueAtTime(0.18, now + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + idx * 0.06);
+        osc.stop(now + 0.95);
+    });
+}
+
+</script>
+</body>
+</html>
