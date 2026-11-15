@@ -10,9 +10,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 
-<!-- Confetti & PptxGenJS -->
+<!-- Confetti, PptxGenJS, PDF.js & Mammoth (Word) -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 
 <style>
 :root {
@@ -101,22 +103,7 @@ body {
     66% { transform: translate(-8px, -8px) rotate(-3deg) scale(1.02); }
 }
 
-/* Click Ripple Effect */
-.click-ripple {
-    position: fixed;
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    background: radial-gradient(circle, rgba(251,191,36,0.75) 0%, rgba(168,85,247,0.4) 50%, transparent 75%);
-    pointer-events: none;
-    z-index: 9998;
-    animation: rippleAnim 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-@keyframes rippleAnim {
-    to {
-        transform: translate(-50%, -50%) scale(3.5);
-        opacity: 0;
-    }
-}
+/* Click Ripple Disabled for Clean Pen Writing */
 
 /* ==================== RESPONSIVE MAIN CONTAINER ==================== */
 .app-container {
@@ -297,6 +284,514 @@ body {
     border-radius: 14px;
     animation: gentleContinuousGlow 3.2s ease-in-out infinite;
     cursor: pointer;
+    image-rendering: -webkit-optimize-contrast;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* ==================== SPAHBOARD INTERACTIVE WHITEBOARD ==================== */
+.spahboard-shell {
+    background: #0f172a;
+    border: 2px solid rgba(56, 189, 248, 0.55);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.65);
+    display: flex;
+    flex-direction: column;
+    height: 78vh;
+    min-height: 540px;
+    position: relative;
+}
+.spahboard-topbar {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    z-index: 5;
+}
+.sb-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 5px 8px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.sb-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: #e2e8f0;
+    padding: 7px 11px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+.sb-btn:hover {
+    background: rgba(99, 102, 241, 0.25);
+    color: #fff;
+}
+.sb-btn.active {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    border-color: #93c5fd;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.45);
+}
+.sb-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.sb-swatch:hover, .sb-swatch.active-swatch {
+    transform: scale(1.22);
+    border-color: #fbbf24;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+}
+.sb-color-input {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+.sb-size-slider {
+    width: 75px;
+    accent-color: #38bdf8;
+    cursor: pointer;
+}
+.spahboard-stage {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    touch-action: none;
+    cursor: crosshair;
+}
+#spahBoardBgCanvas, #spahBoardMediaLayer, #spahBoardCanvas, #spahBoardTempCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+}
+#spahBoardBgCanvas { z-index: 1; pointer-events: none; }
+#spahBoardMediaLayer { z-index: 2; pointer-events: none; overflow: hidden; }
+#spahBoardCanvas { z-index: 3; }
+#spahBoardTempCanvas { z-index: 4; pointer-events: none; }
+
+/* When 'select' (تحريك/تحجيم الملفات) tool is active, allow interacting directly with media items */
+.spahboard-stage.select-mode #spahBoardCanvas { pointer-events: none; }
+.spahboard-stage.select-mode #spahBoardMediaLayer { pointer-events: auto; }
+
+/* Uploaded Image / PDF / Word Document Cards on Whiteboard */
+.sb-media-item {
+    position: absolute;
+    border: 2px solid rgba(56, 189, 248, 0.75);
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.92);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 160px;
+    min-height: 120px;
+    pointer-events: none; /* Body lets pen draw directly over it unless in select-mode */
+}
+.spahboard-stage.select-mode .sb-media-item {
+    pointer-events: auto;
+    border-color: #fbbf24;
+    box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.45), 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+.sb-media-header {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: #f8fafc;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    cursor: move;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    pointer-events: auto; /* Header is ALWAYS draggable & clickable even in pen mode! */
+    z-index: 6;
+    user-select: none;
+}
+.sb-media-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+    color: #fde68a;
+}
+.sb-media-ctrl {
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    padding: 2px 7px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.sb-media-ctrl:hover { background: #3b82f6; }
+.sb-media-ctrl.del-btn { background: rgba(239, 68, 68, 0.85); }
+.sb-media-ctrl.del-btn:hover { background: #dc2626; }
+
+.sb-media-body {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+}
+.sb-media-body img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.sb-word-content {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 16px 20px;
+    background: #ffffff;
+    color: #0f172a;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    line-height: 1.75;
+    text-align: right;
+    direction: auto;
+}
+.sb-word-content h1, .sb-word-content h2, .sb-word-content h3 {
+    color: #1e3a8a;
+    margin-bottom: 8px;
+}
+.sb-word-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+.sb-word-content td, .sb-word-content th {
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+}
+.sb-media-resize {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+    color: #fff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    cursor: nwse-resize;
+    pointer-events: auto; /* Always resizable from corner handle! */
+    z-index: 6;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* Drag & Drop Overlay on SpahBoard */
+.sb-drop-overlay {
+    position: absolute;
+    inset: 12px;
+    border: 3px dashed #fbbf24;
+    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(8px);
+    z-index: 20;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #fde68a;
+    font-size: 1.3rem;
+    font-weight: 900;
+    pointer-events: none;
+    text-align: center;
+    padding: 20px;
+}
+.sb-drop-overlay.visible { display: flex; }
+
+.sb-sticky-note {
+    position: absolute;
+    min-width: 170px;
+    min-height: 130px;
+    background: #fef08a;
+    color: #1e293b;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    padding: 26px 10px 10px;
+    z-index: 5;
+    border-top: 22px solid #f59e0b;
+    cursor: move;
+}
+.sb-sticky-note textarea {
+    width: 100%;
+    height: 90px;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: both;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #0f172a;
+}
+.sb-sticky-close {
+    position: absolute;
+    top: -19px;
+    left: 6px;
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    cursor: pointer;
+    line-height: 1;
+}
+.sb-floating-text-input {
+    position: absolute;
+    z-index: 6;
+    background: rgba(15, 23, 42, 0.88);
+    border: 2px dashed #38bdf8;
+    border-radius: 8px;
+    padding: 4px 8px;
+    color: #fff;
+    font-family: 'Cairo', 'Fredoka', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    outline: none;
+    min-width: 150px;
+}
+
+/* ==================== TRANSPARENT OVERLAY BOARD OVER LESSON ==================== */
+.overlay-board-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 4400;
+    pointer-events: none;
+}
+#overlayCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+}
+.overlay-floating-bar {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(14px);
+    border: 2px solid #fbbf24;
+    border-radius: 50px;
+    padding: 7px 16px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    z-index: 4600;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+    pointer-events: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.overlay-toggle-btn {
+    position: fixed;
+    bottom: 76px;
+    left: 18px;
+    z-index: 4600;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    border: 2px solid #fff;
+    color: #fff;
+    font-size: 1.15rem;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.overlay-toggle-btn:hover { transform: scale(1.12); }
+.overlay-toggle-btn.active {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 0 22px rgba(16, 185, 129, 0.8);
+}
+
+/* ==================== TEACHER SIDEBAR (RAISED ABOVE WINDOWS TASKBAR) ==================== */
+.teacher-toggle-btn {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 6005;
+    padding: 10px 15px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    border: 2px solid #fbbf24;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.25s;
+}
+.teacher-toggle-btn:hover { transform: scale(1.06); }
+
+.teacher-sidebar {
+    position: fixed;
+    top: 14px;
+    bottom: 84px; /* Elevated cleanly above Windows Start / Taskbar */
+    right: -350px;
+    width: 330px;
+    max-width: 90vw;
+    max-height: calc(100vh - 98px);
+    background: rgba(15, 23, 42, 0.97);
+    backdrop-filter: blur(18px);
+    border: 2px solid rgba(129, 140, 248, 0.55);
+    border-right: none;
+    border-radius: 24px 0 0 24px;
+    z-index: 6004;
+    transition: right 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    padding: 16px 16px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: -12px 10px 40px rgba(0, 0, 0, 0.65);
+    overflow-y: auto;
+}
+.teacher-sidebar.open { right: 0; }
+
+.ts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding-bottom: 10px;
+}
+.ts-panel {
+    background: rgba(30, 41, 59, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 12px;
+    text-align: center;
+}
+.ts-panel h3 {
+    font-size: 1rem;
+    color: #fde047;
+    margin-bottom: 8px;
+    font-weight: 900;
+}
+.wheel-stage {
+    position: relative;
+    width: 196px;
+    height: 196px;
+    margin: 6px auto 10px;
+}
+.wheel-pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-top: 22px solid #ffffff;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6));
+    z-index: 10;
+}
+#spinWheelCanvas {
+    width: 196px;
+    height: 196px;
+    border-radius: 50%;
+    border: 4px solid #fbbf24;
+    box-shadow: 0 0 22px rgba(251, 191, 36, 0.4);
+    transition: transform 3.4s cubic-bezier(0.17, 0.67, 0.14, 0.99);
+}
+.wheel-winner-badge {
+    display: none;
+    margin: 6px 0;
+    padding: 6px 12px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    font-weight: 900;
+    font-size: 0.98rem;
+    animation: pulseRing 1.5s infinite;
+}
+.wheel-names-box {
+    display: none;
+    margin-top: 8px;
+    text-align: right;
+}
+.wheel-names-box textarea {
+    width: 100%;
+    height: 76px;
+    border-radius: 12px;
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    background: rgba(2, 6, 23, 0.8);
+    color: #fff;
+    padding: 8px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    resize: vertical;
+    outline: none;
+}
+.ts-btn {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    border: none;
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 11px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 0.86rem;
+    margin: 3px;
+    transition: transform 0.2s;
+}
+.ts-btn:hover { transform: scale(1.05); }
+.ts-timer-val {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: #34d399;
+    margin: 4px 0;
 }
 @keyframes gentleContinuousGlow {
     0%, 100% { transform: scale(1); filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.45)); }
@@ -1156,7 +1651,7 @@ body {
 /* Print / PDF Export Styles */
 @media print {
     body { background: #fff !important; color: #000 !important; }
-    .inline-intro-section, .action-dock, .sound-toggle, #particles-js, #click-fx-canvas, .speak-btn, .floating-decor, .floating-bg-logo, .audio-controls-bar, #bottom-quiz-anchor { display: none !important; }
+    .inline-intro-section, .action-dock, .sound-toggle, .overlay-toggle-btn, .overlay-floating-bar, .teacher-toggle-btn, .teacher-sidebar, #particles-js, #click-fx-canvas, .speak-btn, .floating-decor, .floating-bg-logo, .audio-controls-bar, #bottom-quiz-anchor { display: none !important; }
     .hero-header { background: #1e3a8a !important; color: #fff !important; border: none !important; box-shadow: none !important; }
     .lesson-card { background: #fff !important; color: #000 !important; border: 2px solid #1e3a8a !important; box-shadow: none !important; page-break-inside: avoid; margin-bottom: 16px; }
     .animated-section-title { -webkit-text-fill-color: #fff !important; color: #fff !important; }
@@ -1173,7 +1668,6 @@ body {
 <body>
 
 <canvas id="particles-js"></canvas>
-<canvas id="click-fx-canvas"></canvas>
 
 <!-- Joyful Floating Spaceship, Stars & Small Animated Brand Logos in Particles Background -->
 <div class="floating-decor" style="top: 13%; right: 2.5%; animation-delay: 0s;">🚀</div>
@@ -1181,15 +1675,110 @@ body {
 <div class="floating-decor" style="top: 64%; right: 2%; animation-delay: 3s;">🎓</div>
 <div class="floating-decor" style="top: 82%; left: 3%; animation-delay: 2s;">💡</div>
 
-<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5"
-     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w150';"
-     class="floating-bg-logo" style="top: 24%; left: 4%; animation-delay: 0.4s;" alt="لوجو مستر إيهاب">
-<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5"
-     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w150';"
-     class="floating-bg-logo" style="top: 50%; right: 3.5%; animation-delay: 2.2s;" alt="لوجو مستر إيهاب">
-<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5"
-     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w150';"
-     class="floating-bg-logo" style="top: 76%; left: 5%; animation-delay: 3.8s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 10%; left: 3%; animation-delay: 0.2s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 22%; right: 3.5%; animation-delay: 1.1s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 35%; left: 6%; animation-delay: 2.0s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 48%; right: 6%; animation-delay: 2.9s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 61%; left: 3.5%; animation-delay: 3.7s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 74%; right: 4%; animation-delay: 4.5s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 86%; left: 5%; animation-delay: 5.2s;" alt="لوجو مستر إيهاب">
+<img src="https://lh3.googleusercontent.com/d/1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5=s0"
+     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1y4dyG-9kLmoeIaoDev-wFFq5-U8EopB5&sz=w200';"
+     class="floating-bg-logo" style="top: 93%; right: 5.5%; animation-delay: 1.6s;" alt="لوجو مستر إيهاب">
+
+<!-- Transparent Overlay Whiteboard Above Lesson -->
+<button class="overlay-toggle-btn" id="overlayToggleBtn" onclick="toggleOverlayBoard()" title="سبورة شفافة للكتابة فوق الدرس">
+    <i class="fa-solid fa-pen-nib"></i>
+</button>
+<div class="overlay-floating-bar" id="overlayToolbar">
+    <button class="sb-btn active" id="ov-pen" onclick="setOverlayTool('pen', this)" title="قلم"><i class="fa-solid fa-pen"></i> قلم</button>
+    <button class="sb-btn" id="ov-high" onclick="setOverlayTool('high', this)" title="تظليل"><i class="fa-solid fa-highlighter"></i> فسفوري</button>
+    <button class="sb-btn" id="ov-erase" onclick="setOverlayTool('erase', this)" title="ممحاة"><i class="fa-solid fa-eraser"></i> ممحاة</button>
+    <span class="sb-swatch active-swatch" style="background:#fde047;" onclick="setOverlayColor('#fde047', this)"></span>
+    <span class="sb-swatch" style="background:#38bdf8;" onclick="setOverlayColor('#38bdf8', this)"></span>
+    <span class="sb-swatch" style="background:#34d399;" onclick="setOverlayColor('#34d399', this)"></span>
+    <span class="sb-swatch" style="background:#f87171;" onclick="setOverlayColor('#f87171', this)"></span>
+    <input type="color" id="overlayColorPicker" class="sb-color-input" value="#fde047" onchange="setOverlayColor(this.value)">
+    <button class="sb-btn" style="color:#f87171;" onclick="clearOverlayCanvas()" title="مسح"><i class="fa-solid fa-trash"></i></button>
+    <button class="sb-btn" style="background:#ef4444; color:#fff;" onclick="toggleOverlayBoard()" title="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div class="overlay-board-layer" id="overlayBoardLayer">
+    <canvas id="overlayCanvas"></canvas>
+</div>
+
+<!-- Teacher Classroom Tools Toggle & Sidebar (Elevated Above Windows Taskbar) -->
+<button class="teacher-toggle-btn" onclick="toggleTeacherSidebar()" title="أدوات المستر وعجلة الحظ">
+    <i class="fa-solid fa-toolbox"></i>
+    <span>أدوات المستر</span>
+</button>
+
+<aside class="teacher-sidebar" id="teacherSidebar">
+    <div class="ts-header">
+        <h2 style="font-size:1.15rem; font-weight:900; color:#fde047;">أدوات المستر 👨‍🏫</h2>
+        <button class="sb-btn" style="color:#f87171; padding:4px 9px;" onclick="toggleTeacherSidebar()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- Spin Wheel Panel -->
+    <div class="ts-panel">
+        <h3>🎯 عجلة الحظ (اختيار الطلاب)</h3>
+        <div class="wheel-stage">
+            <div class="wheel-pointer"></div>
+            <canvas id="spinWheelCanvas" width="196" height="196"></canvas>
+        </div>
+        <div class="wheel-winner-badge" id="wheelWinnerBadge"></div>
+        <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px;">
+            <button class="ts-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#020617;" onclick="spinTeacherWheel()">
+                <i class="fa-solid fa-rotate"></i> لف العجلة!
+            </button>
+            <button class="ts-btn" onclick="toggleWheelNamesInput()">
+                <i class="fa-solid fa-user-pen"></i> إضافة أسماء
+            </button>
+        </div>
+        <div class="wheel-names-box" id="wheelNamesBox">
+            <textarea id="wheelNamesInput" placeholder="اكتب أسماء الطلاب هنا (كل اسم في سطر أو افصل بينهم بفاصلة)&#10;مثال:&#10;أحمد&#10;محمد&#10;عمر&#10;يوسف" oninput="updateSpinWheelFromInput()"></textarea>
+            <div style="display:flex; justify-content:space-between; margin-top:5px;">
+                <button class="ts-btn" style="background:#10b981; font-size:0.8rem;" onclick="updateSpinWheelFromInput()">تحديث العجلة ✔</button>
+                <button class="ts-btn" style="background:#ef4444; font-size:0.8rem;" onclick="resetWheelDefault()">الوضع الافتراضي</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Classroom Activity Timer -->
+    <div class="ts-panel">
+        <h3>⏱️ مؤقت الأنشطة</h3>
+        <div class="ts-timer-val" id="classTimerDisplay">02:00</div>
+        <div>
+            <button class="ts-btn" onclick="startClassTimer(60)">1 د</button>
+            <button class="ts-btn" onclick="startClassTimer(120)">2 د</button>
+            <button class="ts-btn" onclick="startClassTimer(300)">5 د</button>
+            <button class="ts-btn" style="background:#ef4444;" onclick="stopClassTimer()">إيقاف</button>
+        </div>
+    </div>
+
+    <!-- Motivational Sound & Visual Effects (Clearly visible above Windows Taskbar) -->
+    <div class="ts-panel">
+        <h3>🎉 مؤثرات تشجيعية</h3>
+        <div>
+            <button class="ts-btn" style="background:linear-gradient(135deg,#10b981,#059669);" onclick="playApplauseFX()">👏 تصفيق حار</button>
+            <button class="ts-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#020617;" onclick="playBellFX()">🔔 جرس انتباه</button>
+            <button class="ts-btn" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);" onclick="triggerCelebration()">⭐ نجوم التفوق</button>
+        </div>
+    </div>
+</aside>
 
 <!-- Sound Effects Toggle -->
 <button class="sound-toggle" id="soundToggleBtn" onclick="toggleAudioFX()" title="تشغيل/كتم المؤثرات الصوتية">
@@ -1199,31 +1788,7 @@ body {
 <!-- ==================== MAIN APP CONTAINER ==================== -->
 <div class="app-container">
 
-    <!-- HERO HEADER: Enlarged Right Logo + Topic Title + Enlarged Far-Left Animated Character -->
-    <header class="hero-header">
-        <div class="brand-right">
-            <div class="topic-icon-box" onclick="triggerCelebration()">
-                <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX"
-                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w350';"
-                     alt="لوجو مستر إيهاب">
-            </div>
-            <div class="brand-titles">
-                <h1>دروس مستر إيهاب التفاعلية الشاملة <span class="joy-icon-spin">✨</span></h1>
-                <div class="lesson-pill">
-                    <i class="fa-solid fa-graduation-cap" style="color: #fbbf24;"></i>
-                    <span class="en">Past Simple Tense</span>
-                    <span>— زمن الماضي البسيط</span>
-                </div>
-            </div>
-        </div>
-        <div class="brand-left">
-            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr"
-                 onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr&sz=w400';"
-                 class="far-left-animated-badge" alt="شخصية مستر إيهاب المتحركة" onclick="triggerCelebration()">
-        </div>
-    </header>
-
-    <!-- ==================== NON-STOP ANIMATED LOGO BANNER ==================== -->
+    <!-- ==================== NON-STOP ANIMATED LOGO BANNER (ABOVE TITLE + HD QUALITY) ==================== -->
     <section class="inline-intro-section" aria-label="الشعار الترحيبي المتحرك">
         <div class="intro-top-strip">
             <span class="joy-icon-spin">🚀</span>
@@ -1232,8 +1797,8 @@ body {
         </div>
 
         <div class="video-frame-wrapper">
-            <img src="https://lh3.googleusercontent.com/d/1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4"
-                 onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4&sz=w1000';"
+            <img src="https://lh3.googleusercontent.com/d/1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4=s0"
+                 onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4&sz=w2000';"
                  class="nonstop-animated-banner-img"
                  alt="شعار دروس مستر إيهاب التفاعلية المتحرك"
                  onclick="triggerCelebration()">
@@ -1246,6 +1811,30 @@ body {
         </div>
     </section>
 
+    <!-- HERO HEADER: Enlarged Right Logo + Topic Title + Enlarged Far-Left Animated Character -->
+    <header class="hero-header">
+        <div class="brand-right">
+            <div class="topic-icon-box" onclick="triggerCelebration()">
+                <img src="https://lh3.googleusercontent.com/d/1gNpof6rwISH31G_yzLvh4mtcauBukffX=s0"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1gNpof6rwISH31G_yzLvh4mtcauBukffX&sz=w400';"
+                     alt="لوجو مستر إيهاب">
+            </div>
+            <div class="brand-titles">
+                <h1>دروس مستر إيهاب التفاعلية الشاملة <span class="joy-icon-spin">✨</span></h1>
+                <div class="lesson-pill">
+                    <i class="fa-solid fa-graduation-cap" style="color: #fbbf24;"></i>
+                    <span class="en">Past Simple Tense</span>
+                    <span>— زمن الماضي البسيط</span>
+                </div>
+            </div>
+        </div>
+        <div class="brand-left">
+            <img src="https://lh3.googleusercontent.com/d/1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr=s0"
+                 onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1Zpz-gDvri2IK3MqLNovbs7Nd9fRayyOr&sz=w400';"
+                 class="far-left-animated-badge" alt="شخصية مستر إيهاب المتحركة" onclick="triggerCelebration()">
+        </div>
+    </header>
+
     <!-- ==================== INTERACTIVE ACTION DOCK ==================== -->
     <nav class="action-dock">
         <button class="dock-btn active-tab" id="tab-lesson" onclick="switchView('lesson', this)">
@@ -1256,6 +1845,14 @@ body {
             </div>
             <span class="dock-label">شرح الدرس التفاعلي 📖</span>
             <span class="dock-sub">عناوين متحركة وأمثلة ناطقة</span>
+        </button>
+
+        <button class="dock-btn" id="tab-board" onclick="switchView('board', this)">
+            <div class="dock-icon-wrap" style="background: rgba(56, 189, 248, 0.25); color: #38bdf8;">
+                <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+            <span class="dock-label">السبورة التفاعلية 🎨</span>
+            <span class="dock-sub">كتابة بالقلم واليد (SpahBoard)</span>
         </button>
 
         <button class="dock-btn" id="tab-video" onclick="openLessonVideoDirect(this)">
@@ -1298,6 +1895,111 @@ body {
             <span class="dock-sub">تحميل ملف شرائح .pptx</span>
         </button>
     </nav>
+
+    <!-- ==================== VIEW: SPAHBOARD INTERACTIVE WHITEBOARD ==================== -->
+    <section id="view-board" class="view-panel">
+        <div class="spahboard-shell" id="spahboardShell">
+            <div class="spahboard-topbar">
+                <!-- Drawing, Eraser & Move Tools -->
+                <div class="sb-group">
+                    <button class="sb-btn active" data-sbtool="pen" onclick="setSbTool('pen', this)" title="قلم حر (يد وقلم)">
+                        <i class="fa-solid fa-pen"></i> قلم
+                    </button>
+                    <button class="sb-btn" data-sbtool="highlighter" onclick="setSbTool('highlighter', this)" title="قلم تظليل فسفوري">
+                        <i class="fa-solid fa-highlighter"></i> فسفوري
+                    </button>
+                    <button class="sb-btn" data-sbtool="laser" onclick="setSbTool('laser', this)" title="مؤشر ليزر يتلاشى">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> ليزر
+                    </button>
+                    <button class="sb-btn" data-sbtool="line" onclick="setSbTool('line', this)" title="خط مستقيم">
+                        <i class="fa-solid fa-slash"></i>
+                    </button>
+                    <button class="sb-btn" data-sbtool="arrow" onclick="setSbTool('arrow', this)" title="سهم">
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                    </button>
+                    <button class="sb-btn" data-sbtool="rect" onclick="setSbTool('rect', this)" title="مستطيل">
+                        <i class="fa-regular fa-square"></i>
+                    </button>
+                    <button class="sb-btn" data-sbtool="circle" onclick="setSbTool('circle', this)" title="دائرة">
+                        <i class="fa-regular fa-circle"></i>
+                    </button>
+                    <button class="sb-btn" data-sbtool="text" onclick="setSbTool('text', this)" title="إضافة نص مكتوب">
+                        <i class="fa-solid fa-font"></i> نص
+                    </button>
+                    <button class="sb-btn" onclick="addSbStickyNote()" title="ملصق ملاحظات">
+                        <i class="fa-regular fa-note-sticky"></i> ملصق
+                    </button>
+                    <button class="sb-btn" data-sbtool="eraser" onclick="setSbTool('eraser', this)" title="ممحاة ذكية (تمسح الخط المتصل بالكامل)">
+                        <i class="fa-solid fa-eraser"></i> ممحاة القلم
+                    </button>
+                    <button class="sb-btn" data-sbtool="select" onclick="setSbTool('select', this)" title="تحريك وتصفح الصور والملفات">
+                        <i class="fa-solid fa-hand"></i> تحريك
+                    </button>
+                </div>
+
+                <!-- Upload Image & Upload PDF / Word (Plus Drag & Drop Support) -->
+                <div class="sb-group">
+                    <button class="sb-btn" style="color:#38bdf8;" onclick="document.getElementById('sbImageUploadInput').click()" title="رفع صورة أو أكثر للسبورة (أو اسحبها وأفلتها هنا)">
+                        <i class="fa-regular fa-image"></i> رفع صورة
+                    </button>
+                    <button class="sb-btn" style="color:#fbbf24;" onclick="document.getElementById('sbDocUploadInput').click()" title="رفع ملف PDF أو Word للسبورة (أو اسحبه وأفلته هنا)">
+                        <i class="fa-solid fa-file-pdf"></i> رفع PDF / Word
+                    </button>
+                    <input type="file" id="sbImageUploadInput" accept="image/*" multiple style="display:none;" onchange="handleSbFileInput(this.files)">
+                    <input type="file" id="sbDocUploadInput" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple style="display:none;" onchange="handleSbFileInput(this.files)">
+                </div>
+
+                <!-- Colors & Brush Size -->
+                <div class="sb-group">
+                    <span class="sb-swatch active-swatch" style="background:#ffffff;" onclick="setSbColor('#ffffff', this)"></span>
+                    <span class="sb-swatch" style="background:#fde047;" onclick="setSbColor('#fde047', this)"></span>
+                    <span class="sb-swatch" style="background:#38bdf8;" onclick="setSbColor('#38bdf8', this)"></span>
+                    <span class="sb-swatch" style="background:#34d399;" onclick="setSbColor('#34d399', this)"></span>
+                    <span class="sb-swatch" style="background:#f87171;" onclick="setSbColor('#f87171', this)"></span>
+                    <span class="sb-swatch" style="background:#c084fc;" onclick="setSbColor('#c084fc', this)"></span>
+                    <span class="sb-swatch" style="background:#0f172a;" onclick="setSbColor('#0f172a', this)"></span>
+                    <input type="color" id="sbColorPicker" class="sb-color-input" value="#ffffff" onchange="setSbColor(this.value)">
+                    <input type="range" id="sbSizeSlider" class="sb-size-slider" min="2" max="24" value="4" title="حجم القلم">
+                </div>
+
+                <!-- Backgrounds -->
+                <div class="sb-group">
+                    <button class="sb-btn active" id="bg-dark" onclick="setSbBackground('dark', this)" title="سبورة داكنة">داكنة</button>
+                    <button class="sb-btn" id="bg-white" onclick="setSbBackground('white', this)" title="سبورة بيضاء">بيضاء</button>
+                    <button class="sb-btn" id="bg-lines" onclick="setSbBackground('lines', this)" title="مسطرة 4 سطور إنجليزي">4 سطور</button>
+                    <button class="sb-btn" id="bg-grid" onclick="setSbBackground('grid', this)" title="شبكة مربعات">شبكة</button>
+                </div>
+
+                <!-- Pages, Undo/Redo, Separate Clear Ink & Clear Files, Save PNG, Fullscreen -->
+                <div class="sb-group">
+                    <button class="sb-btn" onclick="sbPrevPage()" title="الصفحة السابقة"><i class="fa-solid fa-chevron-right"></i></button>
+                    <span id="sbPageIndicator" style="font-weight:800; font-size:0.85rem; color:#fde68a; padding:0 4px;">1 / 1</span>
+                    <button class="sb-btn" onclick="sbNextOrAddPage()" title="الصفحة التالية / صفحة جديدة"><i class="fa-solid fa-plus"></i></button>
+                    <button class="sb-btn" onclick="sbUndo()" title="تراجع عن الكتابة"><i class="fa-solid fa-rotate-left"></i></button>
+                    <button class="sb-btn" onclick="sbRedo()" title="إعادة الكتابة"><i class="fa-solid fa-rotate-right"></i></button>
+                    <button class="sb-btn" style="color:#fb923c;" onclick="sbClearInk()" title="مسح الكتابة والرسومات فقط (مع بقاء الصور والملفات)">
+                        <i class="fa-solid fa-broom"></i> مسح المكتوب
+                    </button>
+                    <button class="sb-btn" style="color:#f87171;" onclick="sbClearMedia()" title="مسح الصور وملفات PDF و Word فقط (مع بقاء المكتوب)">
+                        <i class="fa-solid fa-folder-minus"></i> مسح الصور والملفات
+                    </button>
+                    <button class="sb-btn" style="color:#34d399;" onclick="sbExportPNG()" title="حفظ السبورة كصورة"><i class="fa-solid fa-camera"></i></button>
+                    <button class="sb-btn" onclick="sbToggleFullscreen()" title="ملء الشاشة"><i class="fa-solid fa-expand"></i></button>
+                </div>
+            </div>
+
+            <div class="spahboard-stage" id="spahboardStage">
+                <canvas id="spahBoardBgCanvas"></canvas>
+                <div id="spahBoardMediaLayer"></div>
+                <canvas id="spahBoardCanvas"></canvas>
+                <canvas id="spahBoardTempCanvas"></canvas>
+                <div class="sb-drop-overlay" id="sbDropOverlay">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:3rem; color:#38bdf8;"></i>
+                    <span>أفلت الصورة أو ملف PDF / Word هنا لإدراجه على السبورة مباشرة</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- ==================== VIEW 1: INTERACTIVE LESSON + LISTENING MCQs + BOTTOM QUIZ ==================== -->
     <section id="view-lesson" class="view-panel active">
@@ -1636,8 +2338,8 @@ body {
                 </div>
 
                 <div id="welcome-scene" class="scene active">
-                    <img src="https://lh3.googleusercontent.com/d/1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4"
-                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4&sz=w1000';"
+                    <img src="https://lh3.googleusercontent.com/d/1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4=s0"
+                         onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1UO3h_cy8iVW9m-xilSg9kNuv0ITuIsL4&sz=w2000';"
                          style="width: 320px; max-width: 88%; height: auto; margin-bottom: 18px; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                     <h3 style="font-size: clamp(1.2rem, 2.4vw, 1.65rem); margin-bottom: 16px; font-weight: 900;">اختبار الماضي البسيط الشامل (28 سؤال)</h3>
                     <input type="text" id="studentName" class="student-input" placeholder="أدخل اسمك الثلاثي يا بطل للحصول على الشهادة">
@@ -1742,13 +2444,7 @@ function playSynthTone(type = 'click') {
     const now = audioCtx.currentTime;
 
     if (type === 'click') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(580, now);
-        osc.frequency.exponentialRampToValueAtTime(920, now + 0.09);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-        osc.start(now);
-        osc.stop(now + 0.1);
+        return; // Silent click for distraction-free pen writing
     } else if (type === 'correct') {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(523.25, now);
@@ -1776,71 +2472,16 @@ function toggleAudioFX() {
         : '<i class="fa-solid fa-volume-xmark"></i>';
 }
 
-// Click Sparkles & Ripples
-const fxCanvas = document.getElementById('click-fx-canvas');
-const fxCtx = fxCanvas.getContext('2d');
+// Background Particles Canvas (Click Ripple & Click Sound Removed for Distraction-Free Writing)
 const bgCanvas = document.getElementById('particles-js');
 const bgCtx = bgCanvas.getContext('2d');
-let sparks = [];
 
 function resizeCanvases() {
-    fxCanvas.width = window.innerWidth;
-    fxCanvas.height = window.innerHeight;
     bgCanvas.width = window.innerWidth;
     bgCanvas.height = window.innerHeight;
 }
 resizeCanvases();
 window.addEventListener('resize', resizeCanvases);
-
-document.addEventListener('click', (e) => {
-    const ripple = document.createElement('div');
-    ripple.className = 'click-ripple';
-    ripple.style.left = e.clientX + 'px';
-    ripple.style.top = e.clientY + 'px';
-    ripple.style.width = '50px';
-    ripple.style.height = '50px';
-    document.body.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 650);
-
-    const colors = ['#fbbf24', '#ec4899', '#38bdf8', '#a855f7', '#34d399'];
-    for (let i = 0; i < 16; i++) {
-        const angle = (Math.PI * 2 * i) / 16;
-        const speed = Math.random() * 4 + 2;
-        sparks.push({
-            x: e.clientX,
-            y: e.clientY,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
-            alpha: 1,
-            size: Math.random() * 4 + 2,
-            color: colors[Math.floor(Math.random() * colors.length)]
-        });
-    }
-    playSynthTone('click');
-});
-
-function animateSparks() {
-    fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
-    sparks.forEach((s, idx) => {
-        s.x += s.vx;
-        s.y += s.vy;
-        s.vy += 0.08;
-        s.alpha -= 0.028;
-        if (s.alpha <= 0) {
-            sparks.splice(idx, 1);
-        } else {
-            fxCtx.save();
-            fxCtx.globalAlpha = s.alpha;
-            fxCtx.fillStyle = s.color;
-            fxCtx.beginPath();
-            fxCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-            fxCtx.fill();
-            fxCtx.restore();
-        }
-    });
-    requestAnimationFrame(animateSparks);
-}
-animateSparks();
 
 let bgPts = [];
 for (let i = 0; i < 65; i++) {
@@ -1881,6 +2522,9 @@ function switchView(viewName, btnEl) {
     if (btnEl) {
         document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active-tab'));
         btnEl.classList.add('active-tab');
+    }
+    if (viewName === 'board') {
+        setTimeout(initOrResizeSpahBoard, 40);
     }
     if (viewName !== 'video') {
         const lFrame = document.getElementById('lessonOnlyIframe');
@@ -2316,6 +2960,1203 @@ function showScene(id) {
     document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
+
+// ==================== 7. SPAHBOARD VECTOR WHITEBOARD + CONNECTED-STROKE ERASER + IMAGE / PDF / WORD + DRAG & DROP ====================
+const sbShell = document.getElementById('spahboardShell');
+const sbStage = document.getElementById('spahboardStage');
+const sbBgCanvas = document.getElementById('spahBoardBgCanvas');
+const sbBgCtx = sbBgCanvas.getContext('2d');
+const sbMediaLayer = document.getElementById('spahBoardMediaLayer');
+const sbCanvas = document.getElementById('spahBoardCanvas');
+const sbCtx = sbCanvas.getContext('2d', { willReadFrequently: true });
+const sbTempCanvas = document.getElementById('spahBoardTempCanvas');
+const sbTempCtx = sbTempCanvas.getContext('2d');
+const sbDropOverlay = document.getElementById('sbDropOverlay');
+
+if (typeof pdfjsLib !== 'undefined') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+let sbTool = 'pen';
+let sbColor = '#ffffff';
+let sbSize = 4;
+let sbBgType = 'dark';
+let sbIsDrawing = false;
+let sbStartX = 0, sbStartY = 0;
+let sbCurrentStroke = null;
+let sbLaserTrail = [];
+let sbErasedDuringSwipe = false;
+
+// Each page stores vector strokes (for connected-stroke erasing & undo/redo) + media items HTML
+let sbPages = [{ bg: 'dark', strokes: [], undoStack: ['[]'], redoStack: [], mediaNodes: [] }];
+let sbCurrentPage = 0;
+
+document.getElementById('sbSizeSlider').addEventListener('input', (e) => {
+    sbSize = parseInt(e.target.value, 10);
+});
+
+function getSbCoords(e) {
+    const rect = sbCanvas.getBoundingClientRect();
+    return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
+}
+
+function initOrResizeSpahBoard() {
+    if (!sbStage) return;
+    const rect = sbStage.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    sbBgCanvas.width = rect.width;
+    sbBgCanvas.height = rect.height;
+    sbCanvas.width = rect.width;
+    sbCanvas.height = rect.height;
+    sbTempCanvas.width = rect.width;
+    sbTempCanvas.height = rect.height;
+
+    drawSbBackground(sbBgType);
+    redrawSbInkLayer();
+}
+window.addEventListener('resize', () => {
+    if (document.getElementById('view-board').classList.contains('active')) {
+        initOrResizeSpahBoard();
+    }
+});
+
+function drawSbBackground(type) {
+    sbBgType = type;
+    sbBgCtx.save();
+    sbBgCtx.clearRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+    if (type === 'dark') {
+        sbBgCtx.fillStyle = '#0f172a';
+        sbBgCtx.fillRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+    } else if (type === 'white') {
+        sbBgCtx.fillStyle = '#ffffff';
+        sbBgCtx.fillRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+    } else if (type === 'lines') {
+        sbBgCtx.fillStyle = '#fffbeb';
+        sbBgCtx.fillRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+        for (let y = 55; y < sbBgCanvas.height - 30; y += 96) {
+            sbBgCtx.strokeStyle = '#3b82f6'; sbBgCtx.lineWidth = 1.6; sbBgCtx.setLineDash([]);
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y); sbBgCtx.lineTo(sbBgCanvas.width, y); sbBgCtx.stroke();
+            sbBgCtx.strokeStyle = '#ef4444'; sbBgCtx.lineWidth = 1.3; sbBgCtx.setLineDash([6, 6]);
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y + 24); sbBgCtx.lineTo(sbBgCanvas.width, y + 24); sbBgCtx.stroke();
+            sbBgCtx.strokeStyle = '#2563eb'; sbBgCtx.lineWidth = 1.8; sbBgCtx.setLineDash([]);
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y + 48); sbBgCtx.lineTo(sbBgCanvas.width, y + 48); sbBgCtx.stroke();
+            sbBgCtx.strokeStyle = '#93c5fd'; sbBgCtx.lineWidth = 1.2;
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y + 72); sbBgCtx.lineTo(sbBgCanvas.width, y + 72); sbBgCtx.stroke();
+        }
+    } else if (type === 'grid') {
+        sbBgCtx.fillStyle = '#0f172a';
+        sbBgCtx.fillRect(0, 0, sbBgCanvas.width, sbBgCanvas.height);
+        sbBgCtx.strokeStyle = 'rgba(148, 163, 184, 0.18)';
+        sbBgCtx.lineWidth = 1;
+        for (let x = 0; x < sbBgCanvas.width; x += 32) {
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(x, 0); sbBgCtx.lineTo(x, sbBgCanvas.height); sbBgCtx.stroke();
+        }
+        for (let y = 0; y < sbBgCanvas.height; y += 32) {
+            sbBgCtx.beginPath(); sbBgCtx.moveTo(0, y); sbBgCtx.lineTo(sbBgCanvas.width, y); sbBgCtx.stroke();
+        }
+    }
+    sbBgCtx.restore();
+}
+
+function setSbBackground(type, btnEl) {
+    sbBgType = type;
+    sbPages[sbCurrentPage].bg = type;
+    document.querySelectorAll('#bg-dark, #bg-white, #bg-lines, #bg-grid').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    if (type === 'white' || type === 'lines') {
+        if (sbColor === '#ffffff') setSbColor('#0f172a');
+    } else {
+        if (sbColor === '#0f172a') setSbColor('#ffffff');
+    }
+    drawSbBackground(type);
+}
+
+function setSbTool(tool, btnEl) {
+    sbTool = tool;
+    document.querySelectorAll('[data-sbtool]').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+
+    if (tool === 'select') {
+        sbStage.classList.add('select-mode');
+        sbStage.style.cursor = 'grab';
+    } else {
+        sbStage.classList.remove('select-mode');
+        sbStage.style.cursor = (tool === 'text') ? 'text' : (tool === 'eraser') ? 'cell' : 'crosshair';
+    }
+}
+
+function setSbColor(hex, swatchEl) {
+    sbColor = hex;
+    document.getElementById('sbColorPicker').value = hex;
+    document.querySelectorAll('.sb-group .sb-swatch').forEach(s => s.classList.remove('active-swatch'));
+    if (swatchEl) swatchEl.classList.add('active-swatch');
+}
+
+// Render a single vector stroke onto a canvas context
+function renderSingleStroke(ctx, st) {
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    if (st.type === 'pen' || st.type === 'highlighter') {
+        const pts = st.points;
+        if (!pts || pts.length === 0) { ctx.restore(); return; }
+        ctx.strokeStyle = (st.type === 'highlighter') ? (st.color + '48') : st.color;
+        ctx.fillStyle = (st.type === 'highlighter') ? (st.color + '48') : st.color;
+        const width = (st.type === 'highlighter') ? Math.max(20, st.size * 4) : st.size;
+
+        if (pts.length === 1) {
+            ctx.beginPath();
+            ctx.arc(pts[0].x, pts[0].y, width / 2, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.lineWidth = width;
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) {
+                const prev = pts[i - 1];
+                const curr = pts[i];
+                const midX = (prev.x + curr.x) / 2;
+                const midY = (prev.y + curr.y) / 2;
+                ctx.quadraticCurveTo(prev.x, prev.y, midX, midY);
+            }
+            ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+            ctx.stroke();
+        }
+    } else if (['line', 'arrow', 'rect', 'circle'].includes(st.type)) {
+        ctx.strokeStyle = st.color;
+        ctx.lineWidth = st.size;
+        ctx.beginPath();
+        if (st.type === 'line') {
+            ctx.moveTo(st.x1, st.y1);
+            ctx.lineTo(st.x2, st.y2);
+            ctx.stroke();
+        } else if (st.type === 'arrow') {
+            const headlen = Math.max(14, st.size * 3);
+            const angle = Math.atan2(st.y2 - st.y1, st.x2 - st.x1);
+            ctx.moveTo(st.x1, st.y1);
+            ctx.lineTo(st.x2, st.y2);
+            ctx.lineTo(st.x2 - headlen * Math.cos(angle - Math.PI / 6), st.y2 - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(st.x2, st.y2);
+            ctx.lineTo(st.x2 - headlen * Math.cos(angle + Math.PI / 6), st.y2 - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+        } else if (st.type === 'rect') {
+            ctx.strokeRect(st.x1, st.y1, st.x2 - st.x1, st.y2 - st.y1);
+        } else if (st.type === 'circle') {
+            const rx = Math.abs(st.x2 - st.x1) / 2;
+            const ry = Math.abs(st.y2 - st.y1) / 2;
+            const cx = (st.x1 + st.x2) / 2;
+            const cy = (st.y1 + st.y2) / 2;
+            ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+    } else if (st.type === 'text') {
+        ctx.fillStyle = st.color;
+        ctx.font = `900 ${st.fontSize}px Cairo, Fredoka, sans-serif`;
+        ctx.textBaseline = 'top';
+        ctx.fillText(st.text, st.x, st.y);
+    }
+    ctx.restore();
+}
+
+function redrawSbInkLayer() {
+    sbCtx.clearRect(0, 0, sbCanvas.width, sbCanvas.height);
+    const strokes = sbPages[sbCurrentPage].strokes;
+    for (let i = 0; i < strokes.length; i++) {
+        renderSingleStroke(sbCtx, strokes[i]);
+    }
+}
+
+function saveSbStrokeSnapshot() {
+    const page = sbPages[sbCurrentPage];
+    const serialized = JSON.stringify(page.strokes);
+    if (page.undoStack[page.undoStack.length - 1] !== serialized) {
+        page.undoStack.push(serialized);
+        if (page.undoStack.length > 40) page.undoStack.shift();
+        page.redoStack = [];
+    }
+}
+
+function sbUndo() {
+    const page = sbPages[sbCurrentPage];
+    if (page.undoStack.length <= 1) return;
+    const current = page.undoStack.pop();
+    page.redoStack.push(current);
+    const prev = page.undoStack[page.undoStack.length - 1];
+    page.strokes = JSON.parse(prev);
+    redrawSbInkLayer();
+}
+
+function sbRedo() {
+    const page = sbPages[sbCurrentPage];
+    if (page.redoStack.length === 0) return;
+    const next = page.redoStack.pop();
+    page.undoStack.push(next);
+    page.strokes = JSON.parse(next);
+    redrawSbInkLayer();
+}
+
+// Separate Clear Buttons:
+// 1) Clear ONLY handwritten ink / shapes / text (keeps uploaded images, PDFs & Word docs)
+function sbClearInk() {
+    const page = sbPages[sbCurrentPage];
+    page.strokes = [];
+    redrawSbInkLayer();
+    saveSbStrokeSnapshot();
+}
+
+// 2) Clear ONLY uploaded images, PDFs, Word docs & sticky notes (keeps handwritten ink)
+function sbClearMedia() {
+    sbMediaLayer.innerHTML = '';
+    sbStage.querySelectorAll('.sb-sticky-note').forEach(n => n.remove());
+    sbPages[sbCurrentPage].mediaNodes = [];
+}
+
+function updateSbPageUI() {
+    document.getElementById('sbPageIndicator').innerText = `${sbCurrentPage + 1} / ${sbPages.length}`;
+}
+
+function loadSbPage(idx) {
+    // Save current page's media DOM nodes
+    sbPages[sbCurrentPage].mediaNodes = Array.from(sbMediaLayer.children);
+    sbMediaLayer.innerHTML = '';
+
+    sbCurrentPage = idx;
+    const page = sbPages[sbCurrentPage];
+    sbBgType = page.bg;
+
+    document.querySelectorAll('#bg-dark, #bg-white, #bg-lines, #bg-grid').forEach(b => b.classList.remove('active'));
+    const activeBgBtn = document.getElementById('bg-' + sbBgType);
+    if (activeBgBtn) activeBgBtn.classList.add('active');
+
+    updateSbPageUI();
+    drawSbBackground(sbBgType);
+    redrawSbInkLayer();
+
+    // Restore target page's media DOM nodes
+    if (page.mediaNodes && page.mediaNodes.length > 0) {
+        page.mediaNodes.forEach(node => sbMediaLayer.appendChild(node));
+    }
+}
+
+function sbPrevPage() {
+    if (sbCurrentPage > 0) loadSbPage(sbCurrentPage - 1);
+}
+
+function sbNextOrAddPage() {
+    if (sbCurrentPage < sbPages.length - 1) {
+        loadSbPage(sbCurrentPage + 1);
+    } else {
+        sbPages[sbCurrentPage].mediaNodes = Array.from(sbMediaLayer.children);
+        sbPages.push({ bg: sbBgType, strokes: [], undoStack: ['[]'], redoStack: [], mediaNodes: [] });
+        loadSbPage(sbPages.length - 1);
+    }
+}
+
+function sbExportPNG() {
+    const out = document.createElement('canvas');
+    out.width = sbCanvas.width;
+    out.height = sbCanvas.height;
+    const oCtx = out.getContext('2d');
+    oCtx.drawImage(sbBgCanvas, 0, 0);
+    // Draw uploaded images / rendered PDFs inside media layer
+    const stageRect = sbStage.getBoundingClientRect();
+    sbMediaLayer.querySelectorAll('.sb-media-item').forEach(item => {
+        const img = item.querySelector('.sb-media-body img');
+        if (img && img.complete && img.naturalWidth > 0) {
+            const bodyRect = item.querySelector('.sb-media-body').getBoundingClientRect();
+            const relX = bodyRect.left - stageRect.left;
+            const relY = bodyRect.top - stageRect.top;
+            oCtx.drawImage(img, relX, relY, bodyRect.width, bodyRect.height);
+        }
+    });
+    oCtx.drawImage(sbCanvas, 0, 0);
+    const link = document.createElement('a');
+    link.download = `Mr_Ehab_SpahBoard_Page_${sbCurrentPage + 1}.png`;
+    link.href = out.toDataURL('image/png');
+    link.click();
+}
+
+function sbToggleFullscreen() {
+    if (!document.fullscreenElement) {
+        sbShell.requestFullscreen().then(() => setTimeout(initOrResizeSpahBoard, 150)).catch(() => {});
+    } else {
+        document.exitFullscreen().then(() => setTimeout(initOrResizeSpahBoard, 150)).catch(() => {});
+    }
+}
+
+function spawnSbTextInput(x, y) {
+    const existing = sbStage.querySelector('.sb-floating-text-input');
+    if (existing) existing.blur();
+
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'sb-floating-text-input';
+    inp.placeholder = 'اكتب النص واضغط Enter...';
+    inp.style.left = Math.max(10, Math.min(x, sbCanvas.width - 200)) + 'px';
+    inp.style.top = Math.max(10, Math.min(y, sbCanvas.height - 55)) + 'px';
+    inp.style.color = sbColor;
+    sbStage.appendChild(inp);
+    setTimeout(() => inp.focus(), 20);
+
+    const commitText = () => {
+        const val = inp.value.trim();
+        if (val) {
+            const fontSize = Math.max(22, sbSize * 4);
+            sbCtx.save();
+            sbCtx.font = `900 ${fontSize}px Cairo, Fredoka, sans-serif`;
+            const metrics = sbCtx.measureText(val);
+            sbCtx.restore();
+
+            sbPages[sbCurrentPage].strokes.push({
+                type: 'text',
+                color: sbColor,
+                fontSize: fontSize,
+                x: x,
+                y: y,
+                text: val,
+                width: metrics.width || (val.length * fontSize * 0.6),
+                height: fontSize * 1.25
+            });
+            redrawSbInkLayer();
+            saveSbStrokeSnapshot();
+        }
+        inp.remove();
+    };
+
+    inp.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') commitText();
+        if (ev.key === 'Escape') inp.remove();
+    });
+    inp.addEventListener('blur', commitText);
+}
+
+function addSbStickyNote() {
+    const note = document.createElement('div');
+    note.className = 'sb-sticky-note';
+    note.style.left = (60 + (sbStage.querySelectorAll('.sb-sticky-note').length * 25)) + 'px';
+    note.style.top = (60 + (sbStage.querySelectorAll('.sb-sticky-note').length * 25)) + 'px';
+    note.innerHTML = `
+        <button class="sb-sticky-close" onclick="this.parentElement.remove()">×</button>
+        <textarea placeholder="اكتب ملاحظة للطلاب..."></textarea>
+    `;
+    let drag = false, dx = 0, dy = 0;
+    note.addEventListener('pointerdown', (e) => {
+        if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') return;
+        drag = true;
+        dx = e.clientX - note.offsetLeft;
+        dy = e.clientY - note.offsetTop;
+        note.setPointerCapture(e.pointerId);
+    });
+    note.addEventListener('pointermove', (e) => {
+        if (!drag) return;
+        note.style.left = (e.clientX - dx) + 'px';
+        note.style.top = (e.clientY - dy) + 'px';
+    });
+    note.addEventListener('pointerup', () => drag = false);
+    sbStage.appendChild(note);
+}
+
+// ==================== CONNECTED-STROKE ERASER GEOMETRY ====================
+function distToSegmentSquared(px, py, x1, y1, x2, y2) {
+    const l2 = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+    if (l2 === 0) return (px - x1) * (px - x1) + (py - y1) * (py - y1);
+    let t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / l2;
+    t = Math.max(0, Math.min(1, t));
+    const projX = x1 + t * (x2 - x1);
+    const projY = y1 + t * (y2 - y1);
+    return (px - projX) * (px - projX) + (py - projY) * (py - projY);
+}
+
+function isPointTouchingStroke(px, py, st, eraserRadius) {
+    const strokePad = (st.size || 4) / 2;
+    const hitDist = eraserRadius + strokePad;
+    const hitDistSq = hitDist * hitDist;
+
+    if (st.type === 'pen' || st.type === 'highlighter') {
+        const pts = st.points;
+        if (!pts || pts.length === 0) return false;
+        const extraPad = (st.type === 'highlighter') ? Math.max(10, st.size * 2) : strokePad;
+        const rSq = (eraserRadius + extraPad) * (eraserRadius + extraPad);
+        if (pts.length === 1) {
+            return ((px - pts[0].x) ** 2 + (py - pts[0].y) ** 2) <= rSq;
+        }
+        for (let i = 1; i < pts.length; i++) {
+            if (distToSegmentSquared(px, py, pts[i - 1].x, pts[i - 1].y, pts[i].x, pts[i].y) <= rSq) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    if (st.type === 'line' || st.type === 'arrow') {
+        return distToSegmentSquared(px, py, st.x1, st.y1, st.x2, st.y2) <= hitDistSq;
+    }
+
+    if (st.type === 'rect') {
+        const minX = Math.min(st.x1, st.x2), maxX = Math.max(st.x1, st.x2);
+        const minY = Math.min(st.y1, st.y2), maxY = Math.max(st.y1, st.y2);
+        return (
+            distToSegmentSquared(px, py, minX, minY, maxX, minY) <= hitDistSq ||
+            distToSegmentSquared(px, py, maxX, minY, maxX, maxY) <= hitDistSq ||
+            distToSegmentSquared(px, py, maxX, maxY, minX, maxY) <= hitDistSq ||
+            distToSegmentSquared(px, py, minX, maxY, minX, minY) <= hitDistSq
+        );
+    }
+
+    if (st.type === 'circle') {
+        const rx = Math.abs(st.x2 - st.x1) / 2;
+        const ry = Math.abs(st.y2 - st.y1) / 2;
+        const cx = (st.x1 + st.x2) / 2;
+        const cy = (st.y1 + st.y2) / 2;
+        if (rx < 2 || ry < 2) return ((px - cx) ** 2 + (py - cy) ** 2) <= hitDistSq;
+        // Sample 36 perimeter segments for accurate ellipse perimeter touch detection
+        const steps = 36;
+        let prevX = cx + rx, prevY = cy;
+        for (let s = 1; s <= steps; s++) {
+            const ang = (Math.PI * 2 * s) / steps;
+            const curX = cx + rx * Math.cos(ang);
+            const curY = cy + ry * Math.sin(ang);
+            if (distToSegmentSquared(px, py, prevX, prevY, curX, curY) <= hitDistSq) return true;
+            prevX = curX;
+            prevY = curY;
+        }
+        return false;
+    }
+
+    if (st.type === 'text') {
+        const w = st.width || 120;
+        const h = st.height || 32;
+        return (
+            px >= st.x - hitDist &&
+            px <= st.x + w + hitDist &&
+            py >= st.y - hitDist &&
+            py <= st.y + h + hitDist
+        );
+    }
+
+    return false;
+}
+
+function eraseConnectedStrokesAt(x, y) {
+    const page = sbPages[sbCurrentPage];
+    const eraserRadius = Math.max(14, sbSize * 2);
+    const beforeLen = page.strokes.length;
+    page.strokes = page.strokes.filter(st => !isPointTouchingStroke(x, y, st, eraserRadius));
+    if (page.strokes.length !== beforeLen) {
+        sbErasedDuringSwipe = true;
+        redrawSbInkLayer();
+    }
+}
+
+function drawEraserRing(x, y) {
+    const r = Math.max(14, sbSize * 2);
+    sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+    sbTempCtx.save();
+    sbTempCtx.strokeStyle = '#f87171';
+    sbTempCtx.fillStyle = 'rgba(248, 113, 113, 0.16)';
+    sbTempCtx.lineWidth = 2;
+    sbTempCtx.setLineDash([4, 3]);
+    sbTempCtx.beginPath();
+    sbTempCtx.arc(x, y, r, 0, Math.PI * 2);
+    sbTempCtx.fill();
+    sbTempCtx.stroke();
+    sbTempCtx.restore();
+}
+
+// Pointer Events for Stylus + Finger Touch + Mouse on SpahBoard
+sbCanvas.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    if (sbTool === 'select') return;
+    const { x, y } = getSbCoords(e);
+
+    if (sbTool === 'text') {
+        spawnSbTextInput(x, y);
+        return;
+    }
+
+    sbIsDrawing = true;
+    sbStartX = x;
+    sbStartY = y;
+    try { sbCanvas.setPointerCapture(e.pointerId); } catch (_) {}
+
+    if (sbTool === 'eraser') {
+        sbErasedDuringSwipe = false;
+        drawEraserRing(x, y);
+        eraseConnectedStrokesAt(x, y);
+        return;
+    }
+
+    if (sbTool === 'pen' || sbTool === 'highlighter') {
+        sbCurrentStroke = {
+            type: sbTool,
+            color: sbColor,
+            size: sbSize,
+            points: [{ x, y, p: e.pressure || 0.5 }]
+        };
+        sbPages[sbCurrentPage].strokes.push(sbCurrentStroke);
+        redrawSbInkLayer();
+    }
+});
+
+sbCanvas.addEventListener('pointermove', (e) => {
+    if (sbTool === 'select') return;
+    const { x, y } = getSbCoords(e);
+
+    if (sbTool === 'eraser') {
+        drawEraserRing(x, y);
+        if (sbIsDrawing) {
+            eraseConnectedStrokesAt(x, y);
+        }
+        return;
+    }
+
+    if (!sbIsDrawing) return;
+    e.stopPropagation();
+
+    if (sbTool === 'laser') {
+        sbLaserTrail.push({ x, y, time: Date.now() });
+        return;
+    }
+
+    if (['line', 'arrow', 'rect', 'circle'].includes(sbTool)) {
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+        renderSingleStroke(sbTempCtx, {
+            type: sbTool,
+            color: sbColor,
+            size: sbSize,
+            x1: sbStartX,
+            y1: sbStartY,
+            x2: x,
+            y2: y
+        });
+        return;
+    }
+
+    if ((sbTool === 'pen' || sbTool === 'highlighter') && sbCurrentStroke) {
+        sbCurrentStroke.points.push({ x, y, p: e.pressure || 0.5 });
+        redrawSbInkLayer();
+    }
+});
+
+sbCanvas.addEventListener('pointerup', (e) => {
+    if (!sbIsDrawing) return;
+    e.stopPropagation();
+    sbIsDrawing = false;
+    const { x, y } = getSbCoords(e);
+
+    if (sbTool === 'eraser') {
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+        if (sbErasedDuringSwipe) {
+            saveSbStrokeSnapshot();
+        }
+        return;
+    }
+
+    if (['line', 'arrow', 'rect', 'circle'].includes(sbTool)) {
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+        sbPages[sbCurrentPage].strokes.push({
+            type: sbTool,
+            color: sbColor,
+            size: sbSize,
+            x1: sbStartX,
+            y1: sbStartY,
+            x2: x,
+            y2: y
+        });
+        redrawSbInkLayer();
+        saveSbStrokeSnapshot();
+    } else if (sbTool === 'pen' || sbTool === 'highlighter') {
+        sbCurrentStroke = null;
+        saveSbStrokeSnapshot();
+    }
+});
+
+sbCanvas.addEventListener('pointerleave', () => {
+    if (sbTool === 'eraser') {
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+    }
+});
+
+function animateSbLaser() {
+    if (sbLaserTrail.length > 0 && sbTool === 'laser') {
+        const now = Date.now();
+        sbLaserTrail = sbLaserTrail.filter(pt => now - pt.time < 950);
+        sbTempCtx.clearRect(0, 0, sbTempCanvas.width, sbTempCanvas.height);
+        for (let i = 1; i < sbLaserTrail.length; i++) {
+            const p1 = sbLaserTrail[i - 1];
+            const p2 = sbLaserTrail[i];
+            const alpha = Math.max(0, 1 - (now - p2.time) / 950);
+            sbTempCtx.save();
+            sbTempCtx.strokeStyle = `rgba(239, 68, 68, ${alpha})`;
+            sbTempCtx.shadowColor = '#ef4444';
+            sbTempCtx.shadowBlur = 14;
+            sbTempCtx.lineWidth = 6 * alpha;
+            sbTempCtx.lineCap = 'round';
+            sbTempCtx.beginPath();
+            sbTempCtx.moveTo(p1.x, p1.y);
+            sbTempCtx.lineTo(p2.x, p2.y);
+            sbTempCtx.stroke();
+            sbTempCtx.restore();
+        }
+    }
+    requestAnimationFrame(animateSbLaser);
+}
+animateSbLaser();
+
+// ==================== 7B. IMAGE, PDF & WORD UPLOAD + DRAG & DROP ON WHITEBOARD ====================
+function makeMediaItemInteractive(card, width, height, dropX, dropY) {
+    const stageW = sbStage.clientWidth || 800;
+    const stageH = sbStage.clientHeight || 500;
+    const w = Math.min(width, stageW - 40);
+    const h = Math.min(height, stageH - 40);
+    const left = (typeof dropX === 'number') ? Math.max(10, Math.min(dropX - w / 2, stageW - w - 10)) : Math.max(20, (stageW - w) / 2);
+    const top = (typeof dropY === 'number') ? Math.max(10, Math.min(dropY - 20, stageH - h - 10)) : Math.max(20, (stageH - h) / 2);
+
+    card.style.width = w + 'px';
+    card.style.height = h + 'px';
+    card.style.left = left + 'px';
+    card.style.top = top + 'px';
+
+    // Dragging via top header (works in ANY tool mode) or whole card (when in 'select' mode)
+    const header = card.querySelector('.sb-media-header');
+    let dragging = false, startX = 0, startY = 0, origL = 0, origT = 0;
+
+    const onDragStart = (e) => {
+        if (e.target.closest('button')) return;
+        e.stopPropagation();
+        dragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        origL = card.offsetLeft;
+        origT = card.offsetTop;
+        try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {}
+    };
+    const onDragMove = (e) => {
+        if (!dragging) return;
+        e.stopPropagation();
+        card.style.left = (origL + (e.clientX - startX)) + 'px';
+        card.style.top = (origT + (e.clientY - startY)) + 'px';
+    };
+    const onDragEnd = () => { dragging = false; };
+
+    header.addEventListener('pointerdown', onDragStart);
+    header.addEventListener('pointermove', onDragMove);
+    header.addEventListener('pointerup', onDragEnd);
+
+    card.addEventListener('pointerdown', (e) => {
+        if (sbTool !== 'select') return;
+        if (e.target.closest('button') || e.target.closest('.sb-media-resize') || e.target.closest('.sb-word-content')) return;
+        onDragStart(e);
+    });
+    card.addEventListener('pointermove', (e) => { if (dragging) onDragMove(e); });
+    card.addEventListener('pointerup', onDragEnd);
+
+    // Resizing via bottom-left corner handle (works in ANY tool mode!)
+    const resizer = card.querySelector('.sb-media-resize');
+    let resizing = false, rStartX = 0, rStartY = 0, origW = 0, origH = 0, origLeft = 0;
+    resizer.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        resizing = true;
+        rStartX = e.clientX;
+        rStartY = e.clientY;
+        origW = card.offsetWidth;
+        origH = card.offsetHeight;
+        origLeft = card.offsetLeft;
+        try { resizer.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    resizer.addEventListener('pointermove', (e) => {
+        if (!resizing) return;
+        e.stopPropagation();
+        // Since handle is at bottom-left, dragging left increases width
+        const dx = rStartX - e.clientX;
+        const dy = e.clientY - rStartY;
+        const newW = Math.max(180, origW + dx);
+        const newH = Math.max(140, origH + dy);
+        card.style.width = newW + 'px';
+        card.style.height = newH + 'px';
+        card.style.left = (origLeft - (newW - origW)) + 'px';
+    });
+    resizer.addEventListener('pointerup', () => { resizing = false; });
+
+    sbMediaLayer.appendChild(card);
+}
+
+function insertImageFileToBoard(file, dropX, dropY) {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        const tempImg = new Image();
+        tempImg.onload = () => {
+            const aspect = tempImg.naturalWidth / (tempImg.naturalHeight || 1);
+            let w = Math.min(460, tempImg.naturalWidth || 380);
+            let h = Math.round(w / aspect) + 34;
+            if (h > 440) { h = 440; w = Math.round((h - 34) * aspect); }
+
+            const card = document.createElement('div');
+            card.className = 'sb-media-item';
+            card.innerHTML = `
+                <div class="sb-media-header">
+                    <span class="sb-media-title"><i class="fa-regular fa-image"></i> ${file.name}</span>
+                    <div>
+                        <button class="sb-media-ctrl del-btn" onclick="this.closest('.sb-media-item').remove()" title="حذف الصورة">×</button>
+                    </div>
+                </div>
+                <div class="sb-media-body">
+                    <img src="${ev.target.result}" alt="${file.name}">
+                </div>
+                <div class="sb-media-resize" title="اسحب لتغيير الحجم"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+            `;
+            makeMediaItemInteractive(card, Math.max(220, w), Math.max(180, h), dropX, dropY);
+        };
+        tempImg.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+async function insertPdfFileToBoard(file, dropX, dropY) {
+    const arrayBuffer = await file.arrayBuffer();
+    if (typeof pdfjsLib !== 'undefined') {
+        try {
+            const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            let currentPageNum = 1;
+            const totalPages = pdfDoc.numPages;
+
+            const card = document.createElement('div');
+            card.className = 'sb-media-item';
+            card.innerHTML = `
+                <div class="sb-media-header">
+                    <span class="sb-media-title"><i class="fa-solid fa-file-pdf" style="color:#f87171;"></i> ${file.name}</span>
+                    <div style="display:flex; align-items:center; gap:4px;">
+                        <button class="sb-media-ctrl pdf-prev-btn" title="الصفحة السابقة">◀</button>
+                        <span class="pdf-page-lbl" style="font-size:0.75rem; color:#fde68a;">1/${totalPages}</span>
+                        <button class="sb-media-ctrl pdf-next-btn" title="الصفحة التالية">▶</button>
+                        <button class="sb-media-ctrl del-btn" onclick="this.closest('.sb-media-item').remove()" title="حذف الملف">×</button>
+                    </div>
+                </div>
+                <div class="sb-media-body">
+                    <img class="pdf-rendered-img" src="" alt="PDF Page">
+                </div>
+                <div class="sb-media-resize" title="اسحب لتغيير الحجم"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+            `;
+
+            const renderPdfPageToImg = async (num) => {
+                const page = await pdfDoc.getPage(num);
+                const viewport = page.getViewport({ scale: 1.8 });
+                const tmpCanvas = document.createElement('canvas');
+                tmpCanvas.width = viewport.width;
+                tmpCanvas.height = viewport.height;
+                await page.render({ canvasContext: tmpCanvas.getContext('2d'), viewport }).promise;
+                card.querySelector('.pdf-rendered-img').src = tmpCanvas.toDataURL('image/png');
+                card.querySelector('.pdf-page-lbl').innerText = `${num}/${totalPages}`;
+            };
+
+            await renderPdfPageToImg(1);
+            card.querySelector('.pdf-prev-btn').onclick = async (e) => {
+                e.stopPropagation();
+                if (currentPageNum > 1) { currentPageNum--; await renderPdfPageToImg(currentPageNum); }
+            };
+            card.querySelector('.pdf-next-btn').onclick = async (e) => {
+                e.stopPropagation();
+                if (currentPageNum < totalPages) { currentPageNum++; await renderPdfPageToImg(currentPageNum); }
+            };
+
+            makeMediaItemInteractive(card, 480, 520, dropX, dropY);
+            return;
+        } catch (err) {
+            console.warn('PDF.js fallback:', err);
+        }
+    }
+
+    // Fallback embed if PDF.js unavailable
+    const blobUrl = URL.createObjectURL(file);
+    const card = document.createElement('div');
+    card.className = 'sb-media-item';
+    card.innerHTML = `
+        <div class="sb-media-header">
+            <span class="sb-media-title"><i class="fa-solid fa-file-pdf"></i> ${file.name}</span>
+            <button class="sb-media-ctrl del-btn" onclick="this.closest('.sb-media-item').remove()">×</button>
+        </div>
+        <div class="sb-media-body">
+            <embed src="${blobUrl}" type="application/pdf" style="width:100%; height:100%;">
+        </div>
+        <div class="sb-media-resize"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+    `;
+    makeMediaItemInteractive(card, 480, 500, dropX, dropY);
+}
+
+async function insertWordFileToBoard(file, dropX, dropY) {
+    const card = document.createElement('div');
+    card.className = 'sb-media-item';
+    let bodyHtml = `<div class="sb-word-content"><p style="color:#64748b;">جاري تحميل ملف Word...</p></div>`;
+
+    card.innerHTML = `
+        <div class="sb-media-header">
+            <span class="sb-media-title"><i class="fa-solid fa-file-word" style="color:#38bdf8;"></i> ${file.name}</span>
+            <div>
+                <button class="sb-media-ctrl" onclick="setSbTool('select', document.querySelector('[data-sbtool=select]'))" title="تفعيل التمرير والتحريك">تصفح ✋</button>
+                <button class="sb-media-ctrl del-btn" onclick="this.closest('.sb-media-item').remove()" title="حذف الملف">×</button>
+            </div>
+        </div>
+        <div class="sb-media-body">${bodyHtml}</div>
+        <div class="sb-media-resize" title="اسحب لتغيير الحجم"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+    `;
+    makeMediaItemInteractive(card, 500, 480, dropX, dropY);
+
+    const contentBox = card.querySelector('.sb-word-content');
+    if (typeof mammoth !== 'undefined' && file.name.toLowerCase().endsWith('.docx')) {
+        try {
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.convertToHtml({ arrayBuffer });
+            contentBox.innerHTML = result.value || '<p>المستند فارغ.</p>';
+            return;
+        } catch (err) {
+            console.warn('Mammoth error:', err);
+        }
+    }
+    const blobUrl = URL.createObjectURL(file);
+    contentBox.innerHTML = `
+        <div style="text-align:center; padding:30px;">
+            <i class="fa-solid fa-file-word" style="font-size:3rem; color:#2563eb; margin-bottom:10px;"></i>
+            <h3>${file.name}</h3>
+            <p style="margin:10px 0; color:#475569;">ملف Word جاهز للعرض أو التحميل</p>
+            <a href="${blobUrl}" download="${file.name}" style="display:inline-block; background:#2563eb; color:#fff; padding:8px 16px; border-radius:10px; text-decoration:none; font-weight:800;">فتح / تحميل الملف</a>
+        </div>
+    `;
+}
+
+function handleSbFileInput(files, dropX, dropY) {
+    if (!files || files.length === 0) return;
+    Array.from(files).forEach((file, i) => {
+        const offsetX = (typeof dropX === 'number') ? dropX + i * 25 : undefined;
+        const offsetY = (typeof dropY === 'number') ? dropY + i * 25 : undefined;
+        const nameLower = file.name.toLowerCase();
+
+        if (file.type.startsWith('image/') || /\.(png|jpe?g|gif|webp|bmp|svg)$/.test(nameLower)) {
+            insertImageFileToBoard(file, offsetX, offsetY);
+        } else if (file.type === 'application/pdf' || nameLower.endsWith('.pdf')) {
+            insertPdfFileToBoard(file, offsetX, offsetY);
+        } else if (nameLower.endsWith('.docx') || nameLower.endsWith('.doc') || file.type.includes('word')) {
+            insertWordFileToBoard(file, offsetX, offsetY);
+        } else {
+            alert('يرجى اختيار صورة أو ملف PDF أو Word (.docx / .doc)');
+        }
+    });
+    // Reset inputs so same file can be uploaded again if needed
+    const imgInp = document.getElementById('sbImageUploadInput');
+    const docInp = document.getElementById('sbDocUploadInput');
+    if (imgInp) imgInp.value = '';
+    if (docInp) docInp.value = '';
+}
+
+// Drag & Drop support onto the Whiteboard
+['dragenter', 'dragover'].forEach(evtName => {
+    sbShell.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        sbDropOverlay.classList.add('visible');
+    });
+});
+['dragleave', 'drop'].forEach(evtName => {
+    sbShell.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (evtName === 'dragleave' && sbShell.contains(e.relatedTarget)) return;
+        sbDropOverlay.classList.remove('visible');
+    });
+});
+sbShell.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    if (dt && dt.files && dt.files.length > 0) {
+        const rect = sbStage.getBoundingClientRect();
+        handleSbFileInput(dt.files, e.clientX - rect.left, e.clientY - rect.top);
+    }
+});
+
+// Ctrl+V Paste Image support when Whiteboard is active
+document.addEventListener('paste', (e) => {
+    if (!document.getElementById('view-board').classList.contains('active')) return;
+    if (e.clipboardData && e.clipboardData.files && e.clipboardData.files.length > 0) {
+        handleSbFileInput(e.clipboardData.files);
+    }
+});
+
+// ==================== 8. TRANSPARENT OVERLAY BOARD ABOVE LESSON (WITH CONNECTED-STROKE ERASER) ====================
+const ovLayer = document.getElementById('overlayBoardLayer');
+const ovCanvas = document.getElementById('overlayCanvas');
+const ovCtx = ovCanvas.getContext('2d');
+const ovToggleBtn = document.getElementById('overlayToggleBtn');
+const ovToolbar = document.getElementById('overlayToolbar');
+let ovActive = false, ovDrawing = false, ovTool = 'pen', ovColor = '#fde047';
+let ovStrokes = [], ovCurrentStroke = null;
+
+function toggleOverlayBoard() {
+    ovActive = !ovActive;
+    if (ovActive) {
+        ovLayer.style.pointerEvents = 'auto';
+        ovToolbar.style.display = 'flex';
+        ovToggleBtn.classList.add('active');
+        if (ovCanvas.width !== window.innerWidth || ovCanvas.height !== window.innerHeight) {
+            ovCanvas.width = window.innerWidth;
+            ovCanvas.height = window.innerHeight;
+            redrawOverlayStrokes();
+        }
+    } else {
+        ovLayer.style.pointerEvents = 'none';
+        ovToolbar.style.display = 'none';
+        ovToggleBtn.classList.remove('active');
+    }
+}
+
+function setOverlayTool(tool, btnEl) {
+    ovTool = tool;
+    document.querySelectorAll('#ov-pen, #ov-high, #ov-erase').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+}
+
+function setOverlayColor(hex, swatchEl) {
+    ovColor = hex;
+    document.getElementById('overlayColorPicker').value = hex;
+    document.querySelectorAll('#overlayToolbar .sb-swatch').forEach(s => s.classList.remove('active-swatch'));
+    if (swatchEl) swatchEl.classList.add('active-swatch');
+}
+
+function redrawOverlayStrokes() {
+    ovCtx.clearRect(0, 0, ovCanvas.width, ovCanvas.height);
+    for (let i = 0; i < ovStrokes.length; i++) {
+        renderSingleStroke(ovCtx, ovStrokes[i]);
+    }
+}
+
+function clearOverlayCanvas() {
+    ovStrokes = [];
+    ovCtx.clearRect(0, 0, ovCanvas.width, ovCanvas.height);
+}
+
+function eraseOverlayConnectedAt(x, y) {
+    const before = ovStrokes.length;
+    ovStrokes = ovStrokes.filter(st => !isPointTouchingStroke(x, y, st, 18));
+    if (ovStrokes.length !== before) redrawOverlayStrokes();
+}
+
+ovCanvas.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    ovDrawing = true;
+    if (ovTool === 'erase') {
+        eraseOverlayConnectedAt(e.clientX, e.clientY);
+        return;
+    }
+    ovCurrentStroke = {
+        type: (ovTool === 'high') ? 'highlighter' : 'pen',
+        color: ovColor,
+        size: 4,
+        points: [{ x: e.clientX, y: e.clientY }]
+    };
+    ovStrokes.push(ovCurrentStroke);
+    redrawOverlayStrokes();
+});
+
+ovCanvas.addEventListener('pointermove', (e) => {
+    if (!ovDrawing) return;
+    e.stopPropagation();
+    if (ovTool === 'erase') {
+        eraseOverlayConnectedAt(e.clientX, e.clientY);
+        return;
+    }
+    if (ovCurrentStroke) {
+        ovCurrentStroke.points.push({ x: e.clientX, y: e.clientY });
+        redrawOverlayStrokes();
+    }
+});
+
+ovCanvas.addEventListener('pointerup', (e) => {
+    e.stopPropagation();
+    ovDrawing = false;
+    ovCurrentStroke = null;
+});
+
+// ==================== 9. TEACHER SIDEBAR: CUSTOMIZABLE SPIN WHEEL, TIMER & MOTIVATIONAL FX ====================
+function toggleTeacherSidebar() {
+    document.getElementById('teacherSidebar').classList.toggle('open');
+}
+
+const wheelCanvas = document.getElementById('spinWheelCanvas');
+const wheelCtx = wheelCanvas.getContext('2d');
+const defaultWheelColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'];
+let wheelItems = [];
+let wheelRotation = 0;
+let isWheelSpinning = false;
+
+function drawSpinWheel() {
+    const cx = wheelCanvas.width / 2;
+    const cy = wheelCanvas.height / 2;
+    const r = cx - 4;
+    wheelCtx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
+
+    const hasNames = wheelItems.length > 0;
+    const count = hasNames ? wheelItems.length : 8;
+    const arc = (Math.PI * 2) / count;
+
+    for (let i = 0; i < count; i++) {
+        const startAngle = i * arc - Math.PI / 2;
+        const endAngle = startAngle + arc;
+        wheelCtx.beginPath();
+        wheelCtx.moveTo(cx, cy);
+        wheelCtx.arc(cx, cy, r, startAngle, endAngle);
+        wheelCtx.closePath();
+        wheelCtx.fillStyle = defaultWheelColors[i % defaultWheelColors.length];
+        wheelCtx.fill();
+        wheelCtx.strokeStyle = 'rgba(255,255,255,0.45)';
+        wheelCtx.lineWidth = 2;
+        wheelCtx.stroke();
+
+        if (hasNames) {
+            wheelCtx.save();
+            wheelCtx.translate(cx, cy);
+            wheelCtx.rotate(startAngle + arc / 2);
+            wheelCtx.textAlign = 'right';
+            wheelCtx.fillStyle = '#ffffff';
+            wheelCtx.font = 'bold 13px Cairo, sans-serif';
+            wheelCtx.shadowColor = 'rgba(0,0,0,0.75)';
+            wheelCtx.shadowBlur = 4;
+            const label = wheelItems[i].length > 12 ? wheelItems[i].slice(0, 11) + '..' : wheelItems[i];
+            wheelCtx.fillText(label, r - 12, 4);
+            wheelCtx.restore();
+        }
+    }
+
+    wheelCtx.beginPath();
+    wheelCtx.arc(cx, cy, 16, 0, Math.PI * 2);
+    wheelCtx.fillStyle = '#0f172a';
+    wheelCtx.fill();
+    wheelCtx.lineWidth = 3;
+    wheelCtx.strokeStyle = '#fbbf24';
+    wheelCtx.stroke();
+}
+drawSpinWheel();
+
+function toggleWheelNamesInput() {
+    const box = document.getElementById('wheelNamesBox');
+    box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+}
+
+function updateSpinWheelFromInput() {
+    const raw = document.getElementById('wheelNamesInput').value;
+    const parsed = raw.split(/\r?\n|,|،/).map(s => s.trim()).filter(Boolean);
+    wheelItems = parsed;
+    document.getElementById('wheelWinnerBadge').style.display = 'none';
+    drawSpinWheel();
+}
+
+function resetWheelDefault() {
+    document.getElementById('wheelNamesInput').value = '';
+    wheelItems = [];
+    document.getElementById('wheelWinnerBadge').style.display = 'none';
+    drawSpinWheel();
+}
+
+function spinTeacherWheel() {
+    if (isWheelSpinning) return;
+    isWheelSpinning = true;
+    const badge = document.getElementById('wheelWinnerBadge');
+    badge.style.display = 'none';
+
+    const extraDeg = Math.floor(Math.random() * 360) + 1800;
+    wheelRotation += extraDeg;
+    wheelCanvas.style.transform = `rotate(${wheelRotation}deg)`;
+    playSynthTone('click');
+
+    setTimeout(() => {
+        isWheelSpinning = false;
+        playSynthTone('correct');
+        if (wheelItems.length > 0) {
+            const count = wheelItems.length;
+            const sliceDeg = 360 / count;
+            const normalized = (360 - (wheelRotation % 360)) % 360;
+            const winnerIdx = Math.floor(normalized / sliceDeg) % count;
+            badge.innerText = `🎉 البطل المختار: ${wheelItems[winnerIdx]}`;
+            badge.style.display = 'block';
+            confetti({ particleCount: 90, spread: 65 });
+        } else {
+            confetti({ particleCount: 70, spread: 60 });
+        }
+    }, 3450);
+}
+
+let classTimerInterval = null;
+function startClassTimer(seconds) {
+    clearInterval(classTimerInterval);
+    let remaining = seconds;
+    const disp = document.getElementById('classTimerDisplay');
+    const renderTime = () => {
+        const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+        const s = (remaining % 60).toString().padStart(2, '0');
+        disp.innerText = `${m}:${s}`;
+    };
+    renderTime();
+    classTimerInterval = setInterval(() => {
+        remaining--;
+        renderTime();
+        if (remaining <= 0) {
+            clearInterval(classTimerInterval);
+            playBellFX();
+            confetti({ particleCount: 90, spread: 70 });
+        }
+    }, 1000);
+}
+
+function stopClassTimer() {
+    clearInterval(classTimerInterval);
+    document.getElementById('classTimerDisplay').innerText = '00:00';
+}
+
+function playApplauseFX() {
+    playSynthTone('correct');
+    confetti({ particleCount: 120, spread: 80 });
+    if (!audioEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const duration = 1.4;
+    const bufferSize = audioCtx.sampleRate * duration;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.65));
+    }
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 1100;
+    const gain = audioCtx.createGain();
+    gain.gain.value = 0.25;
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    noise.start();
+}
+
+function playBellFX() {
+    if (!audioEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    [880, 1318.5, 1760].forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+        gain.gain.setValueAtTime(0.18, now + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + idx * 0.06);
+        osc.stop(now + 0.95);
+    });
+}
+
 </script>
 </body>
 </html>
