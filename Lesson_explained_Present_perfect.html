@@ -3104,6 +3104,7 @@ function exportToPPTX() {
         return;
     }
     const pptx = new PptxGenJS();
+    pptx.defineLayout({ name: 'LAYOUT_16x9', width: 10, height: 5.625 });
     pptx.layout = 'LAYOUT_16x9';
     pptx.author = 'Mr. Ehab Eladawy';
     pptx.title = 'Present Perfect — دروس مستر إيهاب التفاعلية الشاملة';
@@ -3117,7 +3118,7 @@ function exportToPPTX() {
         slide.addShape(S.rect, { x: 0, y: 0, w: 10, h: 0.95, fill: { color: '1E1B4B' } });
         slide.addShape(S.rect, { x: 0, y: 0.95, w: 10, h: 0.07, fill: { color: accentHex } });
         // Numbered circle badge on right
-        slide.addShape(S.oval, { x: 9.15, y: 0.14, w: 0.68, h: 0.68, fill: { color: accentHex }, line: { color: 'FFFFFF', width: 2 } });
+        slide.addShape(S.ellipse, { x: 9.15, y: 0.14, w: 0.68, h: 0.68, fill: { color: accentHex }, line: { color: 'FFFFFF', width: 2 } });
         slide.addText(badgeNum, { x: 9.15, y: 0.14, w: 0.68, h: 0.68, fontSize: 18, bold: true, color: '0F172A', align: 'center', valign: 'middle' });
         // Arabic & English Slide Titles
         slide.addText(titleAr, { x: 4.3, y: 0.15, w: 4.7, h: 0.65, fontSize: 22, bold: true, color: 'FFFFFF', align: 'right', valign: 'middle' });
@@ -3134,8 +3135,8 @@ function exportToPPTX() {
     // Decorative corner & side geometric shapes
     s1.addShape(S.rect, { x: 0, y: 0, w: 10, h: 0.22, fill: { color: '1E1B4B' } });
     s1.addShape(S.rect, { x: 0, y: 0.22, w: 10, h: 0.08, fill: { color: 'F59E0B' } });
-    s1.addShape(S.oval, { x: -0.9, y: -0.9, w: 2.8, h: 2.8, fill: { color: 'DBEAFE' } });
-    s1.addShape(S.oval, { x: 8.3, y: 3.7, w: 2.6, h: 2.6, fill: { color: 'D1FAE5' } });
+    s1.addShape(S.ellipse, { x: -0.9, y: -0.9, w: 2.8, h: 2.8, fill: { color: 'DBEAFE' } });
+    s1.addShape(S.ellipse, { x: 8.3, y: 3.7, w: 2.6, h: 2.6, fill: { color: 'D1FAE5' } });
     // Central main showcase card with double layered border
     s1.addShape(S.roundRect, { x: 0.85, y: 0.75, w: 8.3, h: 4.1, rectRadius: 0.18, fill: { color: '1E1B4B' }, line: { color: 'F59E0B', width: 3 } });
     s1.addShape(S.roundRect, { x: 1.05, y: 0.92, w: 7.9, h: 3.76, rectRadius: 0.15, fill: { color: '1E293B' }, line: { color: '38BDF8', width: 1.2 } });
