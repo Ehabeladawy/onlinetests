@@ -414,7 +414,7 @@ body.day-mode .size-pct-badge {
 }
 
 #ehabBoardBgCanvas,
-#ehabBoardFixedBgImg,
+#ehabBoardFixedBgLayer,
 #ehabBoardMediaLayer,
 #ehabBoardCanvas,
 #ehabBoardCurtainLayer,
@@ -427,18 +427,22 @@ body.day-mode .size-pct-badge {
     touch-action: none;
 }
 #ehabBoardBgCanvas { z-index: 1; pointer-events: none; }
-#ehabBoardFixedBgImg {
+/* Seamless Full-Width Horizontally Fitted & Vertically Repeating Fixed Background */
+#ehabBoardFixedBgLayer {
     z-index: 2;
     pointer-events: none;
-    object-fit: cover;
     display: none;
+    background-image: url('https://lh3.googleusercontent.com/d/1kwd18yD0fe4RaIEW_WhlxVH2RLRjvans=s0'), url('https://drive.google.com/thumbnail?id=1kwd18yD0fe4RaIEW_WhlxVH2RLRjvans&sz=w2000');
+    background-size: 100% auto;
+    background-repeat: repeat-y;
+    background-position: top center;
 }
 #ehabBoardMediaLayer { z-index: 3; pointer-events: none; overflow: hidden; }
 #ehabBoardCanvas { z-index: 4; pointer-events: auto; }
 #ehabBoardCurtainLayer { z-index: 5; pointer-events: none; overflow: hidden; }
 #ehabBoardTempCanvas { z-index: 6; pointer-events: none; }
 
-/* Select/Move Mode: Let pointer events pass directly to media items, logos, and sticky notes */
+/* Select/Move Mode: Let pointer events pass directly to media items, logos, text, and sticky notes */
 .ehabboard-workspace.select-mode #ehabBoardCanvas {
     pointer-events: none;
 }
@@ -446,20 +450,22 @@ body.day-mode .size-pct-badge {
     pointer-events: auto;
 }
 
-/* ==================== FRAMELESS INTERACTIVE LOGOS WITH 4 CORNER HANDLES ==================== */
-.sb-logo-object {
+/* ==================== FRAMELESS INTERACTIVE LOGOS & TEXT ('A') WITH 4 CORNER HANDLES ==================== */
+.sb-logo-object,
+.sb-text-object {
     position: absolute;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    pointer-events: auto; /* Always clickable so teacher can click it again to move/resize/delete */
+    pointer-events: auto; /* Always clickable so teacher can select, move, resize, or delete */
     cursor: grab;
     z-index: 8;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.sb-logo-object:active {
+.sb-logo-object:active,
+.sb-text-object:active {
     cursor: grabbing;
 }
 .sb-logo-object img {
@@ -469,6 +475,16 @@ body.day-mode .size-pct-badge {
     pointer-events: none;
     user-select: none;
     -webkit-user-drag: none;
+}
+.sb-text-object .sb-text-content {
+    font-family: 'Cairo', 'Fredoka', sans-serif;
+    font-weight: 900;
+    line-height: 1.25;
+    white-space: pre-wrap;
+    word-break: break-word;
+    pointer-events: none;
+    user-select: none;
+    padding: 4px 8px;
 }
 /* Selection handles only visible when selected */
 .sb-logo-handle {
@@ -482,8 +498,13 @@ body.day-mode .size-pct-badge {
     display: none;
     z-index: 10;
 }
-.sb-logo-object.selected-logo .sb-logo-handle {
+.sb-logo-object.selected-logo .sb-logo-handle,
+.sb-text-object.selected-logo .sb-logo-handle {
     display: block;
+}
+.sb-text-object.selected-logo {
+    outline: 1.5px dashed rgba(251, 191, 36, 0.75);
+    border-radius: 8px;
 }
 .sb-logo-handle.nw { top: -8px; left: -8px; cursor: nwse-resize; }
 .sb-logo-handle.ne { top: -8px; right: -8px; cursor: nesw-resize; }
@@ -895,16 +916,6 @@ body.day-mode .size-pct-badge {
     padding: 8px;
     text-shadow: 0 2px 6px rgba(255, 255, 255, 0.9);
 }
-.fx-dismiss-hint {
-    margin-top: 14px;
-    color: #fde68a;
-    font-weight: 800;
-    font-size: 0.95rem;
-    background: rgba(15, 23, 42, 0.9);
-    padding: 6px 18px;
-    border-radius: 50px;
-    border: 1px solid rgba(251, 191, 36, 0.45);
-}
 
 /* ==================== CUSTOM MODALS (VIDEO / GAME / ANNOUNCEMENT) ==================== */
 .custom-modal-backdrop {
@@ -1231,10 +1242,9 @@ body.day-mode .size-pct-badge {
     <span id="studentCalloutName">اسم الطالب</span>
 </div>
 
-<!-- ==================== 4. MOTIVATIONAL EFFECTS 5-SECOND CENTER OVERLAY ==================== -->
+<!-- ==================== 4. MOTIVATIONAL EFFECTS 5-SECOND CENTER OVERLAY (NO SUBTITLE TEXT) ==================== -->
 <div id="fxCenterOverlay" onclick="dismissMotivationalFX()">
     <div id="fxOverlayContent"></div>
-    <div class="fx-dismiss-hint"><i class="fa-solid fa-hand-pointer"></i> يختفي تلقائياً خلال 5 ثوانٍ أو اضغط في أي مكان للإغلاق فوراً</div>
 </div>
 
 <!-- ==================== 5. VIDEO & GAME LINK MODALS ==================== -->
@@ -1520,7 +1530,8 @@ body.day-mode .size-pct-badge {
 
             <button class="sb-btn" style="color:#fb923c;" onclick="sbClearInk()" title="مسح الكتابة فقط"><i class="fa-solid fa-broom"></i></button>
             <button class="sb-btn" style="color:#f87171;" onclick="sbClearMedia()" title="مسح الملفات واللوجوهات"><i class="fa-solid fa-folder-minus"></i></button>
-            <button class="sb-btn" style="color:#34d399;" onclick="sbExportPNG()" title="حفظ كصورة PNG"><i class="fa-solid fa-camera"></i></button>
+            <button class="sb-btn" style="color:#34d399;" onclick="sbExportPNG()" title="حفظ كصورة PNG"><i class="fa-solid fa-camera"></i> صورة</button>
+            <button class="sb-btn" style="color:#f43f5e;" onclick="sbExportPDF()" title="حفظ العمل كملف PDF"><i class="fa-solid fa-file-pdf"></i> PDF</button>
             <button class="sb-btn" onclick="sbToggleFullscreen()" title="ملء الشاشة"><i class="fa-solid fa-expand"></i></button>
         </div>
 
@@ -1554,11 +1565,7 @@ body.day-mode .size-pct-badge {
     <div class="ehabboard-stage" id="ehabboardStage">
         <div class="ehabboard-workspace" id="ehabboardWorkspace">
             <canvas id="ehabBoardBgCanvas"></canvas>
-            <img id="ehabBoardFixedBgImg"
-                 crossorigin="anonymous"
-                 src="https://lh3.googleusercontent.com/d/1kwd18yD0fe4RaIEW_WhlxVH2RLRjvans=s0"
-                 onerror="this.onerror=null; this.removeAttribute('crossorigin'); this.src='https://drive.google.com/thumbnail?id=1kwd18yD0fe4RaIEW_WhlxVH2RLRjvans&sz=w2000';"
-                 alt="خلفية السبورة الثابتة">
+            <div id="ehabBoardFixedBgLayer" title="خلفية السبورة الثابتة"></div>
             <div id="ehabBoardMediaLayer"></div>
             <canvas id="ehabBoardCanvas"></canvas>
             <div id="ehabBoardCurtainLayer"></div>
@@ -1678,44 +1685,164 @@ function playFiveSecondErrorAlarm() {
     alarmOscillatorTimer = setInterval(triggerSirenPulse, 480);
 }
 
-// Play Google Drive Audio with WebAudio fallback so it never fails
-function playDriveAudioWithFallback(driveId, fallbackType) {
+// Multi-Source Audio Player: Tries primary URLs in order (online + Google Drive endpoints) and runs synth accompaniment/fallback
+function playMultiSourceAudio(urlList, fallbackType) {
     if (!audioEnabled) return;
     stopAllActiveSounds();
-    const url = `https://docs.google.com/uc?export=download&id=${driveId}`;
-    const audio = new Audio(url);
-    activeHtmlAudio = audio;
-    audio.play().catch(() => {
-        // Fallback synthesized sound if browser blocks cross-origin audio stream
-        if (fallbackType === 'applause') {
-            playApplauseSynthFallback();
-        } else if (fallbackType === 'scream') {
-            playFiveSecondErrorAlarm();
+
+    // Always trigger realistic rich synthesis immediately or on fallback so sound is 100% guaranteed
+    let idx = 0;
+    const tryNextUrl = () => {
+        if (!audioEnabled) return;
+        if (idx >= urlList.length) {
+            if (fallbackType === 'applause') playApplauseSynthFallback();
+            else if (fallbackType === 'laugh') playChildLaughSynthFallback();
+            else if (fallbackType === 'scream') playFiveSecondErrorAlarm();
+            else if (fallbackType === 'gavel') playThreeGavelStrikesSound();
+            return;
         }
-    });
+        const currentUrl = urlList[idx++];
+        const audio = new Audio();
+        audio.crossOrigin = 'anonymous';
+        audio.src = currentUrl;
+        activeHtmlAudio = audio;
+
+        let settled = false;
+        const failOver = () => {
+            if (settled) return;
+            settled = true;
+            tryNextUrl();
+        };
+
+        audio.onerror = failOver;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                settled = true;
+            }).catch(failOver);
+        }
+    };
+
+    tryNextUrl();
 }
 
+// Realistic Multi-Clap Enthusiastic Crowd Applause Synthesizer
 function playApplauseSynthFallback() {
     if (!audioEnabled) return;
     if (audioCtx.state === 'suspended') audioCtx.resume();
-    const duration = 2.2;
-    const bufferSize = audioCtx.sampleRate * duration;
-    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.9));
+    const now = audioCtx.currentTime;
+
+    // 45 overlapping individual hand-claps across 4.4 seconds for realistic loud applause
+    for (let c = 0; c < 48; c++) {
+        const startOffset = Math.random() * 4.1;
+        const clapDur = 0.065 + Math.random() * 0.045;
+        const bufSize = Math.floor(audioCtx.sampleRate * clapDur);
+        const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.28));
+        }
+        const src = audioCtx.createBufferSource();
+        src.buffer = buf;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 950 + Math.random() * 850;
+        filter.Q.value = 1.6;
+
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.24, now + startOffset);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + startOffset + clapDur);
+
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        src.start(now + startOffset);
     }
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = buffer;
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 1100;
-    const gain = audioCtx.createGain();
-    gain.gain.value = 0.28;
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(audioCtx.destination);
-    noise.start();
+}
+
+// Joyful Child Giggle / Laugh Synthesizer Fallback
+function playChildLaughSynthFallback() {
+    if (!audioEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    const notes = [587.33, 659.25, 783.99, 659.25, 880, 783.99, 987.77, 880, 1046.5, 880];
+    notes.forEach((freq, i) => {
+        const t = now + i * 0.19;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.18, t + 0.08);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.92, t + 0.16);
+        gain.gain.setValueAtTime(0.22, t);
+        gain.gain.exponentialRampToValueAtTime(0.005, t + 0.17);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + 0.18);
+    });
+}
+
+// 3 Distinct Court Gavel / Hammer Strikes ("صوت مطرقة مكون من 3 طرقات")
+function playThreeGavelStrikesSound() {
+    if (!audioEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    stopAllActiveSounds();
+
+    const strikeTimes = [0, 0.62, 1.24];
+    const now = audioCtx.currentTime;
+
+    strikeTimes.forEach((offset) => {
+        const t = now + offset;
+
+        // 1. Woody resonant gavel body thud
+        const osc = audioCtx.createOscillator();
+        const oscGain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(195, t);
+        osc.frequency.exponentialRampToValueAtTime(52, t + 0.16);
+        oscGain.gain.setValueAtTime(0.85, t);
+        oscGain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+        osc.connect(oscGain);
+        oscGain.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + 0.24);
+
+        // 2. Sharp hardwood block crack impact
+        const crackOsc = audioCtx.createOscillator();
+        const crackGain = audioCtx.createGain();
+        crackOsc.type = 'square';
+        crackOsc.frequency.setValueAtTime(820, t);
+        crackOsc.frequency.exponentialRampToValueAtTime(140, t + 0.045);
+        crackGain.gain.setValueAtTime(0.45, t);
+        crackGain.gain.exponentialRampToValueAtTime(0.001, t + 0.055);
+        crackOsc.connect(crackGain);
+        crackGain.connect(audioCtx.destination);
+        crackOsc.start(t);
+        crackOsc.stop(t + 0.06);
+
+        // 3. Percussive wood noise burst
+        const dur = 0.09;
+        const bufSize = Math.floor(audioCtx.sampleRate * dur);
+        const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.2));
+        }
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buf;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 1400;
+        const nGain = audioCtx.createGain();
+        nGain.gain.setValueAtTime(0.6, t);
+        nGain.gain.exponentialRampToValueAtTime(0.005, t + dur);
+        noise.connect(filter);
+        filter.connect(nGain);
+        nGain.connect(audioCtx.destination);
+        noise.start(t);
+    });
 }
 
 // Background Particles
@@ -1757,7 +1884,7 @@ const sbStage = document.getElementById('ehabboardStage');
 const sbWorkspace = document.getElementById('ehabboardWorkspace');
 const sbBgCanvas = document.getElementById('ehabBoardBgCanvas');
 const sbBgCtx = sbBgCanvas.getContext('2d');
-const sbFixedBgImg = document.getElementById('ehabBoardFixedBgImg');
+const sbFixedBgLayer = document.getElementById('ehabBoardFixedBgLayer');
 const sbMediaLayer = document.getElementById('ehabBoardMediaLayer');
 const sbCanvas = document.getElementById('ehabBoardCanvas');
 const sbCtx = sbCanvas.getContext('2d', { willReadFrequently: true });
@@ -1770,6 +1897,16 @@ const sbLogoCursorImg = document.getElementById('sbLogoCursorImg');
 const sbMagnifierLens = document.getElementById('sbMagnifierLens');
 const sbMagnifierCanvas = document.getElementById('sbMagnifierCanvas');
 const sbMagnifierCtx = sbMagnifierCanvas.getContext('2d');
+
+// Preload Fixed Background Image Object for Export & Magnifier
+const fixedBgImageObj = new Image();
+fixedBgImageObj.crossOrigin = 'anonymous';
+fixedBgImageObj.onerror = function () {
+    this.onerror = null;
+    this.removeAttribute('crossorigin');
+    this.src = 'https://drive.google.com/thumbnail?id=1kwd18yD0fe4RaIEW_WhlxVH2RLRjvans&sz=w2000';
+};
+fixedBgImageObj.src = 'https://lh3.googleusercontent.com/d/1kwd18yD0fe4RaIEW_WhlxVH2RLRjvans=s0';
 
 if (typeof pdfjsLib !== 'undefined') {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -1793,7 +1930,16 @@ let selectedLogoObj = null;
 let currentStampLogoId = '11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD';
 let sbWorkspaceHeight = 2600;
 
-let sbPages = [{ bg: 'dark', height: 2600, strokes: [], undoStack: ['[]'], redoStack: [], mediaNodes: [], curtainNodes: [] }];
+// Unified History Snapshot includes strokes, placed logos, and placed text ('A') elements!
+let sbPages = [{
+    bg: 'dark',
+    height: 2600,
+    strokes: [],
+    undoStack: [JSON.stringify({ strokes: [], objects: [] })],
+    redoStack: [],
+    mediaNodes: [],
+    curtainNodes: []
+}];
 let sbCurrentPage = 0;
 
 // Convert percentage (10% - 100%) to actual brush size
@@ -1901,19 +2047,32 @@ function setSbBackground(type, btnEl) {
     drawSbBackground(type);
 }
 
-// Fixed Full-Bleed Image Background (1kwd18yD0fe4RaIEW_WhlxVH2RLRjvans)
+// Fixed Full-Width Horizontally Fitted & Vertically Repeating Background (1kwd18yD0fe4RaIEW_WhlxVH2RLRjvans)
 function toggleFixedBoardBackground(btnEl) {
-    const isVisible = sbFixedBgImg.style.display === 'block';
+    const isVisible = sbFixedBgLayer.style.display === 'block';
     if (isVisible) {
-        sbFixedBgImg.style.display = 'none';
+        sbFixedBgLayer.style.display = 'none';
         btnEl.classList.remove('active');
     } else {
-        sbFixedBgImg.style.display = 'block';
+        sbFixedBgLayer.style.display = 'block';
         btnEl.classList.add('active');
     }
 }
 
-// ==================== 4. TOOLS, LOGOS GALLERY & SELECTION ====================
+// Helper to draw the vertically-repeating fixed background onto any export/magnifier canvas
+function drawTiledFixedBgToCanvas(targetCtx, targetWidth, targetHeight) {
+    if (sbFixedBgLayer.style.display !== 'block') return;
+    if (!fixedBgImageObj.complete || !fixedBgImageObj.naturalWidth) return;
+    const aspect = fixedBgImageObj.naturalHeight / fixedBgImageObj.naturalWidth;
+    const tileH = Math.max(80, Math.round(targetWidth * aspect));
+    for (let y = 0; y < targetHeight; y += tileH) {
+        try {
+            targetCtx.drawImage(fixedBgImageObj, 0, y, targetWidth, tileH);
+        } catch (_) {}
+    }
+}
+
+// ==================== 4. TOOLS, LOGOS GALLERY & INTERACTIVE TEXT ('A') OBJECTS ====================
 function setSbTool(tool, btnEl) {
     sbTool = tool;
     document.querySelectorAll('[data-sbtool]').forEach(b => b.classList.remove('active'));
@@ -1969,24 +2128,103 @@ function selectLogoToStamp(driveId) {
 }
 
 function selectFramelessLogo(logoEl) {
-    document.querySelectorAll('.sb-logo-object').forEach(el => el.classList.remove('selected-logo'));
+    document.querySelectorAll('.sb-logo-object, .sb-text-object').forEach(el => el.classList.remove('selected-logo'));
     selectedLogoObj = logoEl;
     if (logoEl) {
         logoEl.classList.add('selected-logo');
     }
 }
 
-function stampFramelessLogoAt(x, y, driveId) {
-    const size = 135;
+// Attach Drag & 4-Corner Resize + History Recording to Frameless Logo or Text ('A') Element
+function makeBoardObjectInteractive(objDiv, isTextObject = false) {
+    let isDraggingObj = false, isResizingObj = false, resizeDir = 'se';
+    let startX = 0, startY = 0, origL = 0, origT = 0, origW = 0, origH = 0, origFontSize = 28;
+    let movedOrResized = false;
+
+    objDiv.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        selectFramelessLogo(objDiv);
+
+        const handle = e.target.closest('.sb-logo-handle');
+        startX = e.clientX;
+        startY = e.clientY;
+        origL = objDiv.offsetLeft;
+        origT = objDiv.offsetTop;
+        origW = objDiv.offsetWidth;
+        origH = objDiv.offsetHeight;
+        origFontSize = parseFloat(objDiv.dataset.fontSize || '28');
+        movedOrResized = false;
+
+        if (handle) {
+            isResizingObj = true;
+            resizeDir = handle.dataset.dir;
+        } else {
+            isDraggingObj = true;
+        }
+        try { objDiv.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+
+    objDiv.addEventListener('pointermove', (e) => {
+        if (!isDraggingObj && !isResizingObj) return;
+        e.stopPropagation();
+        const dx = (e.clientX - startX) / sbBoardZoom;
+        const dy = (e.clientY - startY) / sbBoardZoom;
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) movedOrResized = true;
+
+        if (isDraggingObj) {
+            objDiv.style.left = (origL + dx) + 'px';
+            objDiv.style.top = Math.max(0, origT + dy) + 'px';
+        } else if (isResizingObj) {
+            let newW = origW, newH = origH, newL = origL, newT = origT;
+            if (resizeDir.includes('e')) newW = Math.max(45, origW + dx);
+            if (resizeDir.includes('s')) newH = Math.max(35, origH + dy);
+            if (resizeDir.includes('w')) {
+                newW = Math.max(45, origW - dx);
+                newL = origL + (origW - newW);
+            }
+            if (resizeDir.includes('n')) {
+                newH = Math.max(35, origH - dy);
+                newT = origT + (origH - newH);
+            }
+            if (isTextObject) {
+                const scaleRatio = newW / Math.max(1, origW);
+                const newFS = Math.max(14, Math.min(160, Math.round(origFontSize * scaleRatio)));
+                objDiv.dataset.fontSize = newFS;
+                const txtEl = objDiv.querySelector('.sb-text-content');
+                if (txtEl) txtEl.style.fontSize = newFS + 'px';
+                objDiv.style.left = newL + 'px';
+                objDiv.style.top = Math.max(0, newT) + 'px';
+            } else {
+                objDiv.style.width = newW + 'px';
+                objDiv.style.height = newH + 'px';
+                objDiv.style.left = newL + 'px';
+                objDiv.style.top = Math.max(0, newT) + 'px';
+            }
+        }
+    });
+
+    objDiv.addEventListener('pointerup', (e) => {
+        e.stopPropagation();
+        if ((isDraggingObj || isResizingObj) && movedOrResized) {
+            saveSbStrokeSnapshot();
+        }
+        isDraggingObj = false;
+        isResizingObj = false;
+    });
+}
+
+function createLogoDOMElement(data) {
     const logoDiv = document.createElement('div');
     logoDiv.className = 'sb-logo-object';
-    logoDiv.style.width = size + 'px';
-    logoDiv.style.height = size + 'px';
-    logoDiv.style.left = Math.max(5, x - size / 2) + 'px';
-    logoDiv.style.top = Math.max(5, y - size / 2) + 'px';
+    logoDiv.dataset.objType = 'logo';
+    logoDiv.dataset.driveId = data.driveId;
+    logoDiv.style.width = (data.width || 135) + 'px';
+    logoDiv.style.height = (data.height || 135) + 'px';
+    logoDiv.style.left = (data.left || 50) + 'px';
+    logoDiv.style.top = (data.top || 50) + 'px';
 
-    const primaryUrl = `https://lh3.googleusercontent.com/d/${driveId}=s0`;
-    const fallbackUrl = `https://drive.google.com/thumbnail?id=${driveId}&sz=w400`;
+    const primaryUrl = `https://lh3.googleusercontent.com/d/${data.driveId}=s0`;
+    const fallbackUrl = `https://drive.google.com/thumbnail?id=${data.driveId}&sz=w400`;
 
     logoDiv.innerHTML = `
         <img crossorigin="anonymous" src="${primaryUrl}"
@@ -1997,75 +2235,50 @@ function stampFramelessLogoAt(x, y, driveId) {
         <span class="sb-logo-handle sw" data-dir="sw"></span>
         <span class="sb-logo-handle se" data-dir="se"></span>
     `;
+    makeBoardObjectInteractive(logoDiv, false);
+    return logoDiv;
+}
 
-    // Dragging & 4-Corner Resizing on the Frameless Logo
-    let isDraggingLogo = false, isResizingLogo = false, resizeDir = 'se';
-    let startX = 0, startY = 0, origL = 0, origT = 0, origW = 0, origH = 0;
+function createTextDOMElement(data) {
+    const textDiv = document.createElement('div');
+    textDiv.className = 'sb-text-object';
+    textDiv.dataset.objType = 'textObj';
+    textDiv.dataset.text = data.text;
+    textDiv.dataset.color = data.color || '#ffffff';
+    textDiv.dataset.fontSize = data.fontSize || 28;
+    textDiv.style.left = (data.left || 50) + 'px';
+    textDiv.style.top = (data.top || 50) + 'px';
 
-    logoDiv.addEventListener('pointerdown', (e) => {
-        e.stopPropagation();
-        selectFramelessLogo(logoDiv);
+    const safeHtml = (data.text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    textDiv.innerHTML = `
+        <div class="sb-text-content" style="color:${textDiv.dataset.color}; font-size:${textDiv.dataset.fontSize}px;">${safeHtml}</div>
+        <span class="sb-logo-handle nw" data-dir="nw"></span>
+        <span class="sb-logo-handle ne" data-dir="ne"></span>
+        <span class="sb-logo-handle sw" data-dir="sw"></span>
+        <span class="sb-logo-handle se" data-dir="se"></span>
+    `;
+    makeBoardObjectInteractive(textDiv, true);
+    return textDiv;
+}
 
-        const handle = e.target.closest('.sb-logo-handle');
-        startX = e.clientX;
-        startY = e.clientY;
-        origL = logoDiv.offsetLeft;
-        origT = logoDiv.offsetTop;
-        origW = logoDiv.offsetWidth;
-        origH = logoDiv.offsetHeight;
-
-        if (handle) {
-            isResizingLogo = true;
-            resizeDir = handle.dataset.dir;
-        } else {
-            isDraggingLogo = true;
-        }
-        try { logoDiv.setPointerCapture(e.pointerId); } catch (_) {}
+function stampFramelessLogoAt(x, y, driveId) {
+    const size = 135;
+    const logoDiv = createLogoDOMElement({
+        driveId: driveId,
+        left: Math.max(5, x - size / 2),
+        top: Math.max(5, y - size / 2),
+        width: size,
+        height: size
     });
-
-    logoDiv.addEventListener('pointermove', (e) => {
-        if (!isDraggingLogo && !isResizingLogo) return;
-        e.stopPropagation();
-        const dx = (e.clientX - startX) / sbBoardZoom;
-        const dy = (e.clientY - startY) / sbBoardZoom;
-
-        if (isDraggingLogo) {
-            logoDiv.style.left = (origL + dx) + 'px';
-            logoDiv.style.top = Math.max(0, origT + dy) + 'px';
-        } else if (isResizingLogo) {
-            let newW = origW, newH = origH, newL = origL, newT = origT;
-            if (resizeDir.includes('e')) newW = Math.max(45, origW + dx);
-            if (resizeDir.includes('s')) newH = Math.max(45, origH + dy);
-            if (resizeDir.includes('w')) {
-                newW = Math.max(45, origW - dx);
-                newL = origL + (origW - newW);
-            }
-            if (resizeDir.includes('n')) {
-                newH = Math.max(45, origH - dy);
-                newT = origT + (origH - newH);
-            }
-            logoDiv.style.width = newW + 'px';
-            logoDiv.style.height = newH + 'px';
-            logoDiv.style.left = newL + 'px';
-            logoDiv.style.top = Math.max(0, newT) + 'px';
-        }
-    });
-
-    logoDiv.addEventListener('pointerup', (e) => {
-        e.stopPropagation();
-        isDraggingLogo = false;
-        isResizingLogo = false;
-    });
-
     sbMediaLayer.appendChild(logoDiv);
-    // Placed without outer frame; switch back to pen so teacher can write or click logo to select/move
     selectFramelessLogo(null);
+    saveSbStrokeSnapshot(); // Record logo placement in Undo/Redo history!
     setSbTool('pen', document.querySelector('[data-sbtool="pen"]'));
 }
 
-// Global Click Deselects Logo & Closes Dropdowns
+// Global Click Deselects Logo/Text & Closes Dropdowns
 document.addEventListener('pointerdown', (e) => {
-    if (!e.target.closest('.sb-logo-object')) {
+    if (!e.target.closest('.sb-logo-object') && !e.target.closest('.sb-text-object')) {
         selectFramelessLogo(null);
     }
     if (!e.target.closest('#logosPopover') && !e.target.closest('#logosMenuBtn')) {
@@ -2081,12 +2294,13 @@ document.addEventListener('keydown', (e) => {
     const tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
     if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
 
-    // Delete or Backspace deletes selected frameless logo (or active media card in select mode)
+    // Delete or Backspace deletes selected frameless logo or text ('A') element and records in Undo/Redo!
     if (e.key === 'Delete' || e.key === 'Backspace') {
         if (selectedLogoObj) {
             e.preventDefault();
             selectedLogoObj.remove();
             selectedLogoObj = null;
+            saveSbStrokeSnapshot();
             return;
         }
         if (sbTool === 'select' && activeMediaCard) {
@@ -2506,20 +2720,26 @@ function renderMagnifierAt(x, y) {
     // 1. Draw Background
     sbMagnifierCtx.drawImage(sbBgCanvas, sx, sy, srcSize, srcSize, 0, 0, lensSize, lensSize);
 
-    // 2. Draw Fixed Background if visible
-    if (sbFixedBgImg.style.display === 'block' && sbFixedBgImg.complete) {
-        try {
-            sbMagnifierCtx.drawImage(sbFixedBgImg, 0, 0, sbCanvas.width, sbCanvas.height);
-        } catch (_) {}
+    // 2. Draw Tiled Fixed Background if visible
+    if (sbFixedBgLayer.style.display === 'block' && fixedBgImageObj.complete && fixedBgImageObj.naturalWidth) {
+        const aspect = fixedBgImageObj.naturalHeight / fixedBgImageObj.naturalWidth;
+        const tileH = Math.max(80, Math.round(sbCanvas.width * aspect));
+        for (let ty = 0; ty < sbCanvas.height; ty += tileH) {
+            const destX = (0 - sx) * zoomFactor;
+            const destY = (ty - sy) * zoomFactor;
+            try {
+                sbMagnifierCtx.drawImage(fixedBgImageObj, destX, destY, sbCanvas.width * zoomFactor, tileH * zoomFactor);
+            } catch (_) {}
+        }
     }
 
-    // 3. Draw Uploaded Images / PDFs
-    sbMediaLayer.querySelectorAll('.sb-media-item').forEach(item => {
-        const img = item.querySelector('.sb-media-body img');
-        const body = item.querySelector('.sb-media-body');
-        if (img && body && img.complete && img.naturalWidth > 0) {
-            const itemX = item.offsetLeft + body.offsetLeft;
-            const itemY = item.offsetTop + body.offsetTop;
+    // 3. Draw Uploaded Images / PDFs / Logos
+    sbMediaLayer.querySelectorAll('.sb-media-item, .sb-logo-object').forEach(item => {
+        const img = item.querySelector('img');
+        const body = item.querySelector('.sb-media-body') || item;
+        if (img && img.complete && img.naturalWidth > 0) {
+            const itemX = item.offsetLeft + (body !== item ? body.offsetLeft : 0);
+            const itemY = item.offsetTop + (body !== item ? body.offsetTop : 0);
             const itemW = body.offsetWidth;
             const itemH = body.offsetHeight;
             const destX = (itemX - sx) * zoomFactor;
@@ -2537,7 +2757,7 @@ function renderMagnifierAt(x, y) {
     sbMagnifierCtx.restore();
 }
 
-// ==================== 8. VECTOR INK ENGINE & POINTER EVENTS ====================
+// ==================== 8. VECTOR INK ENGINE, UNIFIED UNDO/REDO (INK + LOGOS + TEXT 'A') & POINTER EVENTS ====================
 function getSbCoords(e) {
     const rect = sbCanvas.getBoundingClientRect();
     const scaleX = sbCanvas.width / (rect.width || 1);
@@ -2636,35 +2856,90 @@ function redrawSbInkLayer() {
     }
 }
 
+// Serialize placed Logos and Text ('A') elements so Undo/Redo restores them accurately
+function serializePlacedObjects() {
+    const list = [];
+    sbMediaLayer.querySelectorAll('.sb-logo-object, .sb-text-object').forEach(el => {
+        if (el.classList.contains('sb-logo-object')) {
+            list.push({
+                objType: 'logo',
+                driveId: el.dataset.driveId,
+                left: el.offsetLeft,
+                top: el.offsetTop,
+                width: el.offsetWidth,
+                height: el.offsetHeight
+            });
+        } else if (el.classList.contains('sb-text-object')) {
+            list.push({
+                objType: 'textObj',
+                text: el.dataset.text,
+                color: el.dataset.color,
+                fontSize: parseFloat(el.dataset.fontSize || '28'),
+                left: el.offsetLeft,
+                top: el.offsetTop
+            });
+        }
+    });
+    return list;
+}
+
+function restorePlacedObjects(objectsList) {
+    sbMediaLayer.querySelectorAll('.sb-logo-object, .sb-text-object').forEach(el => el.remove());
+    selectedLogoObj = null;
+    (objectsList || []).forEach(item => {
+        if (item.objType === 'logo') {
+            sbMediaLayer.appendChild(createLogoDOMElement(item));
+        } else if (item.objType === 'textObj') {
+            sbMediaLayer.appendChild(createTextDOMElement(item));
+        }
+    });
+}
+
 function saveSbStrokeSnapshot() {
     const page = sbPages[sbCurrentPage];
-    const serialized = JSON.stringify(page.strokes);
+    const stateObj = {
+        strokes: page.strokes,
+        objects: serializePlacedObjects()
+    };
+    const serialized = JSON.stringify(stateObj);
     if (page.undoStack[page.undoStack.length - 1] !== serialized) {
         page.undoStack.push(serialized);
-        if (page.undoStack.length > 50) page.undoStack.shift();
+        if (page.undoStack.length > 60) page.undoStack.shift();
         page.redoStack = [];
     }
+}
+
+function applyBoardHistorySnapshot(serialized) {
+    const page = sbPages[sbCurrentPage];
+    const parsed = JSON.parse(serialized);
+    if (Array.isArray(parsed)) {
+        page.strokes = parsed;
+    } else {
+        page.strokes = parsed.strokes || [];
+        restorePlacedObjects(parsed.objects || []);
+    }
+    redrawSbInkLayer();
 }
 
 function sbUndo() {
     const page = sbPages[sbCurrentPage];
     if (page.undoStack.length <= 1) return;
     page.redoStack.push(page.undoStack.pop());
-    page.strokes = JSON.parse(page.undoStack[page.undoStack.length - 1]);
-    redrawSbInkLayer();
+    const prevSerialized = page.undoStack[page.undoStack.length - 1];
+    applyBoardHistorySnapshot(prevSerialized);
 }
 
 function sbRedo() {
     const page = sbPages[sbCurrentPage];
     if (page.redoStack.length === 0) return;
-    const next = page.redoStack.pop();
-    page.undoStack.push(next);
-    page.strokes = JSON.parse(next);
-    redrawSbInkLayer();
+    const nextSerialized = page.redoStack.pop();
+    page.undoStack.push(nextSerialized);
+    applyBoardHistorySnapshot(nextSerialized);
 }
 
 function sbClearInk() {
     sbPages[sbCurrentPage].strokes = [];
+    sbMediaLayer.querySelectorAll('.sb-text-object').forEach(t => t.remove());
     redrawSbInkLayer();
     saveSbStrokeSnapshot();
 }
@@ -2676,6 +2951,7 @@ function sbClearMedia() {
     sbWorkspace.querySelectorAll('.sb-sticky-note').forEach(n => n.remove());
     activeMediaCard = null;
     selectedLogoObj = null;
+    saveSbStrokeSnapshot();
 }
 
 // Eraser Geometry
@@ -2721,6 +2997,14 @@ function eraseConnectedStrokesAt(x, y) {
         sbErasedDuringSwipe = true;
         redrawSbInkLayer();
     }
+    // Also allow eraser to erase placed Text ('A') objects if swiped over them
+    sbMediaLayer.querySelectorAll('.sb-text-object').forEach(tEl => {
+        const l = tEl.offsetLeft, t = tEl.offsetTop, w = tEl.offsetWidth, h = tEl.offsetHeight;
+        if (x >= l - r && x <= l + w + r && y >= t - r && y <= t + h + r) {
+            tEl.remove();
+            sbErasedDuringSwipe = true;
+        }
+    });
 }
 
 sbWorkspace.addEventListener('pointermove', (e) => {
@@ -2874,25 +3158,28 @@ function spawnSbTextInput(x, y) {
     sbWorkspace.appendChild(inp);
     setTimeout(() => inp.focus(), 20);
 
+    let committed = false;
     const commit = () => {
+        if (committed) return;
+        committed = true;
         const val = inp.value.trim();
         if (val) {
             const fontSize = Math.max(22, sbSize * 3.5);
-            sbCtx.save();
-            sbCtx.font = `900 ${fontSize}px Cairo, Fredoka, sans-serif`;
-            const w = sbCtx.measureText(val).width;
-            sbCtx.restore();
-            sbPages[sbCurrentPage].strokes.push({
-                type: 'text', color: sbColor, fontSize, x, y, text: val, width: w, height: fontSize * 1.25
+            const textObj = createTextDOMElement({
+                text: val,
+                color: sbColor,
+                fontSize: fontSize,
+                left: x,
+                top: y
             });
-            redrawSbInkLayer();
-            saveSbStrokeSnapshot();
+            sbMediaLayer.appendChild(textObj);
+            saveSbStrokeSnapshot(); // Recorded in Ctrl+Z / Ctrl+Y history!
         }
         inp.remove();
     };
     inp.addEventListener('keydown', ev => {
-        if (ev.key === 'Enter') commit();
-        if (ev.key === 'Escape') inp.remove();
+        if (ev.key === 'Enter') { ev.preventDefault(); commit(); }
+        if (ev.key === 'Escape') { committed = true; inp.remove(); }
     });
     inp.addEventListener('blur', commit);
 }
@@ -2954,31 +3241,149 @@ function sbPrevPage() { if (sbCurrentPage > 0) loadSbPage(sbCurrentPage - 1); }
 function sbNextOrAddPage() {
     if (sbCurrentPage < sbPages.length - 1) loadSbPage(sbCurrentPage + 1);
     else {
-        sbPages.push({ bg: sbBgType, height: 2600, strokes: [], undoStack: ['[]'], redoStack: [], mediaNodes: [], curtainNodes: [] });
+        sbPages.push({
+            bg: sbBgType,
+            height: 2600,
+            strokes: [],
+            undoStack: [JSON.stringify({ strokes: [], objects: [] })],
+            redoStack: [],
+            mediaNodes: [],
+            curtainNodes: []
+        });
         loadSbPage(sbPages.length - 1);
     }
 }
 
-function sbExportPNG() {
+// Helper to assemble full composite canvas for PNG and PDF exports
+function buildCompositeExportCanvas() {
+    const exportHeight = Math.min(sbCanvas.height, Math.max(sbStage.clientHeight + sbStage.scrollTop, 1100));
     const out = document.createElement('canvas');
     out.width = sbCanvas.width;
-    out.height = Math.min(sbCanvas.height, Math.max(sbStage.clientHeight, 1200));
+    out.height = exportHeight;
     const oCtx = out.getContext('2d');
-    oCtx.drawImage(sbBgCanvas, 0, 0);
-    if (sbFixedBgImg.style.display === 'block' && sbFixedBgImg.complete) {
-        try { oCtx.drawImage(sbFixedBgImg, 0, 0, out.width, out.height); } catch (_) {}
-    }
-    sbMediaLayer.querySelectorAll('.sb-media-item, .sb-logo-object').forEach(el => {
-        const img = el.querySelector('img');
-        if (img && img.complete && img.naturalWidth > 0) {
-            try { oCtx.drawImage(img, el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight); } catch (_) {}
+
+    // 1. Base Background
+    oCtx.drawImage(sbBgCanvas, 0, 0, out.width, exportHeight, 0, 0, out.width, exportHeight);
+
+    // 2. Tiled Fixed Background (if active)
+    drawTiledFixedBgToCanvas(oCtx, out.width, exportHeight);
+
+    // 3. Uploaded Media, Placed Logos, and Placed Text ('A')
+    sbMediaLayer.querySelectorAll('.sb-media-item, .sb-logo-object, .sb-text-object').forEach(el => {
+        if (el.classList.contains('sb-text-object')) {
+            const fs = parseFloat(el.dataset.fontSize || '28');
+            oCtx.save();
+            oCtx.fillStyle = el.dataset.color || '#ffffff';
+            oCtx.font = `900 ${fs}px Cairo, Fredoka, sans-serif`;
+            oCtx.textBaseline = 'top';
+            oCtx.fillText(el.dataset.text || '', el.offsetLeft + 8, el.offsetTop + 4);
+            oCtx.restore();
+        } else {
+            const img = el.querySelector('img');
+            const body = el.querySelector('.sb-media-body') || el;
+            if (img && img.complete && img.naturalWidth > 0) {
+                const rx = el.offsetLeft + (body !== el ? body.offsetLeft : 0);
+                const ry = el.offsetTop + (body !== el ? body.offsetTop : 0);
+                try { oCtx.drawImage(img, rx, ry, body.offsetWidth, body.offsetHeight); } catch (_) {}
+            }
         }
     });
-    oCtx.drawImage(sbCanvas, 0, 0);
+
+    // 4. Ink & Shapes Layer
+    oCtx.drawImage(sbCanvas, 0, 0, out.width, exportHeight, 0, 0, out.width, exportHeight);
+    return out;
+}
+
+function sbExportPNG() {
+    const out = buildCompositeExportCanvas();
     const a = document.createElement('a');
     a.download = `سبورة_مستر_إيهاب_صفحة_${sbCurrentPage + 1}.png`;
-    a.href = out.toDataURL('image/png');
+    try {
+        a.href = out.toDataURL('image/png');
+    } catch (_) {
+        a.href = sbCanvas.toDataURL('image/png');
+    }
     a.click();
+}
+
+// Pure-JS Direct PDF Generator & Downloader ("حفظ العمل ك PDF")
+function buildSingleImagePdfBlob(jpegDataUrl, imgWidth, imgHeight) {
+    const base64Data = jpegDataUrl.split(',')[1];
+    const binaryStr = atob(base64Data);
+    const jpegLen = binaryStr.length;
+    const jpegBytes = new Uint8Array(jpegLen);
+    for (let i = 0; i < jpegLen; i++) {
+        jpegBytes[i] = binaryStr.charCodeAt(i);
+    }
+
+    const pdfW = 842; // A4 Landscape width in points
+    const pdfH = Math.max(200, Math.round((imgHeight / (imgWidth || 1)) * pdfW));
+
+    const enc = new TextEncoder();
+    const chunks = [];
+    let byteOffset = 0;
+    const offsets = [0];
+
+    const pushStr = (s) => {
+        const b = enc.encode(s);
+        chunks.push(b);
+        byteOffset += b.length;
+    };
+    const pushBytes = (b) => {
+        chunks.push(b);
+        byteOffset += b.length;
+    };
+
+    pushStr("%PDF-1.4\n");
+    offsets.push(byteOffset);
+    pushStr("1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n");
+    offsets.push(byteOffset);
+    pushStr("2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n");
+    offsets.push(byteOffset);
+    pushStr(`3 0 obj\n<< /Type /Page /Parent 2 0 R /Resources << /XObject << /Im0 4 0 R >> >> /MediaBox [0 0 ${pdfW} ${pdfH}] /Contents 5 0 R >>\nendobj\n`);
+    offsets.push(byteOffset);
+    pushStr(`4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${imgWidth} /Height ${imgHeight} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegLen} >>\nstream\n`);
+    pushBytes(jpegBytes);
+    pushStr("\nendstream\nendobj\n");
+
+    const contentStream = `q ${pdfW} 0 0 ${pdfH} 0 0 cm /Im0 Do Q`;
+    offsets.push(byteOffset);
+    pushStr(`5 0 obj\n<< /Length ${contentStream.length} >>\nstream\n${contentStream}\nendstream\nendobj\n`);
+
+    const xrefStart = byteOffset;
+    pushStr(`xref\n0 ${offsets.length}\n`);
+    pushStr("0000000000 65535 f \n");
+    for (let i = 1; i < offsets.length; i++) {
+        pushStr(String(offsets[i]).padStart(10, '0') + " 00000 n \n");
+    }
+    pushStr(`trailer\n<< /Size ${offsets.length} /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`);
+    return new Blob(chunks, { type: "application/pdf" });
+}
+
+function sbExportPDF() {
+    const out = buildCompositeExportCanvas();
+    let jpegUrl;
+    try {
+        jpegUrl = out.toDataURL('image/jpeg', 0.94);
+    } catch (_) {
+        const fallback = document.createElement('canvas');
+        fallback.width = sbCanvas.width;
+        fallback.height = sbStage.clientHeight || 800;
+        const fCtx = fallback.getContext('2d');
+        fCtx.drawImage(sbBgCanvas, 0, 0);
+        fCtx.drawImage(sbCanvas, 0, 0);
+        jpegUrl = fallback.toDataURL('image/jpeg', 0.94);
+    }
+
+    const pdfBlob = buildSingleImagePdfBlob(jpegUrl, out.width, out.height);
+    const blobUrl = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = `سبورة_مستر_إيهاب_صفحة_${sbCurrentPage + 1}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
 }
 
 function sbToggleFullscreen() {
@@ -3007,7 +3412,7 @@ function triggerMotivationalFX(type) {
     fxContent.innerHTML = '';
 
     if (type === 'applause') {
-        // Image 1wwsTj-Js_wHhJU4U30cypELKOJeqBHXD + Audio 1Tg4vjqw59k57gXzU93Td4B5p1Mxhg37k
+        // Image 1wwsTj-Js_wHhJU4U30cypELKOJeqBHXD + Loud Applause Sound (Online + Drive 1Tg4vjqw59k57gXzU93Td4B5p1Mxhg37k + Realistic Crowd Claps)
         fxContent.innerHTML = `
             <div class="fx-media-box">
                 <img src="https://lh3.googleusercontent.com/d/1wwsTj-Js_wHhJU4U30cypELKOJeqBHXD=s0"
@@ -3015,14 +3420,32 @@ function triggerMotivationalFX(type) {
                      alt="تصفيق حاد">
             </div>
         `;
-        playDriveAudioWithFallback('1Tg4vjqw59k57gXzU93Td4B5p1Mxhg37k', 'applause');
-        confetti({ particleCount: 110, spread: 75 });
+        playApplauseSynthFallback();
+        playMultiSourceAudio([
+            'https://actions.google.com/sounds/v1/crowds/applause.ogg',
+            'https://actions.google.com/sounds/v1/crowds/battle_crowd_celebrate_stutter.ogg',
+            'https://docs.google.com/uc?export=download&id=1Tg4vjqw59k57gXzU93Td4B5p1Mxhg37k',
+            'https://drive.google.com/uc?export=view&id=1Tg4vjqw59k57gXzU93Td4B5p1Mxhg37k'
+        ], 'applause');
+        confetti({ particleCount: 120, spread: 80 });
     } else if (type === 'mrehab') {
         // Video 1bVWlnU4cLKmNvV_OlmQiHU9VfjpCY6_F
         fxContent.innerHTML = renderDriveVideoBox('1bVWlnU4cLKmNvV_OlmQiHU9VfjpCY6_F');
     } else if (type === 'laugh') {
-        // Video 1KK2bq1M0GsIONtRuhFyKB27cCmmHxi__
-        fxContent.innerHTML = renderDriveVideoBox('1KK2bq1M0GsIONtRuhFyKB27cCmmHxi__');
+        // Replaced video with Image 1iAXaTKXvu6yYTtp8IzjWMahGXVmi2lZU + Baby/Child Laugh Sound (Online + Drive 17NnSDrMi0UTUNa85i2xvox8gfRBmtWDl)
+        fxContent.innerHTML = `
+            <div class="fx-media-box">
+                <img src="https://lh3.googleusercontent.com/d/1iAXaTKXvu6yYTtp8IzjWMahGXVmi2lZU=s0"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1iAXaTKXvu6yYTtp8IzjWMahGXVmi2lZU&sz=w1200';"
+                     alt="ضحك">
+            </div>
+        `;
+        playMultiSourceAudio([
+            'https://actions.google.com/sounds/v1/human_voices/babies_laughing.ogg',
+            'https://upload.wikimedia.org/wikipedia/commons/e/e6/Laughing_boy.ogg',
+            'https://docs.google.com/uc?export=download&id=17NnSDrMi0UTUNa85i2xvox8gfRBmtWDl',
+            'https://drive.google.com/uc?export=view&id=17NnSDrMi0UTUNa85i2xvox8gfRBmtWDl'
+        ], 'laugh');
     } else if (type === 'scream') {
         // Image 1XmjrVk6kcwcyJNEaZ8d73b70bMZtyg3p + Audio 1gS2gDczMZ2ove8fje9v5kFaoEpXsXJf2
         fxContent.innerHTML = `
@@ -3032,7 +3455,11 @@ function triggerMotivationalFX(type) {
                      alt="صراخ">
             </div>
         `;
-        playDriveAudioWithFallback('1gS2gDczMZ2ove8fje9v5kFaoEpXsXJf2', 'scream');
+        playMultiSourceAudio([
+            'https://actions.google.com/sounds/v1/human_voices/human_scream.ogg',
+            'https://docs.google.com/uc?export=download&id=1gS2gDczMZ2ove8fje9v5kFaoEpXsXJf2',
+            'https://drive.google.com/uc?export=view&id=1gS2gDczMZ2ove8fje9v5kFaoEpXsXJf2'
+        ], 'scream');
     } else if (type === 'wrong') {
         // Animated Error Icon + 5-second Alarm Siren
         fxContent.innerHTML = `
@@ -3043,8 +3470,15 @@ function triggerMotivationalFX(type) {
         `;
         playFiveSecondErrorAlarm();
     } else if (type === 'stopTalking') {
-        // Video 1cQB81rDSZ8awbz05SATvF2Quhm3ljOvQ
-        fxContent.innerHTML = renderDriveVideoBox('1cQB81rDSZ8awbz05SATvF2Quhm3ljOvQ');
+        // Replaced video with Court Gavel Image 1VOfl7lz9ZKxxl8_4SugSnFlhNGdTVCet + 3 Distinct Gavel Strikes Sound
+        fxContent.innerHTML = `
+            <div class="fx-media-box">
+                <img src="https://lh3.googleusercontent.com/d/1VOfl7lz9ZKxxl8_4SugSnFlhNGdTVCet=s0"
+                     onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=1VOfl7lz9ZKxxl8_4SugSnFlhNGdTVCet&sz=w1200';"
+                     alt="إيقاف الكلام">
+            </div>
+        `;
+        playThreeGavelStrikesSound();
     }
 
     fxOverlay.classList.add('active');
