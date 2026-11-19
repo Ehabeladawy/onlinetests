@@ -110,7 +110,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 .rank-2 { color: silver; font-weight: 900; background: rgba(192, 192, 192, 0.12); }
 .rank-3 { color: #cd7f32; font-weight: 900; background: rgba(205, 127, 50, 0.12); }
 
-/* ----- منصة التتويج الاحتفالية للمعلم (الإضافة الجديدة) ----- */
+/* ----- منصة التتويج الاحتفالية للمعلم ----- */
 #teacher-podium-banner {
     display: none;
     position: relative;
@@ -157,7 +157,64 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     justify-content: center;
     overflow: hidden;
     direction: rtl;
-    transition: transform 0.3s ease;
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.38s ease,
+                background 0.35s ease,
+                border-color 0.35s ease;
+}
+
+/* تأثير اللمعة الضوئية المائلة عند تمرير الماوس على الكارت */
+.winner-card::before {
+    content: "";
+    position: absolute;
+    top: -60%;
+    left: -80%;
+    width: 55%;
+    height: 220%;
+    background: linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.15) 35%,
+        rgba(255, 255, 255, 0.65) 50%,
+        rgba(255, 255, 255, 0.15) 65%,
+        transparent 100%
+    );
+    transform: rotate(24deg);
+    transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.winner-card:hover::before {
+    left: 140%;
+}
+
+/* هالة ضوئية داخلية عند تمرير الماوس */
+.winner-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.winner-card.card-first::after {
+    background: radial-gradient(circle at center, rgba(253, 224, 71, 0.32) 0%, transparent 72%);
+}
+
+.winner-card.card-second::after,
+.winner-card.card-third::after {
+    background: radial-gradient(circle at center, rgba(251, 146, 60, 0.32) 0%, transparent 72%);
+}
+
+.winner-card:hover::after {
+    opacity: 1;
 }
 
 /* كارت المركز الأول: في المنتصف وأعلى من الآخرين */
@@ -170,13 +227,13 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     animation: glowFirst 2.2s infinite ease-in-out;
 }
 
-/* كارت المركز الثاني: جهة اليسار وأقل ارتفاعاً من الأول */
+/* كارت المركز الثاني: جهة اليسار وأقل ارتفاعاً من الأول - بنفس لون Glow المركز الثالث */
 .winner-card.card-second {
     left: 3%;
     top: 15%;
-    border: 2px solid #e2e8f0;
-    box-shadow: 0 0 16px rgba(226, 232, 240, 0.9), 0 0 32px rgba(56, 189, 248, 0.6), inset 0 0 12px rgba(226, 232, 240, 0.3);
-    animation: glowSecond 2.4s infinite ease-in-out;
+    border: 2px solid #fb923c;
+    box-shadow: 0 0 16px rgba(251, 146, 60, 0.9), 0 0 32px rgba(217, 119, 6, 0.6), inset 0 0 12px rgba(251, 146, 60, 0.3);
+    animation: glowOrange 2.4s infinite ease-in-out;
 }
 
 /* كارت المركز الثالث: جهة اليمين وبنفس ارتفاع المركز الثاني */
@@ -185,7 +242,26 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     top: 15%;
     border: 2px solid #fb923c;
     box-shadow: 0 0 16px rgba(251, 146, 60, 0.9), 0 0 32px rgba(217, 119, 6, 0.6), inset 0 0 12px rgba(251, 146, 60, 0.3);
-    animation: glowThird 2.6s infinite ease-in-out;
+    animation: glowOrange 2.6s infinite ease-in-out;
+}
+
+/* تأثيرات الـ Hover الجذابة للكروت */
+.winner-card:hover {
+    z-index: 15;
+    background: rgba(15, 23, 42, 0.68);
+}
+
+.winner-card.card-first:hover {
+    transform: translateX(-50%) translateY(-9px) scale(1.09);
+    border-color: #fef08a;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55), 0 0 32px rgba(253, 224, 71, 1), 0 0 65px rgba(245, 158, 11, 0.95), inset 0 0 22px rgba(253, 224, 71, 0.55);
+}
+
+.winner-card.card-second:hover,
+.winner-card.card-third:hover {
+    transform: translateY(-9px) scale(1.09);
+    border-color: #fdba74;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55), 0 0 30px rgba(251, 146, 60, 1), 0 0 60px rgba(217, 119, 6, 0.95), inset 0 0 22px rgba(251, 146, 60, 0.5);
 }
 
 @keyframes glowFirst {
@@ -193,30 +269,35 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     50% { box-shadow: 0 0 28px rgba(253, 224, 71, 1), 0 0 55px rgba(245, 158, 11, 0.85), inset 0 0 18px rgba(253, 224, 71, 0.45); }
 }
 
-@keyframes glowSecond {
-    0%, 100% { box-shadow: 0 0 14px rgba(226, 232, 240, 0.8), 0 0 26px rgba(56, 189, 248, 0.5), inset 0 0 10px rgba(226, 232, 240, 0.25); }
-    50% { box-shadow: 0 0 24px rgba(226, 232, 240, 1), 0 0 44px rgba(56, 189, 248, 0.8), inset 0 0 16px rgba(226, 232, 240, 0.4); }
-}
-
-@keyframes glowThird {
+@keyframes glowOrange {
     0%, 100% { box-shadow: 0 0 14px rgba(251, 146, 60, 0.8), 0 0 26px rgba(217, 119, 6, 0.5), inset 0 0 10px rgba(251, 146, 60, 0.25); }
-    50% { box-shadow: 0 0 24px rgba(251, 146, 60, 1), 0 0 44px rgba(217, 119, 6, 0.8), inset 0 0 16px rgba(251, 146, 60, 0.4); }
+    50% { box-shadow: 0 0 24px rgba(251, 146, 60, 1), 0 0 44px rgba(217, 119, 6, 0.85), inset 0 0 16px rgba(251, 146, 60, 0.42); }
 }
 
 .winner-rank-badge {
+    position: relative;
+    z-index: 2;
     font-size: clamp(0.55rem, 1.3vw, 0.85rem);
     font-weight: 900;
     line-height: 1.1;
     margin-bottom: 2px;
     white-space: nowrap;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
 }
 
 .card-first .winner-rank-badge { color: #fde047; }
-.card-second .winner-rank-badge { color: #e2e8f0; }
+.card-second .winner-rank-badge { color: #fdba74; }
 .card-third .winner-rank-badge { color: #fdba74; }
 
+.winner-card:hover .winner-rank-badge {
+    transform: scale(1.08);
+    text-shadow: 0 0 12px currentColor, 0 2px 6px rgba(0, 0, 0, 0.95);
+}
+
 .winner-name-box {
+    position: relative;
+    z-index: 2;
     flex: 1;
     width: 100%;
     min-height: 0;
@@ -238,24 +319,52 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
     word-break: break-word;
     overflow-wrap: break-word;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.7);
+    transition: transform 0.32s ease, text-shadow 0.32s ease, color 0.32s ease;
 }
 
-.cheer-sound-hint {
+.winner-card:hover .winner-name-text {
+    transform: scale(1.06);
+    color: #fffbeb;
+    text-shadow: 0 0 14px rgba(255, 255, 255, 0.95), 0 0 24px rgba(253, 224, 71, 0.85), 0 2px 8px rgba(0, 0, 0, 1);
+}
+
+/* أيقونة التحكم بالصوت على حافة الصورة اليسرى من أسفل */
+.podium-sound-btn {
     position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(15, 23, 42, 0.75);
+    bottom: 12px;
+    left: 12px;
+    z-index: 25;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(253, 224, 71, 0.9);
+    background: rgba(15, 23, 42, 0.72);
     color: #fde047;
-    padding: 5px 14px;
-    border-radius: 999px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    border: 1px solid rgba(253, 224, 71, 0.5);
-    backdrop-filter: blur(4px);
-    white-space: nowrap;
-    display: none;
-    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.15rem;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.65);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.podium-sound-btn:hover {
+    transform: scale(1.12);
+    background: rgba(15, 23, 42, 0.9);
+    box-shadow: 0 0 24px rgba(253, 224, 71, 0.95);
+}
+
+.podium-sound-btn.muted {
+    border-color: rgba(248, 113, 113, 0.85);
+    color: #fca5a5;
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
+}
+
+.podium-sound-btn.muted:hover {
+    box-shadow: 0 0 22px rgba(239, 68, 68, 0.85);
 }
 
 /* ----- العداد الزمني الكلي للطالب ----- */
@@ -303,6 +412,7 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 @media (max-width: 768px) {
     .quiz-header { flex-direction: column; text-align: center; }
     .winner-card { border-radius: 10px; padding: 2px 4px; }
+    .podium-sound-btn { width: 38px; height: 38px; font-size: 1rem; bottom: 8px; left: 8px; }
 }
 </style>
 </head>
@@ -437,7 +547,10 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
                         </div>
                     </div>
                 </div>
-                <div class="cheer-sound-hint" id="cheer-sound-hint">🔊 اضغط بالماوس في أي مكان لإيقاف صوت التصفيق</div>
+                <!-- أيقونة التحكم بالصوت في أسفل يسار الصورة -->
+                <button type="button" id="podium-sound-btn" class="podium-sound-btn" onclick="toggleCheeringAudio()" title="تشغيل / إيقاف الصوت" aria-label="تشغيل أو إيقاف الصوت">
+                    <i class="fa-solid fa-volume-high" id="podium-sound-icon"></i>
+                </button>
             </div>
 
             <table class="leaderboard-table" style="margin-top: 10px;">
@@ -623,19 +736,33 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
         });
     }
 
+    function updateSoundButtonUI(isPlaying) {
+        const btn = document.getElementById('podium-sound-btn');
+        const icon = document.getElementById('podium-sound-icon');
+        if (!btn || !icon) return;
+
+        if (isPlaying) {
+            btn.classList.remove('muted');
+            icon.className = 'fa-solid fa-volume-high';
+            btn.title = 'إيقاف الصوت';
+        } else {
+            btn.classList.add('muted');
+            icon.className = 'fa-solid fa-volume-xmark';
+            btn.title = 'تشغيل الصوت';
+        }
+    }
+
     function stopCheeringAudio() {
         const cheerAudio = document.getElementById('sound-cheer');
-        const hintEl = document.getElementById('cheer-sound-hint');
         if (cheerAudio) {
             cheerAudio.pause();
             cheerAudio.currentTime = 0;
         }
-        if (hintEl) hintEl.style.display = 'none';
+        updateSoundButtonUI(false);
     }
 
     function startCheeringAudio() {
         const cheerAudio = document.getElementById('sound-cheer');
-        const hintEl = document.getElementById('cheer-sound-hint');
         if (!cheerAudio) return;
 
         cheerAudio.currentTime = 0;
@@ -644,15 +771,29 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 15px r
 
         if (playPromise !== undefined) {
             playPromise.then(() => {
-                if (hintEl) hintEl.style.display = 'block';
-                setTimeout(() => {
-                    document.addEventListener('click', stopCheeringAudio, { once: true });
-                }, 400);
+                updateSoundButtonUI(true);
             }).catch(() => {
-                if (hintEl) hintEl.style.display = 'none';
+                updateSoundButtonUI(false);
             });
         }
     }
+
+    window.toggleCheeringAudio = function() {
+        const cheerAudio = document.getElementById('sound-cheer');
+        if (!cheerAudio) return;
+
+        if (cheerAudio.paused) {
+            cheerAudio.loop = true;
+            cheerAudio.play().then(() => {
+                updateSoundButtonUI(true);
+            }).catch(() => {
+                updateSoundButtonUI(false);
+            });
+        } else {
+            cheerAudio.pause();
+            updateSoundButtonUI(false);
+        }
+    };
 
     function updateAndShowTeacherPodium(playersArray) {
         const banner = document.getElementById('teacher-podium-banner');
