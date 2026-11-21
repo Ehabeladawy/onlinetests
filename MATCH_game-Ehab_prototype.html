@@ -788,6 +788,68 @@
       box-shadow: 0 0 16px #fde047, 0 0 24px #38bdf8;
     }
 
+    /* عرض لعبة التوصيل داخل لوحة المعلم */
+    .teacher-game-preview-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .teacher-connect-arena {
+      position: relative;
+      width: 100%;
+      min-height: clamp(340px, 50vh, 470px);
+      background: rgba(15, 23, 42, 0.42);
+      border: 2px dashed rgba(125, 211, 252, 0.55);
+      border-radius: 22px;
+      padding: clamp(16px, 2.5vw, 28px) clamp(12px, 3vw, 36px);
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    #teacher-rope-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .teacher-connect-arena .cards-column {
+      position: relative;
+      z-index: 10;
+      width: clamp(140px, 28%, 265px);
+      max-height: none;
+      gap: clamp(10px, 1.8vh, 16px);
+    }
+
+    .teacher-connect-arena .word-card {
+      cursor: default;
+    }
+
+    .teacher-connect-arena .word-card.revealed-answer {
+      border-style: solid;
+      border-color: var(--pair-color, #6ee7b7);
+      background: rgba(16, 185, 129, 0.24);
+      box-shadow:
+        0 0 20px var(--pair-glow, rgba(52, 211, 153, 0.75)),
+        inset 0 0 14px rgba(254, 240, 138, 0.18);
+    }
+
+    .teacher-connect-arena .word-card.revealed-answer .anchor-dot {
+      transform: translateY(-50%) scale(1.3);
+      background: var(--pair-color, #6ee7b7);
+      box-shadow: 0 0 14px var(--pair-color, #6ee7b7);
+    }
+
     /* الشريط السفلي الموحد */
     .game-bottom-dock {
       position: relative;
@@ -1738,6 +1800,14 @@
         width: 41.5vw;
         gap: 8px;
       }
+      .teacher-connect-arena {
+        padding: 12px 8px;
+        min-height: 310px;
+      }
+      .teacher-connect-arena .cards-column {
+        width: 41%;
+        gap: 8px;
+      }
       .word-card {
         padding: 6px 12px;
         min-height: 48px;
@@ -1894,10 +1964,11 @@
             <div class="input-card-box pin-box" id="pin-input-box">
               <i class="fa-solid fa-key" style="color:#38bdf8; font-size:1rem;"></i>
               <input
-                type="number"
+                type="text"
                 id="room-pin-input"
                 class="student-input"
                 placeholder="كود الغرفة (4 أرقام)"
+                maxlength="4"
                 inputmode="numeric"
                 autocomplete="off"
               />
@@ -2273,12 +2344,16 @@
           </table>
         </div>
 
-        <!-- معاينة كلمات التوصيل للإشراف وإظهار الإجابات -->
-        <div class="teacher-vocab-section">
+        <!-- عرض لعبة التوصيل ذاتها كما تظهر للطلاب بالضبط (بدون إجابات حتى الضغط على إظهار الإجابات) -->
+        <div class="teacher-game-preview-section" aria-label="عرض لعبة التوصيل للطلاب">
           <h3 style="color:#fef08a; font-size:1.15rem; font-weight:900; text-align:center;">
-            <i class="fa-solid fa-book-open"></i> كلمات التحدي الحالي (للمراجعة والإشراف)
+            <i class="fa-solid fa-gamepad"></i> التحدي الحالي (كما يظهر للطلاب)
           </h3>
-          <div id="teacher-vocab-grid" class="teacher-vocab-grid"></div>
+          <div id="teacher-connect-arena" class="teacher-connect-arena">
+            <canvas id="teacher-rope-canvas"></canvas>
+            <div class="cards-column" id="teacher-col-right-en" aria-label="الكلمات الإنجليزية للمعلم"></div>
+            <div class="cards-column" id="teacher-col-left-ar" aria-label="الترجمة العربية للمعلم"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -2353,7 +2428,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+    import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
     /* =========================================================================
        1. قائمة الكلمات القابلة للتعديل بسهولة (Vocabulary Configuration)
@@ -2648,7 +2723,9 @@
       timeLeft: 999999,
       studentRoomUnsub: null,
       teacherRoomUnsub: null,
-      teacherPodiumShown: false
+      teacherPodiumShown: false,
+      teacherAnswersRevealed: false,
+      teacherConnections: []
     };
 
     const slides = {
@@ -2672,8 +2749,12 @@
         });
       } else if (targetKey === "result") {
         requestAnimationFrame(() => resizeCanvases());
-      } else if (targetKey === "teacherLeaderboard" && state.teacherPodiumShown) {
-        requestAnimationFrame(() => fitAllWinnerNames());
+      } else if (targetKey === "teacherLeaderboard") {
+        requestAnimationFrame(() => {
+          resizeTeacherRopeCanvas();
+          syncTeacherRopes();
+          if (state.teacherPodiumShown) fitAllWinnerNames();
+        });
       }
     }
 
@@ -2797,15 +2878,21 @@
         }
       }
 
-      draw(ctx, isDragging = false) {
+      draw(ctx, isDragging = false, customColor = null) {
         if (this.nodes.length < 2) return;
         const start = this.nodes[0];
         const end = this.nodes[this.nodes.length - 1];
 
         const grad = ctx.createLinearGradient(start.x, start.y, end.x, end.y);
-        grad.addColorStop(0, "#38bdf8");
-        grad.addColorStop(0.5, "#fde047");
-        grad.addColorStop(1, "#38bdf8");
+        if (customColor) {
+          grad.addColorStop(0, customColor);
+          grad.addColorStop(0.5, "#fef08a");
+          grad.addColorStop(1, customColor);
+        } else {
+          grad.addColorStop(0, "#38bdf8");
+          grad.addColorStop(0.5, "#fde047");
+          grad.addColorStop(1, "#38bdf8");
+        }
 
         ctx.save();
         ctx.lineCap = "round";
@@ -2823,9 +2910,9 @@
         };
 
         traceCurve();
-        ctx.strokeStyle = isDragging ? "rgba(253, 224, 71, 0.55)" : "rgba(56, 189, 248, 0.45)";
+        ctx.strokeStyle = customColor ? customColor + "66" : (isDragging ? "rgba(253, 224, 71, 0.55)" : "rgba(56, 189, 248, 0.45)");
         ctx.lineWidth = isDragging ? 13 : 11;
-        ctx.shadowColor = "#38bdf8";
+        ctx.shadowColor = customColor || "#38bdf8";
         ctx.shadowBlur = 18;
         ctx.stroke();
 
@@ -3068,7 +3155,7 @@
     }
 
     function refreshCardConnectionClasses() {
-      document.querySelectorAll(".word-card").forEach((c) => {
+      slides.game.querySelectorAll(".word-card").forEach((c) => {
         c.classList.remove("connected", "selected");
         c.style.transform = "";
       });
@@ -3147,7 +3234,7 @@
         spawnSparkle(e.clientX, e.clientY, 1);
       }
 
-      document.querySelectorAll(".word-card.drag-hover").forEach((c) => c.classList.remove("drag-hover"));
+      slides.game.querySelectorAll(".word-card.drag-hover").forEach((c) => c.classList.remove("drag-hover"));
       const target = findCardUnderPoint(e.clientX, e.clientY);
       if (target && target.dataset.side !== state.activeDrag.fromSide) {
         target.classList.add("drag-hover");
@@ -3157,7 +3244,7 @@
     window.addEventListener("pointerup", (e) => {
       if (!state.activeDrag) return;
 
-      document.querySelectorAll(".word-card.drag-hover").forEach((c) => c.classList.remove("drag-hover"));
+      slides.game.querySelectorAll(".word-card.drag-hover").forEach((c) => c.classList.remove("drag-hover"));
       const target = findCardUnderPoint(e.clientX, e.clientY);
       const { fromSide, fromId, moved, wasConnected } = state.activeDrag;
       state.activeDrag = null;
@@ -3192,6 +3279,43 @@
     const ropeCtx = ropeCanvas.getContext("2d");
     const confettiCanvas = document.getElementById("confetti-canvas");
     const confettiCtx = confettiCanvas.getContext("2d");
+    const teacherArenaEl = document.getElementById("teacher-connect-arena");
+    const teacherRopeCanvas = document.getElementById("teacher-rope-canvas");
+    const teacherRopeCtx = teacherRopeCanvas.getContext("2d");
+
+    function resizeTeacherRopeCanvas() {
+      if (!teacherArenaEl || !teacherRopeCanvas) return;
+      const rect = teacherArenaEl.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const dpr = window.devicePixelRatio || 1;
+      teacherRopeCanvas.width = Math.floor(rect.width * dpr);
+      teacherRopeCanvas.height = Math.floor(rect.height * dpr);
+      teacherRopeCanvas.style.width = `${rect.width}px`;
+      teacherRopeCanvas.style.height = `${rect.height}px`;
+      teacherRopeCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function getTeacherAnchorPos(cardEl) {
+      const arenaRect = teacherArenaEl.getBoundingClientRect();
+      const dot = cardEl.querySelector(".anchor-dot");
+      const dotRect = dot.getBoundingClientRect();
+      return {
+        x: dotRect.left - arenaRect.left + dotRect.width / 2,
+        y: dotRect.top - arenaRect.top + dotRect.height / 2
+      };
+    }
+
+    function syncTeacherRopes() {
+      if (!teacherArenaEl || state.teacherConnections.length === 0) return;
+      state.teacherConnections.forEach((conn) => {
+        if (conn.enCard && conn.arCard) {
+          const p1 = getTeacherAnchorPos(conn.enCard);
+          const p2 = getTeacherAnchorPos(conn.arCard);
+          conn.rope.setStart(p1.x, p1.y);
+          conn.rope.setEnd(p2.x, p2.y);
+        }
+      });
+    }
 
     function resizeCanvases() {
       const dpr = window.devicePixelRatio || 1;
@@ -3206,6 +3330,10 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       });
       syncAllConnectedRopes();
+      if (state.currentSlide === "teacherLeaderboard") {
+        resizeTeacherRopeCanvas();
+        syncTeacherRopes();
+      }
       if (state.teacherPodiumShown) fitAllWinnerNames();
     }
 
@@ -3282,6 +3410,21 @@
           confettiCtx.fillStyle = p.color;
           confettiCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
           confettiCtx.restore();
+        }
+      } else if (state.currentSlide === "teacherLeaderboard" && teacherArenaEl) {
+        const rect = teacherArenaEl.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          teacherRopeCtx.clearRect(0, 0, rect.width, rect.height);
+          state.teacherConnections.forEach((conn) => {
+            if (conn.enCard && conn.arCard) {
+              const p1 = getTeacherAnchorPos(conn.enCard);
+              const p2 = getTeacherAnchorPos(conn.arCard);
+              conn.rope.setStart(p1.x, p1.y);
+              conn.rope.setEnd(p2.x, p2.y);
+            }
+            conn.rope.update(timeSec);
+            conn.rope.draw(teacherRopeCtx, false, conn.color);
+          });
         }
       }
 
@@ -3495,6 +3638,10 @@
       if (e.key === "Enter") handleEnterGame();
       else startHint.classList.remove("visible");
     });
+    roomPinInput.addEventListener("input", () => {
+      roomPinInput.value = roomPinInput.value.replace(/\D/g, "").slice(0, 4);
+      startHint.classList.remove("visible");
+    });
     roomPinInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") handleEnterGame();
       else startHint.classList.remove("visible");
@@ -3505,6 +3652,10 @@
         state.studentRoomUnsub();
         state.studentRoomUnsub = null;
       }
+      if (db && state.roomPin && state.studentKey) {
+        remove(ref(db, `${ROOMS_ROOT}/${state.roomPin}/players/${state.studentKey}`)).catch(() => {});
+      }
+      state.roomPin = "";
       showSlide("start");
     });
 
@@ -3632,6 +3783,9 @@
 
     const reviewBackdrop = document.getElementById("review-modal-backdrop");
     function openReviewModal() {
+      if (!document.getElementById("review-list").children.length) {
+        buildReviewList();
+      }
       reviewBackdrop.classList.add("open");
     }
     document.getElementById("btn-open-review").addEventListener("click", openReviewModal);
@@ -3650,14 +3804,18 @@
       const el = document.getElementById(containerId);
       if (!el || typeof window.QRCode === "undefined") return;
       el.innerHTML = "";
-      new window.QRCode(el, {
-        text: window.location.href,
-        width: size,
-        height: size,
-        colorDark: "#1e3a8a",
-        colorLight: "#ffffff",
-        correctLevel: window.QRCode.CorrectLevel.H
-      });
+      try {
+        new window.QRCode(el, {
+          text: window.location.href,
+          width: size,
+          height: size,
+          colorDark: "#1e3a8a",
+          colorLight: "#ffffff",
+          correctLevel: window.QRCode.CorrectLevel.M
+        });
+      } catch (err) {
+        el.innerHTML = '<div style="padding:14px;color:#1e3a8a;font-weight:800;font-size:0.88rem;">تعذر توليد رمز QR للرابط الحالي</div>';
+      }
     }
 
     document.getElementById("btn-open-qr").addEventListener("click", () => {
@@ -3719,19 +3877,107 @@
     /* =========================================================================
        13. لوحة تحكم المعلم ولوحة الصدارة ومنصة التتويج الاحتفالية
        ========================================================================= */
-    function buildTeacherVocabGrid(revealed = false) {
-      const grid = document.getElementById("teacher-vocab-grid");
-      grid.innerHTML = "";
+    const TEACHER_PAIR_COLORS = ["#34d399", "#38bdf8", "#facc15", "#fb7185", "#c084fc"];
+
+    function createTeacherPreviewCard(side, id, text, icon) {
+      const card = document.createElement("div");
+      card.className = `word-card ${side === "en" ? "en-card" : "ar-card"}`;
+      card.dataset.side = side;
+      card.dataset.id = String(id);
+      card.innerHTML = `
+        <span class="card-emoji" aria-hidden="true">${icon}</span>
+        <span class="card-text">${text}</span>
+        <span class="anchor-dot"></span>
+      `;
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `translateY(-5px) scale(1.04) rotateX(${-y * 12}deg) rotateY(${x * 14}deg)`;
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "";
+      });
+      return card;
+    }
+
+    function buildTeacherGamePreview(revealed = false) {
+      const enCol = document.getElementById("teacher-col-right-en");
+      const arCol = document.getElementById("teacher-col-left-ar");
+      if (!enCol || !arCol) return;
+
+      enCol.innerHTML = "";
+      arCol.innerHTML = "";
+      state.teacherConnections = [];
+      state.teacherAnswersRevealed = false;
+      if (teacherRopeCtx && teacherArenaEl) {
+        const r = teacherArenaEl.getBoundingClientRect();
+        teacherRopeCtx.clearRect(0, 0, r.width, r.height);
+      }
+
+      // خلط العمود العربي بحيث لا يطابق ترتيب العمود الإنجليزي قبل إظهار الإجابات
+      let shuffledAr = shuffleArray(VOCABULARY);
+      if (VOCABULARY.length > 1) {
+        let attempts = 0;
+        while (shuffledAr.every((item, idx) => item.id === VOCABULARY[idx].id) && attempts < 10) {
+          shuffledAr = shuffleArray(VOCABULARY);
+          attempts++;
+        }
+      }
+
       VOCABULARY.forEach((item) => {
-        const card = document.createElement("div");
-        card.className = `vocab-preview-card ${revealed ? "revealed" : ""}`;
-        card.innerHTML = `
-          <div style="font-size:1.65rem; line-height:1;">${item.icon}</div>
-          <div class="vocab-preview-en">${item.en}</div>
-          <div class="vocab-preview-ar">${item.ar}</div>
-          <div class="vocab-revealed-check"><i class="fa-solid fa-circle-check"></i> إجابة صحيحة</div>
-        `;
-        grid.appendChild(card);
+        enCol.appendChild(createTeacherPreviewCard("en", item.id, item.en, item.icon));
+      });
+
+      shuffledAr.forEach((item) => {
+        arCol.appendChild(createTeacherPreviewCard("ar", item.id, item.ar, "✨"));
+      });
+
+      requestAnimationFrame(() => {
+        resizeTeacherRopeCanvas();
+        if (revealed) {
+          revealTeacherGameAnswers();
+        }
+      });
+    }
+
+    function revealTeacherGameAnswers() {
+      const enCol = document.getElementById("teacher-col-right-en");
+      const arCol = document.getElementById("teacher-col-left-ar");
+      if (!enCol || !arCol) return;
+
+      if (!enCol.children.length) {
+        buildTeacherGamePreview(true);
+        return;
+      }
+
+      if (state.teacherAnswersRevealed) return;
+      state.teacherAnswersRevealed = true;
+      state.teacherConnections = [];
+
+      requestAnimationFrame(() => {
+        resizeTeacherRopeCanvas();
+        VOCABULARY.forEach((item, idx) => {
+          const enCard = enCol.querySelector(`.word-card[data-id="${item.id}"]`);
+          const arCard = arCol.querySelector(`.word-card[data-id="${item.id}"]`);
+          if (!enCard || !arCard) return;
+
+          const color = TEACHER_PAIR_COLORS[idx % TEACHER_PAIR_COLORS.length];
+          setTimeout(() => {
+            enCard.style.setProperty("--pair-color", color);
+            enCard.style.setProperty("--pair-glow", color + "aa");
+            arCard.style.setProperty("--pair-color", color);
+            arCard.style.setProperty("--pair-glow", color + "aa");
+            enCard.classList.add("connected", "revealed-answer");
+            arCard.classList.add("connected", "revealed-answer");
+
+            const p1 = getTeacherAnchorPos(enCard);
+            const p2 = getTeacherAnchorPos(arCard);
+            const rope = new ElasticRope(p1.x, p1.y, p2.x, p2.y, 14);
+            state.teacherConnections.push({ enCard, arCard, rope, color });
+            SoundFX.playNeutralConnect();
+          }, idx * 160);
+        });
       });
     }
 
@@ -3741,7 +3987,7 @@
         return;
       }
 
-      if (!state.roomPin) {
+      if (!state.teacherRoomUnsub) {
         state.roomPin = String(Math.floor(1000 + Math.random() * 9000));
         document.getElementById("teacher-pin-display").textContent = state.roomPin;
         renderQRCodeInto("teacher-setup-qrcode", 136);
@@ -3761,7 +4007,7 @@
           if (!roomData) return;
 
           if (roomData.status === "show_answers") {
-            buildTeacherVocabGrid(true);
+            revealTeacherGameAnswers();
           }
 
           const playersObj = roomData.players || {};
@@ -3844,7 +4090,8 @@
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
     }
 
     document.getElementById("btn-teacher-exit-setup").addEventListener("click", () => {
@@ -3867,7 +4114,7 @@
         timeLimit: timeLimit
       }).catch(() => {});
 
-      buildTeacherVocabGrid(false);
+      buildTeacherGamePreview(false);
       showSlide("teacherLeaderboard");
       SoundFX.playNeutralConnect();
     });
@@ -3905,7 +4152,7 @@
         "إظهار الإجابات الصحيحة",
         "هل تريد إظهار الإجابات الصحيحة لجميع الطلاب وعلى لوحة المعلم الآن؟",
         () => {
-          buildTeacherVocabGrid(true);
+          revealTeacherGameAnswers();
           update(ref(db, `${ROOMS_ROOT}/${state.roomPin}`), {
             status: "show_answers",
             showAnswers: Date.now()
