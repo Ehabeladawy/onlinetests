@@ -998,6 +998,34 @@
       animation: popLand 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
+    .blank-input.revealed-answer {
+      border-style: solid !important;
+      border-color: #6ee7b7 !important;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.45) 0%, rgba(5, 150, 105, 0.58) 100%) !important;
+      color: #fef08a !important;
+      box-shadow: 0 0 22px rgba(52, 211, 153, 0.88), inset 0 0 12px rgba(254, 240, 138, 0.3) !important;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.75);
+    }
+
+    .teacher-game-preview-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .teacher-game-preview-section .drag-word-tile,
+    .teacher-game-preview-section .blank-input {
+      cursor: default;
+    }
+
+    .teacher-game-preview-section .drag-word-tile.revealed-used {
+      border-color: #6ee7b7;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.42), 0 0 22px rgba(52, 211, 153, 0.7);
+    }
+
     @keyframes popLand {
       0% { transform: scale(0.86); box-shadow: 0 0 34px #facc15; }
       60% { transform: scale(1.1); box-shadow: 0 0 28px #38bdf8; }
@@ -2493,12 +2521,31 @@
           </table>
         </div>
 
-        <!-- معاينة إجابات الفراغات للمعلم -->
-        <div class="teacher-vocab-section">
+        <!-- عرض اللعبة ذاتها كما تظهر للطالب بالضبط (بدون إجابات حتى الضغط على إظهار الإجابات) -->
+        <div class="teacher-game-preview-section" aria-label="عرض اللعبة للطلاب">
           <h3 style="color:#fef08a; font-size:1.15rem; font-weight:900; text-align:center;">
-            <i class="fa-solid fa-book-open"></i> فراغات التحدي الحالي (للمراجعة والإشراف)
+            <i class="fa-solid fa-gamepad"></i> التحدي الحالي (كما يظهر للطلاب)
           </h3>
-          <div id="teacher-vocab-grid" class="teacher-vocab-grid"></div>
+
+          <div class="word-bank-stage">
+            <div class="word-bank-hint-bar">
+              <span class="hint-pill"><i class="fa-solid fa-hand-pointer"></i> اسحب الكلمة للفراغ</span>
+              <span class="hint-pill"><i class="fa-solid fa-bolt"></i> أو اضغط عليها لتصبح صفراء ثم اضغط الفراغ (Teleport)</span>
+              <span class="hint-pill"><i class="fa-solid fa-keyboard"></i> أو اكتبها مباشرة</span>
+            </div>
+            <div id="teacher-word-bank-grid" class="word-bank-grid" aria-label="بنك كلمات المعلم"></div>
+          </div>
+
+          <div class="passage-stage-card">
+            <div class="card-sheen-clip"></div>
+            <div class="passage-title-ribbon">
+              <div class="passage-heading-en">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Read and complete the text with the words in the box:</span>
+              </div>
+            </div>
+            <div id="teacher-passage-paragraph" class="passage-paragraph"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -2911,7 +2958,8 @@
       timeLeft: 999999,
       studentRoomUnsub: null,
       teacherRoomUnsub: null,
-      teacherPodiumShown: false
+      teacherPodiumShown: false,
+      teacherAnswersRevealed: false
     };
 
     const slides = {
@@ -3094,7 +3142,7 @@
           .filter(Boolean)
       );
 
-      document.querySelectorAll(".drag-word-tile").forEach((tile) => {
+      wordBankGrid.querySelectorAll(".drag-word-tile").forEach((tile) => {
         const w = tile.dataset.word.toLowerCase();
         tile.classList.toggle("used-in-gap", usedSet.has(w));
       });
@@ -3112,8 +3160,8 @@
     function clearTeleportSelection() {
       state.activeTeleportWord = null;
       state.activeTeleportTile = null;
-      document.querySelectorAll(".drag-word-tile").forEach((t) => t.classList.remove("active-word"));
-      document.querySelectorAll(".blank-input").forEach((inp) => inp.classList.remove("teleport-ready"));
+      wordBankGrid.querySelectorAll(".drag-word-tile").forEach((t) => t.classList.remove("active-word"));
+      passageParagraph.querySelectorAll(".blank-input").forEach((inp) => inp.classList.remove("teleport-ready"));
     }
 
     function selectWordForTeleport(tileEl, word) {
@@ -3126,7 +3174,7 @@
       state.activeTeleportWord = word;
       state.activeTeleportTile = tileEl;
       tileEl.classList.add("active-word");
-      document.querySelectorAll(".blank-input").forEach((inp) => inp.classList.add("teleport-ready"));
+      passageParagraph.querySelectorAll(".blank-input").forEach((inp) => inp.classList.add("teleport-ready"));
       SoundFX.playTeleportSelect();
 
       const r = tileEl.getBoundingClientRect();
@@ -3211,7 +3259,7 @@
         });
         tile.addEventListener("dragend", () => {
           tile.style.opacity = "";
-          document.querySelectorAll(".blank-input.drag-over").forEach((b) => b.classList.remove("drag-over"));
+          passageParagraph.querySelectorAll(".blank-input.drag-over").forEach((b) => b.classList.remove("drag-over"));
         });
 
         // السحب باللمس (Mobile & Tablet Touch Drag + Auto-Scroll)
@@ -3246,7 +3294,7 @@
           if (touch.clientY < 85) slideGameEl.scrollBy(0, -10);
           else if (window.innerHeight - touch.clientY < 85) slideGameEl.scrollBy(0, 10);
 
-          document.querySelectorAll(".blank-input.drag-over").forEach((b) => b.classList.remove("drag-over"));
+          passageParagraph.querySelectorAll(".blank-input.drag-over").forEach((b) => b.classList.remove("drag-over"));
           const underEl = document.elementFromPoint(touch.clientX, touch.clientY);
           if (underEl && underEl.classList.contains("blank-input")) {
             underEl.classList.add("drag-over");
@@ -3255,7 +3303,7 @@
 
         tile.addEventListener("touchend", (e) => {
           touchGhost.style.display = "none";
-          document.querySelectorAll(".blank-input.drag-over").forEach((b) => b.classList.remove("drag-over"));
+          passageParagraph.querySelectorAll(".blank-input.drag-over").forEach((b) => b.classList.remove("drag-over"));
           if (!touchMoved) return;
 
           const touch = e.changedTouches[0];
@@ -3297,7 +3345,7 @@
           inp.classList.remove("drag-over");
           const droppedWord = e.dataTransfer.getData("text/plain");
           if (droppedWord) {
-            const matchingTile = Array.from(document.querySelectorAll(".drag-word-tile")).find((t) => t.dataset.word === droppedWord) || null;
+            const matchingTile = Array.from(wordBankGrid.querySelectorAll(".drag-word-tile")).find((t) => t.dataset.word === droppedWord) || null;
             applyWordToGap(g.id, droppedWord, matchingTile);
           }
         });
@@ -3904,19 +3952,79 @@
     /* =========================================================================
        13. لوحة تحكم المعلم ولوحة الصدارة ومنصة التتويج الاحتفالية
        ========================================================================= */
-    function buildTeacherGapsGrid(revealed = false) {
-      const grid = document.getElementById("teacher-vocab-grid");
-      grid.innerHTML = "";
-      GAP_QUESTIONS.forEach((g) => {
-        const card = document.createElement("div");
-        card.className = `vocab-preview-card ${revealed ? "revealed" : ""}`;
-        card.innerHTML = `
-          <div style="font-size:1.1rem; font-weight:900; color:#7dd3fc;">الفراغ رقم (${g.id})</div>
-          <div class="vocab-preview-en">${g.answer}</div>
-          <div class="vocab-preview-ar">${g.reviewText}</div>
-          <div class="vocab-revealed-check"><i class="fa-solid fa-circle-check"></i> إجابة صحيحة</div>
+    function buildTeacherGamePreview(revealed = false) {
+      const bankEl = document.getElementById("teacher-word-bank-grid");
+      const paraEl = document.getElementById("teacher-passage-paragraph");
+      if (!bankEl || !paraEl) return;
+
+      state.teacherAnswersRevealed = revealed;
+
+      // 1. بناء بنك الكلمات مطابقاً لشاشة الطالب
+      bankEl.innerHTML = "";
+      const answerSet = new Set(GAP_QUESTIONS.map((g) => g.answer.toLowerCase()));
+      WORD_BANK.forEach((word) => {
+        const tile = document.createElement("div");
+        tile.className = "drag-word-tile";
+        tile.dataset.word = word;
+        if (revealed && answerSet.has(word.toLowerCase())) {
+          tile.classList.add("revealed-used");
+        }
+        tile.innerHTML = `
+          <i class="fa-solid fa-star tile-spark-icon" aria-hidden="true"></i>
+          <span class="tile-word-label">${word}</span>
         `;
-        grid.appendChild(card);
+
+        tile.addEventListener("mousemove", (e) => {
+          const rect = tile.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          tile.style.transform = `translateY(-6px) scale(1.07) rotateX(${-y * 16}deg) rotateY(${x * 18}deg)`;
+        });
+        tile.addEventListener("mouseleave", () => {
+          tile.style.transform = "";
+        });
+
+        bankEl.appendChild(tile);
+      });
+
+      // 2. بناء الفقرة والفراغات مطابقة لشاشة الطالب (فارغة تماماً حتى الضغط على إظهار الإجابات)
+      let paraHtml = "";
+      GAP_QUESTIONS.forEach((g) => {
+        const valAttr = revealed ? ` value="${escapeHtml(g.answer)}"` : "";
+        const extraCls = revealed ? " filled revealed-answer" : "";
+        paraHtml += `${g.before}<span class="gap-number-badge">${g.id}</span><input type="text" id="teacher-gap-input-${g.id}" class="blank-input${extraCls}" placeholder=".........." readonly tabindex="-1"${valAttr} />${g.after}`;
+      });
+      paraEl.innerHTML = paraHtml;
+    }
+
+    function revealTeacherGameAnswers() {
+      const bankEl = document.getElementById("teacher-word-bank-grid");
+      const paraEl = document.getElementById("teacher-passage-paragraph");
+      if (!bankEl || !paraEl) return;
+
+      if (!paraEl.children.length) {
+        buildTeacherGamePreview(true);
+        return;
+      }
+
+      if (state.teacherAnswersRevealed) return;
+      state.teacherAnswersRevealed = true;
+
+      const answerSet = new Set(GAP_QUESTIONS.map((g) => g.answer.toLowerCase()));
+      bankEl.querySelectorAll(".drag-word-tile").forEach((tile) => {
+        if (answerSet.has((tile.dataset.word || "").toLowerCase())) {
+          tile.classList.add("revealed-used");
+        }
+      });
+
+      GAP_QUESTIONS.forEach((g, idx) => {
+        const inp = document.getElementById(`teacher-gap-input-${g.id}`);
+        if (!inp) return;
+        setTimeout(() => {
+          inp.value = g.answer;
+          inp.classList.add("filled", "revealed-answer", "pop-landed");
+          SoundFX.playNeutralDrop();
+        }, idx * 140);
       });
     }
 
@@ -3946,7 +4054,7 @@
           if (!roomData) return;
 
           if (roomData.status === "show_answers") {
-            buildTeacherGapsGrid(true);
+            revealTeacherGameAnswers();
           }
 
           const playersObj = roomData.players || {};
@@ -4050,7 +4158,7 @@
         timeLimit: timeLimit
       }).catch(() => {});
 
-      buildTeacherGapsGrid(false);
+      buildTeacherGamePreview(false);
       showSlide("teacherLeaderboard");
       SoundFX.playNeutralDrop();
     });
@@ -4088,7 +4196,7 @@
         "إظهار الإجابات الصحيحة",
         "هل تريد إظهار الإجابات الصحيحة لجميع الطلاب وعلى لوحة المعلم الآن؟",
         () => {
-          buildTeacherGapsGrid(true);
+          revealTeacherGameAnswers();
           update(ref(db, `${ROOMS_ROOT}/${state.roomPin}`), {
             status: "show_answers",
             showAnswers: Date.now()
