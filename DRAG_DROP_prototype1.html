@@ -595,19 +595,79 @@
        7. الشريحة 3: شاشة لعبة السحب والإدراج المبهرة
           (الأعلى فارغ لـ mr ehab eladawy والفوانيس بالأسفل)
        ===================================================================== */
-    #slide-game {
-      justify-content: space-between;
-      padding-top: clamp(72px, 12vh, 128px);
-      padding-bottom: clamp(8px, 1.5vh, 14px);
+    /* جعل شرائح اللعب ولوحة المعلم بنظام Block مع حاوية خلفية مكررة تغطي التمرير بالكامل */
+    #slide-game,
+    #slide-teacher-setup,
+    #slide-teacher-leaderboard {
+      display: block;
+      padding: 0;
+      overflow-x: hidden;
       overflow-y: auto;
     }
 
+    .repeating-game-bg {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: auto;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #0c4a6e;
+      background-image:
+        radial-gradient(circle at center, rgba(14, 30, 68, 0.06) 0%, rgba(15, 23, 58, 0.36) 100%),
+        url("https://lh3.googleusercontent.com/d/18NIZp_E0cBclLranpzT_ElDZVo1bRt3v"),
+        url("https://drive.google.com/thumbnail?id=18NIZp_E0cBclLranpzT_ElDZVo1bRt3v&sz=w1920");
+      background-repeat: repeat-y, repeat-y, repeat-y;
+      background-position: center top, center top, center top;
+      background-size: 100% 100vh, 100% auto, 100% auto;
+    }
+
+    /* طبقة تكديس صور الخلفية المتكررة أسفل بعضها حتى نهاية الصفحة بدون فراغ أزرق */
+    .stacked-bg-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .stacked-bg-tile {
+      width: 100%;
+      height: auto;
+      min-height: 100dvh;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      flex: 0 0 auto;
+    }
+
+    .stacked-bg-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(circle at center, rgba(14, 30, 68, 0.05) 0%, rgba(15, 23, 58, 0.38) 100%);
+    }
+
+    #slide-game .repeating-game-bg {
+      justify-content: space-between;
+      padding-top: clamp(72px, 12vh, 128px);
+      padding-bottom: clamp(12px, 2vh, 22px);
+    }
+
+    /* كانفس المؤثرات مثبت مباشرة على Viewport خارج الشرائح لثبات دقة حركة Teleport مع التمرير */
     #fx-canvas {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 25;
+      z-index: 50;
       pointer-events: none;
     }
 
@@ -1016,9 +1076,26 @@
       margin-top: 4px;
     }
 
-    .teacher-game-preview-section .drag-word-tile,
+    .teacher-preview-header {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 4px;
+    }
+
+    .teacher-game-preview-section .drag-word-tile {
+      cursor: grab;
+    }
+
+    .teacher-game-preview-section .drag-word-tile:active {
+      cursor: grabbing;
+    }
+
     .teacher-game-preview-section .blank-input {
-      cursor: default;
+      cursor: pointer;
     }
 
     .teacher-game-preview-section .drag-word-tile.revealed-used {
@@ -1968,9 +2045,9 @@
         width: 100%;
         max-width: 100%;
       }
-      #slide-game {
+      #slide-game .repeating-game-bg {
         padding-top: clamp(64px, 11vh, 100px);
-        padding-bottom: 8px;
+        padding-bottom: 18px;
       }
       .drag-word-tile {
         min-width: 106px;
@@ -2037,9 +2114,9 @@
         height: 34px;
         font-size: 1.15rem;
       }
-      #slide-game {
+      #slide-game .repeating-game-bg {
         padding-top: clamp(46px, 11vh, 72px);
-        padding-bottom: 6px;
+        padding-bottom: 12px;
       }
       .game-bottom-dock {
         padding: 5px 14px;
@@ -2055,6 +2132,9 @@
 
   <!-- شبح السحب باللمس للموبايل والتابلت -->
   <div id="touch-drag-ghost"></div>
+
+  <!-- كانفس الشرر السحري وأشعة الانتقال الآني (Teleport FX) مثبت مباشرة على الشاشة -->
+  <canvas id="fx-canvas"></canvas>
 
   <!-- =======================================================================
        الشريحة 1: صفحة البداية واختيار الوضع (فردي / جماعي)
@@ -2209,19 +2289,12 @@
        الشريحة 3: شاشة لعبة السحب والإدراج (الأعلى فارغ والفوانيس بالأسفل)
        ======================================================================= -->
   <section id="slide-game" class="slide" aria-label="شاشة السحب والإدراج">
-    <img
-      class="slide-bg-img"
-      src="https://lh3.googleusercontent.com/d/18NIZp_E0cBclLranpzT_ElDZVo1bRt3v"
-      alt="خلفية وادي الفوانيس المسحور"
-      onerror="handleDriveImgFallback(this, '18NIZp_E0cBclLranpzT_ElDZVo1bRt3v', 'linear-gradient(180deg, #0c4a6e 0%, #1e3a8a 55%, #312e81 100%)')"
-    />
-    <div class="slide-vignette"></div>
-
-    <!-- كانفس الشرر السحري وأشعة الانتقال الآني (Teleport FX) -->
-    <canvas id="fx-canvas"></canvas>
+    <div class="repeating-game-bg" id="student-repeating-bg">
+      <div class="stacked-bg-layer" aria-hidden="true"></div>
+      <div class="stacked-bg-vignette" aria-hidden="true"></div>
 
     <!-- ساحة لعبة السحب والإدراج -->
-    <main class="drag-game-arena">
+    <main class="drag-game-arena" id="student-drag-arena">
       <!-- 1. بنك الكلمات الزجاجي العلوي -->
       <div class="word-bank-stage">
         <div class="word-bank-hint-bar">
@@ -2275,6 +2348,7 @@
         <span>تسليم الاختبار</span>
       </button>
     </footer>
+    </div>
   </section>
 
   <!-- =======================================================================
@@ -2347,15 +2421,11 @@
        الشريحة 5: لوحة إعداد غرفة المعلم
        ======================================================================= -->
   <section id="slide-teacher-setup" class="slide" aria-label="إعداد غرفة المعلم">
-    <img
-      class="slide-bg-img"
-      src="https://lh3.googleusercontent.com/d/18NIZp_E0cBclLranpzT_ElDZVo1bRt3v"
-      alt="خلفية لوحة المعلم"
-      onerror="handleDriveImgFallback(this, '18NIZp_E0cBclLranpzT_ElDZVo1bRt3v', 'linear-gradient(135deg, #0369a1 0%, #4f46e5 50%, #9333ea 100%)')"
-    />
-    <div class="slide-vignette"></div>
+    <div class="repeating-game-bg" id="teacher-setup-repeating-bg">
+      <div class="stacked-bg-layer" aria-hidden="true"></div>
+      <div class="stacked-bg-vignette" aria-hidden="true"></div>
 
-    <div class="teacher-scroll-container">
+    <div class="teacher-scroll-container" id="teacher-setup-scroll-container">
       <div class="teacher-glass-panel">
         <div class="teacher-header-bar">
           <div class="teacher-brand-box">
@@ -2418,21 +2488,18 @@
         </button>
       </div>
     </div>
+    </div>
   </section>
 
   <!-- =======================================================================
        الشريحة 6: لوحة الصدارة المباشرة للمعلم + منصة التتويج + الفراغات
        ======================================================================= -->
   <section id="slide-teacher-leaderboard" class="slide" aria-label="لوحة الصدارة المباشرة للمعلم">
-    <img
-      class="slide-bg-img"
-      src="https://lh3.googleusercontent.com/d/18NIZp_E0cBclLranpzT_ElDZVo1bRt3v"
-      alt="خلفية لوحة الصدارة"
-      onerror="handleDriveImgFallback(this, '18NIZp_E0cBclLranpzT_ElDZVo1bRt3v', 'linear-gradient(135deg, #0369a1 0%, #4f46e5 50%, #9333ea 100%)')"
-    />
-    <div class="slide-vignette"></div>
+    <div class="repeating-game-bg" id="teacher-leaderboard-repeating-bg">
+      <div class="stacked-bg-layer" aria-hidden="true"></div>
+      <div class="stacked-bg-vignette" aria-hidden="true"></div>
 
-    <div class="teacher-scroll-container">
+    <div class="teacher-scroll-container" id="teacher-leaderboard-scroll-container">
       <div class="teacher-glass-panel">
         <div class="teacher-header-bar">
           <div class="teacher-brand-box">
@@ -2521,11 +2588,17 @@
           </table>
         </div>
 
-        <!-- عرض اللعبة ذاتها كما تظهر للطالب بالضبط (بدون إجابات حتى الضغط على إظهار الإجابات) -->
+        <!-- عرض اللعبة التفاعلية للمعلم (يمكن للمعلم السحب والإدراج والـ Teleport للشرح المباشر أو إظهار الإجابات مباشرة) -->
         <div class="teacher-game-preview-section" aria-label="عرض اللعبة للطلاب">
-          <h3 style="color:#fef08a; font-size:1.15rem; font-weight:900; text-align:center;">
-            <i class="fa-solid fa-gamepad"></i> التحدي الحالي (كما يظهر للطلاب)
-          </h3>
+          <div class="teacher-preview-header">
+            <h3 style="color:#fef08a; font-size:1.12rem; font-weight:900;">
+              <i class="fa-solid fa-gamepad"></i> التحدي الحالي (يمكنك السحب والإدراج هنا للشرح المباشر للطلاب)
+            </h3>
+            <button type="button" id="btn-teacher-clear-demo" class="dock-btn" title="مسح إجابات الشرح">
+              <i class="fa-solid fa-eraser"></i>
+              <span>مسح الإجابات</span>
+            </button>
+          </div>
 
           <div class="word-bank-stage">
             <div class="word-bank-hint-bar">
@@ -2548,6 +2621,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </section>
 
@@ -2653,6 +2727,55 @@
         reviewText: "4. For example, (.....) use machines to grow crops faster."
       }
     ];
+
+    const GAME_BG_FILE_ID = "18NIZp_E0cBclLranpzT_ElDZVo1bRt3v";
+    const GAME_BG_URL = `https://lh3.googleusercontent.com/d/${GAME_BG_FILE_ID}`;
+
+    /* دالة تكرار وتكديس صورة الخلفية عمودياً لتغطية كامل الصفحة عند التمرير للطالب والمعلم */
+    function syncStackedBackgrounds() {
+      document.querySelectorAll(".repeating-game-bg").forEach((container) => {
+        const layer = container.querySelector(".stacked-bg-layer");
+        if (!layer) return;
+
+        const containerHeight = Math.max(container.scrollHeight, window.innerHeight);
+        const firstTile = layer.querySelector(".stacked-bg-tile");
+        let tileHeight = window.innerHeight || 800;
+
+        if (firstTile && firstTile.getBoundingClientRect().height > 200) {
+          tileHeight = firstTile.getBoundingClientRect().height;
+        }
+
+        const neededTiles = Math.max(2, Math.ceil(containerHeight / tileHeight) + 1);
+
+        while (layer.children.length < neededTiles) {
+          const img = document.createElement("img");
+          img.className = "stacked-bg-tile";
+          img.src = GAME_BG_URL;
+          img.alt = "";
+          img.loading = "eager";
+          img.decoding = "async";
+          img.onerror = function () {
+            window.handleDriveImgFallback(this, GAME_BG_FILE_ID, null);
+          };
+          img.onload = function () {
+            requestAnimationFrame(() => syncStackedBackgrounds());
+          };
+          layer.appendChild(img);
+        }
+      });
+    }
+
+    if (typeof ResizeObserver !== "undefined") {
+      const bgResizeObserver = new ResizeObserver(() => {
+        syncStackedBackgrounds();
+      });
+      const studentArenaEl = document.getElementById("student-drag-arena");
+      const setupScrollEl = document.getElementById("teacher-setup-scroll-container");
+      const lbScrollEl = document.getElementById("teacher-leaderboard-scroll-container");
+      if (studentArenaEl) bgResizeObserver.observe(studentArenaEl);
+      if (setupScrollEl) bgResizeObserver.observe(setupScrollEl);
+      if (lbScrollEl) bgResizeObserver.observe(lbScrollEl);
+    }
 
     /* =========================================================================
        2. تهيئة قاعدة بيانات Firebase Realtime Database
@@ -2959,7 +3082,11 @@
       studentRoomUnsub: null,
       teacherRoomUnsub: null,
       teacherPodiumShown: false,
-      teacherAnswersRevealed: false
+      teacherAnswersRevealed: false,
+      teacherAutoRevealedOnce: false,
+      teacherGapAnswers: {},
+      teacherActiveTeleportWord: null,
+      teacherActiveTeleportTile: null
     };
 
     const slides = {
@@ -2976,10 +3103,25 @@
         el.classList.toggle("active", key === targetKey);
       });
       state.currentSlide = targetKey;
+      state.teleportBeams = [];
+      state.sparkles = [];
+      if (fxCtx && fxCanvas) {
+        fxCtx.clearRect(0, 0, fxCanvas.clientWidth || window.innerWidth, fxCanvas.clientHeight || window.innerHeight);
+      }
+      if (slides[targetKey]) slides[targetKey].scrollTop = 0;
       if (targetKey === "game" || targetKey === "result") {
-        requestAnimationFrame(() => resizeCanvases());
-      } else if (targetKey === "teacherLeaderboard" && state.teacherPodiumShown) {
-        requestAnimationFrame(() => fitAllWinnerNames());
+        requestAnimationFrame(() => {
+          resizeCanvases();
+          syncStackedBackgrounds();
+        });
+      } else if (targetKey === "teacherSetup") {
+        requestAnimationFrame(() => syncStackedBackgrounds());
+      } else if (targetKey === "teacherLeaderboard") {
+        requestAnimationFrame(() => {
+          resizeCanvases();
+          syncStackedBackgrounds();
+          if (state.teacherPodiumShown) fitAllWinnerNames();
+        });
       }
     }
 
@@ -3032,7 +3174,24 @@
     /* =========================================================================
        6. مؤثرات الكانفس (شرر سحري + شعاع الانتقال الآني Teleport + قصاصات)
        ========================================================================= */
+    function getActiveScrollContainer() {
+      if (state.currentSlide === "teacherLeaderboard") return slides.teacherLeaderboard;
+      if (state.currentSlide === "game") return slides.game;
+      return null;
+    }
+
+    function getCanvasRelativeCenter(el) {
+      const canvasRect = fxCanvas.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      return {
+        x: (r.left - canvasRect.left) + r.width / 2,
+        y: (r.top - canvasRect.top) + r.height / 2
+      };
+    }
+
     function spawnSparkle(x, y, count = 12) {
+      const sc = getActiveScrollContainer();
+      const scrollTopAtSpawn = sc ? sc.scrollTop : 0;
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
         const speed = 1.2 + Math.random() * 3.2;
@@ -3043,23 +3202,31 @@
           vy: Math.sin(angle) * speed - 0.5,
           radius: 2 + Math.random() * 2.8,
           alpha: 1,
-          color: Math.random() > 0.45 ? "#facc15" : "#38bdf8"
+          color: Math.random() > 0.45 ? "#facc15" : "#38bdf8",
+          scrollContainer: sc,
+          lastScrollTop: scrollTopAtSpawn
         });
       }
     }
 
     function spawnTeleportBeam(fromEl, toEl) {
       if (!fromEl || !toEl) return;
-      const r1 = fromEl.getBoundingClientRect();
-      const r2 = toEl.getBoundingClientRect();
-      const x1 = r1.left + r1.width / 2;
-      const y1 = r1.top + r1.height / 2;
-      const x2 = r2.left + r2.width / 2;
-      const y2 = r2.top + r2.height / 2;
+      resizeFxCanvas();
+      const p1 = getCanvasRelativeCenter(fromEl);
+      const p2 = getCanvasRelativeCenter(toEl);
 
-      state.teleportBeams.push({ x1, y1, x2, y2, alpha: 1 });
-      spawnSparkle(x1, y1, 8);
-      spawnSparkle(x2, y2, 18);
+      state.teleportBeams.push({
+        fromEl,
+        toEl,
+        x1: p1.x,
+        y1: p1.y,
+        x2: p2.x,
+        y2: p2.y,
+        progress: 0,
+        alpha: 1
+      });
+      spawnSparkle(p1.x, p1.y, 10);
+      spawnSparkle(p2.x, p2.y, 20);
     }
 
     function launchConfetti(count = 95) {
@@ -3161,7 +3328,11 @@
       state.activeTeleportWord = null;
       state.activeTeleportTile = null;
       wordBankGrid.querySelectorAll(".drag-word-tile").forEach((t) => t.classList.remove("active-word"));
-      passageParagraph.querySelectorAll(".blank-input").forEach((inp) => inp.classList.remove("teleport-ready"));
+      passageParagraph.querySelectorAll(".blank-input").forEach((inp) => {
+        inp.classList.remove("teleport-ready");
+        inp.readOnly = false;
+        inp.removeAttribute("inputmode");
+      });
     }
 
     function selectWordForTeleport(tileEl, word) {
@@ -3174,11 +3345,17 @@
       state.activeTeleportWord = word;
       state.activeTeleportTile = tileEl;
       tileEl.classList.add("active-word");
-      passageParagraph.querySelectorAll(".blank-input").forEach((inp) => inp.classList.add("teleport-ready"));
+      passageParagraph.querySelectorAll(".blank-input").forEach((inp) => {
+        inp.classList.add("teleport-ready");
+        // منع فتح لوحة مفاتيح الموبايل وقفز الشاشة أثناء الـ Teleport
+        inp.readOnly = true;
+        inp.setAttribute("inputmode", "none");
+      });
       SoundFX.playTeleportSelect();
 
-      const r = tileEl.getBoundingClientRect();
-      spawnSparkle(r.left + r.width / 2, r.top + r.height / 2, 10);
+      resizeFxCanvas();
+      const center = getCanvasRelativeCenter(tileEl);
+      spawnSparkle(center.x, center.y, 10);
     }
 
     function applyWordToGap(gapId, word, sourceTileEl = null) {
@@ -3197,8 +3374,9 @@
       if (sourceTileEl) {
         spawnTeleportBeam(sourceTileEl, inp);
       } else {
-        const r = inp.getBoundingClientRect();
-        spawnSparkle(r.left + r.width / 2, r.top + r.height / 2, 14);
+        resizeFxCanvas();
+        const center = getCanvasRelativeCenter(inp);
+        spawnSparkle(center.x, center.y, 14);
       }
 
       SoundFX.playNeutralDrop();
@@ -3350,9 +3528,15 @@
           }
         });
 
+        // منع فتح لوحة المفاتيح على الموبايل لحظة الضغط للتنفيذ الفوري لـ Teleport
+        inp.addEventListener("focus", () => {
+          if (state.activeTeleportWord) inp.blur();
+        });
+
         // النقر على الفراغ لتنفيذ الانتقال الآني Teleport إذا كانت هناك كلمة صفراء محددة
-        inp.addEventListener("click", () => {
+        inp.addEventListener("click", (e) => {
           if (state.activeTeleportWord) {
+            e.preventDefault();
             applyWordToGap(g.id, state.activeTeleportWord, state.activeTeleportTile);
           }
         });
@@ -3366,6 +3550,7 @@
       });
 
       updateLanternsAndUI();
+      requestAnimationFrame(() => syncStackedBackgrounds());
     }
 
     function computeCurrentScoreAndMap() {
@@ -3406,42 +3591,77 @@
     const confettiCanvas = document.getElementById("confetti-canvas");
     const confettiCtx = confettiCanvas.getContext("2d");
 
-    function resizeCanvases() {
+    function resizeFxCanvas() {
       const dpr = window.devicePixelRatio || 1;
-      [
-        { c: fxCanvas, ctx: fxCtx },
-        { c: confettiCanvas, ctx: confettiCtx }
-      ].forEach(({ c, ctx }) => {
-        c.width = Math.floor(window.innerWidth * dpr);
-        c.height = Math.floor(window.innerHeight * dpr);
-        c.style.width = `${window.innerWidth}px`;
-        c.style.height = `${window.innerHeight}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      });
+      const rect = fxCanvas.getBoundingClientRect();
+      const w = Math.max(1, Math.round(rect.width || window.innerWidth));
+      const h = Math.max(1, Math.round(rect.height || window.innerHeight));
+      const targetW = Math.floor(w * dpr);
+      const targetH = Math.floor(h * dpr);
+      if (fxCanvas.width !== targetW || fxCanvas.height !== targetH) {
+        fxCanvas.width = targetW;
+        fxCanvas.height = targetH;
+      }
+      fxCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function resizeCanvases() {
+      resizeFxCanvas();
+      const dpr = window.devicePixelRatio || 1;
+      confettiCanvas.width = Math.floor(window.innerWidth * dpr);
+      confettiCanvas.height = Math.floor(window.innerHeight * dpr);
+      confettiCanvas.style.width = `${window.innerWidth}px`;
+      confettiCanvas.style.height = `${window.innerHeight}px`;
+      confettiCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      syncStackedBackgrounds();
       if (state.teacherPodiumShown) fitAllWinnerNames();
     }
 
     window.addEventListener("resize", resizeCanvases);
     window.addEventListener("orientationchange", () => setTimeout(resizeCanvases, 150));
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", resizeFxCanvas);
+    }
 
     function animateLoop(timestamp) {
       const timeSec = timestamp * 0.001;
 
-      if (state.currentSlide === "game") {
-        fxCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      if (state.currentSlide === "game" || state.currentSlide === "teacherLeaderboard") {
+        const fxRect = fxCanvas.getBoundingClientRect();
+        const fxW = fxRect.width || window.innerWidth;
+        const fxH = fxRect.height || window.innerHeight;
+        fxCtx.clearRect(0, 0, fxW, fxH);
 
-        // رسم أشعة الانتقال الآني (Teleport Beams)
+        // رسم أشعة الانتقال الآني (Teleport Beams) مع تتبع لحظي لإحداثيات الكلمة والفراغ مهما حصل Scroll
         for (let i = state.teleportBeams.length - 1; i >= 0; i--) {
           const b = state.teleportBeams[i];
-          b.alpha -= 0.055;
+          b.progress = Math.min(1, b.progress + 0.09);
+          b.alpha -= 0.042;
           if (b.alpha <= 0) {
             state.teleportBeams.splice(i, 1);
             continue;
           }
+
+          if (b.fromEl && b.fromEl.isConnected) {
+            const p1 = getCanvasRelativeCenter(b.fromEl);
+            b.x1 = p1.x;
+            b.y1 = p1.y;
+          }
+          if (b.toEl && b.toEl.isConnected) {
+            const p2 = getCanvasRelativeCenter(b.toEl);
+            b.x2 = p2.x;
+            b.y2 = p2.y;
+          }
+
           const grad = fxCtx.createLinearGradient(b.x1, b.y1, b.x2, b.y2);
           grad.addColorStop(0, `rgba(250, 204, 21, ${b.alpha})`);
           grad.addColorStop(0.5, `rgba(255, 255, 255, ${b.alpha})`);
           grad.addColorStop(1, `rgba(56, 189, 248, ${b.alpha})`);
+
+          const midX = (b.x1 + b.x2) / 2;
+          const arcLift = Math.min(48, Math.max(24, Math.hypot(b.x2 - b.x1, b.y2 - b.y1) * 0.14));
+          const midY = (b.y1 + b.y2) / 2 - arcLift;
 
           fxCtx.save();
           fxCtx.strokeStyle = grad;
@@ -3451,16 +3671,33 @@
           fxCtx.shadowBlur = 18;
           fxCtx.beginPath();
           fxCtx.moveTo(b.x1, b.y1);
-          const midX = (b.x1 + b.x2) / 2;
-          const midY = Math.min(b.y1, b.y2) - 35;
           fxCtx.quadraticCurveTo(midX, midY, b.x2, b.y2);
           fxCtx.stroke();
+
+          // شرارة ضوئية تتحرك على مسار الشعاع من الكلمة إلى الفراغ
+          const t = b.progress;
+          const inv = 1 - t;
+          const orbX = inv * inv * b.x1 + 2 * inv * t * midX + t * t * b.x2;
+          const orbY = inv * inv * b.y1 + 2 * inv * t * midY + t * t * b.y2;
+          fxCtx.fillStyle = `rgba(254, 240, 138, ${b.alpha})`;
+          fxCtx.shadowColor = "#ffffff";
+          fxCtx.shadowBlur = 20;
+          fxCtx.beginPath();
+          fxCtx.arc(orbX, orbY, 6.5 * b.alpha + 2, 0, Math.PI * 2);
+          fxCtx.fill();
           fxCtx.restore();
         }
 
-        // رسم الشرر السحري
+        // رسم الشرر السحري مع تعويض أي حركة Scroll لحظية
         for (let i = state.sparkles.length - 1; i >= 0; i--) {
           const s = state.sparkles[i];
+          if (s.scrollContainer) {
+            const currentTop = s.scrollContainer.scrollTop;
+            if (currentTop !== s.lastScrollTop) {
+              s.y -= (currentTop - s.lastScrollTop);
+              s.lastScrollTop = currentTop;
+            }
+          }
           s.x += s.vx;
           s.y += s.vy;
           s.alpha -= 0.028;
@@ -3952,20 +4189,146 @@
     /* =========================================================================
        13. لوحة تحكم المعلم ولوحة الصدارة ومنصة التتويج الاحتفالية
        ========================================================================= */
+    function updateTeacherBoardUI() {
+      const bankEl = document.getElementById("teacher-word-bank-grid");
+      if (!bankEl) return;
+
+      const usedSet = new Set(
+        Object.values(state.teacherGapAnswers)
+          .map((v) => (v || "").trim().toLowerCase())
+          .filter(Boolean)
+      );
+
+      bankEl.querySelectorAll(".drag-word-tile").forEach((tile) => {
+        const w = (tile.dataset.word || "").toLowerCase();
+        tile.classList.toggle("used-in-gap", usedSet.has(w));
+      });
+
+      GAP_QUESTIONS.forEach((g) => {
+        const inp = document.getElementById(`teacher-gap-input-${g.id}`);
+        if (!inp) return;
+        const hasVal = Boolean(state.teacherGapAnswers[g.id] && state.teacherGapAnswers[g.id].trim() !== "");
+        inp.classList.toggle("filled", hasVal);
+        inp.classList.toggle("teleport-ready", Boolean(state.teacherActiveTeleportWord));
+      });
+    }
+
+    function clearTeacherTeleportSelection() {
+      const bankEl = document.getElementById("teacher-word-bank-grid");
+      const paraEl = document.getElementById("teacher-passage-paragraph");
+      state.teacherActiveTeleportWord = null;
+      state.teacherActiveTeleportTile = null;
+      if (bankEl) {
+        bankEl.querySelectorAll(".drag-word-tile").forEach((t) => t.classList.remove("active-word"));
+      }
+      if (paraEl) {
+        paraEl.querySelectorAll(".blank-input").forEach((inp) => {
+          inp.classList.remove("teleport-ready");
+          inp.readOnly = false;
+          inp.removeAttribute("inputmode");
+        });
+      }
+    }
+
+    function selectTeacherWordForTeleport(tileEl, word) {
+      const paraEl = document.getElementById("teacher-passage-paragraph");
+      if (state.teacherActiveTeleportWord === word) {
+        clearTeacherTeleportSelection();
+        return;
+      }
+      clearTeacherTeleportSelection();
+      state.teacherActiveTeleportWord = word;
+      state.teacherActiveTeleportTile = tileEl;
+      tileEl.classList.add("active-word");
+      if (paraEl) {
+        paraEl.querySelectorAll(".blank-input").forEach((inp) => {
+          inp.classList.add("teleport-ready");
+          inp.readOnly = true;
+          inp.setAttribute("inputmode", "none");
+        });
+      }
+      SoundFX.playTeleportSelect();
+
+      resizeFxCanvas();
+      const center = getCanvasRelativeCenter(tileEl);
+      spawnSparkle(center.x, center.y, 10);
+    }
+
+    function applyTeacherWordToGap(gapId, word, sourceTileEl = null, markRevealed = false) {
+      const inp = document.getElementById(`teacher-gap-input-${gapId}`);
+      if (!inp) return;
+
+      inp.value = word;
+      inp.blur();
+      state.teacherGapAnswers[gapId] = word.trim();
+
+      if (!markRevealed) {
+        state.teacherAnswersRevealed = false;
+        inp.classList.remove("revealed-answer");
+      } else {
+        inp.classList.add("revealed-answer");
+      }
+
+      inp.classList.remove("pop-landed");
+      void inp.offsetWidth;
+      inp.classList.add("pop-landed");
+
+      if (sourceTileEl) {
+        spawnTeleportBeam(sourceTileEl, inp);
+      } else {
+        resizeFxCanvas();
+        const center = getCanvasRelativeCenter(inp);
+        spawnSparkle(center.x, center.y, 14);
+      }
+
+      SoundFX.playNeutralDrop();
+      if (!markRevealed) {
+        clearTeacherTeleportSelection();
+      }
+      updateTeacherBoardUI();
+    }
+
+    function clearTeacherDemoBoard(playSound = false) {
+      const bankEl = document.getElementById("teacher-word-bank-grid");
+      state.teacherGapAnswers = {};
+      state.teacherAnswersRevealed = false;
+      clearTeacherTeleportSelection();
+
+      if (bankEl) {
+        bankEl.querySelectorAll(".drag-word-tile").forEach((t) => {
+          t.classList.remove("revealed-used", "used-in-gap", "active-word");
+        });
+      }
+
+      GAP_QUESTIONS.forEach((g) => {
+        const inp = document.getElementById(`teacher-gap-input-${g.id}`);
+        if (inp) {
+          inp.value = "";
+          inp.classList.remove("filled", "revealed-answer", "pop-landed", "teleport-ready");
+        }
+      });
+
+      if (playSound) SoundFX.playWhoosh();
+      updateTeacherBoardUI();
+    }
+
     function buildTeacherGamePreview(revealed = false) {
       const bankEl = document.getElementById("teacher-word-bank-grid");
       const paraEl = document.getElementById("teacher-passage-paragraph");
       if (!bankEl || !paraEl) return;
 
+      state.teacherGapAnswers = {};
       state.teacherAnswersRevealed = revealed;
+      clearTeacherTeleportSelection();
 
-      // 1. بناء بنك الكلمات مطابقاً لشاشة الطالب
+      // 1. بناء بنك الكلمات التفاعلي 3D مطابقاً تماماً لشاشة الطالب
       bankEl.innerHTML = "";
       const answerSet = new Set(GAP_QUESTIONS.map((g) => g.answer.toLowerCase()));
       WORD_BANK.forEach((word) => {
         const tile = document.createElement("div");
         tile.className = "drag-word-tile";
         tile.dataset.word = word;
+        tile.draggable = true;
         if (revealed && answerSet.has(word.toLowerCase())) {
           tile.classList.add("revealed-used");
         }
@@ -3974,27 +4337,147 @@
           <span class="tile-word-label">${word}</span>
         `;
 
+        // تأثير Hover ثلاثي الأبعاد مع الصوت واللمعان
+        tile.addEventListener("mouseenter", () => SoundFX.playHoverClick());
         tile.addEventListener("mousemove", (e) => {
+          if (tile.classList.contains("active-word")) return;
           const rect = tile.getBoundingClientRect();
           const x = (e.clientX - rect.left) / rect.width - 0.5;
           const y = (e.clientY - rect.top) / rect.height - 0.5;
           tile.style.transform = `translateY(-6px) scale(1.07) rotateX(${-y * 16}deg) rotateY(${x * 18}deg)`;
         });
         tile.addEventListener("mouseleave", () => {
-          tile.style.transform = "";
+          if (!tile.classList.contains("active-word")) {
+            tile.style.transform = "";
+          }
+        });
+
+        // النقر لتفعيل الانتقال الآني Teleport باللون الأصفر
+        tile.addEventListener("click", (e) => {
+          e.stopPropagation();
+          selectTeacherWordForTeleport(tile, word);
+        });
+
+        // السحب بالماوس (Desktop Drag)
+        tile.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", word);
+          tile.style.opacity = "0.55";
+          SoundFX.playWhoosh();
+        });
+        tile.addEventListener("dragend", () => {
+          tile.style.opacity = "";
+          paraEl.querySelectorAll(".blank-input.drag-over").forEach((b) => b.classList.remove("drag-over"));
+        });
+
+        // السحب باللمس (Mobile & Tablet Touch Drag + Auto-Scroll)
+        let touchMoved = false;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        tile.addEventListener("touchstart", (e) => {
+          touchMoved = false;
+          const touch = e.touches[0];
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+          touchGhost.textContent = word;
+          touchGhost.style.left = `${touch.clientX}px`;
+          touchGhost.style.top = `${touch.clientY}px`;
+        }, { passive: true });
+
+        tile.addEventListener("touchmove", (e) => {
+          const touch = e.touches[0];
+          if (!touchMoved && Math.hypot(touch.clientX - touchStartX, touch.clientY - touchStartY) < 8) {
+            return;
+          }
+          e.preventDefault();
+          touchMoved = true;
+          touchGhost.style.display = "block";
+          touchGhost.style.left = `${touch.clientX}px`;
+          touchGhost.style.top = `${touch.clientY}px`;
+
+          const lbEl = slides.teacherLeaderboard;
+          if (touch.clientY < 85) lbEl.scrollBy(0, -10);
+          else if (window.innerHeight - touch.clientY < 85) lbEl.scrollBy(0, 10);
+
+          paraEl.querySelectorAll(".blank-input.drag-over").forEach((b) => b.classList.remove("drag-over"));
+          const underEl = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (underEl && underEl.classList.contains("blank-input") && paraEl.contains(underEl)) {
+            underEl.classList.add("drag-over");
+          }
+        }, { passive: false });
+
+        tile.addEventListener("touchend", (e) => {
+          touchGhost.style.display = "none";
+          paraEl.querySelectorAll(".blank-input.drag-over").forEach((b) => b.classList.remove("drag-over"));
+          if (!touchMoved) return;
+
+          const touch = e.changedTouches[0];
+          const underEl = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (underEl && underEl.classList.contains("blank-input") && paraEl.contains(underEl)) {
+            const gapId = Number(underEl.dataset.teacherGapId);
+            if (gapId) {
+              applyTeacherWordToGap(gapId, word, tile, false);
+            }
+          }
         });
 
         bankEl.appendChild(tile);
       });
 
-      // 2. بناء الفقرة والفراغات مطابقة لشاشة الطالب (فارغة تماماً حتى الضغط على إظهار الإجابات)
+      // 2. بناء الفقرة والفراغات التفاعلية مطابقة لشاشة الطالب
       let paraHtml = "";
       GAP_QUESTIONS.forEach((g) => {
         const valAttr = revealed ? ` value="${escapeHtml(g.answer)}"` : "";
         const extraCls = revealed ? " filled revealed-answer" : "";
-        paraHtml += `${g.before}<span class="gap-number-badge">${g.id}</span><input type="text" id="teacher-gap-input-${g.id}" class="blank-input${extraCls}" placeholder=".........." readonly tabindex="-1"${valAttr} />${g.after}`;
+        if (revealed) state.teacherGapAnswers[g.id] = g.answer;
+        paraHtml += `${g.before}<span class="gap-number-badge">${g.id}</span><input type="text" id="teacher-gap-input-${g.id}" data-teacher-gap-id="${g.id}" class="blank-input${extraCls}" placeholder=".........." autocomplete="off" spellcheck="false"${valAttr} />${g.after}`;
       });
       paraEl.innerHTML = paraHtml;
+
+      // ربط أحداث السحب والإفلات والـ Teleport والكتابة على فراغات المعلم
+      GAP_QUESTIONS.forEach((g) => {
+        const inp = document.getElementById(`teacher-gap-input-${g.id}`);
+        if (!inp) return;
+
+        inp.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          inp.classList.add("drag-over");
+        });
+
+        inp.addEventListener("dragleave", () => {
+          inp.classList.remove("drag-over");
+        });
+
+        inp.addEventListener("drop", (e) => {
+          e.preventDefault();
+          inp.classList.remove("drag-over");
+          const droppedWord = e.dataTransfer.getData("text/plain");
+          if (droppedWord) {
+            const matchingTile = Array.from(bankEl.querySelectorAll(".drag-word-tile")).find((t) => t.dataset.word === droppedWord) || null;
+            applyTeacherWordToGap(g.id, droppedWord, matchingTile, false);
+          }
+        });
+
+        inp.addEventListener("focus", () => {
+          if (state.teacherActiveTeleportWord) inp.blur();
+        });
+
+        inp.addEventListener("click", (e) => {
+          if (state.teacherActiveTeleportWord) {
+            e.preventDefault();
+            applyTeacherWordToGap(g.id, state.teacherActiveTeleportWord, state.teacherActiveTeleportTile, false);
+          }
+        });
+
+        inp.addEventListener("input", () => {
+          state.teacherGapAnswers[g.id] = inp.value.trim();
+          state.teacherAnswersRevealed = false;
+          inp.classList.remove("revealed-answer");
+          updateTeacherBoardUI();
+        });
+      });
+
+      updateTeacherBoardUI();
+      requestAnimationFrame(() => syncStackedBackgrounds());
     }
 
     function revealTeacherGameAnswers() {
@@ -4008,6 +4491,7 @@
       }
 
       if (state.teacherAnswersRevealed) return;
+      clearTeacherTeleportSelection();
       state.teacherAnswersRevealed = true;
 
       const answerSet = new Set(GAP_QUESTIONS.map((g) => g.answer.toLowerCase()));
@@ -4018,13 +4502,20 @@
       });
 
       GAP_QUESTIONS.forEach((g, idx) => {
-        const inp = document.getElementById(`teacher-gap-input-${g.id}`);
-        if (!inp) return;
+        const matchingTile = Array.from(bankEl.querySelectorAll(".drag-word-tile"))
+          .find((t) => (t.dataset.word || "").toLowerCase() === g.answer.toLowerCase()) || null;
         setTimeout(() => {
-          inp.value = g.answer;
-          inp.classList.add("filled", "revealed-answer", "pop-landed");
-          SoundFX.playNeutralDrop();
-        }, idx * 140);
+          if (!state.teacherAnswersRevealed) return;
+          applyTeacherWordToGap(g.id, g.answer, matchingTile, true);
+        }, idx * 160);
+      });
+    }
+
+    const btnTeacherClearDemo = document.getElementById("btn-teacher-clear-demo");
+    if (btnTeacherClearDemo) {
+      btnTeacherClearDemo.addEventListener("click", () => {
+        clearTeacherDemoBoard(true);
+        showToast("تم مسح إجابات الشرح!");
       });
     }
 
@@ -4053,7 +4544,8 @@
           const roomData = snap.val();
           if (!roomData) return;
 
-          if (roomData.status === "show_answers") {
+          if (roomData.status === "show_answers" && !state.teacherAutoRevealedOnce) {
+            state.teacherAutoRevealedOnce = true;
             revealTeacherGameAnswers();
           }
 
@@ -4123,6 +4615,8 @@
           if (state.currentSlide === "teacherLeaderboard" && (allFinished || teacherForcedEnd)) {
             updateAndShowTeacherPodium(playersArray);
           }
+
+          requestAnimationFrame(() => syncStackedBackgrounds());
         });
       }
 
@@ -4145,6 +4639,7 @@
     document.getElementById("btn-start-multiplayer").addEventListener("click", () => {
       const timeLimit = parseInt(document.getElementById("teacher-time-select").value, 10) || 180;
       state.teacherPodiumShown = false;
+      state.teacherAutoRevealedOnce = false;
       document.getElementById("teacher-podium-banner").style.display = "none";
       stopCheeringAudio();
 
@@ -4319,7 +4814,11 @@
 
       requestAnimationFrame(() => {
         fitAllWinnerNames();
-        setTimeout(fitAllWinnerNames, 150);
+        syncStackedBackgrounds();
+        setTimeout(() => {
+          fitAllWinnerNames();
+          syncStackedBackgrounds();
+        }, 150);
       });
     }
 
@@ -4328,6 +4827,7 @@
        ========================================================================= */
     window.addEventListener("load", () => {
       resizeCanvases();
+      syncStackedBackgrounds();
       requestAnimationFrame(animateLoop);
     });
   </script>
