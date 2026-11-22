@@ -597,6 +597,7 @@
     /* حاوية الخلفية المتكررة عمودياً لتغطية جميع الأسئلة بالكامل أثناء التمرير */
     /* جعل شرائح التمرير الطويلة بنظام Block لمنع انكماش الخلفية أو تداخل العناصر */
     #slide-game,
+    #slide-teacher-setup,
     #slide-teacher-leaderboard {
       display: block;
       padding: 0;
@@ -659,12 +660,13 @@
       padding-bottom: clamp(32px, 5vh, 52px);
     }
 
+    /* كانفس المؤثرات والشرر السحري مثبت مباشرة على الشاشة ليعمل بدقة للطالب والمعلم مع التمرير */
     #fx-canvas {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 25;
+      z-index: 50;
       pointer-events: none;
     }
 
@@ -1091,6 +1093,16 @@
       align-items: center;
       gap: 16px;
       margin-top: 6px;
+    }
+
+    .teacher-preview-header {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 4px;
     }
 
     /* الشريط السفلي الموحد بعد نهاية جميع الأسئلة (أسفل آخر سؤال فقط) */
@@ -2070,6 +2082,9 @@
 </head>
 <body>
 
+  <!-- كانفس الشرر السحري (يعمل للطالب ولوحة المعلم بدقة مع التمرير) -->
+  <canvas id="fx-canvas"></canvas>
+
   <!-- =======================================================================
        الشريحة 1: صفحة البداية واختيار الوضع (فردي / جماعي)
        ======================================================================= -->
@@ -2223,9 +2238,6 @@
        الشريحة 3: شاشة لعبة الاختيار من متعدد (بنفس ثيم وادي الفوانيس)
        ======================================================================= -->
   <section id="slide-game" class="slide" aria-label="شاشة الاختيار من متعدد">
-    <!-- كانفس الشرر السحري -->
-    <canvas id="fx-canvas"></canvas>
-
     <!-- حاوية الخلفية المكررة عمودياً بصور متتالية خلف جميع الأسئلة أثناء التمرير -->
     <div class="repeating-game-bg" id="student-repeating-bg">
       <div class="stacked-bg-layer" aria-hidden="true"></div>
@@ -2347,15 +2359,11 @@
        الشريحة 5: لوحة إعداد غرفة المعلم
        ======================================================================= -->
   <section id="slide-teacher-setup" class="slide" aria-label="إعداد غرفة المعلم">
-    <img
-      class="slide-bg-img"
-      src="https://lh3.googleusercontent.com/d/18NIZp_E0cBclLranpzT_ElDZVo1bRt3v"
-      alt="خلفية لوحة المعلم"
-      onerror="handleDriveImgFallback(this, '18NIZp_E0cBclLranpzT_ElDZVo1bRt3v', 'linear-gradient(135deg, #0369a1 0%, #4f46e5 50%, #9333ea 100%)')"
-    />
-    <div class="slide-vignette"></div>
+    <div class="repeating-game-bg" id="teacher-setup-repeating-bg">
+      <div class="stacked-bg-layer" aria-hidden="true"></div>
+      <div class="stacked-bg-vignette" aria-hidden="true"></div>
 
-    <div class="teacher-scroll-container">
+    <div class="teacher-scroll-container" id="teacher-setup-scroll-container">
       <div class="teacher-glass-panel">
         <div class="teacher-header-bar">
           <div class="teacher-brand-box">
@@ -2417,6 +2425,7 @@
           <span>🚀 بدء التحدي الآن</span>
         </button>
       </div>
+    </div>
     </div>
   </section>
 
@@ -2516,11 +2525,17 @@
           </table>
         </div>
 
-        <!-- عرض جميع أسئلة الاختبار الـ 10 للمعلم أسفل لوحة التقدم والأسماء (بدون إجابات حتى الضغط على إظهار الإجابات) -->
+        <!-- عرض جميع أسئلة الاختبار الـ 10 التفاعلية للمعلم للشرح المباشر مع الإبقاء على زر إظهار الإجابات -->
         <div class="teacher-game-preview-section" aria-label="عرض الأسئلة للطلاب">
-          <h3 style="color:#fef08a; font-size:1.18rem; font-weight:900; text-align:center;">
-            <i class="fa-solid fa-gamepad"></i> أسئلة الاختبار الحالية (جميع الأسئلة الـ 10 كما تظهر للطلاب)
-          </h3>
+          <div class="teacher-preview-header">
+            <h3 style="color:#fef08a; font-size:1.12rem; font-weight:900;">
+              <i class="fa-solid fa-gamepad"></i> أسئلة الاختبار الحالية (يمكنك الحل هنا للشرح المباشر للطلاب)
+            </h3>
+            <button type="button" id="btn-teacher-clear-demo" class="dock-btn" title="مسح إجابات الشرح">
+              <i class="fa-solid fa-eraser"></i>
+              <span>مسح الإجابات</span>
+            </button>
+          </div>
 
           <div id="teacher-mcq-list" class="mcq-questions-list"></div>
         </div>
@@ -2656,8 +2671,10 @@
         syncStackedBackgrounds();
       });
       const studentArena = document.getElementById("student-mcq-arena");
+      const teacherSetupContainer = document.getElementById("teacher-setup-scroll-container");
       const teacherContainer = document.getElementById("teacher-scroll-container");
       if (studentArena) bgResizeObserver.observe(studentArena);
+      if (teacherSetupContainer) bgResizeObserver.observe(teacherSetupContainer);
       if (teacherContainer) bgResizeObserver.observe(teacherContainer);
     }
 
@@ -2964,7 +2981,9 @@
       studentRoomUnsub: null,
       teacherRoomUnsub: null,
       teacherPodiumShown: false,
-      teacherAnswersRevealed: false
+      teacherAnswersRevealed: false,
+      teacherAutoRevealedOnce: false,
+      teacherDemoAnswers: {}
     };
 
     const slides = {
@@ -2982,17 +3001,24 @@
       });
       state.currentSlide = targetKey;
       if (slides[targetKey]) slides[targetKey].scrollTop = 0;
+      state.sparkles = [];
+      if (fxCtx && fxCanvas) {
+        fxCtx.clearRect(0, 0, fxCanvas.clientWidth || window.innerWidth, fxCanvas.clientHeight || window.innerHeight);
+      }
       if (targetKey === "game" || targetKey === "result") {
         requestAnimationFrame(() => {
           resizeCanvases();
           syncStackedBackgrounds();
         });
+      } else if (targetKey === "teacherSetup") {
+        requestAnimationFrame(() => syncStackedBackgrounds());
       } else if (targetKey === "teacherLeaderboard") {
         const tList = document.getElementById("teacher-mcq-list");
         if (tList && tList.children.length !== ORIGINAL_QUIZ_DATA.length) {
           buildTeacherGamePreview(state.teacherAnswersRevealed);
         }
         requestAnimationFrame(() => {
+          resizeCanvases();
           syncStackedBackgrounds();
           if (state.teacherPodiumShown) fitAllWinnerNames();
         });
@@ -3048,18 +3074,32 @@
     /* =========================================================================
        6. مؤثرات الكانفس (شرر سحري + قصاصات احتفالية)
        ========================================================================= */
+    function getActiveScrollContainer() {
+      if (state.currentSlide === "teacherLeaderboard") return slides.teacherLeaderboard;
+      if (state.currentSlide === "game") return slides.game;
+      return null;
+    }
+
     function spawnSparkle(x, y, count = 12) {
+      const canvasRect = fxCanvas ? fxCanvas.getBoundingClientRect() : { left: 0, top: 0 };
+      const relX = x - canvasRect.left;
+      const relY = y - canvasRect.top;
+      const sc = getActiveScrollContainer();
+      const scrollTopAtSpawn = sc ? sc.scrollTop : 0;
+
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
         const speed = 1.2 + Math.random() * 3.2;
         state.sparkles.push({
-          x: x + (Math.random() - 0.5) * 18,
-          y: y + (Math.random() - 0.5) * 18,
+          x: relX + (Math.random() - 0.5) * 18,
+          y: relY + (Math.random() - 0.5) * 18,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed - 0.5,
           radius: 2 + Math.random() * 2.8,
           alpha: 1,
-          color: Math.random() > 0.45 ? "#facc15" : "#38bdf8"
+          color: Math.random() > 0.45 ? "#facc15" : "#38bdf8",
+          scrollContainer: sc,
+          lastScrollTop: scrollTopAtSpawn
         });
       }
     }
@@ -3307,11 +3347,19 @@
     function animateLoop(timestamp) {
       const timeSec = timestamp * 0.001;
 
-      if (state.currentSlide === "game") {
-        fxCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      if (state.currentSlide === "game" || state.currentSlide === "teacherLeaderboard") {
+        const fxRect = fxCanvas.getBoundingClientRect();
+        fxCtx.clearRect(0, 0, fxRect.width || window.innerWidth, fxRect.height || window.innerHeight);
 
         for (let i = state.sparkles.length - 1; i >= 0; i--) {
           const s = state.sparkles[i];
+          if (s.scrollContainer) {
+            const currentTop = s.scrollContainer.scrollTop;
+            if (currentTop !== s.lastScrollTop) {
+              s.y -= (currentTop - s.lastScrollTop);
+              s.lastScrollTop = currentTop;
+            }
+          }
           s.x += s.vx;
           s.y += s.vy;
           s.alpha -= 0.028;
@@ -3799,11 +3847,19 @@
     /* =========================================================================
        13. لوحة تحكم المعلم ولوحة الصدارة ومنصة التتويج وعرض الأسئلة
        ========================================================================= */
+    function clearTeacherDemoAnswers(playSound = false) {
+      state.teacherDemoAnswers = {};
+      state.teacherAnswersRevealed = false;
+      buildTeacherGamePreview(false);
+      if (playSound) SoundFX.playWhoosh();
+    }
+
     function buildTeacherGamePreview(revealed = false) {
       const container = document.getElementById("teacher-mcq-list");
       if (!container) return;
 
       state.teacherAnswersRevealed = revealed;
+      state.teacherDemoAnswers = {};
       container.innerHTML = "";
 
       ORIGINAL_QUIZ_DATA.forEach((q, qIdx) => {
@@ -3818,14 +3874,44 @@
               <span class="q-number-badge">${qIdx + 1}</span>
               <div class="mcq-question-text">${escapeHtml(q.q)}</div>
             </div>
+            <button type="button" class="btn-5050" data-tooltip="${TOOLTIP_5050_TEXT}" aria-label="${TOOLTIP_5050_TEXT}">🪄 50:50</button>
           </div>
           <div class="mcq-options-grid"></div>
         `;
 
+        const btn5050 = card.querySelector(".btn-5050");
+        if (revealed) {
+          btn5050.style.display = "none";
+        }
+        btn5050.addEventListener("mouseenter", () => SoundFX.playHoverClick());
+        btn5050.addEventListener("click", () => {
+          // تفعيل وسيلة المساعدة 50:50 على هذا السؤال للشرح للطلاب
+          btn5050.style.display = "none";
+          const wrongOpts = shuffleArray(q.options.filter((o) => o !== q.correct)).slice(0, 2);
+          card.querySelectorAll(".mcq-option-btn").forEach((optBtn) => {
+            const val = optBtn.dataset.option;
+            if (wrongOpts.includes(val)) {
+              optBtn.classList.add("disabled", "faded-option");
+              if (state.teacherDemoAnswers[q.id] === val) {
+                delete state.teacherDemoAnswers[q.id];
+                optBtn.classList.remove("selected-opt");
+                const iconSpan = optBtn.querySelector(".opt-status-icon");
+                if (iconSpan) iconSpan.innerHTML = "";
+                card.classList.remove("answered");
+              }
+            }
+          });
+          const rect = btn5050.getBoundingClientRect();
+          spawnSparkle(rect.left + rect.width / 2, rect.top + rect.height / 2, 18);
+          SoundFX.playMagicLifeline();
+          showToast("🪄 تم حذف إجابتين خاطئتين للشرح!");
+        });
+
         const optsGrid = card.querySelector(".mcq-options-grid");
         q.options.forEach((optText, optIdx) => {
-          const btn = document.createElement("div");
-          btn.className = "mcq-option-btn disabled";
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "mcq-option-btn";
           btn.dataset.option = optText;
 
           let iconHtml = "";
@@ -3845,11 +3931,45 @@
             </span>
             <span class="opt-status-icon">${iconHtml}</span>
           `;
+
+          btn.addEventListener("mouseenter", () => {
+            if (!btn.classList.contains("disabled")) SoundFX.playHoverClick();
+          });
+
+          btn.addEventListener("click", (e) => {
+            if (btn.classList.contains("disabled")) return;
+
+            // إعادة تعيين حالة باقي الخيارات في نفس السؤال عند الحل اليدوي للمعلم
+            optsGrid.querySelectorAll(".mcq-option-btn").forEach((sib) => {
+              sib.classList.remove("selected-opt", "revealed-correct");
+              if (!sib.classList.contains("disabled")) {
+                sib.classList.remove("faded-option");
+              }
+              const iconSpan = sib.querySelector(".opt-status-icon");
+              if (iconSpan) iconSpan.innerHTML = "";
+            });
+
+            // نفس التأثير البصري والصوتي تماماً مثل شاشة الطالب
+            btn.classList.add("selected-opt");
+            const iconSpan = btn.querySelector(".opt-status-icon");
+            if (iconSpan) iconSpan.innerHTML = '<i class="fa-solid fa-star"></i>';
+
+            card.classList.add("answered");
+            state.teacherDemoAnswers[q.id] = optText;
+            state.teacherAnswersRevealed = false;
+
+            const r = btn.getBoundingClientRect();
+            spawnSparkle(e.clientX || (r.left + r.width / 2), e.clientY || (r.top + r.height / 2), 14);
+            SoundFX.playNeutralSelect();
+          });
+
           optsGrid.appendChild(btn);
         });
 
         container.appendChild(card);
       });
+
+      requestAnimationFrame(() => syncStackedBackgrounds());
     }
 
     function revealTeacherGameAnswers() {
@@ -3867,21 +3987,40 @@
       ORIGINAL_QUIZ_DATA.forEach((q, qIdx) => {
         const card = container.children[qIdx];
         if (!card) return;
+        const btn5050 = card.querySelector(".btn-5050");
+        if (btn5050) btn5050.style.display = "none";
+
         setTimeout(() => {
+          if (!state.teacherAnswersRevealed) return;
           const optEls = card.querySelectorAll(".mcq-option-btn");
           optEls.forEach((el) => {
             const val = el.dataset.option;
             const iconSpan = el.querySelector(".opt-status-icon");
+            el.classList.remove("selected-opt", "disabled", "faded-option", "revealed-correct");
             if (val === q.correct) {
               el.classList.add("revealed-correct");
               if (iconSpan) iconSpan.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+              const r = el.getBoundingClientRect();
+              if (r.top >= 0 && r.bottom <= window.innerHeight) {
+                spawnSparkle(r.left + r.width / 2, r.top + r.height / 2, 10);
+              }
             } else {
               el.classList.add("faded-option");
+              if (iconSpan) iconSpan.innerHTML = "";
             }
           });
+          card.classList.add("answered");
         }, qIdx * 90);
       });
       SoundFX.playNeutralSelect();
+    }
+
+    const btnTeacherClearDemo = document.getElementById("btn-teacher-clear-demo");
+    if (btnTeacherClearDemo) {
+      btnTeacherClearDemo.addEventListener("click", () => {
+        clearTeacherDemoAnswers(true);
+        showToast("تم مسح إجابات الشرح!");
+      });
     }
 
     function openTeacherSetup() {
@@ -3909,7 +4048,8 @@
           const roomData = snap.val();
           if (!roomData) return;
 
-          if (roomData.status === "show_answers") {
+          if (roomData.status === "show_answers" && !state.teacherAutoRevealedOnce) {
+            state.teacherAutoRevealedOnce = true;
             revealTeacherGameAnswers();
           }
 
@@ -3979,6 +4119,8 @@
           if (state.currentSlide === "teacherLeaderboard" && (allFinished || teacherForcedEnd)) {
             updateAndShowTeacherPodium(playersArray);
           }
+
+          requestAnimationFrame(() => syncStackedBackgrounds());
         });
       }
 
@@ -4001,6 +4143,7 @@
     document.getElementById("btn-start-multiplayer").addEventListener("click", () => {
       const timeLimit = parseInt(document.getElementById("teacher-time-select").value, 10) || 300;
       state.teacherPodiumShown = false;
+      state.teacherAutoRevealedOnce = false;
       document.getElementById("teacher-podium-banner").style.display = "none";
       stopCheeringAudio();
 
@@ -4175,7 +4318,11 @@
 
       requestAnimationFrame(() => {
         fitAllWinnerNames();
-        setTimeout(fitAllWinnerNames, 150);
+        syncStackedBackgrounds();
+        setTimeout(() => {
+          fitAllWinnerNames();
+          syncStackedBackgrounds();
+        }, 150);
       });
     }
 
