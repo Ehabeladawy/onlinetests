@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>2prep_term1_MCQ_HW1 - واجب مستر ايهاب العدوي</title>
+
+  <!-- الخطوط العربية والإنجليزية والأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Fredoka:wght@600;700&family=Poppins:wght@500;600;700;800;900&family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- مكتبة الاحتفال -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- دالة الحماية الفورية لتحميل صور Google Drive -->
+  <script>
+    function handleDriveImgFallback(imgEl, fileId, cssGradientFallback) {
+      if (!imgEl.dataset.fallbackTried) {
+        imgEl.dataset.fallbackTried = "1";
+        imgEl.src = "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w1920";
+      } else {
+        imgEl.style.display = "none";
+        if (cssGradientFallback && imgEl.parentElement) {
+          imgEl.parentElement.style.background = cssGradientFallback;
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* =====================================================================
+       1. المتغيرات العامة وثيم اللعبة السحري (Vibrant Magical Design Tokens)
+       ===================================================================== */
+    :root {
+      --glass-bg: rgba(15, 23, 42, 0.54);
+      --stitched-border: rgba(255, 100, 100, 0.85);
+      --gold: #fbbf24;
+      --gold-bright: #facc15;
+      --gold-light: #fef08a;
+      --cyan-magic: #38bdf8;
+      --coral: #fb7185;
+      --emerald: #34d399;
+      --danger: #ef4444;
+      --font-ar: 'Cairo', 'Tajawal', sans-serif;
+      --font-en: 'Fredoka', 'Poppins', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: var(--font-ar);
+      background: linear-gradient(135deg, #172554 0%, #312e81 50%, #4c1d95 100%);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* =====================================================================
+       2. الخلفية الموحدة من أول شريحة إلى آخر شريحة
+       ===================================================================== */
+    .global-bg-wrapper {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none !important;
+      overflow: hidden;
+      background-image:
+        url("https://lh3.googleusercontent.com/d/17HYjI8aVK8jJvjR3zS5XDA2ELjcA9JWp"),
+        url("https://drive.google.com/thumbnail?id=17HYjI8aVK8jJvjR3zS5XDA2ELjcA9JWp&sz=w1920");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .global-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      pointer-events: none !important;
+    }
+
+    .global-vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(14, 30, 68, 0.08) 0%, rgba(15, 23, 58, 0.44) 100%);
+      z-index: 1;
+      pointer-events: none !important;
+    }
+
+    /* كانفس الشرر السحري (غير قابل للنقر نهائياً) */
+    #fx-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 60;
+      pointer-events: none !important;
+    }
+
+    /* =====================================================================
+       3. نظام الشرائح (كل سؤال في شريحة مستقلة)
+       ===================================================================== */
+    .stage-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(68px, 11vh, 98px) clamp(12px, 3vw, 24px) clamp(24px, 4vh, 42px);
+    }
+
+    .scene {
+      display: none;
+      width: 100%;
+      max-width: 880px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .scene.active {
+      display: flex;
+      animation: slideZoomIn 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes slideZoomIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* =====================================================================
+       4. الكارت الزجاجي المتوهج بالحدود المتقطعة واللمعان (نفس ثيم اللعبة)
+       ===================================================================== */
+    .stitched-rect-card {
+      position: relative;
+      width: 100%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(13px);
+      -webkit-backdrop-filter: blur(13px);
+      border: 3px dashed var(--stitched-border);
+      outline: 1.5px dashed rgba(255, 255, 255, 0.42);
+      outline-offset: -9px;
+      border-radius: 28px;
+      padding: clamp(56px, 7.6vh, 74px) clamp(18px, 3.4vw, 36px) clamp(22px, 3vh, 32px);
+      text-align: center;
+      animation: redGlowPulse 2.6s ease-in-out infinite;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease;
+    }
+
+    @keyframes redGlowPulse {
+      0%, 100% {
+        box-shadow:
+          0 0 22px rgba(255, 30, 60, 0.85),
+          0 0 48px rgba(255, 20, 50, 0.38),
+          inset 0 0 18px rgba(255, 35, 65, 0.3);
+      }
+      50% {
+        box-shadow:
+          0 0 34px rgba(255, 45, 80, 1),
+          0 0 70px rgba(255, 20, 50, 0.56),
+          inset 0 0 26px rgba(255, 40, 75, 0.48);
+      }
+    }
+
+    .stitched-rect-card:hover {
+      border-color: rgba(255, 165, 180, 0.98);
+    }
+
+    .card-sheen-clip {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      overflow: hidden;
+      pointer-events: none !important;
+      z-index: 1;
+    }
+
+    .card-sheen-clip::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -130%;
+      width: 55%;
+      height: 220%;
+      background: linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.08) 32%,
+        rgba(255, 255, 255, 0.55) 50%,
+        rgba(255, 255, 255, 0.08) 68%,
+        transparent 100%
+      );
+      transform: skewX(-22deg);
+      transition: left 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none !important;
+    }
+
+    .stitched-rect-card:hover .card-sheen-clip::before {
+      left: 165%;
+    }
+
+    /* اللوجو المتوهج المتحرك أعلى الكارت (نفس لوجو اللعبة) */
+    .logo-crown-holder {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -52%);
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none !important;
+    }
+
+    .teacher-logo {
+      width: clamp(86px, 12.5vh, 122px);
+      height: clamp(86px, 12.5vh, 122px);
+      object-fit: contain;
+      pointer-events: auto;
+      animation: logoFloatGlow 3.2s ease-in-out infinite;
+      transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.38s ease;
+    }
+
+    @keyframes logoFloatGlow {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        filter:
+          drop-shadow(0 0 12px rgba(251, 191, 36, 0.92))
+          drop-shadow(0 0 26px rgba(255, 30, 60, 0.72));
+      }
+      50% {
+        transform: translateY(-7px) scale(1.05);
+        filter:
+          drop-shadow(0 0 20px rgba(254, 240, 138, 1))
+          drop-shadow(0 0 40px rgba(255, 45, 80, 0.95));
+      }
+    }
+
+    .teacher-logo:hover {
+      animation-play-state: paused;
+      transform: translateY(-9px) scale(1.13) rotate(-5deg);
+      filter:
+        drop-shadow(0 0 24px rgba(254, 240, 138, 1))
+        drop-shadow(0 0 48px rgba(255, 30, 60, 1));
+    }
+
+    .rect-card-body {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(10px, 1.8vh, 16px);
+      width: 100%;
+    }
+
+    .game-main-title {
+      font-family: var(--font-ar);
+      font-size: clamp(1.48rem, 3.2vw, 2.2rem);
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.25;
+      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.85), 0 0 18px rgba(56, 189, 248, 0.4);
+    }
+
+    .game-sub-title {
+      font-size: clamp(0.98rem, 2vw, 1.25rem);
+      font-weight: 900;
+      background: linear-gradient(90deg, #fbbf24, #fef08a, #f59e0b, #fef08a, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: goldShine 3s linear infinite;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.75));
+    }
+
+    @keyframes goldShine {
+      to { background-position: 200% center; }
+    }
+
+    /* =====================================================================
+       5. عناصر شريحة البداية (الأفاتار + حقل الاسم + الأزرار المتوهجة)
+       ===================================================================== */
+    .avatar-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(8px, 1.8vw, 14px);
+      flex-wrap: wrap;
+      margin: 4px 0;
+    }
+
+    .avatar-chip {
+      width: clamp(46px, 6.2vh, 56px);
+      height: clamp(46px, 6.2vh, 56px);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      border: 2.5px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.45rem, 2.6vw, 1.8rem);
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      z-index: 25;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .avatar-chip:hover {
+      transform: translateY(-4px) scale(1.12);
+      border-color: var(--gold-light);
+    }
+
+    .avatar-chip.selected {
+      background: rgba(251, 191, 36, 0.34);
+      border-color: var(--gold);
+      transform: scale(1.18);
+      box-shadow: 0 0 18px rgba(251, 191, 36, 0.9), 0 0 12px rgba(56, 189, 248, 0.55);
+    }
+
+    .input-card-box {
+      width: min(100%, 500px);
+      background: rgba(255, 255, 255, 0.14);
+      border: 2px solid rgba(255, 255, 255, 0.52);
+      border-radius: 18px;
+      padding: 4px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 25;
+      transition: all 0.28s ease;
+    }
+
+    .input-card-box:focus-within {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: var(--gold);
+      box-shadow: 0 0 22px rgba(251, 191, 36, 0.58), 0 0 12px rgba(255, 30, 60, 0.42);
+      transform: scale(1.015);
+    }
+
+    .input-card-box.shake {
+      animation: gentleShake 0.42s ease;
+      border-color: #ff4d6d;
+      box-shadow: 0 0 22px rgba(255, 50, 80, 0.92);
+    }
+
+    @keyframes gentleShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    .student-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-family: var(--font-ar);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 800;
+      padding: 10px 4px;
+      text-align: center;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .student-input::placeholder {
+      color: rgba(255, 255, 255, 0.78);
+      font-weight: 600;
+    }
+
+    .input-hint {
+      font-size: 0.95rem;
+      color: #fef08a;
+      background: rgba(225, 29, 72, 0.75);
+      border: 1.5px solid #fda4af;
+      border-radius: 999px;
+      padding: 5px 16px;
+      font-weight: 800;
+      display: none;
+    }
+
+    .input-hint.visible {
+      display: inline-block;
+    }
+
+    /* الأزرار المتوهجة مع تأثير اللمعان الضوئي (نفس أزرار اللعبة) */
+    .magic-btn {
+      position: relative;
+      z-index: 25;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: clamp(11px, 1.6vh, 14px) clamp(28px, 4.2vw, 40px);
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      background: linear-gradient(135deg, #e11d48 0%, #f59e0b 100%);
+      color: #ffffff;
+      font-family: var(--font-ar);
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      font-weight: 900;
+      cursor: pointer;
+      user-select: none;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(225, 29, 72, 0.55), 0 0 16px rgba(251, 191, 36, 0.45);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, filter 0.28s ease;
+      white-space: nowrap;
+    }
+
+    .magic-btn::after {
+      content: "";
+      position: absolute;
+      top: -40%;
+      left: -125%;
+      width: 60%;
+      height: 195%;
+      background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.72) 50%, transparent 100%);
+      transform: skewX(-24deg);
+      transition: left 0.62s ease;
+      pointer-events: none;
+    }
+
+    .magic-btn:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 12px 32px rgba(255, 30, 60, 0.82), 0 0 28px rgba(251, 191, 36, 0.8);
+      filter: brightness(1.08);
+    }
+
+    .magic-btn:hover::after {
+      left: 160%;
+    }
+
+    .magic-btn:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+
+    .magic-btn-sky {
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      border-color: rgba(224, 242, 254, 0.88);
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.55);
+    }
+
+    .magic-btn-sky:hover {
+      box-shadow: 0 10px 28px rgba(56, 189, 248, 0.88);
+    }
+
+    .magic-btn-secondary {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.78) 0%, rgba(30, 58, 138, 0.86) 100%);
+      border-color: rgba(147, 197, 253, 0.82);
+      box-shadow: 0 6px 20px rgba(30, 64, 175, 0.5);
+    }
+
+    .magic-btn-secondary:hover {
+      box-shadow: 0 10px 26px rgba(56, 189, 248, 0.82);
+    }
+
+    /* =====================================================================
+       6. شريحة السؤال (كل سؤال في شريحة مستقلة بالكامل)
+       ===================================================================== */
+    .quiz-top-meta {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1.5px dashed rgba(255, 255, 255, 0.25);
+    }
+
+    .student-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1.5px solid rgba(253, 224, 71, 0.65);
+      color: var(--gold-light);
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .dock-btn {
+      position: relative;
+      z-index: 25;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.62);
+      border: 1.5px dashed rgba(255, 255, 255, 0.6);
+      color: #ffffff;
+      font-family: var(--font-ar);
+      font-size: 0.86rem;
+      font-weight: 800;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .dock-btn:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: var(--gold);
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.55);
+      transform: translateY(-2px);
+    }
+
+    .progress-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .progress-info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #e0f2fe;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8 0%, #fbbf24 60%, #fb7185 100%);
+      border-radius: 999px;
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.8);
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .question-slide-box {
+      width: 100%;
+      animation: qCardEnter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes qCardEnter {
+      from { opacity: 0; transform: translateX(-18px) scale(0.97); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    .question-banner-box {
+      position: relative;
+      width: 100%;
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.65) 0%, rgba(30, 58, 138, 0.58) 100%);
+      border: 2px dashed rgba(253, 224, 71, 0.8);
+      border-radius: 22px;
+      padding: clamp(16px, 2.5vh, 22px) clamp(14px, 2.5vw, 24px);
+      margin-bottom: 18px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.42), inset 0 0 18px rgba(56, 189, 248, 0.14);
+      direction: ltr;
+      text-align: left;
+    }
+
+    .question-top-tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.22);
+      direction: rtl;
+    }
+
+    .mode-instruction-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 13px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      background: rgba(56, 189, 248, 0.22);
+      border: 1.5px solid rgba(125, 211, 252, 0.72);
+      color: #e0f2fe;
+    }
+
+    .mode-instruction-pill.dual-mode {
+      background: rgba(250, 204, 21, 0.24);
+      border-color: #fde047;
+      color: #fef08a;
+      box-shadow: 0 0 14px rgba(250, 204, 21, 0.45);
+    }
+
+    /* زر وسيلة المساعدة 50:50 بنفس ثيم وتأثير اللعبة */
+    .btn-5050 {
+      position: relative;
+      z-index: 30;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      border: 2px solid #fef08a;
+      background: linear-gradient(135deg, #d97706 0%, #f59e0b 55%, #ea580c 100%);
+      color: #ffffff;
+      font-family: var(--font-ar);
+      font-size: 0.86rem;
+      font-weight: 900;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.72);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    }
+
+    .btn-5050:hover {
+      transform: translateY(-2px) scale(1.08);
+      box-shadow: 0 0 26px rgba(250, 204, 21, 0.95);
+      z-index: 45;
+    }
+
+    .btn-5050::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 12px);
+      left: 50%;
+      direction: rtl;
+      text-align: center;
+      white-space: normal;
+      width: max-content;
+      max-width: min(320px, 80vw);
+      line-height: 1.5;
+      padding: 9px 15px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.97) 0%, rgba(30, 58, 138, 0.96) 55%, rgba(88, 28, 135, 0.95) 100%);
+      border: 2px solid #fde047;
+      color: #fef08a;
+      font-family: var(--font-ar);
+      font-size: 0.84rem;
+      font-weight: 800;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.72), 0 0 22px rgba(250, 204, 21, 0.62);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-50%) translateY(8px) scale(0.92);
+      transition: opacity 0.24s ease, transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.24s ease;
+      pointer-events: none;
+      z-index: 80;
+    }
+
+    .btn-5050:hover::before,
+    .btn-5050:focus-visible::before {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    .question-row-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      direction: ltr;
+    }
+
+    .question-text-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .q-number-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 36px;
+      padding: 0 7px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f59e0b, #e11d48);
+      color: #ffffff;
+      font-family: var(--font-en);
+      font-size: 1.05rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 2px;
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.75);
+    }
+
+    .question-text {
+      font-family: 'Poppins', 'Fredoka', sans-serif;
+      font-size: clamp(1.08rem, 2.3vw, 1.38rem);
+      font-weight: 700;
+      line-height: 1.55;
+      color: #f8fafc;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    /* المؤقت الدائري المتوهج */
+    .timer-wrapper {
+      position: relative;
+      width: 76px;
+      height: 76px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-svg {
+      transform: rotate(-90deg);
+      width: 76px;
+      height: 76px;
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.55));
+    }
+
+    .timer-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.14);
+      stroke-width: 6;
+    }
+
+    .timer-progress {
+      fill: none;
+      stroke: var(--emerald);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 226;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+    }
+
+    #timer-text {
+      position: absolute;
+      font-family: var(--font-en);
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    .timer-wrapper.urgent #timer-text {
+      color: #fecdd3;
+      animation: timerPulse 0.7s ease-in-out infinite;
+    }
+
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.16); }
+    }
+
+    /* شبكة الخيارات ثلاثية الأبعاد (نفس تصميم وتأثير أزرار اللعبة) */
+    .mcq-options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(11px, 1.8vw, 16px);
+      width: 100%;
+      direction: ltr;
+    }
+
+    .mcq-options-grid.five-opts .mcq-option-btn:last-child {
+      grid-column: 1 / -1;
+      width: min(100%, 48%);
+      margin: 0 auto;
+    }
+
+    .mcq-option-btn {
+      position: relative;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      padding: clamp(13px, 1.9vh, 17px) clamp(16px, 2.3vw, 22px);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(30, 64, 175, 0.76) 0%, rgba(99, 102, 241, 0.7) 55%, rgba(14, 165, 233, 0.72) 100%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 2.5px solid rgba(186, 230, 253, 0.82);
+      color: #ffffff;
+      font-family: var(--font-en);
+      font-size: clamp(1.02rem, 2vw, 1.24rem);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      user-select: none;
+      overflow: hidden;
+      text-align: left;
+      box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.38),
+        0 0 14px rgba(56, 189, 248, 0.35),
+        inset 0 2px 3px rgba(255, 255, 255, 0.52),
+        inset 0 -4px 8px rgba(15, 23, 42, 0.42);
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.28s ease,
+                  border-color 0.28s ease,
+                  background 0.28s ease,
+                  color 0.25s ease,
+                  opacity 0.3s ease;
+    }
+
+    .mcq-option-btn::before {
+      content: "";
+      position: absolute;
+      top: -45%;
+      left: -135%;
+      width: 65%;
+      height: 200%;
+      background: linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.16) 32%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0.16) 68%,
+        transparent 100%
+      );
+      transform: skewX(-24deg);
+      pointer-events: none;
+      transition: left 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 2;
+    }
+
+    .mcq-option-btn::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 6%;
+      right: 6%;
+      height: 38%;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .mcq-option-btn:hover:not(.disabled)::before {
+      left: 165%;
+    }
+
+    .mcq-option-btn:hover:not(.disabled) {
+      transform: translateY(-4px) scale(1.028);
+      border-color: #ffffff;
+      background: linear-gradient(145deg, rgba(14, 165, 233, 0.9) 0%, rgba(124, 58, 237, 0.88) 55%, rgba(236, 72, 153, 0.8) 100%);
+      box-shadow:
+        0 12px 26px rgba(0, 0, 0, 0.48),
+        0 0 24px rgba(56, 189, 248, 0.88),
+        0 0 40px rgba(236, 72, 153, 0.45),
+        inset 0 2px 5px rgba(255, 255, 255, 0.75);
+    }
+
+    .opt-left-group {
+      position: relative;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .opt-letter-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.58);
+      border: 1.5px solid rgba(254, 240, 138, 0.82);
+      color: #fde047;
+      font-size: 0.9rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .opt-text-label {
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+    }
+
+    .opt-status-icon {
+      position: relative;
+      z-index: 3;
+      font-size: 1.2rem;
+      pointer-events: none;
+    }
+
+    /* حالة الاختيار الذهبي (للاختيار الأول في أسئلة الـ 5 خيارات) */
+    .mcq-option-btn.selected-opt {
+      background: linear-gradient(135deg, #fef08a 0%, #facc15 52%, #f59e0b 100%) !important;
+      color: #0f172a !important;
+      border: 3px solid #ffffff !important;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow:
+        0 10px 26px rgba(245, 158, 11, 0.72),
+        0 0 28px rgba(250, 204, 21, 0.98),
+        inset 0 2px 6px rgba(255, 255, 255, 0.95) !important;
+    }
+
+    .mcq-option-btn.selected-opt .opt-letter-badge {
+      background: #0f172a;
+      color: #fde047;
+      border-color: #0f172a;
+    }
+
+    .mcq-option-btn.selected-opt .opt-text-label {
+      text-shadow: none;
+    }
+
+    /* حالة الإجابة الصحيحة */
+    .mcq-option-btn.correct-opt {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+      border: 3px solid #ffffff !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 26px rgba(52, 211, 153, 0.98), inset 0 2px 6px rgba(255, 255, 255, 0.65) !important;
+    }
+
+    .mcq-option-btn.correct-opt .opt-letter-badge {
+      background: #ffffff;
+      color: #047857;
+      border-color: #ffffff;
+    }
+
+    /* حالة الإجابة الخاطئة */
+    .mcq-option-btn.wrong-opt {
+      background: linear-gradient(135deg, #ef4444 0%, #be123c 100%) !important;
+      border: 3px solid #ffffff !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 26px rgba(244, 63, 94, 0.95) !important;
+    }
+
+    .mcq-option-btn.wrong-opt .opt-letter-badge {
+      background: #ffffff;
+      color: #be123c;
+      border-color: #ffffff;
+    }
+
+    /* تمييز الإجابة الصحيحة التي لم يخترها الطالب */
+    .mcq-option-btn.missed-correct-opt {
+      border: 3px solid #34d399 !important;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.45) 0%, rgba(5, 150, 105, 0.55) 100%) !important;
+      box-shadow: 0 0 24px rgba(52, 211, 153, 0.92) !important;
+    }
+
+    .mcq-option-btn.faded-option {
+      opacity: 0.28 !important;
+      filter: grayscale(0.45);
+    }
+
+    .mcq-option-btn.disabled {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* شريط الفوانيس المضيئة أسفل الكارت (من ثيم اللعبة) */
+    .lanterns-dock-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(3px, 0.8vw, 9px);
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: rgba(15, 23, 42, 0.52);
+      border: 1.5px dashed rgba(253, 224, 71, 0.55);
+      border-radius: 18px;
+    }
+
+    .lantern-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform-origin: top center;
+      animation: lanternSway 3.5s ease-in-out infinite;
+    }
+
+    .lantern-item:nth-child(even) {
+      animation-delay: -1.7s;
+      animation-duration: 4s;
+    }
+
+    @keyframes lanternSway {
+      0%, 100% { transform: rotate(-3.5deg); }
+      50% { transform: rotate(3.5deg); }
+    }
+
+    .lantern-svg {
+      width: clamp(16px, 2vw, 22px);
+      height: auto;
+      transition: filter 0.45s ease, transform 0.45s ease;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+    }
+
+    .lantern-core {
+      fill: rgba(148, 163, 184, 0.35);
+      transition: fill 0.45s ease;
+    }
+
+    .lantern-item.lit .lantern-svg {
+      filter: drop-shadow(0 0 9px rgba(251, 191, 36, 1)) drop-shadow(0 0 18px rgba(245, 158, 11, 0.8));
+      transform: scale(1.16);
+    }
+
+    .lantern-item.lit .lantern-core {
+      fill: #fde047;
+    }
+
+    /* =====================================================================
+       7. شريحة النتيجة + الشهادة الأصلية (Certificate) + مراجعة الأخطاء
+       ===================================================================== */
+    .stars-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 2px 0;
+    }
+
+    .star-icon {
+      width: clamp(32px, 4.8vw, 44px);
+      height: clamp(32px, 4.8vw, 44px);
+      fill: rgba(255, 255, 255, 0.2);
+      stroke: rgba(255, 255, 255, 0.55);
+      stroke-width: 1.5;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), fill 0.4s ease;
+      transform: scale(0.75);
+    }
+
+    .star-icon.earned {
+      fill: #facc15;
+      stroke: #fef08a;
+      filter: drop-shadow(0 0 14px rgba(250, 204, 21, 0.98));
+      transform: scale(1.15);
+    }
+
+    .certificate-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin: 6px auto 12px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 3px solid rgba(253, 224, 71, 0.85);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55), 0 0 28px rgba(251, 191, 36, 0.45);
+    }
+
+    .certificate-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .cert-student-name {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #1e3a8a;
+      font-size: clamp(1rem, 3.2vw, 1.85rem);
+      font-weight: 900;
+      width: 82%;
+      text-align: center;
+      line-height: 1.2;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    .cert-student-score {
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #dc2626;
+      font-size: clamp(0.85rem, 2.5vw, 1.45rem);
+      font-weight: 900;
+      width: 80%;
+      text-align: center;
+    }
+
+    .retry-banner-box {
+      width: 100%;
+      max-width: 580px;
+      padding: clamp(28px, 5vh, 46px) 22px;
+      background: rgba(225, 29, 72, 0.18);
+      border: 2.5px dashed var(--coral);
+      border-radius: 24px;
+      margin: 6px auto 12px;
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.35);
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .review-area {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.68);
+      border: 2px dashed rgba(125, 211, 252, 0.65);
+      border-radius: 22px;
+      padding: 18px;
+      margin-top: 12px;
+      display: none;
+      text-align: right;
+    }
+
+    .review-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 13px 16px;
+      margin-top: 10px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(248, 113, 113, 0.65);
+    }
+
+    .review-q-en {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: #ffffff;
+      direction: ltr;
+      text-align: left;
+      line-height: 1.45;
+    }
+
+    .review-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .badge-err { color: #fca5a5; }
+    .badge-ok { color: #86efac; }
+
+    /* الإشعار العائم */
+    .toast-banner {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(18px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px dashed var(--gold);
+      color: #fef08a;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 0.94rem;
+      font-weight: 800;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      text-align: center;
+      max-width: 92vw;
+    }
+
+    .toast-banner.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* =====================================================================
+       8. التوافقية الشاملة (Desktop / Tablet / Mobile)
+       ===================================================================== */
+    @media (max-width: 680px) {
+      .stitched-rect-card {
+        padding: 50px 14px 20px;
+        border-radius: 22px;
+      }
+      .teacher-logo {
+        width: 82px;
+        height: 82px;
+      }
+      .question-row-main {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 12px;
+      }
+      .timer-wrapper {
+        margin: 0 auto;
+        width: 68px;
+        height: 68px;
+      }
+      .timer-svg {
+        width: 68px;
+        height: 68px;
+      }
+      .mcq-options-grid {
+        grid-template-columns: 1fr;
+      }
+      .mcq-options-grid.five-opts .mcq-option-btn:last-child {
+        width: 100%;
+      }
+      .dock-btn span.btn-label {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- الخلفية الموحدة لجميع الشرائح -->
+  <div class="global-bg-wrapper" aria-hidden="true">
+    <img
+      class="global-bg-img"
+      src="https://lh3.googleusercontent.com/d/17HYjI8aVK8jJvjR3zS5XDA2ELjcA9JWp"
+      alt="خلفية واجب مستر ايهاب العدوي"
+      onerror="handleDriveImgFallback(this, '17HYjI8aVK8jJvjR3zS5XDA2ELjcA9JWp', 'linear-gradient(135deg, #172554 0%, #312e81 50%, #9f1239 100%)')"
+    />
+  </div>
+  <div class="global-vignette" aria-hidden="true"></div>
+
+  <!-- كانفس الشرر السحري -->
+  <canvas id="fx-canvas"></canvas>
+
+  <main class="stage-wrapper">
+
+    <!-- =====================================================================
+         الشريحة 1: شريحة البداية والترحيب
+         ===================================================================== -->
+    <section id="welcome-scene" class="scene active" aria-label="شريحة البداية">
+      <div class="stitched-rect-card">
+        <div class="card-sheen-clip"></div>
+
+        <!-- نفس لوجو اللعبة المتوهج المتحرك -->
+        <div class="logo-crown-holder">
+          <img
+            class="teacher-logo"
+            src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD"
+            alt="شعار مستر إيهاب العدوي"
+            onerror="handleDriveImgFallback(this, '11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD', null)"
+          />
+        </div>
+
+        <div class="rect-card-body">
+          <h1 class="game-main-title">واجب مستر ايهاب العدوي</h1>
+          <div class="game-sub-title">إعداد وبرمجة / مستر ايهاب العدوي</div>
+
+          <!-- اختيار الشخصية (الأفاتار) -->
+          <div class="avatar-strip" id="avatar-strip" aria-label="اختر شخصيتك">
+            <button type="button" class="avatar-chip selected" data-avatar="🧑‍🎓">🧑‍🎓</button>
+            <button type="button" class="avatar-chip" data-avatar="🦸‍♂️">🦸‍♂️</button>
+            <button type="button" class="avatar-chip" data-avatar="🥷">🥷</button>
+            <button type="button" class="avatar-chip" data-avatar="🕵️‍♂️">🕵️‍♂️</button>
+            <button type="button" class="avatar-chip" data-avatar="👨‍💻">👨‍💻</button>
+          </div>
+
+          <div class="input-card-box" id="name-input-box">
+            <i class="fa-solid fa-user-graduate" style="color:#fde047; font-size:1.15rem;"></i>
+            <input
+              type="text"
+              id="studentName"
+              class="student-input"
+              placeholder="أدخل اسمك الثلاثي يا بطل..."
+              maxlength="40"
+              autocomplete="off"
+            />
+          </div>
+
+          <div id="start-hint" class="input-hint">من فضلك اكتب اسمك أولاً يا بطل!</div>
+
+          <button type="button" id="btn-start-quiz" class="magic-btn">
+            <i class="fa-solid fa-bolt"></i>
+            <span>بدء الواجب</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         الشريحة 2: شريحة الأسئلة (كل سؤال في شريحة لوحده)
+         ===================================================================== -->
+    <section id="quiz-scene" class="scene" aria-label="شريحة الأسئلة">
+      <div class="stitched-rect-card">
+        <div class="card-sheen-clip"></div>
+
+        <!-- نفس لوجو اللعبة المتوهج المتحرك -->
+        <div class="logo-crown-holder">
+          <img
+            class="teacher-logo"
+            src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD"
+            alt="شعار مستر إيهاب العدوي"
+            onerror="handleDriveImgFallback(this, '11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD', null)"
+          />
+        </div>
+
+        <div class="rect-card-body">
+          <!-- شريط بيانات الطالب والتحكم بالصوت -->
+          <div class="quiz-top-meta">
+            <div class="student-badge-pill" id="active-student-badge">🧑‍🎓 بطل الواجب</div>
+            <div style="font-weight:900; color:#fde047; font-size:1rem;">
+              واجب مستر ايهاب العدوي
+            </div>
+            <div>
+              <button type="button" id="btn-audio-toggle" class="dock-btn" title="تشغيل/كتم الصوت">
+                <i id="icon-audio-on" class="fa-solid fa-volume-high"></i>
+                <i id="icon-audio-off" class="fa-solid fa-volume-xmark" style="display:none; color:#fca5a5;"></i>
+                <span class="btn-label" id="audio-label">الصوت</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- شريط التقدم المضيء -->
+          <div class="progress-wrapper">
+            <div class="progress-info-row">
+              <span id="progStep">السؤال 1 من 22</span>
+              <span id="progPercent" style="color:#fde047;">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="pBar"></div>
+            </div>
+          </div>
+
+          <!-- محتوى السؤال الحالي (شريحة واحدة لكل سؤال) -->
+          <div id="quiz-content" style="width:100%;"></div>
+
+          <!-- شريط فوانيس التقدم المضيئة -->
+          <div class="lanterns-dock-bar" id="lanterns-bar" aria-label="فوانيس التقدم"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         الشريحة 3: شريحة النتيجة النهائية والشهادة الأصلية ومراجعة الأخطاء
+         ===================================================================== -->
+    <section id="result-scene" class="scene" aria-label="شريحة النتيجة النهائية">
+      <div class="stitched-rect-card">
+        <div class="card-sheen-clip"></div>
+
+        <!-- نفس لوجو اللعبة المتوهج المتحرك -->
+        <div class="logo-crown-holder">
+          <img
+            class="teacher-logo"
+            src="https://lh3.googleusercontent.com/d/11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD"
+            alt="شعار مستر إيهاب العدوي"
+            onerror="handleDriveImgFallback(this, '11VcC5pR3k6jmvzASuwxN2hizVkAl8pDD', null)"
+          />
+        </div>
+
+        <div class="rect-card-body">
+          <h2 id="result-title" class="game-main-title">واجب مستر ايهاب العدوي 🏆</h2>
+          <div class="game-sub-title">إعداد وبرمجة / مستر ايهاب العدوي</div>
+
+          <!-- التقييم بالنجوم -->
+          <div class="stars-container" id="stars-container" aria-label="التقييم بالنجوم">
+            <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+
+          <!-- الشهادة الأصلية أو بطاقة المحاولة مرة أخرى -->
+          <div id="result-container" style="width:100%;"></div>
+
+          <div class="result-actions">
+            <button type="button" id="btn-toggle-review" class="magic-btn magic-btn-secondary">
+              <i class="fa-solid fa-eye"></i>
+              <span>مراجعة الأخطاء</span>
+            </button>
+            <button type="button" id="btn-retry-quiz" class="magic-btn magic-btn-sky">
+              <i class="fa-solid fa-rotate"></i>
+              <span>جرب مرة تانية</span>
+            </button>
+          </div>
+
+          <div id="reviewArea" class="review-area"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- شريط التنبيهات العائم -->
+  <div id="toast-banner" class="toast-banner"></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* =========================================================================
+         1. بيانات الأسئلة:
+            - 12 سؤال اختيار من متعدد موجودة بالفعل من اختبار الجيزة السابق
+            - 10 أسئلة اختيار من متعدد جديدة مستخلصة من نفس نصوص وأسئلة الاختبار السابق
+         ========================================================================= */
+      var quizData = [
+        // --- 12 سؤال اختيار من متعدد موجودة بالفعل من اختبار الجيزة السابق ---
+        { q: "The passengers of the plane will leave from .......... 5.", options: ["luggage", "passport", "flight", "gate"], correct: "gate" },
+        { q: "Winter is my favourite .......... .", options: ["coast", "border", "season", "continent"], correct: "season" },
+        { q: "He is very .......... . He is always worried about meeting new people.", options: ["confident", "shy", "generous", "responsible"], correct: "shy" },
+        { q: "We spend a long time looking at .......... : phones, tablets and computers.", options: ["steps", "lessons", "screens", "books"], correct: "screens" },
+        { q: "Last semester we performed a .......... in the drama studio.", options: ["speech", "project", "play", "climate"], correct: "play" },
+        { q: "One of the most famous .......... is the Great Pyramid.", options: ["landmarks", "business", "jobs", "transportation"], correct: "landmarks" },
+        { q: "I have never .......... a play before.", options: ["seeing", "seen", "see", "sees"], correct: "seen" },
+        { q: "If you .......... in with group activities, you'd make new friends.", options: ["joined", "joins", "joining", "join"], correct: "joined" },
+        { q: "The journey was .......... longer than we expected.", options: ["many", "more", "far", "very"], correct: "far" },
+        { q: "My parents asked me to have dinner with them, but I had .......... eaten.", options: ["never", "yet", "already", "ago"], correct: "already" },
+        { q: "They .......... their math homework yesterday.", options: ["do", "does", "did", "have done"], correct: "did" },
+        { q: "The whole team played well. .......... , they lost the match.", options: ["Although", "Despite", "However", "Because"], correct: "However" },
+
+        // --- 10 أسئلة اختيار من متعدد مولّدة من نفس أسئلة ونصوص الاختبار السابق ---
+        { q: "Omar enjoys English because it helps him talk to people from other .......... .", options: ["countries", "seasons", "gates", "screens"], correct: "countries" },
+        { q: "Nada's teachers are .......... and friendly, which makes her enjoy school.", options: ["enthusiastic", "dishonest", "angry", "selfish"], correct: "enthusiastic" },
+        { q: "Students do scientific experiments in the school .......... .", options: ["laboratory", "luggage", "passport", "border"], correct: "laboratory" },
+        { q: "Lena's group built a small model of a .......... to generate electricity for a tiny bulb.", options: ["wind turbine", "drama studio", "flight gate", "passport"], correct: "wind turbine" },
+        { q: "Lena felt .......... when her model worked and the judges praised her teamwork.", options: ["proud", "dishonest", "bored", "worried"], correct: "proud" },
+        { q: "I .......... used to waking up at six o'clock every morning.", options: ["am", "are", "were", "has"], correct: "am" },
+        { q: "My room is just .......... big as my brother's room.", options: ["as", "so", "than", "more"], correct: "as" },
+        { q: "After Omar .......... his homework, he went out to play football.", options: ["had finished", "finishes", "is finishing", "has finish"], correct: "had finished" },
+        { q: "Karim visited the beach and the .......... during his trip to Alexandria.", options: ["library", "gate", "border", "continent"], correct: "library" },
+        { q: "The people of Lilliput were unusual because they were very .......... .", options: ["small", "tall", "loud", "lazy"], correct: "small" }
+      ];
+
+      var OPTION_LETTERS = ["A", "B", "C", "D", "E"];
+      var TOOLTIP_5050_TEXT = "✨ مستر ايهاب بيفكرك انك ممكن تحذف اجابتين كمساعدة منه - لكن لمرة واحدة فقط";
+      var CERT_FILE_ID = "1yHlVcO1402weXdOCm7Ao6v7cd0mmRffM";
+
+      /* =========================================================================
+         2. متغيرات حالة الواجب
+         ========================================================================= */
+      var shuffled = [];
+      var currentShuffledOptions = [];
+      var currentIdx = 0;
+      var score = 0;
+      var studentName = "";
+      var studentAvatar = "🧑‍🎓";
+      var timer = null;
+      var timeLeft = 60;
+      var wrongs = [];
+      var used5050 = false;
+      var currentSelections = [];
+      var isLocked = false;
+      var toastTimer = null;
+
+      /* =========================================================================
+         3. محرك المؤثرات الصوتية الآمن (Web Audio API)
+         ========================================================================= */
+      var SoundFX = (function () {
+        var ctx = null;
+        var muted = false;
+        var lastHoverTime = 0;
+
+        function ensureContext() {
+          try {
+            if (!ctx) {
+              var AudioCtx = window.AudioContext || window.webkitAudioContext;
+              if (AudioCtx) ctx = new AudioCtx();
+            }
+            if (ctx && ctx.state === "suspended" && typeof ctx.resume === "function") {
+              var p = ctx.resume();
+              if (p && typeof p.catch === "function") p.catch(function () {});
+            }
+            return ctx;
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function playToneSequence(notes, type, stepDelay, vol, dur) {
+          if (muted) return;
+          try {
+            var audio = ensureContext();
+            if (!audio) return;
+            var now = audio.currentTime;
+            for (var i = 0; i < notes.length; i++) {
+              var osc = audio.createOscillator();
+              var gain = audio.createGain();
+              osc.type = type;
+              osc.frequency.setValueAtTime(notes[i], now + i * stepDelay);
+              gain.gain.setValueAtTime(0.001, now + i * stepDelay);
+              gain.gain.exponentialRampToValueAtTime(vol, now + i * stepDelay + 0.02);
+              gain.gain.exponentialRampToValueAtTime(0.0001, now + i * stepDelay + dur);
+              osc.connect(gain);
+              gain.connect(audio.destination);
+              osc.start(now + i * stepDelay);
+              osc.stop(now + i * stepDelay + dur + 0.03);
+            }
+          } catch (e) {}
+        }
+
+        return {
+          playHoverClick: function () {
+            if (muted) return;
+            try {
+              var nowMs = Date.now();
+              if (nowMs - lastHoverTime < 85) return;
+              lastHoverTime = nowMs;
+              var audio = ensureContext();
+              if (!audio) return;
+              var now = audio.currentTime;
+              var osc = audio.createOscillator();
+              var gain = audio.createGain();
+              osc.type = "sine";
+              osc.frequency.setValueAtTime(780, now);
+              osc.frequency.exponentialRampToValueAtTime(1180, now + 0.045);
+              gain.gain.setValueAtTime(0.028, now);
+              gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
+              osc.connect(gain);
+              gain.connect(audio.destination);
+              osc.start(now);
+              osc.stop(now + 0.06);
+            } catch (e) {}
+          },
+          playSelect: function () {
+            playToneSequence([523.25, 659.25], "triangle", 0.05, 0.07, 0.22);
+          },
+          playCorrect: function () {
+            playToneSequence([523.25, 659.25, 783.99, 1046.5], "triangle", 0.06, 0.09, 0.28);
+          },
+          playWrong: function () {
+            playToneSequence([290, 210], "sawtooth", 0.12, 0.06, 0.22);
+          },
+          playMagicLifeline: function () {
+            playToneSequence([587.33, 880, 1174.66], "triangle", 0.06, 0.08, 0.25);
+          },
+          playResultFanfare: function () {
+            playToneSequence([523.25, 659.25, 783.99, 1046.5], "triangle", 0.11, 0.11, 0.62);
+          },
+          playEncouragingChime: function () {
+            playToneSequence([392.0, 440.0, 523.25], "sine", 0.14, 0.08, 0.45);
+          },
+          toggleMute: function () {
+            muted = !muted;
+            return muted;
+          }
+        };
+      })();
+
+      /* =========================================================================
+         4. محرك الشرر السحري (Sparkles FX Canvas)
+         ========================================================================= */
+      var fxCanvas = null;
+      var fxCtx = null;
+      var sparkles = [];
+
+      function resizeFxCanvas() {
+        try {
+          if (!fxCanvas || !fxCtx) return;
+          var dpr = window.devicePixelRatio || 1;
+          fxCanvas.width = Math.floor(window.innerWidth * dpr);
+          fxCanvas.height = Math.floor(window.innerHeight * dpr);
+          fxCanvas.style.width = window.innerWidth + "px";
+          fxCanvas.style.height = window.innerHeight + "px";
+          fxCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        } catch (e) {}
+      }
+
+      function animateSparkles() {
+        try {
+          if (fxCtx) {
+            fxCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            for (var i = sparkles.length - 1; i >= 0; i--) {
+              var s = sparkles[i];
+              s.x += s.vx;
+              s.y += s.vy;
+              s.alpha -= 0.026;
+              if (s.alpha <= 0) {
+                sparkles.splice(i, 1);
+                continue;
+              }
+              fxCtx.save();
+              fxCtx.globalAlpha = s.alpha;
+              fxCtx.fillStyle = s.color;
+              fxCtx.shadowColor = s.color;
+              fxCtx.shadowBlur = 10;
+              fxCtx.beginPath();
+              fxCtx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+              fxCtx.fill();
+              fxCtx.restore();
+            }
+          }
+        } catch (e) {}
+        if (typeof requestAnimationFrame === "function") {
+          requestAnimationFrame(animateSparkles);
+        }
+      }
+
+      function initFxCanvas() {
+        try {
+          fxCanvas = document.getElementById("fx-canvas");
+          if (!fxCanvas || !fxCanvas.getContext) return;
+          fxCtx = fxCanvas.getContext("2d");
+          resizeFxCanvas();
+          window.addEventListener("resize", resizeFxCanvas);
+          if (typeof requestAnimationFrame === "function") {
+            requestAnimationFrame(animateSparkles);
+          }
+        } catch (e) {}
+      }
+
+      function spawnSparkle(x, y, count, palette) {
+        try {
+          if (!fxCtx) return;
+          var colors = palette || ["#facc15", "#38bdf8", "#fb7185"];
+          var total = count || 16;
+          for (var i = 0; i < total; i++) {
+            var angle = Math.random() * Math.PI * 2;
+            var speed = 1.4 + Math.random() * 3.4;
+            sparkles.push({
+              x: x + (Math.random() - 0.5) * 16,
+              y: y + (Math.random() - 0.5) * 16,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed - 0.6,
+              radius: 2 + Math.random() * 3,
+              alpha: 1,
+              color: colors[Math.floor(Math.random() * colors.length)]
+            });
+          }
+        } catch (e) {}
+      }
+
+      /* =========================================================================
+         5. الدوال المساعدة
+         ========================================================================= */
+      function showToast(msg, duration) {
+        var banner = document.getElementById("toast-banner");
+        if (!banner) return;
+        banner.textContent = msg;
+        banner.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          banner.classList.remove("show");
+        }, duration || 2400);
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function shuffleArray(arr) {
+        var copy = arr.slice();
+        for (var i = copy.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = copy[i];
+          copy[i] = copy[j];
+          copy[j] = tmp;
+        }
+        return copy;
+      }
+
+      function getCorrectAnswersArray(qObj) {
+        if (Array.isArray(qObj.correct)) {
+          return qObj.correct.map(function (a) { return String(a).trim(); });
+        }
+        return [String(qObj.correct).trim()];
+      }
+
+      function getRequiredSelectionsCount(qObj) {
+        if (qObj.options.length === 5) return 2;
+        var correctArr = getCorrectAnswersArray(qObj);
+        return correctArr.length > 1 ? correctArr.length : 1;
+      }
+
+      function showScene(id) {
+        var scenes = document.querySelectorAll(".scene");
+        for (var i = 0; i < scenes.length; i++) {
+          scenes[i].classList.remove("active");
+        }
+        var target = document.getElementById(id);
+        if (target) target.classList.add("active");
+        try {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {
+          window.scrollTo(0, 0);
+        }
+      }
+
+      /* =========================================================================
+         6. فوانيس التقدم المضيئة
+         ========================================================================= */
+      function buildLanterns(total) {
+        var bar = document.getElementById("lanterns-bar");
+        if (!bar) return;
+        var html = "";
+        for (var i = 0; i < total; i++) {
+          html +=
+            '<div class="lantern-item">' +
+              '<svg class="lantern-svg" viewBox="0 0 44 64" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                '<line x1="22" y1="0" x2="22" y2="11" stroke="#fde047" stroke-width="2.2"/>' +
+                '<path d="M14 14 C14 10 30 10 30 14 Z" fill="#f59e0b" stroke="#fef08a" stroke-width="1.4"/>' +
+                '<rect x="11" y="14" width="22" height="4" rx="2" fill="#d97706" stroke="#fef08a" stroke-width="1.2"/>' +
+                '<path class="lantern-core" d="M12 18 L32 18 L29 46 L15 46 Z" stroke="#fef08a" stroke-width="1.6"/>' +
+                '<line x1="22" y1="18" x2="22" y2="46" stroke="rgba(255,255,255,0.45)" stroke-width="1.2"/>' +
+                '<rect x="13" y="46" width="18" height="4" rx="2" fill="#d97706" stroke="#fef08a" stroke-width="1.2"/>' +
+                '<path d="M18 50 L26 50 L22 58 Z" fill="#f59e0b"/>' +
+              '</svg>' +
+            '</div>';
+        }
+        bar.innerHTML = html;
+      }
+
+      function updateLanterns(litCount) {
+        var items = document.querySelectorAll("#lanterns-bar .lantern-item");
+        for (var i = 0; i < items.length; i++) {
+          if (i < litCount) items[i].classList.add("lit");
+          else items[i].classList.remove("lit");
+        }
+      }
+
+      /* =========================================================================
+         7. تشغيل الواجب + عرض كل سؤال في شريحة مستقلة + منطق 4 و 5 خيارات
+         ========================================================================= */
+      function startTest() {
+        var nameInput = document.getElementById("studentName");
+        var nameBox = document.getElementById("name-input-box");
+        var startHint = document.getElementById("start-hint");
+
+        studentName = nameInput ? nameInput.value.trim() : "";
+        if (studentName.length < 2) {
+          if (startHint) startHint.classList.add("visible");
+          if (nameBox) {
+            nameBox.classList.remove("shake");
+            void nameBox.offsetWidth;
+            nameBox.classList.add("shake");
+          }
+          showToast("من فضلك اكتب اسمك أولاً يا بطل!");
+          if (nameInput) nameInput.focus();
+          return;
+        }
+
+        if (startHint) startHint.classList.remove("visible");
+        shuffled = shuffleArray(quizData);
+        currentIdx = 0;
+        score = 0;
+        wrongs = [];
+        used5050 = false;
+
+        var badge = document.getElementById("active-student-badge");
+        if (badge) badge.textContent = studentAvatar + " " + studentName;
+
+        buildLanterns(shuffled.length);
+        SoundFX.playSelect();
+        showScene("quiz-scene");
+        loadQuestion();
+      }
+
+      function loadQuestion() {
+        clearInterval(timer);
+        timeLeft = 60;
+        currentSelections = [];
+        isLocked = false;
+
+        var q = shuffled[currentIdx];
+        var requiredCount = getRequiredSelectionsCount(q);
+        var isFiveOptions = q.options.length === 5;
+        var progressPct = (currentIdx / shuffled.length) * 100;
+
+        var pBar = document.getElementById("pBar");
+        var progStep = document.getElementById("progStep");
+        var progPercent = document.getElementById("progPercent");
+        if (pBar) pBar.style.width = progressPct + "%";
+        if (progStep) progStep.textContent = "السؤال " + (currentIdx + 1) + " من " + shuffled.length;
+        if (progPercent) progPercent.textContent = Math.round(progressPct) + "%";
+        updateLanterns(currentIdx);
+
+        var instructionHtml =
+          requiredCount === 2
+            ? '<span class="mode-instruction-pill dual-mode" id="selection-status-pill"><i class="fa-solid fa-star"></i> ⭐ اختر إجابتين صحيحتين من 5 (0 / 2)</span>'
+            : '<span class="mode-instruction-pill" id="selection-status-pill"><i class="fa-solid fa-wand-magic-sparkles"></i> ✨ اختر إجابة واحدة صحيحة</span>';
+
+        var lifelineBtnHtml = !used5050
+          ? '<button type="button" id="btn-5050" class="btn-5050" data-tooltip="' + escapeHtml(TOOLTIP_5050_TEXT) + '" aria-label="' + escapeHtml(TOOLTIP_5050_TEXT) + '">🪄 50:50</button>'
+          : "";
+
+        currentShuffledOptions = shuffleArray(q.options);
+
+        var quizContent = document.getElementById("quiz-content");
+        quizContent.innerHTML =
+          '<div class="question-slide-box">' +
+            '<div class="question-banner-box">' +
+              '<div class="question-top-tools">' +
+                instructionHtml +
+                lifelineBtnHtml +
+              '</div>' +
+              '<div class="question-row-main">' +
+                '<div class="question-text-wrap">' +
+                  '<span class="q-number-badge">' + (currentIdx + 1) + '</span>' +
+                  '<div class="question-text">' + escapeHtml(q.q) + '</div>' +
+                '</div>' +
+                '<div class="timer-wrapper" id="timerWrapper">' +
+                  '<svg class="timer-svg" viewBox="0 0 80 80">' +
+                    '<circle class="timer-bg" cx="40" cy="40" r="36"></circle>' +
+                    '<circle id="timerRing" class="timer-progress" cx="40" cy="40" r="36"></circle>' +
+                  '</svg>' +
+                  '<div id="timer-text">60</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div id="optionsGrid" class="mcq-options-grid ' + (isFiveOptions ? "five-opts" : "") + '"></div>' +
+          '</div>';
+
+        var optionsGrid = document.getElementById("optionsGrid");
+        for (var i = 0; i < currentShuffledOptions.length; i++) {
+          (function (optIndex, optText) {
+            var btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "mcq-option-btn";
+            btn.setAttribute("data-opt-idx", String(optIndex));
+            btn.innerHTML =
+              '<span class="opt-left-group">' +
+                '<span class="opt-letter-badge">' + (OPTION_LETTERS[optIndex] || (optIndex + 1)) + '</span>' +
+                '<span class="opt-text-label">' + escapeHtml(optText) + '</span>' +
+              '</span>' +
+              '<span class="opt-status-icon"></span>';
+
+            btn.addEventListener("mouseenter", function () {
+              if (!btn.classList.contains("disabled") && !isLocked) {
+                SoundFX.playHoverClick();
+              }
+            });
+
+            btn.addEventListener("click", function (ev) {
+              handleOptionClick(btn, optIndex, ev);
+            });
+
+            optionsGrid.appendChild(btn);
+          })(i, currentShuffledOptions[i]);
+        }
+
+        var btn5050 = document.getElementById("btn-5050");
+        if (btn5050) {
+          btn5050.addEventListener("mouseenter", function () { SoundFX.playHoverClick(); });
+          btn5050.addEventListener("click", function () { use5050(btn5050); });
+        }
+
+        startTimer();
+      }
+
+      function use5050(triggerBtn) {
+        if (used5050 || isLocked) return;
+        var q = shuffled[currentIdx];
+        used5050 = true;
+        if (triggerBtn) triggerBtn.style.display = "none";
+
+        var correctArr = getCorrectAnswersArray(q);
+        var wrongIndices = [];
+        for (var i = 0; i < currentShuffledOptions.length; i++) {
+          if (correctArr.indexOf(String(currentShuffledOptions[i]).trim()) === -1) {
+            wrongIndices.push(i);
+          }
+        }
+        var toRemove = shuffleArray(wrongIndices).slice(0, 2);
+
+        var btns = document.querySelectorAll("#optionsGrid .mcq-option-btn");
+        for (var k = 0; k < btns.length; k++) {
+          var idx = parseInt(btns[k].getAttribute("data-opt-idx"), 10);
+          if (toRemove.indexOf(idx) !== -1) {
+            btns[k].classList.add("disabled", "faded-option");
+            for (var s = currentSelections.length - 1; s >= 0; s--) {
+              if (currentSelections[s].idx === idx) {
+                currentSelections.splice(s, 1);
+                btns[k].classList.remove("selected-opt");
+                var iconSpan = btns[k].querySelector(".opt-status-icon");
+                if (iconSpan) iconSpan.innerHTML = "";
+                updateDualSelectionPill(getRequiredSelectionsCount(q));
+              }
+            }
+          }
+        }
+
+        if (triggerBtn) {
+          var rect = triggerBtn.getBoundingClientRect();
+          spawnSparkle(rect.left + rect.width / 2, rect.top + rect.height / 2, 20);
+        }
+        SoundFX.playMagicLifeline();
+        showToast("🪄 تم حذف إجابتين خاطئتين بنجاح!");
+      }
+
+      function updateDualSelectionPill(requiredCount) {
+        var pill = document.getElementById("selection-status-pill");
+        if (pill && requiredCount === 2) {
+          pill.innerHTML = '<i class="fa-solid fa-star"></i> ⭐ اختر إجابتين صحيحتين من 5 (' + currentSelections.length + ' / 2)';
+        }
+      }
+
+      function handleOptionClick(btn, optIndex, ev) {
+        if (isLocked || btn.classList.contains("disabled")) return;
+
+        var q = shuffled[currentIdx];
+        var requiredCount = getRequiredSelectionsCount(q);
+        var optText = currentShuffledOptions[optIndex];
+        var r = btn.getBoundingClientRect();
+        var fxX = (ev && ev.clientX) ? ev.clientX : (r.left + r.width / 2);
+        var fxY = (ev && ev.clientY) ? ev.clientY : (r.top + r.height / 2);
+
+        // حالة 4 خيارات (اختيار واحد فقط)
+        if (requiredCount === 1) {
+          currentSelections = [{ el: btn, idx: optIndex, val: optText }];
+          evaluateCurrentQuestion(fxX, fxY, false);
+          return;
+        }
+
+        // حالة 5 خيارات (اختيار إجابتين)
+        var existingPos = -1;
+        for (var i = 0; i < currentSelections.length; i++) {
+          if (currentSelections[i].idx === optIndex) {
+            existingPos = i;
+            break;
+          }
+        }
+
+        if (existingPos !== -1) {
+          currentSelections.splice(existingPos, 1);
+          btn.classList.remove("selected-opt");
+          var iconSpanRemove = btn.querySelector(".opt-status-icon");
+          if (iconSpanRemove) iconSpanRemove.innerHTML = "";
+          updateDualSelectionPill(requiredCount);
+          SoundFX.playHoverClick();
+          return;
+        }
+
+        currentSelections.push({ el: btn, idx: optIndex, val: optText });
+        btn.classList.add("selected-opt");
+        var iconSpanAdd = btn.querySelector(".opt-status-icon");
+        if (iconSpanAdd) iconSpanAdd.innerHTML = '<i class="fa-solid fa-star"></i>';
+        updateDualSelectionPill(requiredCount);
+        spawnSparkle(fxX, fxY, 12, ["#facc15", "#38bdf8"]);
+
+        if (currentSelections.length < requiredCount) {
+          SoundFX.playSelect();
+        } else {
+          evaluateCurrentQuestion(fxX, fxY, false);
+        }
+      }
+
+      function startTimer() {
+        var tText = document.getElementById("timer-text");
+        var ring = document.getElementById("timerRing");
+        var wrapper = document.getElementById("timerWrapper");
+
+        timer = setInterval(function () {
+          timeLeft--;
+          if (tText) tText.textContent = Math.max(0, timeLeft);
+
+          var offset = 226 - (Math.max(0, timeLeft) * (226 / 60));
+          if (ring) {
+            ring.style.strokeDashoffset = offset;
+            if (timeLeft <= 10) {
+              ring.style.stroke = "#ef4444";
+              if (wrapper) wrapper.classList.add("urgent");
+            } else if (timeLeft <= 20) {
+              ring.style.stroke = "#fbbf24";
+            }
+          }
+
+          if (timeLeft <= 0) {
+            clearInterval(timer);
+            if (!isLocked) {
+              evaluateCurrentQuestion(window.innerWidth / 2, window.innerHeight / 2, true);
+            }
+          }
+        }, 1000);
+      }
+
+      function evaluateCurrentQuestion(fxX, fxY, timedOut) {
+        isLocked = true;
+        clearInterval(timer);
+
+        var q = shuffled[currentIdx];
+        var allBtns = document.querySelectorAll("#optionsGrid .mcq-option-btn");
+        for (var i = 0; i < allBtns.length; i++) {
+          allBtns[i].classList.add("disabled");
+        }
+
+        var btn5050 = document.getElementById("btn-5050");
+        if (btn5050) btn5050.style.display = "none";
+
+        var correctArr = getCorrectAnswersArray(q);
+        var requiredCount = getRequiredSelectionsCount(q);
+        var chosenVals = [];
+        for (var c = 0; c < currentSelections.length; c++) {
+          chosenVals.push(String(currentSelections[c].val).trim());
+        }
+
+        var allMatch = !timedOut && chosenVals.length === requiredCount;
+        if (allMatch) {
+          for (var m = 0; m < chosenVals.length; m++) {
+            if (correctArr.indexOf(chosenVals[m]) === -1) {
+              allMatch = false;
+              break;
+            }
+          }
+        }
+
+        for (var s = 0; s < currentSelections.length; s++) {
+          var sel = currentSelections[s];
+          sel.el.classList.remove("selected-opt");
+          var iconSpan = sel.el.querySelector(".opt-status-icon");
+          if (correctArr.indexOf(String(sel.val).trim()) !== -1) {
+            sel.el.classList.add("correct-opt");
+            if (iconSpan) iconSpan.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+          } else {
+            sel.el.classList.add("wrong-opt");
+            if (iconSpan) iconSpan.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+          }
+        }
+
+        if (allMatch) {
+          score++;
+          SoundFX.playCorrect();
+          spawnSparkle(fxX, fxY, 22, ["#34d399", "#facc15", "#ffffff"]);
+        } else {
+          SoundFX.playWrong();
+          wrongs.push({
+            q: q.q,
+            chosen: timedOut ? "انتهى الوقت" : (chosenVals.length ? chosenVals.join(" , ") : "لم يتم الاختيار"),
+            correct: correctArr.join(" , ")
+          });
+          for (var b = 0; b < allBtns.length; b++) {
+            var bIdx = parseInt(allBtns[b].getAttribute("data-opt-idx"), 10);
+            var bVal = String(currentShuffledOptions[bIdx]).trim();
+            if (correctArr.indexOf(bVal) !== -1 && chosenVals.indexOf(bVal) === -1) {
+              allBtns[b].classList.remove("faded-option");
+              allBtns[b].classList.add("missed-correct-opt");
+              var bIcon = allBtns[b].querySelector(".opt-status-icon");
+              if (bIcon) bIcon.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#86efac;"></i>';
+            }
+          }
+        }
+
+        updateLanterns(currentIdx + 1);
+        var nextPct = ((currentIdx + 1) / shuffled.length) * 100;
+        var pBar = document.getElementById("pBar");
+        var progPercent = document.getElementById("progPercent");
+        if (pBar) pBar.style.width = nextPct + "%";
+        if (progPercent) progPercent.textContent = Math.round(nextPct) + "%";
+
+        var delayMs = requiredCount === 2 ? 1800 : 1500;
+        setTimeout(function () {
+          currentIdx++;
+          if (currentIdx < shuffled.length) {
+            loadQuestion();
+          } else {
+            finish();
+          }
+        }, delayMs);
+      }
+
+      /* =========================================================================
+         8. شريحة النتيجة النهائية والشهادة الأصلية ومراجعة الأخطاء
+         ========================================================================= */
+      function finish() {
+        clearInterval(timer);
+        showScene("result-scene");
+
+        var total = shuffled.length;
+        var percentage = (score / total) * 100;
+        var resContainer = document.getElementById("result-container");
+        var rev = document.getElementById("reviewArea");
+        if (rev) rev.style.display = "none";
+
+        var earnedStars = 1;
+        if (percentage >= 85) earnedStars = 3;
+        else if (percentage >= 50) earnedStars = 2;
+
+        var starEls = document.querySelectorAll("#stars-container .star-icon");
+        for (var i = 0; i < starEls.length; i++) {
+          starEls[i].classList.remove("earned");
+          if (i < earnedStars) {
+            (function (el, delay) {
+              setTimeout(function () { el.classList.add("earned"); }, delay);
+            })(starEls[i], 280 + i * 230);
+          }
+        }
+
+        if (percentage >= 50) {
+          SoundFX.playResultFanfare();
+          try {
+            if (typeof window.confetti === "function") {
+              window.confetti({ particleCount: 150, spread: 75, origin: { y: 0.55 } });
+            }
+          } catch (e) {}
+          resContainer.innerHTML =
+            '<div class="certificate-wrapper">' +
+              '<img class="certificate-img" src="https://drive.google.com/thumbnail?id=' + CERT_FILE_ID + '&sz=w1000" alt="شهادة التقدير" onerror="if(!this.dataset.tried){this.dataset.tried=\'1\';this.src=\'https://lh3.googleusercontent.com/d/' + CERT_FILE_ID + '\';}" />' +
+              '<div class="cert-student-name">' + escapeHtml(studentName) + '</div>' +
+              '<div class="cert-student-score">الدرجة: ' + score + ' من ' + total + '</div>' +
+            '</div>';
+        } else {
+          SoundFX.playEncouragingChime();
+          resContainer.innerHTML =
+            '<div class="retry-banner-box">' +
+              '<h3 style="font-size: clamp(1.5rem, 3vw, 2rem); color: #fda4af; font-weight: 900;">حاول مرة أخرى 💪</h3>' +
+              '<p style="font-size: clamp(1.05rem, 2.2vw, 1.3rem); margin-top: 10px; font-weight: 800; color: #f8fafc;">' +
+                'يا بطل ' + studentAvatar + ' ' + escapeHtml(studentName) + '، درجتك <span style="color:#fde047;">' + score + ' من ' + total + '</span>.' +
+              '</p>' +
+              '<p style="font-size: 0.95rem; margin-top: 8px; color: #e2e8f0;">' +
+                'راجع الأخطاء وجرب مرة تانية لتحصل على شهادة التقدير!' +
+              '</p>' +
+            '</div>';
+        }
+
+        if (wrongs.length === 0) {
+          rev.innerHTML = '<h3 style="color:#86efac; font-size: 1.45rem; text-align:center;">ممتاز يا بطل! مفيش أخطاء خالص 🌟</h3>';
+        } else {
+          var html = '<h3 style="margin-bottom:10px; border-bottom:1px dashed rgba(255,255,255,0.25); padding-bottom:10px; color:#fde047; font-size:1.15rem;"><i class="fa-solid fa-list-check"></i> مراجعة الأخطاء (' + wrongs.length + '):</h3>';
+          for (var w = 0; w < wrongs.length; w++) {
+            html +=
+              '<div class="review-row">' +
+                '<div class="review-q-en">' + (w + 1) + '. ' + escapeHtml(wrongs[w].q) + '</div>' +
+                '<div class="review-meta-row">' +
+                  '<span class="badge-err">✕ إجابتك: ' + escapeHtml(wrongs[w].chosen) + '</span>' +
+                  '<span class="badge-ok">✓ الإجابة الصحيحة: ' + escapeHtml(wrongs[w].correct) + '</span>' +
+                '</div>' +
+              '</div>';
+          }
+          rev.innerHTML = html;
+        }
+      }
+
+      /* =========================================================================
+         9. ربط جميع الأزرار والأحداث فور جاهزية الصفحة
+         ========================================================================= */
+      function initApp() {
+        var avatarChips = document.querySelectorAll("#avatar-strip .avatar-chip");
+        for (var i = 0; i < avatarChips.length; i++) {
+          (function (chip) {
+            chip.addEventListener("click", function () {
+              for (var j = 0; j < avatarChips.length; j++) {
+                avatarChips[j].classList.remove("selected");
+              }
+              chip.classList.add("selected");
+              studentAvatar = chip.getAttribute("data-avatar") || "🧑‍🎓";
+              SoundFX.playHoverClick();
+            });
+          })(avatarChips[i]);
+        }
+
+        var nameInput = document.getElementById("studentName");
+        var startHint = document.getElementById("start-hint");
+        if (nameInput) {
+          nameInput.addEventListener("input", function () {
+            if (startHint) startHint.classList.remove("visible");
+          });
+          nameInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              startTest();
+            }
+          });
+        }
+
+        var btnStart = document.getElementById("btn-start-quiz");
+        if (btnStart) {
+          btnStart.addEventListener("click", startTest);
+        }
+
+        var btnAudio = document.getElementById("btn-audio-toggle");
+        if (btnAudio) {
+          btnAudio.addEventListener("click", function () {
+            var isMuted = SoundFX.toggleMute();
+            var onIcon = document.getElementById("icon-audio-on");
+            var offIcon = document.getElementById("icon-audio-off");
+            var label = document.getElementById("audio-label");
+            if (onIcon) onIcon.style.display = isMuted ? "none" : "inline-block";
+            if (offIcon) offIcon.style.display = isMuted ? "inline-block" : "none";
+            if (label) label.textContent = isMuted ? "صامت" : "الصوت";
+          });
+        }
+
+        var btnReview = document.getElementById("btn-toggle-review");
+        if (btnReview) {
+          btnReview.addEventListener("click", function () {
+            var r = document.getElementById("reviewArea");
+            if (!r) return;
+            var isHidden = r.style.display === "none" || r.style.display === "";
+            r.style.display = isHidden ? "block" : "none";
+            SoundFX.playHoverClick();
+            if (isHidden) {
+              try { r.scrollIntoView({ behavior: "smooth", block: "nearest" }); } catch (e) {}
+            }
+          });
+        }
+
+        var btnRetry = document.getElementById("btn-retry-quiz");
+        if (btnRetry) {
+          btnRetry.addEventListener("click", function () {
+            clearInterval(timer);
+            SoundFX.playSelect();
+            var r = document.getElementById("reviewArea");
+            if (r) r.style.display = "none";
+            showScene("welcome-scene");
+            if (nameInput) nameInput.focus();
+          });
+        }
+
+        initFxCanvas();
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initApp);
+      } else {
+        initApp();
+      }
+    })();
+  </script>
+</body>
+</html>
